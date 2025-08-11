@@ -24,35 +24,28 @@ export default function Footer() {
                     height={60}
                     className="mb-5 md:ml-12"
                   />
-                  <p className="text-base max-w-xs">
-                    t vero eos et accusamus et iusto odio dignissimos ducimus
-                    qui blanditiis
-                  </p>
-                  <div className="flex gap-4 mt-6">
-                    <Link
-                      href=""
-                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
-                    >
-                      <FaInstagram size={24} />
-                    </Link>
-                    <Link
-                      href=""
-                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
-                    >
-                      <FaFacebook size={24} />
-                    </Link>
-                    <Link
-                      href=""
-                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
-                    >
-                      <FaYoutube size={24} />
-                    </Link>
-                  </div>
 
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-start">
+                    <FaLocationDot className="text-3xl text-[#788406] mt-1" />
+                    <p className="pl-3 hover:text-[#009fe3]">
+                      Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer,
+                      Jagatpura, Jaipur Rajasthan, India, 302017
+                    </p>
+                  </div>
+                  <div className="flex items-start">
+                    <IoMail className="text-xl text-[#788406] mt-1" />
+                    <p className="pl-3 hover:text-[#009fe3]">info@7unique.in</p>
+                  </div>
+                  <div className="flex items-start">
+                    <IoMdCall className="text-xl text-[#788406] mt-1" />
+                    <p className="pl-3 hover:text-[#009fe3]">0141-4511098</p>
+                  </div>
+                  </div>
 
                 </div>
 
-                <div className="lg:pl-6 mt-10 md:mt-0">
+                <div className="lg:pl-6 mt-10 md:mt-0 md:ml-4">
                   <h3 className="font-bold text-lg mb-4">Quick Links</h3>
                   <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
@@ -81,7 +74,7 @@ export default function Footer() {
                   </ul>
                 </div>
 
-                <div className="mt-10 md:mt-0">
+                <div className="mt-10 md:mt-0 md:ml-4">
                   <h3 className="font-bold text-lg mb-4">Support</h3>
                   <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
@@ -112,32 +105,65 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-10 md:mt-0">
-                  <h3 className="font-bold text-lg mb-4">Contact Us</h3>
-                  <div className="space-y-4 text-sm">
-                    <div>
-                      <div className="flex items-start">
-                        <FaLocationDot className="text-3xl text-[#788406] mt-1" />
-                        <p className="pl-3 hover:text-[#009fe3]">
-                          Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer,
-                          Jagatpura, Jaipur Rajasthan, India, 302017
-                        </p>
-                      </div>
-                    </div>
-                    <div></div>
-
-                    <div className="flex items-start">
-                      <IoMail className="text-xl text-[#788406] mt-1" />
-                      <p className="pl-3 hover:text-[#009fe3]">
-                        info@7unique.in
-                      </p>
-                    </div>
-                    <div className="flex items-start">
-                      <IoMdCall className="text-xl text-[#788406] mt-1" />
-                      <p className="pl-3 hover:text-[#009fe3]">0141-4511098</p>
-                    </div>
+                  <h3 className="font-bold text-lg mb-4">Governnment Exam</h3>
+                   <ul className="space-y-2 text-base">
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/services/switch"
+                        className="hover:text-[#009fe3]"
+                      >
+All India Exam
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/services/escrow"
+                        className="hover:text-[#009fe3]"
+                      >
+                        Rajasthan Exams
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/services/connected-banking"
+                        className="hover:text-[#009fe3]"
+                      >
+3<sup>rd</sup> Grade
+                      </Link>
+                    </li>
+                     <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/services/connected-banking"
+                        className="hover:text-[#009fe3]"
+                      >
+Current Affairs
+                      </Link>
+                    </li>
+                  </ul>
+<div className="flex gap-4 mt-6 md:mt-12">
+                    <Link
+                      href=""
+                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
+                    >
+                      <FaInstagram size={24} />
+                    </Link>
+                    <Link
+                      href=""
+                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
+                    >
+                      <FaFacebook size={24} />
+                    </Link>
+                    <Link
+                      href=""
+                      className="text-gray-200 hover:text-[#009fe3] transition-colors"
+                    >
+                      <FaYoutube size={24} />
+                    </Link>
                   </div>
                 </div>
+
               </div>
+
             </div>
 
             <div className="border-t-3 border-[#788406] w-full mb-6"></div>
@@ -184,7 +210,7 @@ export default function Footer() {
             </div>
 
             <div className="text-center text-base mt-auto">
-              © 2025 Deenita India Private Limited. All rights reserved.
+              © 2025 PV Classes . All rights reserved.
             </div>
           </div>
         </div>
