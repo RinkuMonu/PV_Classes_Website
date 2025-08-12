@@ -105,7 +105,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-10 md:mt-0">
-                  <h3 className="font-bold text-lg mb-4">Governnment Exam</h3>
+                  <h3 className="font-bold text-lg mb-4">Government Exam</h3>
                    <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
@@ -166,7 +166,7 @@ Current Affairs
 
             </div>
 
-            <div className="border-t-3 border-[#788406] w-full mb-6"></div>
+            <div className="border-t-2 border-[#788406] w-full mb-6"></div>
 
             <div className="mb-6">
               <ul className="flex flex-wrap justify-center gap-6 sm:gap-10 text-base text-center">
