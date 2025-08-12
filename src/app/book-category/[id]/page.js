@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { useState,useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,24 +8,24 @@ import { FaPlus } from "react-icons/fa6";
 import axiosInstance from "../../axios/axiosInstance";
 
 export default function BookCategoryPage() {
-    const router = useRouter();
-    const { id } = router.query;
-    const [books, setBooks] = useState([]);
+  const params = useParams();
+  const id = params.id;
+  const [books, setBooks] = useState([]);
 
-    useEffect(() => {
-        if (!router.isReady) return;
+  useEffect(() => {
 
-        const fetchBooks = async () => {
-        try {
-            const res = await axiosInstance.get(`/books/category/${id}`);
-            setBooks(res.data.data);
-        } catch (error) {
-            console.error(error);
-        }
-        };
+    const fetchBooks = async () => {
+      try {
+        const res = await axiosInstance.get(`/books/category/${id}`);
+        console.log("res = ",res.data.data);
+        setBooks(res.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        fetchBooks();
-    }, [id]);
+    fetchBooks();
+  }, [id]);
   // Book Data (You can fetch this from an API later)
 //   const books = [
 //     {
@@ -83,7 +83,7 @@ export default function BookCategoryPage() {
       (editionFilter === "" || book.edition.toString() === editionFilter)
     );
   });
-
+console.log("filter book = ",filteredBooks);
   return (
     <div className="p-6">
 
@@ -91,8 +91,6 @@ export default function BookCategoryPage() {
         <span className="cursor-pointer  text-[#204972] hover:underline">Home</span> &gt;{" "}
         <span className=" text-[#204972] font-medium">REET Exam Special</span>
       </div>
-
-
       <h1 className="text-2xl text-[#204972] font-bold mb-6">
         REET Exam Books{" "}
         <span className="text-gray-500 text-sm">
@@ -168,50 +166,54 @@ export default function BookCategoryPage() {
 
 
           <div className="grid grid-cols-4 gap-4">
-            {filteredBooks.map((book) => (
-              <div
-                key={book.id}
-                className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
-              >
+            {filteredBooks?.map((book) => (
+              <Link to={`/book-detail/${book?.id}`}>
+                <div
+                  key={book?.id}
+                  className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
+                >
 
-                {book.tag && (
-                  <div
-                    className={`absolute bg-[#616602] text-white text-xs px-3 py-1 rounded-br-lg font-semibold z-10 shadow-md`}
-                  >
-                    {book.tag}
-                  </div>
-                )}
+                  {book?.tag && (
+                    <div
+                      className={`absolute bg-[#616602] text-white text-xs px-3 py-1 rounded-br-lg font-semibold z-10 shadow-md`}
+                    >
+                      {book?.tag}
+                    </div>
+                  )}
 
-               <div className="relative w-full h-64">
-              <Image
-                src={book.img}
-                alt={book.title}
-                fill
-                className="object-cover p-2"
-              />
-              <Link href="/" className="flex absolute -bottom-27 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
-                <span className="mt-1 me-2"><FaPlus /></span>
-                ADD
-              </Link>
-            </div>
+                <div className="relative w-full h-64">
+                <Image
+                  src={book?.full_image?.[0]}
+                  alt={book?.book_title}
+                  fill
+                  className="object-cover p-2"
+                />
+                <Link href="/" className="flex absolute -bottom-27 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
+                  <span className="mt-1 me-2"><FaPlus /></span>
+                  ADD
+                </Link>
+              </div>
 
-
-<div className="p-3">
-    <p className="text-sm font-medium line-clamp-2 mb-2">
-                  {book.title}
+              <div className="p-3">
+                <p className="text-sm font-medium line-clamp-2 mb-2">
+                  {book?.book_title}
                 </p>
-
-
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg">₹{book.price}</span>
-                  <span className="text-green-600 text-sm">{book.discount}</span>
+                  <span className="font-bold text-lg">₹{book?.discount_price}</span>
+                  <span className="text-green-600 text-sm">
+                    {book?.discount_price && book?.price
+                      ? `${Math.round(((book.price - book.discount_price) / book.price) * 100)}% off`
+                      : null}
+                  </span>
+
                 </div>
                 <div className="text-xs text-gray-500 line-through">
-                  ₹{book.oldPrice}
+                  ₹{book?.price}
                 </div>
-    </div>
-
               </div>
+
+                </div>
+              </Link>
             ))}
           </div>
         </main>
