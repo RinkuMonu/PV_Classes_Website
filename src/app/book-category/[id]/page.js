@@ -1,58 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState,useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
+import axiosInstance from "../../axios/axiosInstance";
 
 export default function BookCategoryPage() {
+    const router = useRouter();
+    const { id } = router.query;
+    const [books, setBooks] = useState([]);
+
+    useEffect(() => {
+        if (!router.isReady) return;
+
+        const fetchBooks = async () => {
+        try {
+            const res = await axiosInstance.get(`/books/category/${id}`);
+            setBooks(res.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+        };
+
+        fetchBooks();
+    }, [id]);
   // Book Data (You can fetch this from an API later)
-  const books = [
-    {
-      id: 1,
-      title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
-      price: 161,
-      oldPrice: 170,
-      discount: "5% OFF",
-      tag: "New Arrivals",
-      img: "/image/book1.webp",
-      language: "Hindi",
-      edition: 2024,
-    },
-    {
-      id: 2,
-      title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
-      price: 161,
-      oldPrice: 170,
-      discount: "5% OFF",
-      tag: "New Arrivals",
-      img: "/image/book1.webp",
-      language: "Hindi",
-      edition: 2024,
-    },
-    {
-      id: 3,
-      title: "REET Level 2nd Science Math's Language 2nd Sanskrit/English",
-      price: 1187,
-      oldPrice: 1250,
-      discount: "5% OFF",
-      tag: "Bestselling",
-      img: "/image/book1.webp",
-      language: "English",
-      edition: 2023,
-    },
-    {
-      id: 4,
-      title: "Social Studies Teaching Methods (REET Level-II)",
-      price: 114,
-      oldPrice: 120,
-      discount: "5% OFF",
-      tag: "Bestselling",
-      img: "/image/book1.webp",
-      language: "Hindi",
-      edition: 2021,
-    },
-  ];
+//   const books = [
+//     {
+//       id: 1,
+//       title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
+//       price: 161,
+//       oldPrice: 170,
+//       discount: "5% OFF",
+//       tag: "New Arrivals",
+//       img: "/image/book1.webp",
+//       language: "Hindi",
+//       edition: 2024,
+//     },
+//     {
+//       id: 2,
+//       title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
+//       price: 161,
+//       oldPrice: 170,
+//       discount: "5% OFF",
+//       tag: "New Arrivals",
+//       img: "/image/book1.webp",
+//       language: "Hindi",
+//       edition: 2024,
+//     },
+//     {
+//       id: 3,
+//       title: "REET Level 2nd Science Math's Language 2nd Sanskrit/English",
+//       price: 1187,
+//       oldPrice: 1250,
+//       discount: "5% OFF",
+//       tag: "Bestselling",
+//       img: "/image/book1.webp",
+//       language: "English",
+//       edition: 2023,
+//     },
+//     {
+//       id: 4,
+//       title: "Social Studies Teaching Methods (REET Level-II)",
+//       price: 114,
+//       oldPrice: 120,
+//       discount: "5% OFF",
+//       tag: "Bestselling",
+//       img: "/image/book1.webp",
+//       language: "Hindi",
+//       edition: 2021,
+//     },
+//   ];
 
   const [languageFilter, setLanguageFilter] = useState("");
   const [editionFilter, setEditionFilter] = useState("");
