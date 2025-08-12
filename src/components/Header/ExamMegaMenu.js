@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ExamMegaMenu() {
   const data = {
@@ -166,7 +167,8 @@ export default function ExamMegaMenu() {
         {/* Exam Cards */}
         <div className="grid grid-cols-3 gap-4">
           {data[activeCategory].tabs[activeTab].map((exam) => (
-            <div
+            <Link
+            href=""
               key={exam.name}
               className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:border-indigo-200 hover:bg-indigo-50 transition-all duration-200 cursor-pointer"
             >
@@ -181,7 +183,7 @@ export default function ExamMegaMenu() {
               <span className="text-sm font-medium text-gray-800 group-hover:text-[#00316B]">
                 {exam.name}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
