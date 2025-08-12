@@ -1,50 +1,68 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+"use client";
+import { Star } from "lucide-react";
+import Image from "next/image";
 
-function TestCard() {
+export default function TestSeriesCard({
+  title,
+  subtitle,
+  tests,
+  price,
+  originalPrice,
+  validity,
+  image,
+  badge,
+  discount,
+}) {
   return (
-    <>
-    <div className=" my-12">
-      <div className="relative">
-        {/* main card */}
-        <div className="rounded-2xl border border-gray-200 shadow-md overflow-hidden pt-12 bg-white">
-          {/* body with soft green gradient */}
-          <div className="p-6 bg-gradient-to-b from-green-50 to-white rounded-b-2xl">
-            <h3 className="text-center text-2xl font-semibold text-gray-800 mb-4">SSC CGL 2025 – Tier 1</h3>
-
-            <ul className="text-gray-700 text-left list-disc list-inside space-y-2 mb-6">
-              <li>20 Full Mock Tests</li>
-              <li>210 Previous Mock Tests</li>
-            </ul>
-
-            <div className="flex gap-3 justify-center mb-3">
-              <Link href="#" className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-[#341a63] text-white font-semibold text-sm shadow-sm hover:opacity-95">
-                View All Tests
-              </Link>
-
-              <Link href="#" className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-[#1ea7ff] text-white font-semibold text-sm shadow-sm hover:opacity-95">
-                Buy Now
-              </Link>
-            </div>
-
-            <div className="px-4">
-              <Link href="#" className="block text-center py-2 rounded-md border border-[#341a63] text-[#341a63] font-semibold">Attempt Now</Link>
-            </div>
-          </div>
+    <div className="w-full max-w-sm rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+      
+      {/* Title + New Tag */}
+      <div className="px-4 pt-4">
+        <div className="flex justify-between items-start">
+          <h2 className="text-lg font-bold leading-snug">{title}</h2>
+          <span className="bg-yellow-400 text-xs px-2 py-1 rounded-full font-semibold shadow-sm">
+            NEW
+          </span>
         </div>
+        <p className="font-semibold text-sm text-gray-600">{subtitle}</p>
+      </div>
 
-        {/* floating header badge */}
-        <div className="absolute left-1/2 -top-7 transform -translate-x-1/2 w-48 bg-white rounded-2xl shadow-lg flex flex-col items-center py-4">
-          <div className="w-16 h-16 relative rounded-full overflow-hidden bg-white">
-            <Image src="/ssc-logo.png" alt="SSC" fill sizes="64px" style={{ objectFit: 'contain' }} />
+      {/* Image */}
+      <div className="relative w-full h-56 px-4 mt-3">
+        <div className="relative w-full h-full rounded-lg overflow-hidden">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover hover:scale-105 transition-transform duration-500"
+          />
+          {badge && (
+            <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
+              {tests} Tests
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Validity */}
+      <p className="px-4 mt-3 font-medium text-sm">
+        Validity for {validity} days
+      </p>
+
+      {/* Price + Discount */}
+      <div className="px-4 pb-4 mt-2">
+        <div className="flex justify-between items-center">
+          <div>
+            <span className="text-indigo-700 font-bold text-lg">₹{price}</span>
+            <span className="text-gray-400 line-through text-sm ml-1">
+              ₹{originalPrice}
+            </span>
           </div>
-          <div className="mt-2 text-gray-800 font-semibold">View Plans</div>
+          <div className="text-green-700 text-xs font-semibold bg-green-50 px-2 py-1 rounded-md">
+            {discount}% OFF
+          </div>
         </div>
       </div>
     </div>
-    </>
-  )
+  );
 }
-
-export default TestCard

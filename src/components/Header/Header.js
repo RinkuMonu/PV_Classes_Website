@@ -2,90 +2,133 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import {
-    ChevronDown,
-    Globe,
-    Search,
-    Phone,
-    Bell,
-    ShoppingCart,
-    Tag
+  Phone,
+  Mail,
+  MapPin,
+  ChevronDown,
+  Tag,
+  Bell,
+  ShoppingCart,
 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import ExamMegaMenu from "./ExamMegaMenu";
 
 export default function Header() {
-    const [coursesMenu, setCoursesMenu] = useState(false);
-    return (
-        <nav className="border-b border-gray-200 bg-white shadow-sm relative">
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 gap-6">
-                <div className="flex items-center">
-                    <Image
-                        src="/utkarsh-logo.png"
-                        alt="Utkarsh Classes"
-                        width={70}
-                        height={70}
-                        className="object-contain"
-                    />
-                </div>
-                <div className="flex-1 max-w-lg relative">
-                    <Search
-                        className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"
-                        size={18}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="w-full border border-gray-300 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                    />
-                </div>
-                <div className="flex items-center gap-4">
-                    <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
-                        <Tag size={20} className="text-gray-700" />
-                    </button>
-                    <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
-                        <Bell size={20} className="text-gray-700" />
-                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
-                    <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
-                        <ShoppingCart size={20} className="text-gray-700" />
-                        <span className="absolute -top-1 -right-1 bg-yellow-400 text-xs px-1 rounded-full">
-                            2
-                        </span>
-                    </button>
-                    <Link
-                        href="#"
-                        className="bg-yellow-300 hover:bg-yellow-400 text-gray-900 font-medium px-5 py-2 rounded-full transition"
-                    >
-                        Login
-                    </Link>
-                </div>
+  const [coursesMenu, setCoursesMenu] = useState(false);
+  const [hideTopBar, setHideTopBar] = useState(false);
+  const lastScrollRef = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScrollRef.current && currentScroll > 50) {
+        setHideTopBar(true);
+      } else if (currentScroll < lastScrollRef.current) {
+        setHideTopBar(false);
+      }
+
+      lastScrollRef.current = currentScroll;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      <div
+        className={`bg-[#00316B] text-white text-sm border-b border-gray-100 transition-all duration-300 overflow-hidden ${
+          hideTopBar ? "max-h-0 py-0" : "max-h-20 py-2"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
+          {/* Left side */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-1">
+              <Phone size={14}  />
+              <span>+1 (396) 486 4709</span>
             </div>
-            <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-evenly gap-6 text-sm font-medium text-gray-700">
-                <Link href="#" className="hover:text-yellow-500 transition">Home</Link>
-                <div
-                    className="relative group"
-                    onMouseEnter={() => setCoursesMenu(true)}
-                    onMouseLeave={() => setCoursesMenu(false)}
-                >
-                    <button className="flex items-center gap-1 hover:text-yellow-500 transition">
-                        All Exams
-                        <ChevronDown size={14} />
-                    </button>
-                    {coursesMenu && (
-                        <div className="absolute left-0 top-full w-[900px] z-50">
-                            <ExamMegaMenu />
-                        </div>
-                    )}
-                </div>
-                <Link href="#" className="hover:text-yellow-500 transition">Courses</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">PYQs</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">Test Series</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">Current Affairs</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">Daily Quiz</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">News</Link>
-                <Link href="#" className="hover:text-yellow-500 transition">Book</Link>
+            <div className="flex items-center gap-1">
+              <Mail size={14}  />
+              <span>enquery@domain.com</span>
             </div>
-        </nav>
-    );
+            <div className="flex items-center gap-1">
+              <MapPin size={14}  />
+              <span>795 South Park Avenue, CA</span>
+            </div>
+          </div>
+
+          {/* Right side */}
+          <div className="flex items-center">
+            <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
+              <Tag size={20} className="text-white" />
+            </button>
+            <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
+              <Bell size={20} className="text-white" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
+              <ShoppingCart size={20} className="text-white" />
+              <span className="absolute -top-1 -right-1 bg-yellow-400 text-xs px-1 rounded-full">
+                2
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white sticky top-0 z-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="PV classes"
+              width={120}
+              height={40}
+              className="object-contain"
+            />
+          </Link>
+
+          {/* Menu */}
+          <nav className="flex items-center gap-6 text-sm font-medium text-[#204972]">
+            <Link href="/" className="hover:text-[#009FE3]">
+              Home
+            </Link>
+            <div
+              className="relative group"
+              onMouseEnter={() => setCoursesMenu(true)}
+              onMouseLeave={() => setCoursesMenu(false)}
+            >
+              <button className="flex items-center gap-1 hover:text-[#009FE3] transition">
+                All Exams
+                <ChevronDown size={14} />
+              </button>
+              {coursesMenu && (
+                <div className="absolute -left-75 top-full w-[800px] z-50">
+                  <ExamMegaMenu />
+                </div>
+              )}
+            </div>
+            <Link href="#" className="hover:text-[#009FE3]">
+              PYQs
+            </Link>
+            <Link href="/test-series" className="hover:text-[#009FE3]">
+            Test Series
+            </Link>
+            <Link href="/current-affairs" className="hover:text-[#009FE3]">
+             Current Affairs
+            </Link>
+            <Link href="#" className="hover:text-[#009FE3]">
+              News
+            </Link>
+            <Link href="#" className="hover:text-[#009FE3]">
+              Books
+            </Link>
+          </nav>
+        </div>
+      </div>
+    </>
+  );
 }
