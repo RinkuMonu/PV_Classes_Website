@@ -13,8 +13,6 @@ export default function Home() {
       <CoursesSection />
       <BannerImg2 />
       <Rajexam />
-
-
     </>
   );
 }
