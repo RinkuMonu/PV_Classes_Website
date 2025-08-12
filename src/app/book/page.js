@@ -1,10 +1,28 @@
+"use client";
+import { useState, useEffect } from "react";
 import GKbooks from "../../components/Books-sections/GKbooks";
 import Rajexam from "../../components/Books-sections/Rajexam";
 import Popularmagazines from "../../components/Books-sections/Popularmagazines";
 import Image from "next/image";
 import Link from "next/link";
-
+import axiosInstance from "../axios/axiosInstance";
 export default function Book() {
+  const [category,setCategory] = useState([]);
+  
+ useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await axiosInstance.get("/book-categories/");
+      setCategory(res.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  fetchCategories();
+}, []);
+      console.log("category = ",category);
+
 
   const sidebarItems = [
     { img: "/image/img1.jpg", label: "UGC-NET" },
@@ -26,19 +44,19 @@ export default function Book() {
   return (
     <div className="flex gap-6 p-4">
       <aside className="bg-[#204972] text-white rounded-lg p-4 w-56 flex flex-col gap-4 sticky top-4 h-fit">
-  {sidebarItems.map((item, index) => (
+  {category?.map((item, index) => (
     <Link href="/"
       key={index}
       className="flex items-center gap-3 hover:scale-105 transition"
     >
       <Image
-        src={item.img}
-        alt={item.label}
-        width={40}
-        height={40}
-        className="rounded-md"
+        src={item?.full_image}
+        alt={item?.name || "Book image"}
+        width={200}
+        height={300}
       />
-      <span className="text-sm">{item.label}</span>
+
+      <span className="text-sm">{item?.name}</span>
     </Link>
   ))}
 </aside>
