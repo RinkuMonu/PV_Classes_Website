@@ -27,7 +27,7 @@ export default function Book() {
     <div className="flex gap-6 p-4">
       <aside className="bg-[#204972] text-white rounded-lg p-4 w-56 flex flex-col gap-4 sticky top-4 h-fit">
   {sidebarItems.map((item, index) => (
-    <Link href="/"
+    <Link href="/book-category"
       key={index}
       className="flex items-center gap-3 hover:scale-105 transition"
     >
