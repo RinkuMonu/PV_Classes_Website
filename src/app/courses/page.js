@@ -1,250 +1,252 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
 
-const CATEGORIES = [
-  { id: "all", name: "All" },
-  { id: "all-india", name: "All India Exams" },
-  { id: "rajasthan", name: "Rajasthan Exams" },
-  { id: "up", name: "Uttar Pradesh Exams" },
-  { id: "ugc-net", name: "UGC NET/JRF" },
-  { id: "railway", name: "Railway" },
-  { id: "ssc", name: "SSC" },
-  { id: "bank", name: "Bank" },
-  { id: "defence", name: "Defence" },
-  { id: "current-affairs", name: "Current Affairs" },
-  { id: "ncert", name: "NCERT" },
-];
+import { useEffect, useMemo, useState } from "react";
+import SectionHeader from "../../components/SectionHeader";
+import ExamToolbar from "../../components/ExamToolbar";
+import CourseCard from "../../components/CourseCard";
+import CourseHero from "../../components/CourseHero";
+import FilterDrawer from "../../components/FilterDrawer";
 
+/* ---------- Sample data ---------- */
 const COURSES = [
   {
-    id: "c1",
-    title: "Comprehensive GK & GS (Foundation)",
-    tags: ["Recorded + Live", "PDFs", "Tests"],
-    label: "Bestseller",
+    id: "upsc-cse-2025",
+    title: "UPSC Civil Services Examination 2025 (Prelims + Mains + Interview)",
+    shortTitle: "UPSC CSE 2025",
+    thumbnail: "/Image/1exam.webp",
+    category: "UPSC",
+    tags: ["Syllabus", "Eligibility", "Current Affairs", "GS", "CSAT"],
+    rating: 4.8,
+    language: "Bilingual",
     mode: "Online",
-    exams: ["All India", "SSC", "Bank"],
-    thumb: "https://placehold.co/640x360/png",
-    price: 1499,
-    strikePrice: 3999,
-    language: "Hindi + English",
-    rating: 4.7,
+    durationHours: 480,
+    validityDays: 200,
+    price: 24999,
+    discountedPrice: 14999,
+    isFree: false,
+    lastUpdated: "2025-07-10",
   },
   {
-    id: "c2",
-    title: "Current Affairs Power Batch (6 Months)",
-    tags: ["Weekly CA", "MCQs", "Mentorship"],
-    label: "New",
-    mode: "Online",
-    exams: ["All India", "Railway", "State PSC"],
-    thumb: "https://placehold.co/640x360/png",
-    price: 999,
-    strikePrice: 2499,
+    id: "ssc-cgl-2025",
+    title: "SSC CGL 2025 (Tier I + Tier II) Complete Prep",
+    shortTitle: "SSC CGL 2025",
+    thumbnail: "/Image/1exam.webp",
+    category: "SSC",
+    tags: ["Quant", "Reasoning", "English", "GA", "Mock Tests"],
+    rating: 4.6,
     language: "Hindi",
-    rating: 4.8,
+    mode: "Online",
+    durationHours: 260,
+    validityDays: 365,
+    isFree: true,
+    lastUpdated: "2025-07-01",
   },
+  {
+    id: "rrb-ntpc-2025",
+    title: "RRB NTPC 2025 Crash + Mock Combo",
+    shortTitle: "RRB NTPC 2025",
+    thumbnail: "/Image/1exam.webp",
+    category: "Railway",
+    tags: ["Maths", "Reasoning", "GS", "PYQ"],
+    rating: 4.4,
+    language: "English",
+    mode: "Online",
+    durationHours: 120,
+    validityDays: 180,
+    price: 3999,
+    discountedPrice: 2499,
+    isFree: false,
+    lastUpdated: "2025-06-20",
+  },
+  {
+    id: "ssc-gd-2025",
+    title: "SSC GD 2025 Target Batch",
+    shortTitle: "SSC GD 2025",
+    thumbnail: "/Image/1exam.webp",
+    category: "SSC",
+    tags: ["Syllabus", "Class PDF", "Test Series"],
+    rating: 4.5,
+    language: "Hindi",
+    mode: "Online",
+    validityDays: 500,
+    isFree: true,
+    lastUpdated: "2025-06-18",
+  },
+  {
+    id: "upsc-ca-revision",
+    title: "January to June 2025 Current Affairs Revision",
+    shortTitle: "CA Revision (Jan–Jun 2025)",
+    thumbnail: "/Image/1exam.webp",
+    category: "UPSC",
+    tags: ["Current Affairs", "Monthly MCQ"],
+    rating: 4.7,
+    language: "Bilingual",
+    mode: "Online",
+    validityDays: 150,
+    isFree: true,
+    lastUpdated: "2025-06-10",
+  },
+  {
+    id: "railway-express-2025",
+    title: "Railway NTPC Gaurav Express Batch",
+    shortTitle: "Railway Express 2025",
+    thumbnail: "/Image/1exam.webp",
+    category: "Railway",
+    tags: ["Hindi Medium", "Class PDF", "Test Series"],
+    rating: 4.3,
+    language: "Hindi",
+    mode: "Online",
+    validityDays: 500,
+    isFree: true,
+    lastUpdated: "2025-06-05",
+  },
+];
+
+/* ---------- Helpers ---------- */
+const formatINR = (n) =>
+  typeof n === "number"
+    ? new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0,
+      }).format(n)
+    : "—";
+
+/** Map the big top category chip to course.category values */
+function matchesTopCategory(course, topCat) {
+  if (topCat === "All India Exams") return ["UPSC", "SSC", "Railway", "Banking"].includes(course.category);
+  if (topCat === "Rajasthan Exams") return course.category === "Rajasthan";
+  if (topCat === "Uttar Pradesh Exams") return course.category === "UP";
+  if (topCat === "UGC NET JRF") return course.category === "UGC NET";
+  if (topCat === "Madhya Pradesh Exam") return course.category === "MP";
+  if (topCat === "Bihar Exams") return course.category === "Bihar";
+  if (topCat === "Haryana Exams") return course.category === "Haryana";
+  if (topCat === "Jharkhand Exams") return course.category === "Jharkhand";
+  return true;
+}
+
+/** Language matcher used by the drawer */
+function langMatch(courseLang, filterLang) {
+  if (filterLang === "All") return true;
+  if (filterLang === "English") return ["English", "Bilingual"].includes(courseLang);
+  if (filterLang === "Hindi") return ["Hindi", "Bilingual"].includes(courseLang);
+  return courseLang === filterLang;
+}
+
+const TOP_CATEGORIES = [
+  "All India Exams",
+  "Rajasthan Exams",
+  "Uttar Pradesh Exams",
+  "UGC NET JRF",
+  "Madhya Pradesh Exam",
+  "Bihar Exams",
+  "Haryana Exams",
+  "Jharkhand Exams",
 ];
 
 export default function Page() {
+  /* ---------- State ---------- */
+  const [mode, setMode] = useState("Online");
+  const [cat, setCat] = useState("All India Exams");
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+  const perPage = 8;
+
+  // Drawer state
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [lang, setLang] = useState("All");
+  const [freeOnly, setFreeOnly] = useState(false);
+
+  /* ---------- Filter / Search ---------- */
+  const filtered = useMemo(() => {
+    let items = COURSES.slice();
+
+    if (cat) items = items.filter((c) => matchesTopCategory(c, cat));
+    if (mode) items = items.filter((c) => c.mode === mode);
+    if (lang !== "All") items = items.filter((c) => langMatch(c.language, lang));
+    if (freeOnly) items = items.filter((c) => c.isFree);
+
+    if (q.trim()) {
+      const s = q.toLowerCase();
+      items = items.filter(
+        (c) =>
+          c.title.toLowerCase().includes(s) ||
+          (c.shortTitle || "").toLowerCase().includes(s) ||
+          c.category.toLowerCase().includes(s) ||
+          c.tags.some((t) => t.toLowerCase().includes(s))
+      );
+    }
+
+    items.sort((a, b) => +new Date(b.lastUpdated || 0) - +new Date(a.lastUpdated || 0));
+    return items;
+  }, [cat, mode, q, lang, freeOnly]); // <-- include freeOnly
+
+  const pages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const pageItems = filtered.slice((page - 1) * perPage, page * perPage);
+
+  // clamp page safely when filters change
+  useEffect(() => {
+    if (page > pages) setPage(1);
+  }, [pages, page]);
+
   return (
-    <main className="min-h-screen">
-      <Hero />
-      <section className="container mx-auto px-4">
-        <CategoryRail />
-        <Filters />
-        <CourseGrid />
+    <main className="min-h-screen bg-white">
+      <CourseHero />  {/* your banner hero */}
+      <SectionHeader />
+
+      <ExamToolbar
+        categories={TOP_CATEGORIES}
+        selected={cat}
+        onSelect={(c) => {
+          setCat(c);
+          setPage(1);
+        }}
+        mode={mode}
+        onModeChange={(m) => {
+          setMode(m);
+          setPage(1);
+        }}
+        search={q}
+        onSearch={(val) => {
+          setQ(val);
+          setPage(1);
+        }}
+        onOpenFilters={() => setFilterOpen(true)}  // <-- open the drawer
+      />
+
+      {/* Off-canvas filter drawer */}
+      <FilterDrawer
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        initialLanguage={lang}
+        initialFreeOnly={freeOnly}
+        onApply={({ language, freeOnly }) => {
+          setLang(language);
+          setFreeOnly(freeOnly);
+          setPage(1);
+        }}
+      />
+
+      <section id="courses" className="mx-auto max-w-7xl px-20 pt-4 pb-8">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {pageItems.map((c) => (
+            <CourseCard key={c.id} course={c} formatINR={formatINR} />
+          ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          {page < pages ? (
+            <button
+              className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+              onClick={() => setPage((p) => Math.min(p + 1, pages))}
+            >
+              View more <span>▾</span>
+            </button>
+          ) : (
+            <span className="text-sm text-neutral-500">No more results</span>
+          )}
+        </div>
       </section>
     </main>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(1200px_400px_at_50%_-50%,#e5e5e5,transparent)]" />
-      <div className="container mx-auto px-4 py-12 sm:py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-neutral-600">
-              <span>New UI</span> <span className="opacity-60">•</span> <span>Fast & Accessible</span>
-            </div>
-            <h1 className="mt-4 text-3xl font-bold sm:text-4xl md:text-5xl">
-              Learn GK & GS with <span className="underline decoration-neutral-300">Kumar Gaurav Sir</span>
-            </h1>
-            <p className="mt-4 max-w-xl text-neutral-600">
-              Live + recorded classes, structured notes, quizzes, and tests.
-            </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a href="#courses" className="inline-flex items-center justify-center rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90">Browse Courses</a>
-              <button className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-semibold hover:bg-neutral-50">Download PDFs</button>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="aspect-video overflow-hidden rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
-              <img src="https://placehold.co/800x450/png" alt="Course preview" className="h-full w-full object-cover" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CategoryRail() {
-  const ref = useRef(null);
-  const scroll = (dir) => {
-    const el = ref.current;
-    if (!el) return;
-    el.scrollBy({ left: dir === "left" ? -300 : 300, behavior: "smooth" });
-  };
-  return (
-    <section className="py-6">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Choose your exam category</h2>
-        <div className="hidden gap-2 sm:flex">
-          <button onClick={() => scroll("left")} className="inline-flex items-center rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm hover:bg-neutral-50">◀</button>
-          <button onClick={() => scroll("right")} className="inline-flex items-center rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm hover:bg-neutral-50">▶</button>
-        </div>
-      </div>
-      <div ref={ref} className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4">
-        {CATEGORIES.map((c) => (
-          <button key={c.id} className="snap-start whitespace-nowrap rounded-full border px-4 py-2 text-sm text-neutral-700 hover:border-black hover:text-black">
-            {c.name}
-          </button>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Filters() {
-  const [query, setQuery] = useState("");
-  const [modes, setModes] = useState([]);
-  const [lang, setLang] = useState(null);
-  const toggleMode = (m) => setModes((list) => (list.includes(m) ? list.filter((x) => x !== m) : [...list, m]));
-  return (
-    <section className="mb-6 mt-2 rounded-xl border bg-white/60 p-4">
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Search</label>
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="Search courses, topics..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus-visible:ring-2 focus-visible:ring-black/60"
-            />
-            <button className="inline-flex items-center rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-semibold hover:bg-neutral-50">Search</button>
-          </div>
-        </div>
-        <div>
-          <span className="mb-1 block text-sm font-medium">Mode</span>
-          <div className="flex flex-wrap gap-2">
-            {["Online", "Offline", "Hybrid"].map((m) => (
-              <button
-                key={m}
-                onClick={() => toggleMode(m)}
-                className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${modes.includes(m) ? "border-black bg-black text-white" : "border-neutral-300 text-neutral-700"}`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div>
-          <span className="mb-1 block text-sm font-medium">Language</span>
-          <div className="flex gap-2">
-            {["Hindi", "English", "Hindi + English"].map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang((curr) => (curr === l ? null : l))}
-                className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${lang === l ? "border-black bg-black text-white" : "border-neutral-300 text-neutral-700"}`}
-              >
-                {l}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="sr-only">
-        Current search: {query || "none"}. Modes: {modes.join(", ") || "any"}. Language: {lang || "any"}.
-      </div>
-    </section>
-  );
-}
-
-function CourseGrid() {
-  const [sort, setSort] = useState("popular");
-  const [query] = useState("");
-  const courses = useMemo(() => {
-    let list = COURSES;
-    if (query) {
-      const q = query.toLowerCase();
-      list = list.filter((c) => c.title.toLowerCase().includes(q));
-    }
-    if (sort === "price") list = [...list].sort((a, b) => a.price - b.price);
-    if (sort === "new") list = [...list].sort((a, b) => (b.label === "New" ? 1 : -1));
-    return list;
-  }, [sort, query]);
-
-  return (
-    <section id="courses" className="pb-10">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Courses</h3>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600">Sort</label>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="rounded-lg border px-2 py-1.5 text-sm"
-          >
-            <option value="popular">Popular</option>
-            <option value="new">New</option>
-            <option value="price">Price (Low to High)</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {courses.map((c) => (
-          <article key={c.id} className="group overflow-hidden rounded-xl border bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:shadow-lg">
-            <div className="relative">
-              <img src={c.thumb} alt="" className="h-40 w-full object-cover" />
-              {c.label && (
-                <span className="absolute left-3 top-3 inline-flex items-center rounded-full border border-black bg-black px-2.5 py-1 text-xs font-medium text-white">{c.label}</span>
-              )}
-            </div>
-            <div className="p-4">
-              <h4 className="line-clamp-2 text-base font-semibold">{c.title}</h4>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {c.tags.map((t) => (
-                  <span key={t} className="inline-flex items-center rounded-full border border-neutral-300 px-2.5 py-1 text-xs font-medium text-neutral-700">{t}</span>
-                ))}
-              </div>
-              <div className="mt-3 flex items-center justify-between">
-                <div className="text-sm text-neutral-600">
-                  <span className="font-medium">{c.mode}</span> • {c.language || "—"}
-                </div>
-                {typeof c.rating === "number" && (
-                  <div className="text-sm">⭐ {c.rating}</div>
-                )}
-              </div>
-              <div className="mt-3 flex items-end justify-between">
-                <div>
-                  <div className="text-xl font-bold">₹{c.price}</div>
-                  {c.strikePrice && <div className="text-sm text-neutral-400 line-through">₹{c.strikePrice}</div>}
-                </div>
-                <button className="inline-flex items-center rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90">Buy Now</button>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1 text-xs text-neutral-600">
-                {c.exams.map((e) => (
-                  <span key={e} className="rounded bg-neutral-100 px-2 py-1">{e}</span>
-                ))}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
   );
 }

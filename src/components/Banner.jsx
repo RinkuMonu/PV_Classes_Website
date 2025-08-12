@@ -137,7 +137,7 @@ const Banner = () => {
                         <SwiperSlide key={item._id}>
                             <div className="relative w-full h-auto">
                                 <img
-                                    src={item.images[0]}
+                                    src={item.full_image}
                                     alt={item.bannerName}
                                     className="w-full h-auto object-fill"
                                     loading="eager"
