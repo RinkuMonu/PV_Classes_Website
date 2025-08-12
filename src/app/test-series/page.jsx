@@ -1,4 +1,4 @@
-import TestSeriesCard from '@/components/TestCard'
+import TestSeriesCard from '../../components/TestCard'
 import React from 'react'
 
 export const testSeriesData = [
