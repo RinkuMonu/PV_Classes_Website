@@ -69,7 +69,7 @@ export default function Book() {
                   {subCatData.book_subcategory_name}
                 </h2>
                 <Link
-                  href="#"
+                  href={`/book-category/${subCatData?.books?.[0]?.category?._id}`}
                   className="flex items-center text-[#616602] font-medium hover:underline"
                 >
                   See All <span className="ml-1">→</span>
