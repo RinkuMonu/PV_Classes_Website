@@ -29,50 +29,50 @@ export const CartProvider = ({ children }) => {
 
   // 🛒 Add to cart
     const addToCart = async ({ itemType, itemId, quantity = 1, extra = {} }) => {
-    try {
-        setLoading(true);
-        const userId = localStorage.getItem("userId");
+        try {
+            setLoading(true);
+            const userId = localStorage.getItem("userId");
 
-        if (!userId) {
-            let guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
-            const existingItemIndex = guestCart.findIndex(
-                (item) => item.itemId === itemId && item.itemType === itemType
-            );
+            if (!userId) {
+                let guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+                const existingItemIndex = guestCart.findIndex(
+                    (item) => item.itemId === itemId && item.itemType === itemType
+                );
 
-            if (existingItemIndex > -1) {
-                guestCart[existingItemIndex].quantity += quantity;
-            } else {
-                guestCart.push({ itemType, itemId, quantity, extra });
+                if (existingItemIndex > -1) {
+                    guestCart[existingItemIndex].quantity += quantity;
+                } else {
+                    guestCart.push({ itemType, itemId, quantity, extra });
+                }
+
+                localStorage.setItem("guestCart", JSON.stringify(guestCart));           
+                return { success: true, message: "Item added to cart" };
             }
 
-            localStorage.setItem("guestCart", JSON.stringify(guestCart));           
-            return { success: true, message: "Item added to cart" };
+            const { data } = await axiosInstance.post(`/cart/add`, {
+                userId,
+                itemType,
+                itemId,
+                quantity,
+                extra,
+            });
+
+            setCart({
+                ...data.cart,
+                subtotal: data.subtotal,
+                tax: data.tax,
+                total: data.total,
+            });
+
+        
+        
+            return { success: true, message: data.message };
+        } catch (error) {
+            console.error("Error adding to cart:", error);        
+            return { success: false, message: error.response?.data?.message || "Failed to add to cart" };
+        } finally {
+            setLoading(false);
         }
-
-        const { data } = await axiosInstance.post(`/cart/add`, {
-            userId,
-            itemType,
-            itemId,
-            quantity,
-            extra,
-        });
-
-        setCart({
-            ...data.cart,
-            subtotal: data.subtotal,
-            tax: data.tax,
-            total: data.total,
-        });
-
-       
-       
-        return { success: true, message: data.message };
-    } catch (error) {
-        console.error("Error adding to cart:", error);        
-        return { success: false, message: error.response?.data?.message || "Failed to add to cart" };
-    } finally {
-        setLoading(false);
-    }
     };
 
 
