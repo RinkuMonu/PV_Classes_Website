@@ -110,14 +110,14 @@ export default function PreviousYearPapers() {
                         <FaShareAlt className="mt-1 me-1" /> Share
                       </button>
                       {openIndex === idx && (
-                        <div className="absolute top-13 right-30 bg-white shadow-xl rounded-xl border w-48 z-50 overflow-hidden animate-fadeIn">
+                        <div className="absolute top-12 right-30 bg-white shadow-2xl rounded-xl  w-48 z-50 overflow-hidden animate-fadeIn">
                           <a
                             href="https://wa.me/?text=Check%20this%20out:%20YOUR_URL"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-3 hover:bg-green-50 transition-colors"
                           >
-                            <span className="p-2 bg-green-100 rounded-full">
+                            <span className="px-2 py-1 bg-green-100 rounded-full">
                               <FaWhatsapp className="text-green-600" />
                             </span>
                             <span className="text-sm font-medium text-gray-700">WhatsApp</span>
@@ -129,7 +129,7 @@ export default function PreviousYearPapers() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors"
                           >
-                            <span className="p-2 bg-blue-100 rounded-full">
+                            <span className="px-2 py-1 bg-blue-100 rounded-full">
                               <FaFacebook className="text-blue-600" />
                             </span>
                             <span className="text-sm font-medium text-gray-700">Facebook</span>
@@ -140,7 +140,7 @@ export default function PreviousYearPapers() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-3 hover:bg-sky-50 transition-colors"
                           >
-                            <span className="p-2 bg-sky-100 rounded-full">
+                            <span className="px-2 py-1 bg-sky-100 rounded-full">
                               <FaTwitter className="text-sky-500" />
                             </span>
                             <span className="text-sm font-medium text-gray-700">Twitter / X</span>
