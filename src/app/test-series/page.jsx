@@ -111,7 +111,7 @@ export const testSeriesData = [
 function page() {
   return (
     <>
- <div className='px-20'>
+ <div className='px-3 md:px-20'>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
       {testSeriesData.map((series, index) => (
         <TestSeriesCard key={index} {...series} />

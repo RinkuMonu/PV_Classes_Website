@@ -31,13 +31,7 @@ const books = [
     discount: "5% OFF",
     img: "/image/book3.webp",
   },
-  {
-    title: "Bhoogol ka Khajaana : World map (3rd Edition)",
-    price: 123,
-    oldPrice: 130,
-    discount: "5% OFF",
-    img: "/image/book3.webp",
-  },
+
 ];
 
 export default function Popularmagazines() {
@@ -56,19 +50,19 @@ export default function Popularmagazines() {
         </Link>
       </div>
 
-      {/* Books Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {books.map((book, index) => (
           <div
             key={index}
             className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
           >
-            {/* New Arrival Tag */}
+
             <div className="absolute bg-[#616602] text-white text-xs px-3 py-1 rounded-br-lg font-semibold z-10 shadow-md">
               New Arrivals
             </div>
 
-            {/* Book Image */}
+
             <div className="relative w-full h-64">
               <Image
                 src={book.img}
@@ -82,13 +76,13 @@ export default function Popularmagazines() {
               </Link>
             </div>
 
-            {/* Title */}
+
             <div className="p-3">
               <p className="text-sm font-medium text-gray-800 line-clamp-2">
                 {book.title}
               </p>
 
-              {/* Price */}
+
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-lg font-semibold text-[#204972]">
                   ₹{book.price}
