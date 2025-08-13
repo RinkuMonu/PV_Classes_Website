@@ -9,7 +9,8 @@ const books = [
     oldPrice: 120,
     discount: "5% OFF",
     img: "/image/book1.webp",
-  },
+  }, 
+  
   {
     title: "Bihar Police Constable Study Material & 15 Model Papers",
     price: 190,
