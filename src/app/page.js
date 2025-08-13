@@ -1,5 +1,4 @@
 import Banner from "../components/Banner";
-import Image from "next/image";
 import Rajexam from "../components/Books-sections/Rajexam"
 import CourseEnroll from "../components/CourseEnroll";
 import CoursesSection from "../components/CourseSelection";

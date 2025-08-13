@@ -91,7 +91,7 @@ export default function CoursesSection() {
         {courses.map((course, idx) => (
           <div
             key={idx}
-            className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+            className="bg-white border-[gray] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
           >
             <Image
               src={course.img}

@@ -113,6 +113,7 @@ const Banner = () => {
 
     return (
         <section className="relative w-full">
+        <h1>hfjdksdjf</h1>
             <div className="relative overflow-hidden">
                 <Swiper
                     slidesPerView={1}
@@ -142,17 +143,11 @@ const Banner = () => {
                                     className="w-full h-auto object-fill"
                                     loading="eager"
                                 />
-                                <div className="absolute inset-0 flex items-center justify-center text-white text-center z-20 px-4">
+                                {/* <div className="absolute inset-0 flex items-center justify-center text-white text-center z-20 px-4">
                                     <div className="w-full max-w-3xl space-y-4">
                                         <div className="flex flex-row justify-center items-center gap-3 -mt-16 sm:mt-72">
                                             <Link
-                                                to={
-                                                    item.description?.toLowerCase() === "new arrivals"
-                                                        ? `/products?newArrival=true`
-                                                        : `/category/${encodeURIComponent(
-                                                            slugify(item?.description)
-                                                        ).toLowerCase()}`
-                                                }
+                                                to={item?.description}
                                                 className="group inline-flex items-center justify-center gap-2 py-1 px-4 text-xs font-bold bg-white text-black rounded-full shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105"
                                                 onMouseEnter={(e) => {
                                                     e.currentTarget.style.background = "rgb(157 48 137)";
@@ -174,7 +169,7 @@ const Banner = () => {
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </SwiperSlide>
                     ))}
