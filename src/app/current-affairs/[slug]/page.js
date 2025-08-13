@@ -73,7 +73,8 @@ export default function CurrentAffairsDetails() {
                     <div className="mb-6 relative w-full aspect-[16/9]">
                         <Image
                             //   src={article.image}
-                            src={`http://localhost:5000${article.image}`}
+                            // src={`http://localhost:5000${article.image}`}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${article.image}`}
                             alt={article.title}
                             fill
                             className="rounded-md object-cover"
@@ -170,7 +171,8 @@ export default function CurrentAffairsDetails() {
                                             width={40}
                                             height={40}
                                             //   src={post.image}
-                                            src={`http://localhost:5000${post.image}`}
+                                            // src={`http://localhost:5000${post.image}`}
+                                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${post.image}`}
                                             alt={post.title}
                                             className="w-16 h-16 object-cover rounded-md flex-shrink-0"
                                         />
