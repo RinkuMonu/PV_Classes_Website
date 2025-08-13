@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
+import Link from "next/link";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function CoursesSection() {
   const [activeTab, setActiveTab] = useState("All India Exams");
@@ -39,6 +41,14 @@ export default function CoursesSection() {
       price: 300,
       oldPrice: 1200,
       discount: "75% OFF",
+    },
+    {
+      title: "GK & GS Brahmastra 3.0 Batch",
+      img: "/Image/book1.webp",
+      validity: "365 Days",
+      price: 399,
+      oldPrice: 2850,
+      discount: "86% OFF",
     },
     {
       title: "GK & GS Brahmastra 3.0 Batch",
@@ -87,7 +97,7 @@ export default function CoursesSection() {
       </div>
 
       {/* Course Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 mb-6">
         {courses.map((course, idx) => (
           <div
             key={idx}
@@ -118,6 +128,16 @@ export default function CoursesSection() {
           </div>
         ))}
       </div>
+
+
+<div className="flex float-end">
+ <Link
+          href="#"
+          className="bg-[#204972] text-white px-8 py-2 rounded-md"
+        >
+          See All <span className="ml-1">→</span>
+        </Link>
+</div>
     </section>
   );
 }
