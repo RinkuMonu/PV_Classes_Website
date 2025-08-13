@@ -1,126 +1,106 @@
-import TestSeriesCard from '../../components/TestCard'
-import React from 'react'
+"use client";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../axios/axiosInstance";
+import Image from "next/image";
 
-export const testSeriesData = [
-  {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  }, {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  },  {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  }, {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  },  {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  }, {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  }, {
-    title: "Prayas JEE Hindi 2026",
-    subtitle: "Test Series",
-    tests: 20,
-    price: 799,
-    originalPrice: 1599,
-    validity: 180,
-    image: "/test1.webp",
-    badge: "ONLINE HINDI",
-    discount: 50,
-  },
-  {
-    title: "NEET Rank Booster 2025",
-    subtitle: "Full Syllabus",
-    tests: 25,
-    price: 999,
-    originalPrice: 1999,
-    validity: 365,
-    image: "/test1.webp",
-    badge: "ONLINE ENGLISH",
-    discount: 50,
-  },
-  {
-    title: "Foundation Class 10 2025",
-    subtitle: "Test Series",
-    tests: 15,
-    price: 599,
-    originalPrice: 1299,
-    validity: 150,
-    image: "/test1.webp",
-    badge: "OFFLINE HINDI",
-    discount: 54,
-  },
-   {
-    title: "Foundation Class 10 2025",
-    subtitle: "Test Series",
-    tests: 15,
-    price: 599,
-    originalPrice: 1299,
-    validity: 150,
-    image: "/test1.webp",
-    badge: "OFFLINE HINDI",
-    discount: 54,
-  },
-];
+function Page() {
+  const [testSeriesData, setTestSeriesData] = useState([]);
 
-function page() {
+  useEffect(() => {
+    const fetchTestSeries = async () => {
+      try {
+        const res = await axiosInstance.get("/test-series");
+        if (res.data.success) {
+          setTestSeriesData(res.data.data); // grouped data
+        }
+      } catch (err) {
+        console.error("Error fetching test series:", err);
+      }
+    };
+    fetchTestSeries();
+  }, []);
+console.log("testSeriesData = ",testSeriesData);
   return (
-    <>
- <div className='px-3 md:px-20'>
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
-      {testSeriesData.map((series, index) => (
-        <TestSeriesCard key={index} {...series} />
+    <div className="px-3 md:px-20">
+      {testSeriesData.map((examGroup) => (
+        <div key={examGroup.exam_id} className="mb-8">
+          {/* Exam Name */}
+          <h2 className="text-2xl font-bold mb-4">{examGroup.exam_name}</h2>
+
+          {/* Grid of Series */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
+            {examGroup.series.map((series) => {
+              const discount =
+                Math.round(
+                  ((series.price - series.discount_price) / series.price) * 100
+                ) || 0;
+
+             
+
+              return (
+                <div
+                  key={series._id}
+                  className="w-full max-w-sm rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  {/* Title + Tag */}
+                  <div className="px-4 pt-4">
+                    <div className="flex justify-between items-start">
+                      <h2 className="text-lg font-bold leading-snug">
+                        {series?.title}
+                      </h2>
+                      <span className="bg-yellow-400 text-xs px-2 py-1 rounded-full font-semibold shadow-sm">
+                        {series?.title_tag}
+                      </span>
+                    </div>
+                   
+                  </div>
+
+                  {/* Image */}
+                  <div className="relative w-full h-56 px-4 mt-3">
+                    <div className="relative w-full h-full rounded-lg overflow-hidden">
+                      <Image
+                        src={`http://localhost:5000/uploads/testSeries/${series?.images?.[0]}`}
+                        alt={series?.title}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                      {series?.total_tests > 0 && (
+                        <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
+                          {series?.total_tests} Tests
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Validity */}
+                  <p className="px-4 mt-3 font-medium text-sm">
+                    Validity for {series?.validity}
+                  </p>
+
+                  {/* Price + Discount */}
+                  <div className="px-4 pb-4 mt-2">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="text-indigo-700 font-bold text-lg">
+                          ₹{series?.discount_price}
+                        </span>
+                        <span className="text-gray-400 line-through text-sm ml-1">
+                          ₹{series?.price}
+                        </span>
+                      </div>
+                      <div className="text-green-700 text-xs font-semibold bg-green-50 px-2 py-1 rounded-md">
+                        {discount}% OFF
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       ))}
-    </div> 
- </div>
-   
-    </>
-  )
+    </div>
+  );
 }
 
-export default page
+export default Page;

@@ -1,4 +1,6 @@
 "use client";
+import toast from "react-hot-toast";
+import { useCart } from "../../components/context/CartContext";
 import { useState, useEffect } from "react";
 import GKbooks from "../../components/Books-sections/GKbooks";
 import Rajexam from "../../components/Books-sections/Rajexam";
@@ -9,21 +11,26 @@ import axiosInstance from "../axios/axiosInstance";
 import { FaPlus } from "react-icons/fa6";
 
 export default function Book() {
+  const { addToCart, loading,successMessage, errorMessage } = useCart();
+  console.log("success = ",successMessage);
   const [category,setCategory] = useState([]);
    const [booksData, setBooksData] = useState({});
-
+// toast.success(successMessage);
+// toast.error(errorMessage);
+  useEffect(() => {
   
- useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await axiosInstance.get("/book-categories/");
-      setCategory(res.data.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-  fetchCategories();
-}, []);
+  }, [successMessage, errorMessage]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axiosInstance.get("/book-categories/");
+        setCategory(res.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -39,6 +46,22 @@ export default function Book() {
     fetchBook();
   }, []);
     console.log("booksData = ",booksData);
+    const handleAdd = async (e, itemType, itemId) => {
+      e.stopPropagation();
+      const response = await addToCart({
+        itemType,
+        itemId,
+        quantity: 1,
+        extra: {}
+      });
+      console.log("response = ",response.success);
+      if (response.success) {
+        toast.success(response.message);  // show success toast
+      } else {
+        toast.error(response.message);    // show error toast
+      }
+    };
+
 
 
   return (
@@ -76,39 +99,30 @@ export default function Book() {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {subCatData?.books?.map((book) => (
-                  <Link key={book?._id} href={book?._id ? `/book-detail/${book?._id}` : '/'}>
-                    <div
-                      key={book?._id}
-                      className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
-                    >
+                  <div
+                    key={book?._id}
+                    className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
+                  >
+                    <Link href={book?._id ? `/book-detail/${book?._id}` : '/'}>
                       {book?.tag?.map((tag, index) => (
                         <div
                           key={index}
                           className="absolute top-0 left-0 bg-[#616602] text-white text-xs px-3 py-1 rounded-br-lg font-semibold z-10 shadow-md mr-1"
-                          style={{ top: `${index * 24}px` }} // to stack badges vertically with spacing
+                          style={{ top: `${index * 24}px` }}
                         >
-                          {tag.charAt(0).toUpperCase() + tag.slice(1)} {/* Capitalize first letter */}
+                          {tag.charAt(0).toUpperCase() + tag.slice(1)}
                         </div>
                       ))}
 
                       <div className="relative w-full h-64">
                         <Image
-                          src={`http://localhost:5000/uploads/book/${book?.images[0]}`} // assuming base URL is handled in next.config.js or elsewhere
+                          src={`http://localhost:5000/uploads/book/${book?.images[0]}`}
                           alt={book?.book_title}
                           fill
                           className="object-cover p-2"
                         />
-                        <Link
-                          href="/"
-                          className="flex absolute -bottom-28 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow"
-                        >
-                          <span className="mt-1 me-2">
-                            <FaPlus />
-                          </span>
-                          ADD
-                        </Link>
                       </div>
 
                       <div className="p-3">
@@ -125,7 +139,6 @@ export default function Book() {
                               ({Math.round(((book.price - book.discount_price) / book.price) * 100)}% OFF)
                             </span>
                           )}
-
                         </div>
 
                         {book?.discount_price && (
@@ -134,10 +147,23 @@ export default function Book() {
                           </p>
                         )}
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+
+                    {/* Button ko card ke andar rakha, but Link ke bahar */}
+                    <button
+                      onClick={(e) => handleAdd(e, "book", book?._id)}
+                      disabled={loading}
+                      className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      <span className="mt-1 me-2">
+                        <FaPlus />
+                      </span>
+                      {loading ? "ADDING..." : "ADD"}
+                    </button>
+                  </div>
                 ))}
               </div>
+
             </div>
           ))}
         </section>

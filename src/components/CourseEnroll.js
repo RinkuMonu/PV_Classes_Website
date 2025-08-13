@@ -8,7 +8,7 @@ export default function CourseEnroll() {
         {/* Left Content */}
         <div className="p-10">
           <h2 className="text-2xl md:text-4xl text-[#00316b] font-bold leading-snug mb-4">
-            Course select kar tayari ki shuruaat karen
+            Course select kar tayyari ki shuruaat karen...!
           </h2>
           <p className=" mb-6 leading-relaxed">
             Paayen Free Resources Current Affairs aur notes PDFs, Test Series,
