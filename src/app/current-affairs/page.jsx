@@ -420,7 +420,6 @@ export default function CurrentAffairsPage() {
     return [currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
   };
 
-                console.log("Category:", categories);
 
 
   return (
@@ -477,12 +476,9 @@ export default function CurrentAffairsPage() {
         {categories.slice(1).map((cat) => (
           <Link
             key={cat}
-            // href={`/current-affairs/category/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-            href={`/current-affairs/category/${cat}`}
-            className={`px-4 py-2 rounded-full text-base border transition font-bold ${selectedCategory === cat
-              ? "bg-[#00316B] text-white border-[#00316B]"
-              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-              }`}
+            href={`/current-affairs/category/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+            // href={`/current-affairs/category/${cat}`}
+            className={`px-4 py-2 rounded-full text-base border transition font-bold m-2`}
           >
             {cat}
           </Link>
@@ -588,7 +584,7 @@ export default function CurrentAffairsPage() {
           </div>
         ) : (
           <>
-            <div className="container mx-auto px-4 space-y-10">
+            <div className="container mx-auto px-4 space-y-10 mt-4">
               {categories.filter((cat) => cat !== "All").map((cat) => {
                 const catItems = paginatedAffairs.filter((item) => item.category?.name === cat);
                 if (catItems.length === 0) return null;
