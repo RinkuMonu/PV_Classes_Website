@@ -207,7 +207,8 @@ export default function CategoryAffairsPage() {
                       <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
                         <div className="relative">
                           <Image
-                            src={item.image.startsWith("http") ? item.image : `http://localhost:5000${item.image}`}
+                            // src={item.image.startsWith("http") ? item.image : `http://localhost:5000${item.image}`}
+                            src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
                             alt={item.title}
                             width={200}
                             height={400}
