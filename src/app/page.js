@@ -17,9 +17,9 @@ export default function Home() {
       <CoursesSection />
       <BannerImg2 />
       <Rajexam />
-<FacultySlider/>
+      <FacultySlider/>
       <CurrentAffairs />
- <Testimonials />
+      <Testimonials />
 
     </>
   );
