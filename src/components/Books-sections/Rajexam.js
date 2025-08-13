@@ -67,8 +67,10 @@ export default function rajexambooks() {
               <Image
                 src={book.img}
                 alt={book.title}
-                fill
-                className="object-cover p-2"
+                 width={200}
+              height={150}
+
+                className="object-contain p-2"
               />
               <Link href="/" className="flex absolute -bottom-28 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
                 <span className="mt-1 me-2"><FaPlus /></span>

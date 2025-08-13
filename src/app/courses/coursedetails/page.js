@@ -1,0 +1,499 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+/**
+ * ⬇️ Drop <CourseBody /> directly *below your existing HERO/top section*.
+ * I have *not* included/changed your hero. This only renders the lower layout
+ * with a sticky right sidebar exactly like Udemy's course page.
+ */
+
+// ---------- Small UI helpers ----------
+const IconPlay = (props) => (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+        <path d="M8 5v14l11-7z" />
+    </svg>
+);
+
+const Dot = () => <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-400 inline-block" />;
+
+const Star = ({ filled = true }) => (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill={filled ? "currentColor" : "none"} stroke="currentColor">
+        <path d="M12 2l2.09 6.26L20 10.27l-6 4.36L16.18 22 12 18.9 7.82 22 10 14.63l-6-4.36 5.91-2.01L12 2z" />
+    </svg>
+);
+
+const Rating = ({ value }) => {
+    const full = Math.floor(value);
+    const half = value - full >= 0.5;
+    return (
+        <div className="flex items-center gap-1 text-yellow-500" aria-label={`${value} out of 5`}>
+            {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} filled={i < full || (half && i === full)} />
+            ))}
+        </div>
+    );
+};
+
+// ---------- Left blocks ----------
+const LearnList = () => {
+    const points = [
+        "Create content & synthesize info with prompt engineering",
+        "Turn creativity into paid work using ChatGPT",
+        "Use 50+ AI tools for marketing & growth",
+        "Plan/prioritize tasks with AI to save hours",
+        "Improve communication & leadership with AI feedback",
+        "Generate ads, newsletters & campaigns",
+        "Create AI voiceovers for any use-case",
+        "Automate research & note-taking",
+    ];
+    const [show, setShow] = useState(false);
+    return (
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <h2 className="text-xl font-bold">What you'll learn</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {(show ? points : points.slice(0, 6)).map((t, i) => (
+                    <div key={i} className="flex items-start gap-3 text-[15px] text-neutral-800">
+                        <Dot />
+                        <span>{t}</span>
+                    </div>
+                ))}
+            </div>
+            <button onClick={() => setShow((s) => !s)} className="mt-4 text-sm font-semibold underline">
+                {show ? "Show less" : "Show more"}
+            </button>
+        </div>
+    );
+};
+
+const CourseContent = () => {
+    const [open, setOpen] = useState([0]);
+    const sections = [
+        {
+            title: "Introduction & Setup",
+            meta: "6 lectures • 34min",
+            items: [
+                "Welcome & course overview",
+                "How to use this course effectively",
+                "Setting up ChatGPT & extensions",
+                "Prompt patterns you'll reuse",
+                "Safety, privacy & limitations",
+                "Quick wins demo",
+            ],
+        },
+        {
+            title: "Prompt Engineering Essentials",
+            meta: "8 lectures • 1h 12min",
+            items: [
+                "CRAFT framework",
+                "Role prompting & constraints",
+                "Few-shot & multi-turn refinement",
+                "Structured outputs (JSON/CSV)",
+                "Common failures & fixes",
+                "Hands-on exercises",
+                "System vs user prompts",
+                "Evaluation checklist",
+            ],
+        },
+    ];
+    const toggle = (i) =>
+        setOpen((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]));
+
+    return (
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="flex items-end justify-between">
+                <div>
+                    <h2 className="text-xl font-bold">Course content</h2>
+                    <p className="text-sm text-neutral-600">{sections.length} sections • 24 lectures • 3h 26m total length</p>
+                </div>
+                <button className="text-sm underline">Expand all</button>
+            </div>
+
+            <div className="mt-4 divide-y">
+                {sections.map((s, i) => {
+                    const isOpen = open.includes(i);
+                    return (
+                        <div key={i} className="py-3">
+                            <button onClick={() => toggle(i)} className="flex w-full items-center justify-between gap-3 text-left">
+                                <div className="flex items-center gap-3">
+                                    <span className={`grid h-6 w-6 place-items-center rounded-full border ${isOpen ? "bg-neutral-900 text-white border-neutral-900" : "border-neutral-300"}`}>{isOpen ? "-" : "+"}</span>
+                                    <span className="font-semibold">{s.title}</span>
+                                </div>
+                                <span className="text-sm text-neutral-600">{s.meta}</span>
+                            </button>
+                            <div className={`overflow-hidden transition-all ${isOpen ? "mt-3" : "max-h-0"}`}>
+                                <ul className="space-y-2">
+                                    {s.items.map((it) => (
+                                        <li key={it} className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm">
+                                            <div className="flex items-center gap-2 text-neutral-800">
+                                                <IconPlay className="h-4 w-4 text-neutral-500" />
+                                                {it}
+                                            </div>
+                                            <span className="text-neutral-500">05:12</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+const Requirements = () => (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-bold">Requirements</h2>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-neutral-800">
+            <li>No prior AI experience needed</li>
+            <li>A computer with internet access</li>
+            <li>Curiosity to experiment and iterate</li>
+        </ul>
+    </div>
+);
+
+const Description = () => {
+    const [more, setMore] = useState(false);
+    return (
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <h2 className="text-xl font-bold">Description</h2>
+            <div className="prose prose-neutral mt-3 max-w-none text-[15px]">
+                <p>
+                    This course is a practical, business-focused guide to using ChatGPT and modern generative
+                    AI tools. You'll move from fundamentals to workflows that 10x productivity, content and
+                    decision‑making.
+                </p>
+                {more && (
+                    <>
+                        <p>
+                            We'll cover prompt patterns, structured outputs, marketing use‑cases, research
+                            automation and safety. Each module ends with projects you can ship immediately.
+                        </p>
+                        <p>By the end, you'll have reusable prompts and mini-systems that compound over time.</p>
+                    </>
+                )}
+                <button onClick={() => setMore((m) => !m)} className="mt-2 text-sm font-semibold underline">
+                    {more ? "Show less" : "Show more"}
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const Instructors = () => (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-bold">Instructors</h2>
+        <div className="mt-4 flex items-start gap-4">
+            <div className="h-14 w-14 rounded-full bg-neutral-200" />
+            <div>
+                <h3 className="font-semibold">Julian Melanson • Benza Maman</h3>
+                <p className="text-sm text-neutral-600">AI educator, entrepreneur</p>
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-neutral-700">
+                    <span className="flex items-center gap-1"><Star /> 4.6 instructor rating</span>
+                    <span>294k students</span>
+                    <span>20 courses</span>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+const Feedback = () => (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-bold">Student feedback</h2>
+        <div className="mt-4 grid items-center gap-6 md:grid-cols-3">
+            <div className="text-center">
+                <div className="text-5xl font-extrabold">4.5</div>
+                <div className="mt-1 flex items-center justify-center gap-2"><Rating value={4.5} /></div>
+                <div className="mt-1 text-sm text-neutral-600">51,338 ratings</div>
+            </div>
+            <div className="md:col-span-2 space-y-3 text-sm">
+                {[{ l: "5 stars", p: 62 }, { l: "4 stars", p: 25 }, { l: "3 stars", p: 8 }, { l: "2 stars", p: 3 }, { l: "1 star", p: 2 }].map(r => (
+                    <div key={r.l} className="flex items-center gap-3">
+                        <span className="w-16 text-right text-neutral-600">{r.l}</span>
+                        <div className="h-2 flex-1 rounded-full bg-neutral-200 overflow-hidden">
+                            <div className="h-full bg-neutral-900" style={{ width: `${r.p}%` }} />
+                        </div>
+                        <span className="w-8 text-right">{r.p}%</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+);
+
+// ---------- Right sticky sidebar ----------
+const SidebarCard = () => {
+    const [tab, setTab] = useState("personal");
+
+    const TabBtn = ({ id, label }) => (
+        <button
+            onClick={() => setTab(id)}
+            className={`relative py-3 text-[15px] font-semibold ${tab === id ? "text-neutral-900" : "text-neutral-600"
+                }`}
+            aria-selected={tab === id}
+        >
+            {label}
+            {tab === id && <span className="absolute bottom-[-1px] left-0 h-0.5 w-full bg-neutral-900" />}
+        </button>
+    );
+
+    return (
+        <aside className="lg:sticky lg:top-36 h-fit space-y-4">
+            <div className="bg-blue-100">
+
+            </div>
+            <div className="overflow-hidden rounded-md border border-neutral-200 bg-white shadow-sm">
+                {/* Tabs header */}
+                <div className="px-4 pt-3">
+                    <div className="grid grid-cols-2 border-b">
+                        <TabBtn id="personal" label="Personal" />
+                        <TabBtn id="teams" label="Teams" />
+                    </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-4">
+                    {tab === "personal" ? (
+                        <>
+                            <div className="flex items-center gap-2 text-sm text-neutral-700">
+                                <span className="h-1.5 w-1.5 rounded-full bg-violet-600" />
+                                <span>This Premium course is included in plans</span>
+                            </div>
+
+                            <h3 className="mt-4 text-[22px] leading-6 font-extrabold">Subscribe to Udemy’s top courses</h3>
+                            <p className="mt-1 text-sm text-neutral-700">
+                                Get this course, plus 26,000+ of our top-rated courses, with Personal Plan.{' '}
+                                <a href="#" className="underline">Learn more</a>
+                            </p>
+
+                            <button className="mt-4 w-full rounded-md bg-violet-700 py-3 font-semibold text-white transition hover:bg-violet-800">Start subscription</button>
+                            <div className="mt-2 text-center text-xs text-neutral-600">
+                                Starting at <span className="line-through">₹500</span> <span className="font-semibold text-neutral-900">₹400</span> per month
+                            </div>
+                            <div className="text-center text-xs text-neutral-600">Cancel anytime</div>
+
+                            <div className="my-4 flex items-center gap-3">
+                                <div className="h-px flex-1 bg-neutral-200" />
+                                <span className="text-xs text-neutral-500">or</span>
+                                <div className="h-px flex-1 bg-neutral-200" />
+                            </div>
+
+                            <div className="text-2xl font-bold">
+                                ₹509 <span className="text-sm font-medium text-neutral-500 line-through">₹2,739</span>{' '}
+                                <span className="text-sm font-semibold text-emerald-600">81% off</span>
+                            </div>
+
+                            <button className="mt-3 w-full rounded-md bg-violet-700 py-3 font-semibold text-white hover:bg-violet-800">Add to cart</button>
+                            <button className="mt-3 w-full rounded-md border border-violet-600 py-3 font-semibold text-violet-700 hover:bg-violet-50">Buy now</button>
+
+                            <div className="mt-4 text-center text-xs text-neutral-600">
+                                <div>30-Day Money-Back Guarantee</div>
+                                <div>Full Lifetime Access</div>
+                            </div>
+                            <div className="mt-4 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-3 text-sm">
+                                <div><span className="font-semibold">NVDIN35</span> is applied</div>
+                                <div className="-mt-0.5 text-xs text-neutral-500">Udemy coupon</div>
+                            </div>
+
+                            <div className="mt-3 flex gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="Enter Coupon"
+                                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-500"
+                                />
+                                <button className="rounded-md bg-violet-700 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-800">Apply</button>
+                            </div>
+                        </>
+                    ) : (
+                        // TEAMS TAB CONTENT
+                        <>
+                            <div className="flex items-center gap-2 text-sm text-neutral-700">
+                                <span className="h-1.5 w-1.5 rounded-full bg-violet-600" />
+                                <span>This Premium course is included in plans</span>
+                            </div>
+
+                            <div className="mt-4 text-2xl font-extrabold tracking-tight">
+                                <span className="mr-1">udemy</span>
+                                <span className="text-violet-700">business</span>
+                            </div>
+                            <p className="mt-2 text-sm text-neutral-700">
+                                Subscribe to this course and 30,000+ top-rated Udemy courses for your organization.
+                            </p>
+
+                            <button className="mt-4 w-full rounded-md bg-violet-700 py-3 font-semibold text-white transition hover:bg-violet-800">Try Udemy Business</button>
+
+                            <ul className="mt-4 space-y-3 text-sm text-neutral-800">
+                                {[
+                                    "For teams of 2 or more users",
+                                    "30,000+ fresh & in-demand courses",
+                                    "Learning Engagement tools",
+                                    "SSO and LMS Integrations",
+                                ].map((t) => (
+                                    <li key={t} className="flex items-start gap-3">
+                                        <svg className="mt-0.5 h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M9 16.17l-3.88-3.88-1.41 1.41L9 19l10.29-10.29-1.41-1.41z" />
+                                        </svg>
+                                        <span>{t}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    )}
+                </div>
+            </div>
+
+            {/* This course includes */}
+            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+                <h3 className="font-bold">This course includes</h3>
+                <ul className="mt-3 space-y-2 text-sm text-neutral-800">
+                    <li className="flex items-center gap-2"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg> 5 hours on-demand video</li>
+                    <li className="flex items-center gap-2"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z" /></svg> 12 downloadable resources</li>
+                    <li className="flex items-center gap-2"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" /></svg> Certificate of completion</li>
+                    <li className="flex items-center gap-2"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg> Access on mobile and TV</li>
+                </ul>
+            </div>
+        </aside>
+    );
+};
+
+// ---------- Public component to use below your hero ----------
+export default function CourseBody() {
+    return (
+        <section className="relative z-10 pt-10 md:pt-6 ">
+            <div className="-z-10 pointer-events-none absolute inset-x-0 top-0 h-[80vh] bg-[#0f0f13] " />
+
+            <div className="mx-auto grid max-w-[1160px] grid-cols-1 gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+                {/* LEFT */}
+                <div className="space-y-6">
+                    <main className="">
+                        <section
+                            className=" text-white mb-20 relative min-h-screen
+                              sm:min-h-[calc(100svh-200px)]
+                              md:min-h-[calc(100dvh-200px)]"
+                        >
+                            <div className=" max-w-3xl px-4 mb-10 py-8 md:py-12">
+                                <nav className="text-xs md:text-sm text-neutral-400">
+                                    <ol className="flex flex-wrap items-center gap-2">
+                                        <li>
+                                            <Link href="/" className="hover:underline">
+                                                Home
+                                            </Link>
+                                        </li>
+                                        <li>›</li>
+                                        <li>
+                                            <Link href="/courses" className="hover:underline">
+                                                Courses
+                                            </Link>
+                                        </li>
+                                        <li>›</li>
+                                        <li>
+                                            <a href="#" className="">
+                                                GK & GS Shiv Shakti Batch By Kumar Gaurav Sir
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+
+                                <h1 className="mt-3 text-3xl leading-tight font-extrabold md:text-[44px] md:leading-[1.15]">
+                                    The Complete AI Guide: Learn ChatGPT,
+                                    <br className="hidden md:block" />
+                                    Generative AI &amp; More
+                                </h1>
+
+                                <p className="mt-3 max-w-4xl text-neutral-300 text-base md:text-lg">
+                                    50+ Generative AI Tools to 10x Business, Productivity, Creativity |
+                                    ChatGPT, Artificial Intelligence, Prompt Engineering
+                                </p>
+
+                                <div className="mt-4 mb-20 flex flex-wrap items-center gap-3">
+                                    <span className="rounded-md bg-emerald-700/20 text-emerald-300 px-3 py-1 text-xs font-semibold">
+                                        Code: 20575
+                                    </span>
+                                    <span className="rounded-md bg-indigo-500/20 text-indigo-300 px-3 py-1 text-xs font-semibold">
+                                        Validity: 200 Days
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* <div className="absolute bottom-[-74px]  -translate-x-80 px-4 mb-10" style={{ left: "35%" }}>
+                                <div className="relative -mt-3 md:-mt-5 w-3xl">
+                                    <div className="overflow-hidden rounded-2xl bg-white text-neutral-900 shadow">
+                                        <div className="flex flex-col md:flex-row">
+                                            <div className="md:w-72 flex items-center gap-4 bg-violet-700 text-white px-5 py-4">
+                                                <div className="shrink-0 rounded-full bg-white/10 p-2">
+                                                    <svg
+                                                        width="22"
+                                                        height="22"
+                                                        viewBox="0 0 24 24"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path d="M12 2l2.09 6.26L20 10.27l-6 4.36L16.18 22 12 18.9 7.82 22 10 14.63l-6-4.36 5.91-2.01L12 2z" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <div className="text-lg font-semibold leading-5">
+                                                        Premium
+                                                    </div>
+                                                    <p className="text-xs text-violet-100">
+                                                        Access this top-rated course, plus 26,000+ more with a
+                                                        Udemy plan.{" "}
+                                                        <a href="#" className="underline text-white">
+                                                            See Plans &amp; Pricing
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid flex-1 grid-cols-1 divide-y md:grid-cols-2 lg:grid-cols-2 md:divide-y-0">
+                                                <div className="flex items-center justify-center gap-4 px-6 py-5">
+                                                    <div className="text-3xl font-bold">4.5</div>
+                                                    <div
+                                                        className="text-yellow-500"
+                                                        aria-label="4.5 out of 5 stars"
+                                                    >
+                                                        ★★★★☆
+                                                    </div>
+                                                    <a href="#" className="text-sm text-neutral-600 underline">
+                                                        51,338 ratings
+                                                    </a>
+                                                </div>
+                                                <div className="flex items-center justify-center gap-4 px-6 py-5">
+                                                    <svg
+                                                        width="26"
+                                                        height="26"
+                                                        viewBox="0 0 24 24"
+                                                        fill="currentColor"
+                                                        className="text-neutral-500"
+                                                    >
+                                                        <path d="M16 11c1.66 0 2.99-1.79 2.99-4S17.66 3 16 3s-3 1.79-3 4 1.34 4 3 4zm-8 0c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.96 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z" />
+                                                    </svg>
+                                                    <div className="text-center">
+                                                        <div className="text-2xl font-bold">294,510</div>
+                                                        <div className="text-sm text-neutral-600">learners</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>{" "}
+                                    </div>
+                                </div>
+                            </div> */}
+                        </section>
+                    </main>
+                    <LearnList />
+                    <CourseContent />
+                    <Requirements />
+                    <Description />
+                    <Instructors />
+                    <Feedback />
+                </div>
+                {/* RIGHT sticky */}
+                <SidebarCard />
+            </div>
+            <div className="h-10" />
+        </section>
+    );
+}
