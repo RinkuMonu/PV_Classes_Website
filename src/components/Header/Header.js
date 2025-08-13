@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   ChevronUp,
+  LogIn, UserPlus
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import ExamMegaMenu from "./ExamMegaMenu";
@@ -167,8 +168,9 @@ export default function Header() {
     <>
       {/* Top Bar */}
       <div
-        className={`bg-[#00316B] text-white text-sm border-b border-gray-100 transition-all duration-300 overflow-hidden ${hideTopBar ? "max-h-0 py-0" : "max-h-20 py-2"
+        className={`bg-[#00316B] text-white text-sm border-b border-gray-100 transition-all duration-300 py-4 overflow-hidden ${hideTopBar ? "-translate-y-full" : "translate-y-0"}
           }`}
+            style={{ willChange: "transform" }}
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           {/* Left */}
@@ -188,10 +190,13 @@ export default function Header() {
           </div>
           {/* Right */}
           <div className="flex items-center">
-            <Link href="/login" className="relative py-2 px-3  bg-[#788406] rounded-full transition me-2">
+            <Link href="/login" className="relative py-2 px-3  me-2 inline-flex gap-1">
+            <LogIn size={16} className="mt-1"/>
+
            Login
             </Link>
-             <Link href="/register" className="relative py-2 px-3 bg-[#788406] rounded-full transition">
+             <Link href="/register" className="relative py-2 px-3 inline-flex gap-1">
+              <UserPlus size={16} className="mt-1"/>
            Register
             </Link>
           </div>
@@ -199,13 +204,13 @@ export default function Header() {
       </div>
 
       {/* Main Header */}
-      <div className="bg-white sticky top-0 z-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+      <div className="bg-white sticky top-0 z-50 border-b py-2 border-gray-200">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 ">
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/logo.png"
+              src="/Image/pv-logo.png"
               alt="PV classes"
-              width={120}
+              width={70}
               height={40}
               className="object-contain"
             />
@@ -213,7 +218,7 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-16 text-sm font-medium text-[#204972]">
-            <Link href="/" className="hover:text-[#009FE3]">
+            <Link href="/" className="hover:text-[#009FE3] text-base">
               Home
             </Link>
             <div
@@ -221,9 +226,9 @@ export default function Header() {
               onMouseEnter={() => setCoursesMenu(true)}
               onMouseLeave={() => setCoursesMenu(false)}
             >
-              <button className="flex items-center gap-1 hover:text-[#009FE3] transition">
+              <button className="flex items-center gap-1 hover:text-[#009FE3] transition text-base">
                 All Exams
-                <ChevronDown size={14} />
+                <ChevronDown size={16} />
               </button>
               {coursesMenu && (
                 <div className="absolute -left-75 top-full w-[800px] z-50">
@@ -231,32 +236,32 @@ export default function Header() {
                 </div>
               )}
             </div>
-            <Link href="#" className="hover:text-[#009FE3]">
+            <Link href="/previous-year-question" className="hover:text-[#009FE3] text-base">
               PYQs
             </Link>
-            <Link href="/test-series" className="hover:text-[#009FE3]">
+            <Link href="/test-series" className="hover:text-[#009FE3] text-base">
               Test Series
             </Link>
-            <Link href="/current-affairs" className="hover:text-[#009FE3]">
+            <Link href="/current-affairs" className="hover:text-[#009FE3] text-base">
               Current Affairs
             </Link>
-            <Link href="#" className="hover:text-[#009FE3]">
+            <Link href="#" className="hover:text-[#009FE3] text-base">
               News
             </Link>
-            <Link href="#" className="hover:text-[#009FE3]">
+            <Link href="#" className="hover:text-[#009FE3] text-base">
               Books
             </Link>
           </nav>
 
             <div className="flex items-center">
-            <button className="relative p-2 hover:bg-blue-800 rounded-full transition">
+            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Tag size={20} />
             </button>
-            <button className="relative p-2 hover:bg-blue-800 rounded-full transition">
+            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
-            <button className="relative p-2 hover:bg-blue-800 rounded-full transition">
+            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <ShoppingCart size={20} />
               <span className="absolute -top-1 -right-1 bg-yellow-400 text-xs px-1 rounded-full">
                 2
@@ -328,11 +333,11 @@ export default function Header() {
                       </button>
 
                       {openTabs[`${category}-${tab}`] && (
-                        <ul className="mt-1 pl-4 space-y-1 text-sm text-gray-600">
+                        <ul className="mt-1 pl-4 space-y-1 text-sm text-gray-800">
                           {examData[category].tabs[tab].map((exam) => (
                             <li
                               key={exam.name}
-                              className="hover:text-[#00316B] hover:font-medium cursor-pointer transition"
+                              className="hover:text-[#00316B] hover:font-medium my-2 text-gray-600 cursor-pointer transition"
                               onClick={() => setExamsMenuOpen(false)}
                             >
                               {exam.name}
@@ -401,7 +406,7 @@ export default function Header() {
           </button>
 
           <Link
-            href="#"
+            href="/previous-year-question"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-[#00316B] hover:text-white px-3 py-2 rounded-md transition"
           >
