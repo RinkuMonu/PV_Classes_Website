@@ -291,7 +291,7 @@ export default function PreviousYearPapers() {
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#00316B] text-white">
-                  <th className="p-3 font-medium text-left">#</th>
+                  <th className="p-3 font-medium text-left">Sr. No.</th>
                   <th className="p-3 font-medium text-left">Exam</th>
                   <th className="p-3 font-medium text-left">Description</th>
                   <th className="p-3 font-medium text-center">Action</th>
