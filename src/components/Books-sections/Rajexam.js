@@ -31,12 +31,19 @@ const books = [
     discount: "5% OFF",
     img: "/image/book2.webp",
   },
+  {
+    title: "Rajasthan Geography Handwritten Notes-2025 By Narendra Choudhary",
+    price: 114,
+    oldPrice: 120,
+    discount: "5% OFF",
+    img: "/image/book2.webp",
+  },
 
 ];
 
 export default function rajexambooks() {
   return (
-    <section className="px-6 py-8 bg-white">
+    <section className="p-20 bg-white">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#204972]">
@@ -44,14 +51,14 @@ export default function rajexambooks() {
         </h2>
         <Link
           href="#"
-          className="flex items-center text-[#616602] font-medium hover:underline"
+          className="bg-[#204972] text-white px-8 py-2 rounded-md"
         >
           See All <span className="ml-1">→</span>
         </Link>
       </div>
 
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {books.map((book, index) => (
           <div
             key={index}
@@ -70,7 +77,7 @@ export default function rajexambooks() {
                  width={200}
               height={150}
 
-                className="object-contain p-2"
+                className="w-full h-60 object-scale-down"
               />
               <Link href="/" className="flex absolute -bottom-28 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
                 <span className="mt-1 me-2"><FaPlus /></span>
