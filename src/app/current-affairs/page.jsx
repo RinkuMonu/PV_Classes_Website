@@ -231,9 +231,7 @@ export default function CurrentAffairsPage() {
                     <div key={cat}>
 
                       <h2 className="text-2xl font-bold mb-4">{cat}</h2>
-
-
-                      <div className="grid gap-6 md:grid-cols-4">
+                       <div className="grid gap-6 md:grid-cols-4">
                         {catItems.map((item) => (
                           <Link key={item.id} href="/current-affairs-detail">
                             <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
