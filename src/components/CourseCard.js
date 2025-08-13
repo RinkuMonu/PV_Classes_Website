@@ -1,23 +1,44 @@
+// components/CourseCard.jsx
+import Link from "next/link";
+
+function slugify(str = "") {
+  return str
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
 export default function CourseCard({ course, formatINR }) {
-    const {
-      id, title, shortTitle, thumbnail,
-      validityDays, durationHours, rating,
-      price, discountedPrice, isFree,
-    } = course;
-  
-    return (
-      <article className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition">
+  const {
+    id, title, shortTitle, thumbnail,
+    validityDays, durationHours, rating,
+    price, discountedPrice, isFree, slug,
+  } = course;
+
+  const href = `/courses/${slug || slugify(`${title}-${id}`)}`;
+
+  return (
+    <Link
+      href={href}
+      className="block overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition"
+    >
+      <article>
         <div className="aspect-[4/5] w-full overflow-hidden rounded-b-none">
           <img
             src={thumbnail}
-            alt=""
+            alt={`${shortTitle || title} thumbnail`}
             className="h-full w-full object-cover"
+            loading="lazy"
           />
         </div>
-  
+
         <div className="p-4">
-          <h3 className="line-clamp-2 text-[15px] font-semibold leading-5">{shortTitle || title}</h3>
-  
+          <h3 className="line-clamp-2 text-[15px] font-semibold leading-5">
+            {shortTitle || title}
+          </h3>
+
           {/* validity line */}
           <div className="mt-2 text-sm">
             {typeof validityDays === "number" ? (
@@ -30,7 +51,7 @@ export default function CourseCard({ course, formatINR }) {
               </span>
             ) : null}
           </div>
-  
+
           {/* price / free */}
           <div className="mt-1 flex items-end gap-2">
             {isFree ? (
@@ -48,8 +69,8 @@ export default function CourseCard({ course, formatINR }) {
               </>
             )}
           </div>
-        </div>  
+        </div>
       </article>
-    );
-  }
-  
+    </Link>
+  );
+}
