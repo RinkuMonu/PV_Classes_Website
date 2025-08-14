@@ -88,16 +88,16 @@ export default function CurrentAffairsPage() {
       {/* Banner */}
       <section className="relative w-full bg-[#00316B] text-white">
         <div className="absolute inset-0">
-          <Image src="/book.jpg" alt="Banner" fill className="object-cover object-center opacity-70" priority />
+          <Image src="/Image/Banner/CurrentAffair-herobanner.jpg" alt="Banner" fill className="object-cover object-center opacity-70" priority />
           <div className="absolute inset-0 bg-black/40" />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20 flex flex-col items-center text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+          {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
             Government Exams Preparation & Download PDFs
           </h1>
           <p className="mt-4 text-lg sm:text-xl max-w-2xl">
             Prepare for your exams with the latest resources, mock tests, and study materials.
-          </p>
+          </p> */}
           <div className="mt-6 flex space-x-4">
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => (
@@ -256,7 +256,7 @@ export default function CurrentAffairsPage() {
                       {catItems.map((item) => (
                         <Link key={item._id} href={`/current-affairs/${item.slug}`}>
                           <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
-                            <div className="relative"> 
+                            <div className="relative">
                             
                               <Image
                                 src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}

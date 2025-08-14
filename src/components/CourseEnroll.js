@@ -22,12 +22,12 @@ export default function CourseEnroll() {
         {/* Right Images */}
         <div className="flex items-end justify-center relative">
           {/* Phones */}
-          <div className="grid grid-cols-1 shadow-lg">
+          <div className="grid grid-cols-1">
             <Image
-              src="/Image/banner-img1.webp"
+              src="/Image/pv-logo.png"
               alt="Phone 1"
-              width={380}
-              height={350}
+              width={320}
+              height={300}
               className="drop-shadow-lg"
             />
 
