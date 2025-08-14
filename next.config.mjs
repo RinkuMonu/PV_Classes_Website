@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
      images: {
-    domains: ["localhost"], // ✅ yaha tumhare backend ka domain add karo
+    domains: ["localhost",'apps-s3-prod.utkarshapp.com'], 
   },
 };
 
