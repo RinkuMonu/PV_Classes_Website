@@ -101,7 +101,7 @@ export default function Testimonials() {
 
                   {/* Course name (if reviewType is course) */}
                   {item?.reviewType === 'course' && item?.course?.title && (
-                    <p className="font-medium text-[#204972]">Course: {item.course.title}</p>
+                    <p className="font-medium text-[#204972]">Course: {item?.course?.title}</p>
                   )}
 
                   {/* Review type */}
