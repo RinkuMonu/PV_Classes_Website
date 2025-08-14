@@ -8,6 +8,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
+  const [storageCart, setStorageCart] = useState(null);
   const [loading, setLoading] = useState(false);
   
 
@@ -16,8 +17,11 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = localStorage.getItem("userId");
-      if (!userId) return;
-
+      if(!userId){
+        const cartData = localStorage.getItem("guestCart");
+        setStorageCart(JSON.parse(cartData));return;
+      }
+      // if (!userId) return;
       const { data } = await axiosInstance.get(`/api/cart/${userId}`);
       setCart(data);
     } catch (error) {
@@ -45,7 +49,9 @@ export const CartProvider = ({ children }) => {
                     guestCart.push({ itemType, itemId, quantity, extra });
                 }
 
-                localStorage.setItem("guestCart", JSON.stringify(guestCart));           
+                localStorage.setItem("guestCart", JSON.stringify(guestCart));   
+                 const storageData = localStorage.getItem("guestCart"); 
+                setStorageCart(JSON.parse(storageData))        
                 return { success: true, message: "Item added to cart" };
             }
 
@@ -143,6 +149,7 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cart,
+        storageCart,
         loading,
         fetchCart,
         addToCart,
