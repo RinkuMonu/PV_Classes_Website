@@ -687,7 +687,7 @@ const handleDecrement = (id) => {
           </Link>
 
           <Link
-            href="#"
+            href="/book"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-[#00316B] hover:text-white px-3 py-2 rounded-md transition"
           >
