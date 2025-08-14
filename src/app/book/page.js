@@ -46,19 +46,19 @@ export default function Book() {
     fetchBook();
   }, []);
     console.log("booksData = ",booksData);
-    const handleAdd = async (e, itemType, itemId) => {
+    const handleAdd = async (e, itemType, itemId, book) => {
       e.stopPropagation();
       const response = await addToCart({
         itemType,
         itemId,
         quantity: 1,
-        extra: {}
+        extra: { book }
       });
-      console.log("response = ",response.success);
+      console.log("response = ", response.success);
       if (response.success) {
-        toast.success(response.message);  // show success toast
+        toast.success(response.message);
       } else {
-        toast.error(response.message);    // show error toast
+        toast.error(response.message);
       }
     };
 
@@ -118,11 +118,12 @@ export default function Book() {
 
                       <div className="relative w-full h-64">
                         <Image
-                          src={`http://localhost:5000/uploads/book/${book?.images[0]}`}
-                          alt={book?.book_title}
+                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
+                          alt={book?.book_title || "Book image"}
                           fill
                           className="object-cover p-2"
                         />
+
                       </div>
 
                       <div className="p-3">
@@ -150,8 +151,8 @@ export default function Book() {
                     </Link>
 
                     {/* Button ko card ke andar rakha, but Link ke bahar */}
-                    <button
-                      onClick={(e) => handleAdd(e, "book", book?._id)}
+                   <button
+                      onClick={(e) => handleAdd(e, "book", book?._id, book)}
                       disabled={loading}
                       className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
                     >
