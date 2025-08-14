@@ -4,11 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-/**
- * ⬇️ Drop <CourseBody /> directly *below your existing HERO/top section*.
- * I have *not* included/changed your hero. This only renders the lower layout
- * with a sticky right sidebar exactly like Udemy's course page.
- */
 
 // ---------- Small UI helpers ----------
 const IconPlay = (props) => (
@@ -264,7 +259,7 @@ const SidebarCard = () => {
                                 <span>This Premium course is included in plans</span>
                             </div>
 
-                            <h3 className="mt-4 text-[22px] leading-6 font-extrabold">Subscribe to Udemy’s top courses</h3>
+                            <h3 className="mt-4 text-[22px] leading-6 font-extrabold">Subscribe to PV Classes top courses</h3>
                             <p className="mt-1 text-sm text-neutral-700">
                                 Get this course, plus 26,000+ of our top-rated courses, with Personal Plan.{' '}
                                 <a href="#" className="underline">Learn more</a>
@@ -296,7 +291,7 @@ const SidebarCard = () => {
                             </div>
                             <div className="mt-4 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-3 text-sm">
                                 <div><span className="font-semibold">NVDIN35</span> is applied</div>
-                                <div className="-mt-0.5 text-xs text-neutral-500">Udemy coupon</div>
+                                <div className="-mt-0.5 text-xs text-neutral-500">PV Classes coupon</div>
                             </div>
 
                             <div className="mt-3 flex gap-2">
@@ -317,14 +312,14 @@ const SidebarCard = () => {
                             </div>
 
                             <div className="mt-4 text-2xl font-extrabold tracking-tight">
-                                <span className="mr-1">udemy</span>
+                                <span className="mr-1">PV CLasses</span>
                                 <span className="text-violet-700">business</span>
                             </div>
                             <p className="mt-2 text-sm text-neutral-700">
-                                Subscribe to this course and 30,000+ top-rated Udemy courses for your organization.
+                                Subscribe to this course and 30,000+ top-rated PV CLasses courses for your organization.
                             </p>
 
-                            <button className="mt-4 w-full rounded-md bg-violet-700 py-3 font-semibold text-white transition hover:bg-violet-800">Try Udemy Business</button>
+                            <button className="mt-4 w-full rounded-md bg-violet-700 py-3 font-semibold text-white transition hover:bg-violet-800">Try PV CLasses</button>
 
                             <ul className="mt-4 space-y-3 text-sm text-neutral-800">
                                 {[
@@ -418,69 +413,6 @@ export default function CourseBody() {
                                     </span>
                                 </div>
                             </div>
-
-                            {/* <div className="absolute bottom-[-74px]  -translate-x-80 px-4 mb-10" style={{ left: "35%" }}>
-                                <div className="relative -mt-3 md:-mt-5 w-3xl">
-                                    <div className="overflow-hidden rounded-2xl bg-white text-neutral-900 shadow">
-                                        <div className="flex flex-col md:flex-row">
-                                            <div className="md:w-72 flex items-center gap-4 bg-violet-700 text-white px-5 py-4">
-                                                <div className="shrink-0 rounded-full bg-white/10 p-2">
-                                                    <svg
-                                                        width="22"
-                                                        height="22"
-                                                        viewBox="0 0 24 24"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path d="M12 2l2.09 6.26L20 10.27l-6 4.36L16.18 22 12 18.9 7.82 22 10 14.63l-6-4.36 5.91-2.01L12 2z" />
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <div className="text-lg font-semibold leading-5">
-                                                        Premium
-                                                    </div>
-                                                    <p className="text-xs text-violet-100">
-                                                        Access this top-rated course, plus 26,000+ more with a
-                                                        Udemy plan.{" "}
-                                                        <a href="#" className="underline text-white">
-                                                            See Plans &amp; Pricing
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <div className="grid flex-1 grid-cols-1 divide-y md:grid-cols-2 lg:grid-cols-2 md:divide-y-0">
-                                                <div className="flex items-center justify-center gap-4 px-6 py-5">
-                                                    <div className="text-3xl font-bold">4.5</div>
-                                                    <div
-                                                        className="text-yellow-500"
-                                                        aria-label="4.5 out of 5 stars"
-                                                    >
-                                                        ★★★★☆
-                                                    </div>
-                                                    <a href="#" className="text-sm text-neutral-600 underline">
-                                                        51,338 ratings
-                                                    </a>
-                                                </div>
-                                                <div className="flex items-center justify-center gap-4 px-6 py-5">
-                                                    <svg
-                                                        width="26"
-                                                        height="26"
-                                                        viewBox="0 0 24 24"
-                                                        fill="currentColor"
-                                                        className="text-neutral-500"
-                                                    >
-                                                        <path d="M16 11c1.66 0 2.99-1.79 2.99-4S17.66 3 16 3s-3 1.79-3 4 1.34 4 3 4zm-8 0c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.96 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z" />
-                                                    </svg>
-                                                    <div className="text-center">
-                                                        <div className="text-2xl font-bold">294,510</div>
-                                                        <div className="text-sm text-neutral-600">learners</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>{" "}
-                                    </div>
-                                </div>
-                            </div> */}
                         </section>
                     </main>
                     <LearnList />
@@ -490,7 +422,6 @@ export default function CourseBody() {
                     <Instructors />
                     <Feedback />
                 </div>
-                {/* RIGHT sticky */}
                 <SidebarCard />
             </div>
             <div className="h-10" />

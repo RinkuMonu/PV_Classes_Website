@@ -117,7 +117,7 @@ export default function ExamMegaMenu() {
             >
               <div className="w-10 h-10 relative">
                 <Image
-                  src={"http://localhost:5000" + exam?.logo || "/vercel.svg"}
+                  src={exam?.logo || "/vercel.svg"}
                   alt={exam.name}
                   fill
                   className="object-contain rounded-full"
