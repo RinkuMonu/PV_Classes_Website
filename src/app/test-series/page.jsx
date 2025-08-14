@@ -21,7 +21,28 @@ function Page() {
   }, []);
 console.log("testSeriesData = ",testSeriesData);
   return (
-    <div className="px-3 md:px-20">
+<>
+
+<section className="relative w-full h-[60vh]">
+        <div className="absolute inset-0">
+          <Image src="/Image/Banner/testseries-banner.jpg" alt="Banner" fill className="object-cover object-center" priority />
+          <div className="absolute inset-0" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+          {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+            Government Exams Preparation & Download PDFs
+          </h1>
+          <p className="mt-4 text-lg sm:text-xl max-w-2xl">
+            Prepare for your exams with the latest resources, mock tests, and study materials.
+          </p> */}
+
+        </div>
+      </section>
+
+
+
+
+    <div className="px-3 md:px-20 py-8">
       {testSeriesData.map((examGroup) => (
         <div key={examGroup.exam_id} className="mb-8">
           {/* Exam Name */}
@@ -100,6 +121,7 @@ console.log("testSeriesData = ",testSeriesData);
         </div>
       ))}
     </div>
+    </>
   );
 }
 
