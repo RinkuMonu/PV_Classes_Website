@@ -545,11 +545,10 @@ export default function CoursesSection() {
                         setActiveCategory(cat);
                         setCurrentStep(2);
                       }}
-                      className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${
-                        activeCategory?._id === cat?._id
+                      className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${activeCategory?._id === cat?._id
                           ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
                           : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                      }`}
+                        }`}
                     >
                       <div className="font-medium">{cat?.name}</div>
                     </button>
@@ -575,11 +574,10 @@ export default function CoursesSection() {
                           setActiveExamType(type);
                           setCurrentStep(3);
                         }}
-                        className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${
-                          activeExamType?._id === type?._id
+                        className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${activeExamType?._id === type?._id
                             ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg"
                             : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                        }`}
+                          }`}
                       >
                         <div className="font-medium text-sm">{type?.name}</div>
                       </button>
@@ -654,11 +652,10 @@ export default function CoursesSection() {
                     <button
                       key={exam?._id}
                       onClick={() => setActiveExam(exam)}
-                      className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                        activeExam?._id === exam?._id
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${activeExam?._id === exam?._id
                           ? "border-purple-500 bg-purple-50 shadow-lg"
                           : "border-gray-200 hover:border-purple-300 hover:shadow-md"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="font-semibold text-gray-900">{exam?.name}</div>
@@ -692,61 +689,60 @@ export default function CoursesSection() {
 
               {courses?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-               {courses.map((course) => (
-  <Link
-    href={`/courses/${course?.slug}`}
-    key={course?._id}
-    className="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-  >
-    {/* Course Image */}
-    {course?.images?.length > 0 && (
-      <div className="w-full h-48 overflow-hidden">
-        <img
-          src={`${course?.imagesFullPath[0]}`}
-          alt={course?.title || "Course Image"}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    )}
+                  {courses.map((course) => (
+                    <Link
+                      href={`/courses/${course?.slug}`}
+                      key={course?._id}
+                      className="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                    >
+                      {/* Course Image */}
+                      {course?.images?.length > 0 && (
+                        <div className="w-full h-48 overflow-hidden">
+                          <img
+                            src={`${course?.imagesFullPath[0]}`}
+                            alt={course?.title || "Course Image"}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
 
-    <div className="p-6">
-      <div className="flex justify-between items-start mb-4">
-        {/* Keep icon if no image */}
-        {!course?.images?.length && (
-          <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl flex items-center justify-center">
-            <FaBook className="text-blue-600 text-xl" />
-          </div>
-        )}
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
-            course?.isFree
-              ? "bg-gradient-to-r from-green-400 to-emerald-500 text-white"
-              : "bg-gradient-to-r from-blue-400 to-indigo-500 text-white"
-          }`}
-        >
-          {course?.isFree ? "FREE" : "PREMIUM"}
-        </span>
-      </div>
+                      <div className="p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          {/* Keep icon if no image */}
+                          {!course?.images?.length && (
+                            <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl flex items-center justify-center">
+                              <FaBook className="text-blue-600 text-xl" />
+                            </div>
+                          )}
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${course?.isFree
+                                ? "bg-gradient-to-r from-green-400 to-emerald-500 text-white"
+                                : "bg-gradient-to-r from-blue-400 to-indigo-500 text-white"
+                              }`}
+                          >
+                            {course?.isFree ? "FREE" : "PREMIUM"}
+                          </span>
+                        </div>
 
-      <h3 className="font-bold text-lg mb-3 text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-        {course?.title}
-      </h3>
-      <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">
-        {course?.overview}
-      </p>
+                        <h3 className="font-bold text-lg mb-3 text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                          {course?.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">
+                          {course?.overview}
+                        </p>
 
-      <div className="flex justify-between items-center">
-        <span className="font-bold text-xl text-gray-900">
-          {course?.isFree ? "Free Access" : `₹${course?.price}`}
-        </span>
-        <div className="flex items-center gap-2 text-blue-600 font-medium group-hover:gap-3 transition-all">
-          <span className="text-sm">Explore</span>
-          <FaArrowRight className="text-xs" />
-        </div>
-      </div>
-    </div>
-  </Link>
-))}
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-xl text-gray-900">
+                            {course?.isFree ? "Free Access" : `₹${course?.price}`}
+                          </span>
+                          <div className="flex items-center gap-2 text-blue-600 font-medium group-hover:gap-3 transition-all">
+                            <span className="text-sm">Explore</span>
+                            <FaArrowRight className="text-xs" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
 
                 </div>
               ) : (
@@ -758,7 +754,7 @@ export default function CoursesSection() {
                     {!activeExam ? "Select an exam to view courses" : "No courses available"}
                   </h3>
                   <p className="text-gray-500 max-w-md mx-auto">
-                    {!activeExam 
+                    {!activeExam
                       ? "Choose a category, exam type, and exam from the sidebar to discover relevant courses."
                       : "We couldn't find any courses for the selected exam. Try selecting a different exam or check back later."
                     }
