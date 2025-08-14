@@ -13,8 +13,9 @@ export default function Home() {
     <>
 
 <Banner />
-      <CourseEnroll />
       <CoursesSection />
+      <CourseEnroll />
+
       <BannerImg2 />
       <Rajexam />
       <FacultySlider/>
