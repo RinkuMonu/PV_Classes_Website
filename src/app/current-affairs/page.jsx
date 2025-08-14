@@ -86,19 +86,19 @@ export default function CurrentAffairsPage() {
   return (
     <>
       {/* Banner */}
-      <section className="relative w-full bg-[#00316B] text-white">
+      <section className="relative w-full h-[60vh]">
         <div className="absolute inset-0">
-          <Image src="/Image/Banner/CurrentAffair-herobanner.jpg" alt="Banner" fill className="object-cover object-center opacity-70" priority />
-          <div className="absolute inset-0 bg-black/40" />
+          <Image src="/Image/Banner/CurrentAffair-herobanner.jpg" alt="Banner" fill className="object-cover object-center" priority />
+          <div className="absolute inset-0" />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
           {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
             Government Exams Preparation & Download PDFs
           </h1>
           <p className="mt-4 text-lg sm:text-xl max-w-2xl">
             Prepare for your exams with the latest resources, mock tests, and study materials.
           </p> */}
-          <div className="mt-6 flex space-x-4">
+          <div className="absolute top-64 mt-6 flex space-x-4">
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => (
                 <button

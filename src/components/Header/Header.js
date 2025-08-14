@@ -13,10 +13,16 @@ import {
   Menu,
   X,
   ChevronUp,
-  LogIn, UserPlus
+  LogIn, UserPlus,
+  ArrowRight,
+  Trash2,
+  Minus,
+  Plus
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import ExamMegaMenu from "./ExamMegaMenu";
+import LoginModal from "../LoginModal";
+
 const examData = {
   "Government Exam": {
     tabs: {
@@ -130,6 +136,10 @@ const examData = {
   },
 };
 
+
+
+  const isLoggedIn = true;
+
 export default function Header() {
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -137,8 +147,9 @@ export default function Header() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [coursesMenu, setCoursesMenu] = useState(false)
   const [openTabs, setOpenTabs] = useState({});
+const [isModalOpen, setIsModalOpen] = useState(false);
   const lastScrollRef = useRef(0);
-
+  const [isOpen, setIsOpen] = useState(false);
   const toggleCategory = (category) => {
     setActiveCategory(activeCategory === category ? null : category);
   };
@@ -149,6 +160,62 @@ export default function Header() {
       [`${category}-${tab}`]: !prev[`${category}-${tab}`],
     }));
   };
+  
+const [cartToDisplay, setCartToDisplay] = useState( [
+  {
+    id: 1,
+    name: "SSC CGL 2025 Complete Preparation Course",
+    category: "SSC Exams",
+    image: "/test1.webp",
+    price: 2499,
+    quantity: 1,
+  },
+  {
+    id: 2,
+    name: "UPSC Civil Services Prelims Test Series (30 Tests)",
+    category: "UPSC Exams",
+   image: "/test1.webp",
+    price: 3499,
+    quantity: 1,
+  },
+  {
+    id: 3,
+    name: "Railway RRB NTPC Mock Test Pack",
+    category: "Railway Exams",
+  image: "/test1.webp",
+    price: 999,
+    quantity: 2,
+  },
+  {
+    id: 4,
+    name: "Bank PO & Clerk Combo Course",
+    category: "Banking Exams",
+  image: "/test1.webp",
+    price: 1999,
+    quantity: 1,
+  },
+]);
+
+const handleIncrement = (id) => {
+  setCartToDisplay((prevCart) =>
+    prevCart.map((item) =>
+      item.id === id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    )
+  );
+};
+
+const handleDecrement = (id) => {
+  setCartToDisplay((prevCart) =>
+    prevCart.map((item) =>
+      item.id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    )
+  );
+};
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -163,6 +230,12 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+    // const cartToDisplay = isLoggedIn ? cartItems : localCart;
+  const total = cartToDisplay.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
@@ -190,15 +263,15 @@ export default function Header() {
           </div>
           {/* Right */}
           <div className="flex items-center">
-            <Link href="/login" className="relative py-2 px-3  me-2 inline-flex gap-1">
+            <Link href="" className="relative py-2 px-3  me-2 inline-flex gap-1"       onClick={() => setIsModalOpen(true)}>
             <LogIn size={16} className="mt-1"/>
 
            Login
             </Link>
-             <Link href="/register" className="relative py-2 px-3 inline-flex gap-1">
+             {/* <Link href="/register" className="relative py-2 px-3 inline-flex gap-1">
               <UserPlus size={16} className="mt-1"/>
            Register
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
@@ -261,12 +334,187 @@ export default function Header() {
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
-            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
+            <button onClick={() => setIsOpen(true)} className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <ShoppingCart size={20} />
               <span className="absolute -top-1 -right-1 bg-yellow-400 text-xs px-1 rounded-full">
                 2
               </span>
             </button>
+                {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/40 z-40"
+        />
+      )}
+
+      {/* Offcanvas */}
+    <div
+  className={`fixed top-0 right-0 h-full bg-white w-70 md:w-100 shadow-lg z-50 transform transition-transform duration-300 ${
+    isOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+ 
+>
+  {/* Header */}
+  <div className="flex justify-between items-center p-4 border-b border-gray-400 text-white bg-[#115D8E]">
+    <h2 className="text-lg font-semibold ">Your Shopping Cart</h2>
+    <button onClick={() => setIsOpen(false)}>
+      <X size={20} />
+    </button>
+  </div>
+
+  {/* Scrollable Cart Content */}
+  <div className="flex flex-col h-[calc(100%-64px)] ">
+    <div className="flex-1 overflow-y-auto p-6  hide-scrollbar">
+      {cartToDisplay.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full text-center">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
+            style={{ background: "rgba(157, 48, 137, 0.1)" }}
+          >
+            <ShoppingCart
+              className="w-10 h-10"
+              style={{ color: "rgb(157 48 137)" }}
+            />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Your cart is empty
+          </h3>
+          <p className="text-gray-500 mb-6">
+            Add some items to get started!
+          </p>
+          <Link
+            href="/checkout"
+            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
+        
+          >
+            Continue Shopping
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {cartToDisplay.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
+            >
+              {/* Product Image */}
+              <div className="flex-shrink-0">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
+                />
+              </div>
+
+              {/* Product Details */}
+              <div className="flex-1 flex flex-col justify-between min-w-0">
+                <div>
+                  <h3 className="text-gray-800 font-semibold text-base sm:text-lg leading-snug line-clamp-2 mb-1">
+                    {item.name}
+                  </h3>
+                  {item.category && (
+                    <p className="text-xs text-gray-500 mb-3">
+                      {item.category}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
+                  <span className="font-semibold text-[#115D8E]">
+                    ₹{item.price.toLocaleString()}
+                  </span>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                    aria-label="Remove item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
+                  <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white">
+                    <button
+                      onClick={() => handleDecrement(item.id)}
+                      className="px-3 py-2 hover:bg-gray-100 disabled:opacity-50 transition"
+                      disabled={item.quantity <= 1}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="px-4 text-sm font-medium min-w-[40px] text-center">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => handleIncrement(item.id)}
+                      className="px-3 py-2 hover:bg-gray-100 transition"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <span className="text-sm font-medium text-gray-700 flex justify-end">
+                    Total: ₹{(item.price * item.quantity).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {cartToDisplay.length > 0 && (
+  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+    <div className="space-y-3 mb-5">
+      <div className="flex justify-between text-sm text-gray-600">
+        <span>
+          Subtotal{" "}
+          <span className="text-gray-400">({cartToDisplay.length} items)</span>
+        </span>
+        <span className="text-sm font-semibold text-gray-800">
+          ₹{total.toLocaleString()}
+        </span>
+      </div>
+
+      <div className="flex justify-between text-sm text-gray-600">
+        <span>Shipping</span>
+        <span className="text-green-600 font-medium">Free</span>
+      </div>
+
+      <div className="border-t border-dashed border-gray-300 pt-3 flex justify-between text-base font-bold text-gray-900">
+        <span>Total</span>
+        <span>₹{total.toLocaleString()}</span>
+      </div>
+    </div>
+
+    <div className="space-y-2">
+       <Link
+            href="/checkout"
+            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
+       
+          >
+        Proceed to Checkout
+        <ArrowRight className="w-4 h-4" />
+      </Link>
+
+      {/* <button
+        onClick={onClose}
+        className="w-full py-2 px-4 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition"
+      >
+        Continue Shopping
+      </button> */}
+    </div>
+
+    <p className="text-center mt-4 text-xs text-gray-400">
+      Shipping and taxes calculated at checkout
+    </p>
+  </div>
+)}
+
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
           </div>
 
           {/* Mobile Menu Button */}
@@ -355,6 +603,7 @@ export default function Header() {
 
         {/* Custom Scrollbar Styles */}
         <style jsx>{`
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
     }
@@ -438,7 +687,7 @@ export default function Header() {
           </Link>
 
           <Link
-            href="#"
+            href="/book"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-[#00316B] hover:text-white px-3 py-2 rounded-md transition"
           >
@@ -458,6 +707,7 @@ export default function Header() {
           }}
         ></div>
       )}
+        {isModalOpen && <LoginModal onClose={() => setIsModalOpen(false)} />}
     </>
   );
 }
