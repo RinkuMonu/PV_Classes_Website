@@ -16,10 +16,11 @@ export default function Home() {
       <CoursesSection />
       <CourseEnroll />
 
-      <BannerImg2 />
+
       <Rajexam />
       <FacultySlider/>
       <CurrentAffairs />
+      <BannerImg2 />
       <Testimonials />
 
     </>
