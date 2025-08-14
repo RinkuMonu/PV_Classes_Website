@@ -136,7 +136,32 @@ const examData = {
   },
 };
 
-const cartToDisplay = [
+
+
+  const isLoggedIn = true;
+
+export default function Header() {
+  const [hideTopBar, setHideTopBar] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [examsMenuOpen, setExamsMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [coursesMenu, setCoursesMenu] = useState(false)
+  const [openTabs, setOpenTabs] = useState({});
+const [isModalOpen, setIsModalOpen] = useState(false);
+  const lastScrollRef = useRef(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleCategory = (category) => {
+    setActiveCategory(activeCategory === category ? null : category);
+  };
+
+  const toggleTab = (category, tab) => {
+    setOpenTabs((prev) => ({
+      ...prev,
+      [`${category}-${tab}`]: !prev[`${category}-${tab}`],
+    }));
+  };
+  
+const [cartToDisplay, setCartToDisplay] = useState( [
   {
     id: 1,
     name: "SSC CGL 2025 Complete Preparation Course",
@@ -169,31 +194,27 @@ const cartToDisplay = [
     price: 1999,
     quantity: 1,
   },
-];
+]);
 
-  const isLoggedIn = true;
+const handleIncrement = (id) => {
+  setCartToDisplay((prevCart) =>
+    prevCart.map((item) =>
+      item.id === id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    )
+  );
+};
 
-export default function Header() {
-  const [hideTopBar, setHideTopBar] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [examsMenuOpen, setExamsMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [coursesMenu, setCoursesMenu] = useState(false)
-  const [openTabs, setOpenTabs] = useState({});
-const [isModalOpen, setIsModalOpen] = useState(false);
-  const lastScrollRef = useRef(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleCategory = (category) => {
-    setActiveCategory(activeCategory === category ? null : category);
-  };
-
-  const toggleTab = (category, tab) => {
-    setOpenTabs((prev) => ({
-      ...prev,
-      [`${category}-${tab}`]: !prev[`${category}-${tab}`],
-    }));
-  };
-
+const handleDecrement = (id) => {
+  setCartToDisplay((prevCart) =>
+    prevCart.map((item) =>
+      item.id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    )
+  );
+};
 
 
   useEffect(() => {
@@ -328,14 +349,14 @@ const [isModalOpen, setIsModalOpen] = useState(false);
 
       {/* Offcanvas */}
     <div
-  className={`fixed top-0 right-0 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+  className={`fixed top-0 right-0 h-full bg-white w-70 md:w-100 shadow-lg z-50 transform transition-transform duration-300 ${
     isOpen ? "translate-x-0" : "translate-x-full"
   }`}
-  style={{ width: "450px" }} // optional fixed width for cart
+ 
 >
   {/* Header */}
-  <div className="flex justify-between items-center p-4 border-b">
-    <h2 className="text-lg font-semibold">Your Cart</h2>
+  <div className="flex justify-between items-center p-4 border-b border-gray-400 text-white bg-[#115D8E]">
+    <h2 className="text-lg font-semibold ">Your Shopping Cart</h2>
     <button onClick={() => setIsOpen(false)}>
       <X size={20} />
     </button>
@@ -363,8 +384,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
           </p>
           <Link
             href="/checkout"
-            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
-            style={{ background: "rgb(157 48 137)" }}
+            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
+        
           >
             Continue Shopping
             <ArrowRight className="w-4 h-4" />
@@ -400,7 +421,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
                 </div>
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
-                  <span className="font-semibold text-[rgb(157_48_137)]">
+                  <span className="font-semibold text-[#115D8E]">
                     ₹{item.price.toLocaleString()}
                   </span>
                   <button
@@ -467,8 +488,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
     <div className="space-y-2">
        <Link
             href="/checkout"
-            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
-            style={{ background: "rgb(157 48 137)" }}
+            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
+       
           >
         Proceed to Checkout
         <ArrowRight className="w-4 h-4" />
@@ -666,7 +687,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
           </Link>
 
           <Link
-            href="#"
+            href="/book"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-[#00316B] hover:text-white px-3 py-2 rounded-md transition"
           >
