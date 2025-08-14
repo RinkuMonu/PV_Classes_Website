@@ -256,7 +256,7 @@ export default function CurrentAffairsPage() {
                       {catItems.map((item) => (
                         <Link key={item._id} href={`/current-affairs/${item.slug}`}>
                           <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
-                            <div className="relative"> 
+                            <div className="relative">
                             
                               <Image
                                 src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
