@@ -88,7 +88,7 @@ export default function CurrentAffairsPage() {
       {/* Banner */}
       <section className="relative w-full bg-[#00316B] text-white">
         <div className="absolute inset-0">
-          <Image src="/book.jpg" alt="Banner" fill className="object-cover object-center opacity-70" priority />
+          <Image src="/Image/Banner/CurrentAffair-herobanner.jpg" alt="Banner" fill className="object-cover object-center opacity-70" priority />
           <div className="absolute inset-0 bg-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20 flex flex-col items-center text-center">
