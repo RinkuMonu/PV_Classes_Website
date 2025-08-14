@@ -113,7 +113,7 @@ const Banner = () => {
 
     return (
         <section className="relative w-full">
-        <h1>hfjdksdjf</h1>
+        {/* <h1>hfjdksdjf</h1> */}
             <div className="relative overflow-hidden">
                 <Swiper
                     slidesPerView={1}

@@ -10,7 +10,6 @@ import { GrSecure } from "react-icons/gr";
 import { FiShoppingBag } from "react-icons/fi";
 import axiosInstance from "../../axios/axiosInstance";
 
-
 export default function ProductPage() {
     const params = useParams();
     const id = params.id;

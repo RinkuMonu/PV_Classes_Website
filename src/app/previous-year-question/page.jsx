@@ -175,12 +175,19 @@
 
 
 "use client";
+import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaDownload, FaShareAlt, FaWhatsapp, FaFacebook, FaTwitter, FaShoppingCart } from "react-icons/fa";
 import axiosInstance from "../axios/axiosInstance";
+import { useCart } from "../../components/context/CartContext";
+
 
 export default function PreviousYearPapers() {
+
+    const { addToCart,successMessage, errorMessage } = useCart();
+  console.log("success = ",successMessage);
+
   const [pyqs, setPyqs] = useState([]);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null);
@@ -222,27 +229,44 @@ export default function PreviousYearPapers() {
     pyq.exam.toLowerCase().includes(search.toLowerCase())
   );
 
+
+  const handleAdd = async (e, itemType, itemId) => {
+      e.stopPropagation();
+      const response = await addToCart({
+        itemType,
+        itemId,
+        quantity: 1,
+        extra: {}
+      });
+      console.log("response = ",response.success);
+      if (response.success) {
+        toast.success(response.message);  // show success toast
+      } else {
+        toast.error(response.message);    // show error toast
+      }
+    };
+
   return (
     <>
       {/* Banner */}
-      <section className="relative w-full bg-[#00316B] text-white">
+      <section className="relative w-full h-[56vh] text-white">
         <div className="absolute inset-0">
           <Image
-            src="/book.jpg"
+            src="/Image/Banner/pyq-banner.jpg"
             alt="Banner"
             fill
-            className="object-cover object-center opacity-70"
+            className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-black/40" />
+          {/* <div className="absolute inset-0 bg-black/40" /> */}
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20 flex flex-col items-center text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+          {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
             Government Exams Preparation & Download PDFs
           </h1>
           <p className="mt-4 text-lg sm:text-xl max-w-2xl">
             Prepare for your exams with the latest resources, mock tests, and study materials.
-          </p>
+          </p> */}
         </div>
       </section>
 
@@ -291,7 +315,7 @@ export default function PreviousYearPapers() {
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#00316B] text-white">
-                  <th className="p-3 font-medium text-left">#</th>
+                  <th className="p-3 font-medium text-left">Sr. No.</th>
                   <th className="p-3 font-medium text-left">Exam</th>
                   <th className="p-3 font-medium text-left">Description</th>
                   <th className="p-3 font-medium text-center">Action</th>
@@ -367,7 +391,10 @@ export default function PreviousYearPapers() {
                               <FaDownload className="mt-1 me-1" /> Download
                             </a>
                           ) : (
-                            <button className="p-2 inline-flex bg-green-600 text-white rounded hover:bg-green-700 transition">
+                            <button className="p-2 inline-flex bg-green-600 text-white rounded hover:bg-green-700 transition"
+                              onClick={(e) => handleAdd(e, "pyq", pyq._id)}
+                              disabled={loading}
+                            >
                               <FaShoppingCart className="mt-1 me-1" /> Add to Cart
                             </button>
                           )}
