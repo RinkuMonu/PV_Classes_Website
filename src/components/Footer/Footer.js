@@ -49,7 +49,7 @@ export default function Footer() {
                   <h3 className="font-bold text-lg mb-4">Quick Links</h3>
                   <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
-                      <Link href="/about" className="hover:text-[#009fe3]">
+                      <Link href="/courses" className="hover:text-[#009fe3]">
                         Courses
                       </Link>
                     </li>
