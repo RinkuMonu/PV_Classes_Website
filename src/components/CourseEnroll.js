@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function CourseEnroll() {
   return (
 
-    <div className="p-16">
+    <div className="p-18">
        <section className="w-full overflow-hidden p-8 bg-[#E6EEF5] rounded-2xl  shadow-blue-950">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Left Content */}
