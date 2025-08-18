@@ -501,7 +501,7 @@ export default function CoursesSection() {
   // console.log("exam :", exams);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-[#E6EEF5]  md:px-14 md:py-8">
       {/* Header Section */}
       <div className="">
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -520,12 +520,12 @@ export default function CoursesSection() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-18">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#204972] rounded-lg flex items-center justify-center">
                   <FaFilter className="text-white text-sm" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Select Courses</h2>
+                <h2 className="text-xl font-bold text-[#204972]">Select Courses</h2>
               </div>
 
               {/* Categories Section */}
@@ -545,8 +545,9 @@ export default function CoursesSection() {
                         setActiveCategory(cat);
                         setCurrentStep(2);
                       }}
-                      className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${activeCategory?._id === cat?._id
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                      className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${
+                        activeCategory?._id === cat?._id
+                          ? "bg-[#204972] text-white shadow-lg"
                           : "bg-gray-50 hover:bg-gray-100 text-gray-700"
                         }`}
                     >
@@ -574,8 +575,9 @@ export default function CoursesSection() {
                           setActiveExamType(type);
                           setCurrentStep(3);
                         }}
-                        className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${activeExamType?._id === type?._id
-                            ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg"
+                        className={`w-full text-left p-3 rounded-xl transition-all duration-200 ${
+                          activeExamType?._id === type?._id
+                            ? "bg-[#616602] text-white shadow-lg"
                             : "bg-gray-50 hover:bg-gray-100 text-gray-700"
                           }`}
                       >
@@ -590,7 +592,7 @@ export default function CoursesSection() {
               {activeExamType && exams.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <FaCertificate className="text-purple-500" />
+                    <FaCertificate className="text-[#616602]" />
                     <h3 className="font-semibold text-gray-900">Search Exams</h3>
                   </div>
                   <div className="relative">
@@ -616,7 +618,7 @@ export default function CoursesSection() {
                 <span className="text-gray-500">Selection Path:</span>
                 {activeCategory && (
                   <>
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
+                    <span className="bg-[#E5ECF3] text-[#204972] px-3 py-1 rounded-full font-medium">
                       {activeCategory.name}
                     </span>
                     <FaChevronRight className="text-gray-400 text-xs" />
@@ -624,7 +626,7 @@ export default function CoursesSection() {
                 )}
                 {activeExamType && (
                   <>
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">
+                    <span className="bg-[#F0F1DC] text-[#616606] px-3 py-1 rounded-full font-medium">
                       {activeExamType.name}
                     </span>
                     <FaChevronRight className="text-gray-400 text-xs" />
@@ -652,15 +654,16 @@ export default function CoursesSection() {
                     <button
                       key={exam?._id}
                       onClick={() => setActiveExam(exam)}
-                      className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${activeExam?._id === exam?._id
-                          ? "border-purple-500 bg-purple-50 shadow-lg"
-                          : "border-gray-200 hover:border-purple-300 hover:shadow-md"
-                        }`}
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                        activeExam?._id === exam?._id
+                          ? "border-[#616602] bg-white shadow-lg"
+                          : "border-gray-200 hover:border-{#F0F1DC} hover:shadow-md"
+                      }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="font-semibold text-gray-900">{exam?.name}</div>
                         {activeExam?._id === exam?._id && (
-                          <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                          <div className="w-6 h-6 bg-[#616602] rounded-full flex items-center justify-center">
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           </div>
                         )}
@@ -706,43 +709,44 @@ export default function CoursesSection() {
                         </div>
                       )}
 
-                      <div className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                          {/* Keep icon if no image */}
-                          {!course?.images?.length && (
-                            <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl flex items-center justify-center">
-                              <FaBook className="text-blue-600 text-xl" />
-                            </div>
-                          )}
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${course?.isFree
-                                ? "bg-gradient-to-r from-green-400 to-emerald-500 text-white"
-                                : "bg-gradient-to-r from-blue-400 to-indigo-500 text-white"
-                              }`}
-                          >
-                            {course?.isFree ? "FREE" : "PREMIUM"}
-                          </span>
-                        </div>
+    <div className="p-6">
+      <div className="flex justify-between items-start mb-4">
+        {/* Keep icon if no image */}
+        {!course?.images?.length && (
+          <div className="w-14 h-14 bg-[#E5ECF3] rounded-2xl flex items-center justify-center">
+            <FaBook className="text-[#204972] text-xl" />
+          </div>
+        )}
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+            course?.isFree
+              ? "bg-gradient-to-r from-green-400 to-emerald-500 text-white"
+              : "bg-[#E5ECF3] text-[#204972]"
+          }`}
+        >
+          {course?.isFree ? "FREE" : "PREMIUM"}
+        </span>
+      </div>
 
-                        <h3 className="font-bold text-lg mb-3 text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                          {course?.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">
-                          {course?.overview}
-                        </p>
+      <h3 className="font-bold text-lg mb-3 text-gray-900 line-clamp-2 group-hover:text-[#204972] transition-colors">
+        {course?.title}
+      </h3>
+      <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">
+        {course?.overview}
+      </p>
 
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-xl text-gray-900">
-                            {course?.isFree ? "Free Access" : `₹${course?.price}`}
-                          </span>
-                          <div className="flex items-center gap-2 text-blue-600 font-medium group-hover:gap-3 transition-all">
-                            <span className="text-sm">Explore</span>
-                            <FaArrowRight className="text-xs" />
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
+      <div className="flex justify-between items-center">
+        <span className="font-bold text-xl text-gray-900">
+          {course?.isFree ? "Free Access" : `₹${course?.price}`}
+        </span>
+        <div className="flex items-center gap-2 text-[#204972] font-medium group-hover:gap-3 transition-all">
+          <span className="text-sm">Explore</span>
+          <FaArrowRight className="text-xs" />
+        </div>
+      </div>
+    </div>
+  </Link>
+))}
 
                 </div>
               ) : (

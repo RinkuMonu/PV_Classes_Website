@@ -15,9 +15,9 @@ export default function Home() {
 <Banner />
       <CoursesSection />
       <CourseEnroll />
-
-
-      <Rajexam />
+<div className="container px-14">
+   <Rajexam />
+</div>
       <FacultySlider/>
       <CurrentAffairs />
       <BannerImg2 />
