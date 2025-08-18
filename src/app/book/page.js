@@ -73,11 +73,11 @@ export default function Book() {
             <Image
               src={item?.full_image}
               alt={item?.name || "Book image"}
-              width={200}
-              height={300}
+              width={40}
+              height={40}
             />
 
-            <span className="text-sm">{item?.name}</span>
+            <span className="text-xs">{item?.name}</span>
           </Link>
         ))}
       </aside>       
