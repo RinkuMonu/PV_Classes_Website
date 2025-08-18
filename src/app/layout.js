@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import { CartProvider } from "../components/context/CartContext"; // ✅ import CartProvider
+import { CartProvider } from "../components/context/CartContext";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({ children }) {
           <Footer />
           <Toaster position="top-right" />
         </CartProvider>
-
+      <WhatsAppButton /> 
       </body>
     </html>
   );

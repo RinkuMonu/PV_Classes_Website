@@ -549,7 +549,7 @@ export default function CoursesSection() {
                         activeCategory?._id === cat?._id
                           ? "bg-[#204972] text-white shadow-lg"
                           : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                      }`}
+                        }`}
                     >
                       <div className="font-medium">{cat?.name}</div>
                     </button>
@@ -579,7 +579,7 @@ export default function CoursesSection() {
                           activeExamType?._id === type?._id
                             ? "bg-[#616602] text-white shadow-lg"
                             : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                        }`}
+                          }`}
                       >
                         <div className="font-medium text-sm">{type?.name}</div>
                       </button>
@@ -692,22 +692,22 @@ export default function CoursesSection() {
 
               {courses?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-               {courses.map((course) => (
-  <Link
-    href={`/courses/${course?.slug}`}
-    key={course?._id}
-    className="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-  >
-    {/* Course Image */}
-    {course?.images?.length > 0 && (
-      <div className="w-full h-48 overflow-hidden">
-        <img
-          src={`${course?.imagesFullPath[0]}`}
-          alt={course?.title || "Course Image"}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    )}
+                  {courses.map((course) => (
+                    <Link
+                      href={`/courses/${course?.slug}`}
+                      key={course?._id}
+                      className="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                    >
+                      {/* Course Image */}
+                      {course?.images?.length > 0 && (
+                        <div className="w-full h-48 overflow-hidden">
+                          <img
+                            src={`${course?.imagesFullPath[0]}`}
+                            alt={course?.title || "Course Image"}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
 
     <div className="p-6">
       <div className="flex justify-between items-start mb-4">
@@ -758,7 +758,7 @@ export default function CoursesSection() {
                     {!activeExam ? "Select an exam to view courses" : "No courses available"}
                   </h3>
                   <p className="text-gray-500 max-w-md mx-auto">
-                    {!activeExam 
+                    {!activeExam
                       ? "Choose a category, exam type, and exam from the sidebar to discover relevant courses."
                       : "We couldn't find any courses for the selected exam. Try selecting a different exam or check back later."
                     }
