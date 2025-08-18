@@ -38,12 +38,6 @@ function AddressShipping() {
     description: "Get your order delivered in 5-7 business days at no extra cost.",
   },
   {
-    id: "pickup",
-    name: "Local Pickup",
-    price: 0,
-    description: "Pick up your order from our nearest store location for free.",
-  },
-  {
     id: "flat",
     name: "Flat Rate",
     price: 20,
@@ -54,12 +48,6 @@ function AddressShipping() {
     name: "Express Delivery",
     price: 99,
     description: "Get your order delivered within 1-2 business days.",
-  },
-  {
-    id: "overnight",
-    name: "Overnight Shipping",
-    price: 199,
-    description: "Order before 6 PM and get it delivered by the next morning.",
   },
 ];
 const addresses = [
@@ -89,21 +77,21 @@ const cartItems = [
   {
     id: 1,
     name: "Floral Block Print Cotton Kurta",
-    image: "uploads/products/floral_kurta.jpg",
+    image: "test1.webp",
     quantity: 2,
     price: 1299,
   },
   {
     id: 2,
     name: "Handcrafted Wooden Serving Bowl",
-    image: "uploads/products/wooden_bowl.jpg",
+    image: "test1.webp",
     quantity: 1,
     price: 899,
   },
   {
     id: 3,
     name: "Vintage Block Print Cushion Cover",
-    image: "uploads/products/cushion_cover.jpg",
+    image: "test1.webp",
     quantity: 3,
     price: 499,
   },
@@ -412,11 +400,11 @@ const cartItems = [
         <div className="container mx-auto px-4 py-12">
           {/* Header Section */}
           <nav className="flex px-5 mb-4 text-sm text-gray-500 space-x-2">
-            <Link href="/" className="hover:text-purple-700 transition-colors cursor-pointer">Home</Link>
+            <Link href="/" className="hover:text-[#384D89]  transition-colors cursor-pointer">Home</Link>
             <span>/</span>
-            <Link href="/cart" className="hover:text-purple-700 transition-colors cursor-pointer">Cart</Link>
-           <span>/</span>
-            <Link href="/checkout" className="text-purple-700 font-semibold">Checkout</Link>
+            {/* <Link href="/cart" className="hover:text-[#384D89]  transition-colors cursor-pointer">Cart</Link>
+           <span>/</span> */}
+            <Link href="/checkout" className="text-[#384D89] font-semibold">Checkout</Link>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -621,7 +609,7 @@ const cartItems = [
                           key={method.id}
                           className={`flex items-start gap-4 p-2 rounded-xl border transition-all duration-300 shadow-sm cursor-pointer 
           ${selectedShipping === method.id
-                              ? "border-purple-600 bg-purple-50 ring-2 ring-purple-300"
+                              ? "border-[#384D89] bg-[#384D89]/10 ring-1 "
                               : "border-gray-200 hover:bg-gray-50"
                             }`}
                         >
@@ -631,7 +619,7 @@ const cartItems = [
                             value={method.id}
                             checked={selectedShipping === method.id}
                             onChange={(e) => setSelectedShipping(e.target.value)}
-                            className="mt-1 h-4 w-4 shrink-0 accent-purple-600"
+                            className="mt-1 h-4 w-4 shrink-0 accent-[#384D89]"
                           />
                           <div className="flex-1">
                             <span className="block text-base font-semibold text-gray-800">
@@ -711,10 +699,10 @@ const cartItems = [
 
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 border-t pt-6">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8  pt-6">
                   <Link
                     href="/cart"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-purple-700 font-medium transition"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-[#384D89] font-medium transition"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Back to Cart
@@ -723,8 +711,7 @@ const cartItems = [
                     <p className="text-sm text-gray-500 font-medium">Your Cart Is Empty - Please Add Something</p>
                   ) : (
                     <button
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-6 py-3 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                      style={{ background: "rgb(157 48 137)" }}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#384D89] text-white text-sm font-semibold px-6 py-3 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                       onClick={handlePayment}
                       disabled={isloading || (isNewAddress && Object.values(errors).some(error => error))}
                     >
@@ -838,15 +825,15 @@ const cartItems = [
       </div>
 
       {/* Shipping Note */}
-      <div className="bg-gradient-to-r from-[#A13C78]/10 to-[#C1467F]/10 p-4 rounded-xl border border-[#A13C78]/20">
-        <p className="text-sm text-[#872D67] italic">Shipping fees will be calculated at checkout</p>
+      <div className="bg-gradient-to-r bg-[#384D89]/10 p-4 rounded-xl border border-[#384D89]/20">
+        <p className="text-sm text-[#384D89] italic">Shipping fees will be calculated at checkout</p>
       </div>
 
       {/* Action Buttons */}
       <div className="space-y-4">
         <Link
           href="/address"
-          className="block w-full py-4 px-6 bg-gradient-to-r from-[#A13C78] to-[#872D67] text-white text-center font-semibold rounded-lg hover:from-[#872D67] hover:to-[#681853] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5"
+          className="block w-full py-4 px-6 bg-[#384D89] text-white text-center font-semibold rounded-lg  transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5"
         >
           Proceed to Checkout
         </Link>

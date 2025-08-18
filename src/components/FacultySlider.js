@@ -27,13 +27,16 @@ export default function FacultySlider() {
     <div className="w-full overflow-hidden">
       <Slider {...settings}>
         {bannerImages.map((src, index) => (
-          <div key={index} className="relative w-full h-[400px] md:h-[360px]">
+          <div
+            key={index}
+            className="relative w-full h-[250px] sm:h-[300px] md:h-[360px] lg:h-[400px]"
+          >
             <Image
               src={src}
               alt={`Banner ${index + 1}`}
               fill
               priority
-              className="object-cover"
+              className="object-contain md:object-cover"
             />
           </div>
         ))}

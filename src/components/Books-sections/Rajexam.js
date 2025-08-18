@@ -87,9 +87,9 @@ export default function rajexambooks() {
       {Object.entries(booksData).map(([subCatId, subCatData]) => (
         <div key={subCatId} className="mb-10">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-[#204972]">
+            <h3 className="text-2xl font-bold text-[#204972]">
               {subCatData.book_subcategory_name}
-            </h2>
+            </h3>
             <Link
               href={`/book-category/${subCatData?.books?.[0]?.category?._id}`}
               className="flex items-center text-[#616602] font-medium hover:underline"

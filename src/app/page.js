@@ -6,6 +6,7 @@ import CoursesSection from "../components/CourseSelection";
 import BannerImg2 from "../components/bannerimg2";
 import CurrentAffairs from "../components/CurrentAffairs";
 import FacultySlider from "../components/FacultySlider";
+import CTA from "../components/CTA";
 
 
 export default function Home() {
@@ -15,12 +16,15 @@ export default function Home() {
 <Banner />
       <CoursesSection />
       <CourseEnroll />
-
-
-      <Rajexam />
+<div className="container md:px-14 px-1">
+   <Rajexam />
+</div>
       <FacultySlider/>
       <CurrentAffairs />
-      <BannerImg2 />
+     <div className="container px-4 md:px-0">
+       <BannerImg2 />
+     </div>
+      <CTA />
       <Testimonials />
 
     </>

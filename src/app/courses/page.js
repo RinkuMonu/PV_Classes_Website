@@ -297,23 +297,51 @@ export default function CoursesPage() {
   // Local cart state
   const [cart, setCart] = useState([]);
 
+  // useEffect(() => {
+  //   if (!examId) return;
+  //   const fetchCourses = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const res = await axiosInstance.get(`/courses?exam=${examId}`);
+  //       console.log("Fetched courses:", res.data);
+  //       setCourses(res?.data || []);
+  //     } catch (err) {
+  //       console.error("Error fetching courses", err?.response?.data || err.message);
+  //       setCourses([]);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchCourses();
+  // }, [examId]);
+
   useEffect(() => {
-    if (!examId) return;
-    const fetchCourses = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axiosInstance.get(`/courses?exam=${examId}`);
-        console.log("Fetched courses:", res.data);
-        setCourses(res?.data || []);
-      } catch (err) {
-        console.error("Error fetching courses", err?.response?.data || err.message);
-        setCourses([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCourses();
-  }, [examId]);
+  if (!examId) return;
+  const fetchCourses = async () => {
+    setIsLoading(true);
+    try {
+      const res = await axiosInstance.get(`/courses?exam=${examId}`);
+      let data = res?.data || [];
+
+      // 👇 yaha dummy fields inject karenge
+      data = data.map((c, idx) => ({
+        ...c,
+        language: c.language || (idx % 2 === 0 ? "English" : "Hindi"), // alternate for demo
+        mode: c.mode || (idx % 2 === 0 ? "Online" : "Offline"),       // alternate for demo
+      }));
+
+      console.log("Fetched courses:", data);
+      setCourses(data);
+    } catch (err) {
+      console.error("Error fetching courses", err?.response?.data || err.message);
+      setCourses([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  fetchCourses();
+}, [examId]);
+
 
   const handleAddToCart = (course) => {
     if (cart.some((item) => item.id === course.id)) {
@@ -323,16 +351,28 @@ export default function CoursesPage() {
     setCart([...cart, course]);
   };
 
+  // const filtered = courses
+  //   .filter((c) => (mode ? c.mode === mode : true))
+  //   .filter((c) => (lang === "All" ? true : c.language === lang))
+  //   .filter((c) => (freeOnly ? c.isFree : true))
+  //   .filter((c) =>
+  //     q.trim()
+  //       ? c.title.toLowerCase().includes(q.toLowerCase()) ||
+  //         (c.shortTitle || "").toLowerCase().includes(q.toLowerCase())
+  //       : true
+  //   );
+
   const filtered = courses
-    .filter((c) => (mode ? c.mode === mode : true))
-    .filter((c) => (lang === "All" ? true : c.language === lang))
-    .filter((c) => (freeOnly ? c.isFree : true))
-    .filter((c) =>
-      q.trim()
-        ? c.title.toLowerCase().includes(q.toLowerCase()) ||
-          (c.shortTitle || "").toLowerCase().includes(q.toLowerCase())
-        : true
-    );
+  .filter((c) => (mode ? c.mode === mode : true))
+  .filter((c) => (lang === "All" ? true : c.language === lang))
+  .filter((c) => (freeOnly ? c.isFree : true))
+  .filter((c) =>
+    q.trim()
+      ? c.title.toLowerCase().includes(q.toLowerCase()) ||
+        (c.shortTitle || "").toLowerCase().includes(q.toLowerCase())
+      : true
+  );
+
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageItems = filtered.slice((page - 1) * perPage, page * perPage);
@@ -344,7 +384,7 @@ export default function CoursesPage() {
   return (
     <main className="min-h-screen bg-white">
       <CourseHero />
-      <SectionHeader />
+      {/* <SectionHeader /> */}
 
       <ExamToolbar
         categories={[]} // remove if not needed
