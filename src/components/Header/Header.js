@@ -421,7 +421,7 @@ const handleDecrement = (id) => {
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                   <span className="font-semibold text-[#115D8E]">
-                    ₹{item?.discount_price.toLocaleString()}
+                    {/* ₹{item?.discount_price.toLocaleString()} */}
                   </span>
                   <button
                     onClick={() => handleDelete(item?.itemId)}
