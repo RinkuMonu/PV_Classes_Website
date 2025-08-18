@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import Link from "next/link";
 export default function CourseEnroll() {
   return (
     <div className="px-4 md:px-10 lg:px-18 py-10">
@@ -15,9 +15,11 @@ export default function CourseEnroll() {
               Paayen Free Resources Current Affairs aur notes PDFs, Test Series,
               Video Lectures aur bhi bahut kuch...
             </p>
+            <Link href="/courses" className="inline-block mb-4">
             <button className="bg-[#788406] text-white px-6 py-3 rounded-md font-medium hover:bg-[#00316b] transition-colors">
               Enroll Now
             </button>
+            </Link>
           </div>
 
           {/* Right Image */}

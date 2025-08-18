@@ -629,24 +629,21 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import axiosInstance from "../../axios/axiosInstance"; 
+import axiosInstance from "../../axios/axiosInstance";
+import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay } from "react-icons/fi";
 
 export default function CourseDetailsPage() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openVideo, setOpenVideo] = useState(null); // track open video index
+  const [openVideo, setOpenVideo] = useState(null);
 
   useEffect(() => {
     if (!id) return;
     const fetchCourse = async () => {
       try {
-        // const res = await fetch(`http://localhost:5000/api/courses/${id}`);
-        // const data = await res.json();
-        // setCourse(data);
         const res = await axiosInstance.get(`/courses/${id}`);
         setCourse(res.data);
-
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
@@ -660,131 +657,229 @@ export default function CourseDetailsPage() {
   if (!course) return <div className="p-10 text-center">Course not found</div>;
 
   return (
-    <section className="relative z-10 pt-10 md:pt-6">
-      <div className="mx-auto max-w-[1160px] px-4 space-y-8">
-        
-        {/* Image + Title */}
-        <div className="flex flex-col md:flex-row gap-6">
-          {course?.imagesFullPath?.[0] && (
-            <img
-              src={course.imagesFullPath[0]}
-              alt={course.title}
-              className="w-full md:w-80 rounded-lg shadow-md"
-            />
-          )}
-          <div>
-            <h1 className="text-3xl font-extrabold mb-2">{course?.title}</h1>
-            <p className="text-gray-600">{course?.shortDescription}</p>
-
-            <div className="mt-3 flex gap-3 flex-wrap">
-              <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-md text-sm">
-                {course?.isFree ? "FREE" : `₹${course?.price}`}
-              </span>
-              <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-md text-sm">
-                Validity: {course?.validity || "N/A"}
-              </span>
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-sm">
-                Language: {course?.language}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Long Description */}
-        <div>
-          <h2 className="text-xl font-bold mb-2">About this course</h2>
-          <p className="text-gray-700">{course?.longDescription}</p>
-        </div>
-
-        {/* Exam Info */}
-        {course?.exam && (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Exam Info</h2>
-            <div className="flex items-center gap-4 border rounded p-4">
-              {course.exam.logo && (
+    <section className="relative z-10 pt-10 md:pt-6 bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1160px] px-4 py-8 flex flex-col md:flex-row gap-8">
+        {/* Main Content */}
+        <div className="w-full md:w-2/3 space-y-8">
+          {/* Course Header */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              {course?.imagesFullPath?.[0] && (
                 <img
-                  src={`http://localhost:5000${course.exam.logo}`}
-                  alt={course.exam.name}
-                  className="w-20 h-20 object-contain"
+                  src={course.imagesFullPath[0]}
+                  alt={course.title}
+                  className="w-full md:w-64 h-48 object-cover rounded-lg"
                 />
               )}
-              <div>
-                <p className="font-semibold">{course.exam.name}</p>
-                <p className="text-sm text-gray-600">{course.exam.description}</p>
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{course?.title}</h1>
+                <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                    <span className="font-bold">4.5</span>
+                    <span>★★★★★</span>
+                    <span>(35,000)</span>
+                  </span>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                    773,391 learners
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm">
+                    {course?.isFree ? "FREE" : `₹${course?.price}`}
+                  </span>
+                  <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
+                    Validity: {course?.validity || "N/A"}
+                  </span>
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
+                    Language: {course?.language}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        )}
 
-        {/* Topics */}
-        {course?.topics?.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Topics Covered</h2>
-            <ul className="list-disc pl-5 text-gray-700 space-y-1">
-              {course.topics.map((t, i) => (
-                <li key={i}>{t}</li>
+          {/* What You'll Learn */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">What you'll learn</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {course.topics?.slice(0, 8).map((topic, i) => (
+                <div key={i} className="flex items-start">
+                  <FiCheck className="text-green-500 mt-1 mr-2 flex-shrink-0" />
+                  <span className="text-gray-700">Learn {topic}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
-        )}
 
-        {/* Features */}
-        {course?.features?.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Course Features</h2>
-            <ul className="list-disc pl-5 text-gray-700 space-y-1">
-              {course.features.map((f, i) => (
-                <li key={i}>{f}</li>
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore Content</h2>
+
+            <h1 className="text-3xl text-gray-900 mb-2">{course?.title}</h1>
+            <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
+
+          </div>
+
+
+            {/* What You'll Learn */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Our features </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {course.features?.slice(0, 8).map((topic, i) => (
+                <div key={i} className="flex items-start">
+                  <FiCheck className="text-green-500 mt-1 mr-2 flex-shrink-0" />
+                  <span className="text-gray-700">Learn {topic}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
-        )}
 
-   {/* Videos */}
-        {course?.videos?.length > 0 && (
-          <div className="mt-6">
-            <h2 className="text-xl font-bold mb-2">Course Videos</h2>
-            <ul className="space-y-3">
-              {course.videos.map((v, i) => (
-                <li key={i} className="border rounded p-3">
+          {/* Explore Related Topics */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore related topics</h2>
+            <div className="flex flex-wrap gap-2">
+              {["Python", "Data Science", "Machine Learning", "Environment"].map((topic, i) => (
+                <span
+                  key={i}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full transition cursor-pointer"
+                >
+                  {topic}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Course Content */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="border-b p-6">
+              <h2 className="text-2xl font-bold text-gray-900">Course content</h2>
+              <p className="text-gray-600 mt-1">27 sessions • 15th minutes • 26th bike ticket length</p>
+            </div>
+
+            <div className="divide-y">
+              {course.videos?.map((video, i) => (
+                <div key={i} className="p-4 hover:bg-gray-50">
                   <div
                     className="flex justify-between items-center cursor-pointer"
-                    onClick={() =>
-                      setOpenVideo(openVideo === i ? null : i)
-                    }
+                    onClick={() => setOpenVideo(openVideo === i ? null : i)}
                   >
-                    <div>
-                      <p className="font-medium">{v.title}</p>
-                      <p className="text-xs text-gray-500">
-                        Duration: {Math.floor(v.duration / 60)} mins
-                      </p>
-                      {v.shortDescription && (
-                        <p className="text-sm text-gray-400">
-                          {v.shortDescription}
+                    <div className="flex items-center gap-3">
+                      <div className="bg-gray-100 rounded-md p-2">
+                        <FiPlay className="text-gray-500" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">{video.title}</h3>
+                        <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                          <span>{i + 1} lecture</span>
+                          <span>•</span>
+                          <span>{Math.floor(video.duration / 60)} min</span>
                         </p>
-                      )}
+                      </div>
                     </div>
                     <a
-                      href={v.url}
+                      href={video.url}
                       target="_blank"
-                      className="text-blue-600 hover:underline"
-                      onClick={(e) => e.stopPropagation()} // stop accordion toggle
+                      className="text-blue-600 hover:underline text-sm font-medium"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      Watch
+                      Preview
                     </a>
                   </div>
 
-                  {/* Expand longDescription */}
-                  {openVideo === i && v.longDescription && (
-                    <div className="mt-3 p-3 bg-gray-50 rounded text-gray-700 text-sm">
-                      {v.longDescription}
+                  {openVideo === i && video.longDescription && (
+                    <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm">
+                      {video.longDescription}
                     </div>
                   )}
-                </li>
+                </div>
               ))}
+            </div>
+          </div>
+
+          {/* Requirements */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Requirements</h2>
+            <ul className="list-disc pl-5 text-gray-700 space-y-2">
+              <li>Some programming experience</li>
+              <li>Admin permissions to download files</li>
             </ul>
           </div>
-        )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="w-full md:w-1/3 space-y-6">
+          {/* Pricing Card */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-6">
+            <div className="p-6">
+              <div className="flex items-end gap-2 mb-4">
+                <span className="text-3xl font-bold text-gray-900">₹4,469</span>
+                <span className="text-gray-500 line-through">₹8,999</span>
+                <span className="text-green-600 font-medium">50% off</span>
+              </div>
+
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg mb-3 transition">
+                Add to cart
+              </button>
+
+              <button className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 rounded-lg transition">
+                Buy now
+              </button>
+
+              <p className="text-center text-gray-600 text-sm mt-4">
+                30-Day Money-Back Guarantee
+              </p>
+            </div>
+
+            <div className="border-t p-6">
+              <h3 className="font-bold text-lg text-gray-900 mb-3">This course includes:</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2 text-gray-700">
+                  <FiClock className="text-blue-500" />
+                  <span>25 hours on-demand video</span>
+                </li>
+                <li className="flex items-center gap-2 text-gray-700">
+                  <FiTablet className="text-blue-500" />
+                  <span>Access on mobile and TV</span>
+                </li>
+                <li className="flex items-center gap-2 text-gray-700">
+                  <FiDownload className="text-blue-500" />
+                  <span>5 downloadable resources</span>
+                </li>
+                <li className="flex items-center gap-2 text-gray-700">
+                  <FiAward className="text-blue-500" />
+                  <span>Certificate of completion</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="border-t p-6">
+              <h3 className="font-bold text-lg text-gray-900 mb-3">Share this course</h3>
+              <div className="flex gap-3">
+                {["Facebook", "Twitter", "LinkedIn", "Copy Link"].map((action, i) => (
+                  <button
+                    key={i}
+                    className="flex-1 text-center py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 text-sm"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Personal Teams */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="font-bold text-lg text-gray-900 mb-3">Personal Teams</h3>
+            <p className="text-gray-700 mb-3">
+              The Premium team is included in plan. Subscribe to Udemy’s top courses.
+            </p>
+            <a href="#" className="text-blue-600 hover:underline font-medium">
+              Go into startup, plus 25,000/7 and beyond
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

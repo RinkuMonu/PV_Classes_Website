@@ -3,12 +3,12 @@ import React from "react";
 
 export default function TermsOfUse() {
   return (
-<section className="container">
+<section className="container py-6">
  <div className="max-w-5xl mx-auto px-6 py-12 bg-[#E6EEF5]">
 
       <h1 className="text-4xl font-bold text-center text-[#204972] mb-4">
 
-  Cancellation & Refund Policy
+Terms & Conditions
       </h1>
       <p className="text-center text-gray-600 mb-10">
         Please read our Privacy Policy carefully before using our services.
@@ -16,14 +16,13 @@ export default function TermsOfUse() {
 
       <div className="bg-white shadow-md rounded-lg border-l-4 border-[#616602] p-6 mb-8">
         <h3 className="text-2xl font-semibold text-[#204972] mb-4">
-          Refund Policy
+         Terms & Acceptance
         </h3>
         <p className="text-gray-700 mb-3">
-         Return will not be accepted if the customer does not like the material or color of the dress. We suggest that the customer read the product description before ordering.
+        Please read the following terms and conditions very carefully as your use of service is subject to your acceptance of and compliance with the following terms and conditions ("Terms").
          <br />
 
-Exchange is accepted if the customer wants to exchange the dress with a different dress of similar or higher value. (We do not give free shipping for exchanged dresses.The original product is sent by the customer at their own expense. If the customer pays shipping charges for exchanges, then we can arrange reverse pickup (₹80) and dispatch a new parcel (₹70). In total, ₹150 shipping charges must be paid by the customer.)
-
+By subscribing to or using any of our services you agree that you have read, understood and are bound by the Terms, regardless of how you subscribe to or use the services. If you do not want to be bound by the Terms, you must not subscribe to or use our services.
  <br />Return will not be accepted if the customer does not like the color of the dress. We try our best to ensure exact colors as shown. However, 5–10% variation is unavoidable due to lighting effects.<br />
 
 Return will not be accepted if the customer is not satisfied, as we commit to deliver what we have displayed and for the prices we have charged which is the best possible.

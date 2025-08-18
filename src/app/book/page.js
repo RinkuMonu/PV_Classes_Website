@@ -53,6 +53,7 @@ export default function Book() {
     }
   };
   return (
+    <>
     <div className="flex gap-6 p-4">
       <aside className="bg-[#204972] text-white rounded-lg p-4 w-56 flex flex-col gap-4 sticky top-4 h-fit">
         {category?.map((item, index) => (
@@ -63,11 +64,11 @@ export default function Book() {
             <Image
               src={item?.full_image}
               alt={item?.name || "Book image"}
-              width={200}
-              height={300}
+              width={40}
+              height={40}
             />
 
-            <span className="text-sm">{item?.name}</span>
+            <span className="text-xs">{item?.name}</span>
           </Link>
         ))}
       </aside>       
@@ -158,5 +159,6 @@ export default function Book() {
         </section>
       </div>
     </div>
+    </>
   );
 }

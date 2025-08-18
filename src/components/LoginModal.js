@@ -6,6 +6,7 @@ import { useState } from "react";
 import axiosInstance from "../app/axios/axiosInstance";
 import toast from "react-hot-toast";
 import { useCart } from "../components/context/CartContext";
+import Image from "next/image";
 
 
 export default function LoginModal({ onClose }) {
@@ -116,8 +117,16 @@ export default function LoginModal({ onClose }) {
         >
           &times;
         </button>
-
-        <h2 className="text-xl font-semibold text-center mb-1">
+ <Link href="/" className="flex items-center justify-center gap-2 pb-4">
+            <Image
+              src="/Image/pv-logo.png"
+              alt="PV classes"
+              width={170}
+              height={40}
+              className="object-contain"
+            />
+          </Link>
+        <h2 className="text-2xl font-semibold text-center mb-1">
           Welcome back to <span className="text-[#115D8E] font-bold">PV classes</span>
         </h2>
         <p className="text-center text-gray-500 text-sm mb-6">
@@ -166,10 +175,19 @@ export default function LoginModal({ onClose }) {
                           </button>
                         )}
 
-                        {/* OTP Input + Verify Button */}
+                       
                         {otpSent && (
                           <>
                             <div className="relative w-full">
+                               <Link href="/" className="flex items-center justify-center gap-2">
+            <Image
+              src="/Image/pv-logo.png"
+              alt="PV classes"
+              width={170}
+              height={40}
+              className="object-contain"
+            />
+          </Link>
                               <label
                                 htmlFor="otp"
                                 className="absolute left-4 top-2 text-sm font-semibold text-[#115D8E] pointer-events-none"
