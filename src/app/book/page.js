@@ -53,6 +53,7 @@ export default function Book() {
     }
   };
   return (
+    <>
     <div className="flex gap-6 p-4">
       <aside className="bg-[#204972] text-white rounded-lg p-4 w-56 flex flex-col gap-4 sticky top-4 h-fit">
         {category?.map((item, index) => (
@@ -158,5 +159,6 @@ export default function Book() {
         </section>
       </div>
     </div>
+    </>
   );
 }
