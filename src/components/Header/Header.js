@@ -13,7 +13,7 @@ import {
   Menu,
   X,
   ChevronUp,
-  LogIn, UserPlus,
+  LogIn, User,
   ArrowRight,
   Trash2,
   Minus,
@@ -22,7 +22,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import ExamMegaMenu from "./ExamMegaMenu";
 import LoginModal from "../LoginModal";
-
+import { useCart } from "../context/CartContext";
 const examData = {
   "Government Exam": {
     tabs: {
@@ -141,13 +141,15 @@ const examData = {
   const isLoggedIn = true;
 
 export default function Header() {
+  const { cart,storageCart, updateQuantity, removeFromCart, fetchCart } = useCart();
+  console.log("storageCart = ",storageCart);
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [examsMenuOpen, setExamsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const [coursesMenu, setCoursesMenu] = useState(false)
   const [openTabs, setOpenTabs] = useState({});
-const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const lastScrollRef = useRef(0);
   const [isOpen, setIsOpen] = useState(false);
   const toggleCategory = (category) => {
@@ -160,42 +162,39 @@ const [isModalOpen, setIsModalOpen] = useState(false);
       [`${category}-${tab}`]: !prev[`${category}-${tab}`],
     }));
   };
-  
-const [cartToDisplay, setCartToDisplay] = useState( [
-  {
-    id: 1,
-    name: "SSC CGL 2025 Complete Preparation Course",
-    category: "SSC Exams",
-    image: "/test1.webp",
-    price: 2499,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "UPSC Civil Services Prelims Test Series (30 Tests)",
-    category: "UPSC Exams",
-   image: "/test1.webp",
-    price: 3499,
-    quantity: 1,
-  },
-  {
-    id: 3,
-    name: "Railway RRB NTPC Mock Test Pack",
-    category: "Railway Exams",
-  image: "/test1.webp",
-    price: 999,
-    quantity: 2,
-  },
-  {
-    id: 4,
-    name: "Bank PO & Clerk Combo Course",
-    category: "Banking Exams",
-  image: "/test1.webp",
-    price: 1999,
-    quantity: 1,
-  },
-]);
+  const [cartToDisplay, setCartToDisplay] = useState([]);
+  const [userId, setUserId] = useState(null);
 
+  const formatCartData = (cartArray) => {
+    return cartArray.map(item => ({
+      itemId: item.itemId,
+      quantity: item.quantity,
+      price: item.extra?.book?.price || null,
+      discount_price: item.extra?.book?.discount_price || null,
+      categoryName: item.extra?.book?.category?.name || null,
+      image: item.extra?.book?.images?.[0] || null
+    }));
+  };
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    setUserId(storedUserId);
+    if (!storedUserId) {
+      const cartData = localStorage.getItem("guestCart");
+      if (cartData) {
+        setCartToDisplay(formatCartData(JSON.parse(cartData)));
+      } else {
+        setCartToDisplay([]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId && cart) {
+      setCartToDisplay(formatCartData(cart));
+    }
+  }, [userId, cart]);
+
+console.log("cartToDisplay = ",cartToDisplay);
 const handleIncrement = (id) => {
   setCartToDisplay((prevCart) =>
     prevCart.map((item) =>
@@ -268,10 +267,10 @@ const handleDecrement = (id) => {
 
            Login
             </Link>
-             {/* <Link href="/register" className="relative py-2 px-3 inline-flex gap-1">
-              <UserPlus size={16} className="mt-1"/>
-           Register
-            </Link> */}
+             <Link href="/profile" className="relative py-2 px-3 inline-flex gap-1">
+              <User size={16} className="mt-1"/>
+           My Profile
+            </Link>
           </div>
         </div>
       </div>
@@ -321,7 +320,7 @@ const handleDecrement = (id) => {
             <Link href="#" className="hover:text-[#009FE3] text-base">
               News
             </Link>
-            <Link href="#" className="hover:text-[#009FE3] text-base">
+            <Link href="/book" className="hover:text-[#009FE3] text-base">
               Books
             </Link>
           </nav>
@@ -365,7 +364,7 @@ const handleDecrement = (id) => {
   {/* Scrollable Cart Content */}
   <div className="flex flex-col h-[calc(100%-64px)] ">
     <div className="flex-1 overflow-y-auto p-6  hide-scrollbar">
-      {cartToDisplay.length === 0 ? (
+      {cartToDisplay?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-center">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
@@ -395,14 +394,14 @@ const handleDecrement = (id) => {
         <div className="space-y-6">
           {cartToDisplay.map((item) => (
             <div
-              key={item.id}
+              key={item?.itemId}
               className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
             >
               {/* Product Image */}
               <div className="flex-shrink-0">
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item?.image}
+                  alt={item?.categoryName}
                   className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
                 />
               </div>
@@ -411,21 +410,21 @@ const handleDecrement = (id) => {
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 <div>
                   <h3 className="text-gray-800 font-semibold text-base sm:text-lg leading-snug line-clamp-2 mb-1">
-                    {item.name}
+                    {item.categoryName}
                   </h3>
-                  {item.category && (
+                  {item?.category && (
                     <p className="text-xs text-gray-500 mb-3">
-                      {item.category}
+                      {item?.category}
                     </p>
                   )}
                 </div>
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                   <span className="font-semibold text-[#115D8E]">
-                    ₹{item.price.toLocaleString()}
+                    ₹{item?.discount_price.toLocaleString()}
                   </span>
                   <button
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item?.itemId)}
                     className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                     aria-label="Remove item"
                   >
@@ -436,17 +435,17 @@ const handleDecrement = (id) => {
                 <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
                   <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white">
                     <button
-                      onClick={() => handleDecrement(item.id)}
+                      onClick={() => handleDecrement(item?.itemId)}
                       className="px-3 py-2 hover:bg-gray-100 disabled:opacity-50 transition"
-                      disabled={item.quantity <= 1}
+                      disabled={item?.quantity <= 1}
                     >
                       <Minus className="w-4 h-4" />
                     </button>
                     <span className="px-4 text-sm font-medium min-w-[40px] text-center">
-                      {item.quantity}
+                      {item?.quantity}
                     </span>
                     <button
-                      onClick={() => handleIncrement(item.id)}
+                      onClick={() => handleIncrement(item?.itemId)}
                       className="px-3 py-2 hover:bg-gray-100 transition"
                     >
                       <Plus className="w-4 h-4" />
@@ -454,7 +453,7 @@ const handleDecrement = (id) => {
                   </div>
 
                   <span className="text-sm font-medium text-gray-700 flex justify-end">
-                    Total: ₹{(item.price * item.quantity).toLocaleString()}
+                    Total: ₹{(item?.discount_price * item?.quantity).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -467,7 +466,7 @@ const handleDecrement = (id) => {
       <div className="flex justify-between text-sm text-gray-600">
         <span>
           Subtotal{" "}
-          <span className="text-gray-400">({cartToDisplay.length} items)</span>
+          <span className="text-gray-400">({cartToDisplay?.length} items)</span>
         </span>
         <span className="text-sm font-semibold text-gray-800">
           ₹{total.toLocaleString()}
