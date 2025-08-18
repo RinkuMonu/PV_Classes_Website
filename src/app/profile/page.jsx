@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ProfilePage() {
-    const [activeTab, setActiveTab] = useState("books");
+    const [activeTab, setActiveTab] = useState("detail");
     const [search, setSearch] = useState("");
     const [userDetails, setUserDetails] = useState({
         name: "",
