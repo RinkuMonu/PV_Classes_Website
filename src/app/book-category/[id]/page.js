@@ -29,23 +29,18 @@ export default function BookCategoryPage() {
     fetchBooks();
   }, [id]);
   const handleAdd = async (e, itemType, itemId) => {
-      e.stopPropagation();
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login to add items to cart.");
-        return;
-      }
-      const response = await addToCart({
-        itemType,
-        itemId,
-      });
-      console.log("response = ", response.success);
-      if (response.success) {
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    };
+    e.stopPropagation();    
+    const response = await addToCart({
+      itemType,
+      itemId,
+    });
+    console.log("response = ", response.success);
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   // Book Data (You can fetch this from an API later)
 //   const books = [
 //     {

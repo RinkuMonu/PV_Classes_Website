@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axiosInstance from "../app/axios/axiosInstance";
 import toast from "react-hot-toast";
+import { useCart } from "../components/context/CartContext";
 import Image from "next/image";
 
 
@@ -15,6 +16,7 @@ export default function LoginModal({ onClose }) {
   const [otpSent, setOtpSent] = useState(false);
   const [errors, setErrors] = useState({ phone: "", otp: "" });
   const router = useRouter();
+  const { addToCart, loading} = useCart();
 
   const sendOtp = async () => {
      setOtpSent(false);
@@ -32,7 +34,6 @@ export default function LoginModal({ onClose }) {
 
       if (res.data?.message) {
         setOtpSent(true);
-        // ✅ Show OTP in toast (for testing)
         toast.success(
           `${res.data.message} - OTP: ${res.data.data?.otp}`,
           { autoClose: 4000 }
@@ -65,22 +66,36 @@ export default function LoginModal({ onClose }) {
     if (!valid) return;
 
     try {
-      const response = await axiosInstance.post("/users/login", {
-        phone,
-        otp,
-      });
-      console.log("logged in = ",response);
+      const response = await axiosInstance.post("/users/login", { phone, otp });
+      console.log("logged in = ", response);
+
       if (response.data.message) {
-        // Save token
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
 
-        // Success message
+        let Cart = JSON.parse(localStorage.getItem("cart")) || [];
+        await Promise.all(
+          Cart.map(async (item) => {
+            try {
+              const res = await addToCart({
+                itemType: item.itemType,
+                itemId: item.itemId,
+                quantity: item.quantity,
+              });
+              if (res?.success) {
+                Cart = Cart.filter(
+                  (c) => !(c.itemId === item.itemId && c.itemType === item.itemType)
+                );
+                localStorage.setItem("cart", JSON.stringify(Cart));
+              }
+
+              console.log("res", res);
+            } catch (error) {
+              console.error("Error syncing item:", item, error);
+            }
+          })
+        );
         toast.success(response.data.message);
-
-        // Optional: store user info
-        localStorage.setItem("userId",response.data.userId);
-
-        // Refresh & close modal
         router.refresh();
         onClose();
       } else {
@@ -91,6 +106,7 @@ export default function LoginModal({ onClose }) {
       toast.error(error.response?.data?.message || "Server error");
     }
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(82,93,101,0.6)]">
@@ -199,7 +215,7 @@ export default function LoginModal({ onClose }) {
               >
                 Verify OTP
               </button>
-              <button onClick={sendOtp()} className="flex justify-end text-sm text-[#115D8E]">Resend Opt</button>
+              <button className="flex justify-end text-sm text-[#115D8E]">Resend Opt</button>
             </>
           )}
         </form>
