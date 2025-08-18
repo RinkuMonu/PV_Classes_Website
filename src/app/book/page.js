@@ -9,15 +9,12 @@ import Image from "next/image";
 import Link from "next/link";
 import axiosInstance from "../axios/axiosInstance";
 import { FaPlus } from "react-icons/fa6";
+// import { headers } from "next/headers";
 
 export default function Book() {
-  const { addToCart, loading,successMessage, errorMessage } = useCart();
-  console.log("success = ",successMessage);
+  const { addToCart, loading} = useCart();
   const [category,setCategory] = useState([]);
-   const [booksData, setBooksData] = useState({});
-  useEffect(() => {
-  
-  }, [successMessage, errorMessage]);
+  const [booksData, setBooksData] = useState({});  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -29,7 +26,6 @@ export default function Book() {
     };
     fetchCategories();
   }, []);
-
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -43,26 +39,19 @@ export default function Book() {
 
     fetchBook();
   }, []);
-  
-    console.log("booksData = ",booksData);
-    const handleAdd = async (e, itemType, itemId, book) => {
-      e.stopPropagation();
-      const response = await addToCart({
-        itemType,
-        itemId,
-        quantity: 1,
-        extra: { book }
-      });
-      console.log("response = ", response.success);
-      if (response.success) {
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    };
-
-
-
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();    
+    const response = await addToCart({
+      itemType,
+      itemId,
+    });
+    console.log("response = ", response.success);
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   return (
     <div className="flex gap-6 p-4">
       <aside className="bg-[#204972] text-white rounded-lg p-4 w-56 flex flex-col gap-4 sticky top-4 h-fit">
@@ -150,15 +139,15 @@ export default function Book() {
                     </Link>
 
                     {/* Button ko card ke andar rakha, but Link ke bahar */}
-                   <button
-                      onClick={(e) => handleAdd(e, "book", book?._id, book)}
-                      disabled={loading}
-                      className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      <span className="mt-1 me-2">
-                        <FaPlus />
-                      </span>
-                      {loading ? "ADDING..." : "ADD"}
+                    <button
+                        onClick={(e) => handleAdd(e, "book", book?._id)}
+                        disabled={loading}
+                        className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
+                      >
+                        <span className="mt-1 me-2">
+                          <FaPlus />
+                        </span>
+                        {loading ? "ADDING..." : "ADD"}
                     </button>
                   </div>
                 ))}
