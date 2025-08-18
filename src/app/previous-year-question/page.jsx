@@ -249,7 +249,7 @@ export default function PreviousYearPapers() {
   return (
     <>
       {/* Banner */}
-      <section className="relative w-full h-[56vh] text-white">
+      <section className="relative w-full h-[60vh] text-white">
         <div className="absolute inset-0">
           <Image
             src="/Image/Banner/pyq-banner.jpg"
