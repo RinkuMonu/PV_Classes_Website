@@ -15,8 +15,6 @@ export default function Book() {
   console.log("success = ",successMessage);
   const [category,setCategory] = useState([]);
    const [booksData, setBooksData] = useState({});
-// toast.success(successMessage);
-// toast.error(errorMessage);
   useEffect(() => {
   
   }, [successMessage, errorMessage]);

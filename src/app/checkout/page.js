@@ -38,12 +38,6 @@ function AddressShipping() {
     description: "Get your order delivered in 5-7 business days at no extra cost.",
   },
   {
-    id: "pickup",
-    name: "Local Pickup",
-    price: 0,
-    description: "Pick up your order from our nearest store location for free.",
-  },
-  {
     id: "flat",
     name: "Flat Rate",
     price: 20,
@@ -54,12 +48,6 @@ function AddressShipping() {
     name: "Express Delivery",
     price: 99,
     description: "Get your order delivered within 1-2 business days.",
-  },
-  {
-    id: "overnight",
-    name: "Overnight Shipping",
-    price: 199,
-    description: "Order before 6 PM and get it delivered by the next morning.",
   },
 ];
 const addresses = [
@@ -89,21 +77,21 @@ const cartItems = [
   {
     id: 1,
     name: "Floral Block Print Cotton Kurta",
-    image: "uploads/products/floral_kurta.jpg",
+    image: "test1.webp",
     quantity: 2,
     price: 1299,
   },
   {
     id: 2,
     name: "Handcrafted Wooden Serving Bowl",
-    image: "uploads/products/wooden_bowl.jpg",
+    image: "test1.webp",
     quantity: 1,
     price: 899,
   },
   {
     id: 3,
     name: "Vintage Block Print Cushion Cover",
-    image: "uploads/products/cushion_cover.jpg",
+    image: "test1.webp",
     quantity: 3,
     price: 499,
   },
@@ -711,7 +699,7 @@ const cartItems = [
 
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 border-t pt-6">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8  pt-6">
                   <Link
                     href="/cart"
                     className="flex items-center gap-2 text-sm text-gray-600 hover:text-purple-700 font-medium transition"
