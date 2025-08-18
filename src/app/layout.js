@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* ✅ CartProvider wraps the entire app */}
+
         <CartProvider>
           <Header />
           {children}
