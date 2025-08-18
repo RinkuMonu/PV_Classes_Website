@@ -2,12 +2,22 @@
 import { SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+// const SUB_FILTERS_DEFAULT = [
+//     "GK & GS Kumar Gaurav Sir",
+//     "UPSC(IAS)",
+//     "SSC Foundation(CGL CHSL)",
+//     "SSC GD (Constable)",
+// ];
+
 const SUB_FILTERS_DEFAULT = [
-    "GK & GS Kumar Gaurav Sir",
-    "UPSC(IAS)",
-    "SSC Foundation(CGL CHSL)",
-    "SSC GD (Constable)",
+  "GK & Current Affairs",
+  "Teaching Aptitude (REET/CTET)",
+  "Banking (IBPS, SBI, RBI)",
+  "Defence (NDA, CDS, AFCAT)",
 ];
+
+
+
 
 export default function ExamToolbar({
     categories,

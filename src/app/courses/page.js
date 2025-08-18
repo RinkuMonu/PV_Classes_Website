@@ -271,10 +271,10 @@ import SectionHeader from "../../components/SectionHeader";
 const formatINR = (n) =>
   typeof n === "number"
     ? new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        maximumFractionDigits: 0,
-      }).format(n)
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(n)
     : "—";
 
 export default function CoursesPage() {
@@ -316,31 +316,31 @@ export default function CoursesPage() {
   // }, [examId]);
 
   useEffect(() => {
-  if (!examId) return;
-  const fetchCourses = async () => {
-    setIsLoading(true);
-    try {
-      const res = await axiosInstance.get(`/courses?exam=${examId}`);
-      let data = res?.data || [];
+    if (!examId) return;
+    const fetchCourses = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axiosInstance.get(`/courses?exam=${examId}`);
+        let data = res?.data || [];
 
-      // 👇 yaha dummy fields inject karenge
-      data = data.map((c, idx) => ({
-        ...c,
-        language: c.language || (idx % 2 === 0 ? "English" : "Hindi"), // alternate for demo
-        mode: c.mode || (idx % 2 === 0 ? "Online" : "Offline"),       // alternate for demo
-      }));
+        // 👇 yaha dummy fields inject karenge
+        data = data.map((c, idx) => ({
+          ...c,
+          language: c.language || (idx % 2 === 0 ? "English" : "Hindi"), // alternate for demo
+          mode: c.mode || (idx % 2 === 0 ? "Online" : "Offline"),       // alternate for demo
+        }));
 
-      console.log("Fetched courses:", data);
-      setCourses(data);
-    } catch (err) {
-      console.error("Error fetching courses", err?.response?.data || err.message);
-      setCourses([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  fetchCourses();
-}, [examId]);
+        console.log("Fetched courses:", data);
+        setCourses(data);
+      } catch (err) {
+        console.error("Error fetching courses", err?.response?.data || err.message);
+        setCourses([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [examId]);
 
 
   const handleAddToCart = (course) => {
@@ -363,15 +363,15 @@ export default function CoursesPage() {
   //   );
 
   const filtered = courses
-  .filter((c) => (mode ? c.mode === mode : true))
-  .filter((c) => (lang === "All" ? true : c.language === lang))
-  .filter((c) => (freeOnly ? c.isFree : true))
-  .filter((c) =>
-    q.trim()
-      ? c.title.toLowerCase().includes(q.toLowerCase()) ||
+    .filter((c) => (mode ? c.mode === mode : true))
+    .filter((c) => (lang === "All" ? true : c.language === lang))
+    .filter((c) => (freeOnly ? c.isFree : true))
+    .filter((c) =>
+      q.trim()
+        ? c.title.toLowerCase().includes(q.toLowerCase()) ||
         (c.shortTitle || "").toLowerCase().includes(q.toLowerCase())
-      : true
-  );
+        : true
+    );
 
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
@@ -444,8 +444,9 @@ export default function CoursesPage() {
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {pageItems.map((c) => (
-                <div
-                  key={c.id}
+                <a
+                  key={c._id}
+                  href={`/courses/${c._id}`}
                   className="border rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
                   <img
@@ -474,15 +475,19 @@ export default function CoursesPage() {
                         )}
                       </div>
                       <button
-                        onClick={() => handleAddToCart(c)}
+                        onClick={(e) => {
+                          e.preventDefault(); // link ko open hone se rokhega
+                          handleAddToCart(c);
+                        }}
                         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                       >
                         Add to Cart
                       </button>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
+
             </div>
             <div className="mt-6 flex justify-center">
               {page < pages ? (
@@ -493,7 +498,7 @@ export default function CoursesPage() {
                   View more <span>▾</span>
                 </button>
               ) : (
-                <span className="text-sm text-neutral-500">No more results</span>
+                <span className="text-sm text-neutral-500"></span>
               )}
             </div>
           </>
