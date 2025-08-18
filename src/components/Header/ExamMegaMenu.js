@@ -198,15 +198,21 @@ export default function ExamMegaMenu() {
 
     setExams([]);
 
-    const fetchExams = async () => {
-      try {
-        const res = await axiosInstance.get(`/exams/type/${activeExamType._id}`);
-        setExams(res.data);
-      } catch (err) {
-        console.error("Error fetching exams", err);
-      }
-    };
-    fetchExams();
+ const fetchExams = async () => {
+  try {
+    const res = await axiosInstance.get(`/exams/type/${activeExamType._id}`);
+    setExams(res.data);
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      // Agar 404 aaya to empty data set kar do (frontend pe error na dikhe)
+      setExams([]);
+    } else {
+      console.error("Error fetching exams", err);
+    }
+  }
+};
+
+fetchExams();
   }, [activeExamType]);
 
   return (
