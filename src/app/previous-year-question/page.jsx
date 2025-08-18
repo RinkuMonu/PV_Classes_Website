@@ -185,9 +185,7 @@ import { useCart } from "../../components/context/CartContext";
 
 export default function PreviousYearPapers() {
 
-    const { addToCart,successMessage, errorMessage } = useCart();
-  console.log("success = ",successMessage);
-
+  const { addToCart} = useCart();
   const [pyqs, setPyqs] = useState([]);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null);
@@ -230,19 +228,22 @@ export default function PreviousYearPapers() {
   );
 
 
-  const handleAdd = async (e, itemType, itemId) => {
+   const handleAdd = async (e, itemType, itemId) => {
       e.stopPropagation();
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login to add items to cart.");
+        return;
+      }
       const response = await addToCart({
         itemType,
         itemId,
-        quantity: 1,
-        extra: {}
       });
-      console.log("response = ",response.success);
+      console.log("response = ", response.success);
       if (response.success) {
-        toast.success(response.message);  // show success toast
+        toast.success(response.message);
       } else {
-        toast.error(response.message);    // show error toast
+        toast.error(response.message);
       }
     };
 

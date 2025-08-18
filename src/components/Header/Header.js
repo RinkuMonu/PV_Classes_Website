@@ -135,14 +135,11 @@ const examData = {
     },
   },
 };
-
-
-
   const isLoggedIn = true;
 
 export default function Header() {
-  const { cart,storageCart, updateQuantity, removeFromCart, fetchCart } = useCart();
-  console.log("storageCart = ",storageCart);
+  const { cart,storageCart, updateQuantity, removeFromCart, fetchCart,cartCount } = useCart();
+  console.log("cart = ", cart);
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [examsMenuOpen, setExamsMenuOpen] = useState(false);
@@ -161,60 +158,7 @@ export default function Header() {
       ...prev,
       [`${category}-${tab}`]: !prev[`${category}-${tab}`],
     }));
-  };
-  const [cartToDisplay, setCartToDisplay] = useState([]);
-  const [userId, setUserId] = useState(null);
-
-  const formatCartData = (cartArray) => {
-    return cartArray.map(item => ({
-      itemId: item.itemId,
-      quantity: item.quantity,
-      price: item.extra?.book?.price || null,
-      discount_price: item.extra?.book?.discount_price || null,
-      categoryName: item.extra?.book?.category?.name || null,
-      image: item.extra?.book?.images?.[0] || null
-    }));
-  };
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    setUserId(storedUserId);
-    if (!storedUserId) {
-      const cartData = localStorage.getItem("guestCart");
-      if (cartData) {
-        setCartToDisplay(formatCartData(JSON.parse(cartData)));
-      } else {
-        setCartToDisplay([]);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userId && cart) {
-      setCartToDisplay(formatCartData(cart));
-    }
-  }, [userId, cart]);
-
-console.log("cartToDisplay = ",cartToDisplay);
-const handleIncrement = (id) => {
-  setCartToDisplay((prevCart) =>
-    prevCart.map((item) =>
-      item.id === id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    )
-  );
-};
-
-const handleDecrement = (id) => {
-  setCartToDisplay((prevCart) =>
-    prevCart.map((item) =>
-      item.id === id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    )
-  );
-};
-
+  }; 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -231,11 +175,12 @@ const handleDecrement = (id) => {
   }, []);
 
     // const cartToDisplay = isLoggedIn ? cartItems : localCart;
-  const total = cartToDisplay.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+const total = cart?.reduce(
+  (sum, item) => sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
+  0
+);
 
+console.log("total = ", total);
   return (
     <>
       {/* Top Bar */}
@@ -336,7 +281,7 @@ const handleDecrement = (id) => {
             <button onClick={() => setIsOpen(true)} className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <ShoppingCart size={20} />
               <span className="absolute -top-1 -right-1 bg-yellow-400 text-xs px-1 rounded-full">
-                2
+                {cartCount}
               </span>
             </button>
                 {isOpen && (
@@ -364,7 +309,7 @@ const handleDecrement = (id) => {
   {/* Scrollable Cart Content */}
   <div className="flex flex-col h-[calc(100%-64px)] ">
     <div className="flex-1 overflow-y-auto p-6  hide-scrollbar">
-      {cartToDisplay?.length === 0 ? (
+       {cart?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-center">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
@@ -392,7 +337,7 @@ const handleDecrement = (id) => {
         </div>
       ) : (
         <div className="space-y-6">
-          {cartToDisplay.map((item) => (
+          {cart?.map((item) => (
             <div
               key={item?.itemId}
               className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
@@ -400,8 +345,11 @@ const handleDecrement = (id) => {
               {/* Product Image */}
               <div className="flex-shrink-0">
                 <img
-                  src={item?.image}
-                  alt={item?.categoryName}
+                  src={item?.details
+?.images
+?.[0]}
+                  alt={item?.details?.book_title
+}
                   className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
                 />
               </div>
@@ -410,21 +358,21 @@ const handleDecrement = (id) => {
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 <div>
                   <h3 className="text-gray-800 font-semibold text-base sm:text-lg leading-snug line-clamp-2 mb-1">
-                    {item.categoryName}
+                    {item?.details?.book_title}
                   </h3>
-                  {item?.category && (
+                  {item?.details?.book_category_id && (
                     <p className="text-xs text-gray-500 mb-3">
-                      {item?.category}
+                      {item?.details?.book_category_id?.name}
                     </p>
                   )}
                 </div>
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                   <span className="font-semibold text-[#115D8E]">
-                    ₹{item?.discount_price.toLocaleString()}
+                    ₹{item?.details?.discount_price.toLocaleString()}
                   </span>
                   <button
-                    onClick={() => handleDelete(item?.itemId)}
+                    onClick={() => removeFromCart(item?.itemId)}
                     className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                     aria-label="Remove item"
                   >
@@ -435,7 +383,7 @@ const handleDecrement = (id) => {
                 <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
                   <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white">
                     <button
-                      onClick={() => handleDecrement(item?.itemId)}
+                      onClick={() => updateQuantity(-1,item?.quantity,item?.itemId)}
                       className="px-3 py-2 hover:bg-gray-100 disabled:opacity-50 transition"
                       disabled={item?.quantity <= 1}
                     >
@@ -445,7 +393,7 @@ const handleDecrement = (id) => {
                       {item?.quantity}
                     </span>
                     <button
-                      onClick={() => handleIncrement(item?.itemId)}
+                      onClick={() => updateQuantity(1,item?.quantity,item?.itemId)}
                       className="px-3 py-2 hover:bg-gray-100 transition"
                     >
                       <Plus className="w-4 h-4" />
@@ -453,63 +401,63 @@ const handleDecrement = (id) => {
                   </div>
 
                   <span className="text-sm font-medium text-gray-700 flex justify-end">
-                    Total: ₹{(item?.discount_price * item?.quantity).toLocaleString()}
+                    Total: ₹{(item?.details?.discount_price * item?.quantity).toLocaleString()}
                   </span>
                 </div>
               </div>
             </div>
           ))}
 
-          {cartToDisplay.length > 0 && (
-  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-    <div className="space-y-3 mb-5">
-      <div className="flex justify-between text-sm text-gray-600">
-        <span>
-          Subtotal{" "}
-          <span className="text-gray-400">({cartToDisplay?.length} items)</span>
-        </span>
-        <span className="text-sm font-semibold text-gray-800">
-          ₹{total.toLocaleString()}
-        </span>
-      </div>
+          {cart?.length > 0 && (
+            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+              <div className="space-y-3 mb-5">
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>
+                    Subtotal{" "}
+                    <span className="text-gray-400">({cart?.length} items)</span>
+                  </span>
+                  <span className="text-sm font-semibold text-gray-800">
+                    ₹{total.toLocaleString()}
+                  </span>
+                </div>
 
-      <div className="flex justify-between text-sm text-gray-600">
-        <span>Shipping</span>
-        <span className="text-green-600 font-medium">Free</span>
-      </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Shipping</span>
+                  <span className="text-green-600 font-medium">Free</span>
+                </div>
 
-      <div className="border-t border-dashed border-gray-300 pt-3 flex justify-between text-base font-bold text-gray-900">
-        <span>Total</span>
-        <span>₹{total.toLocaleString()}</span>
-      </div>
-    </div>
+                <div className="border-t border-dashed border-gray-300 pt-3 flex justify-between text-base font-bold text-gray-900">
+                  <span>Total</span>
+                  <span>₹{total.toLocaleString()}</span>
+                </div>
+              </div>
 
-    <div className="space-y-2">
-       <Link
-            href="/checkout"
-            className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
-       
-          >
-        Proceed to Checkout
-        <ArrowRight className="w-4 h-4" />
-      </Link>
+              <div className="space-y-2">
+                <Link
+                      href="/checkout"
+                      className="flex items-center gap-2 text-white px-6 py-2.5 rounded-lg font-medium transition-colors bg-[#115D8E]"
+                
+                    >
+                  Proceed to Checkout
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
 
-      {/* <button
-        onClick={onClose}
-        className="w-full py-2 px-4 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition"
-      >
-        Continue Shopping
-      </button> */}
-    </div>
+                {/* <button
+                  onClick={onClose}
+                  className="w-full py-2 px-4 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition"
+                >
+                  Continue Shopping
+                </button> */}
+              </div>
 
-    <p className="text-center mt-4 text-xs text-gray-400">
-      Shipping and taxes calculated at checkout
-    </p>
-  </div>
-)}
+              <p className="text-center mt-4 text-xs text-gray-400">
+                Shipping and taxes calculated at checkout
+              </p>
+            </div>
+          )}
 
-        </div>
-      )}
+                  </div>
+                )}
     </div>
   </div>
 </div>

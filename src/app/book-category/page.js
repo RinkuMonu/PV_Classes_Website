@@ -1,11 +1,14 @@
 "use client";
-
+import toast from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
+import { useCart } from "../../components/context/CartContext";
 
 export default function BookCategoryPage() {
+  const { addToCart} = useCart();  
+
   // Book Data (You can fetch this from an API later)
   const books = [
     {
@@ -63,7 +66,7 @@ export default function BookCategoryPage() {
       (editionFilter === "" || book.edition.toString() === editionFilter)
     );
   });
-
+  
   return (
     <div className="p-6">
 
@@ -174,10 +177,8 @@ export default function BookCategoryPage() {
                 ADD
               </Link>
             </div>
-
-
-<div className="p-3">
-    <p className="text-sm font-medium line-clamp-2 mb-2">
+              <div className="p-3">
+                <p className="text-sm font-medium line-clamp-2 mb-2">
                   {book.title}
                 </p>
 
@@ -189,7 +190,7 @@ export default function BookCategoryPage() {
                 <div className="text-xs text-gray-500 line-through">
                   ₹{book.oldPrice}
                 </div>
-    </div>
+              </div>
 
               </div>
             ))}

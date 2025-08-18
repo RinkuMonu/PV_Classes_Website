@@ -1,10 +1,14 @@
 "use client";
+import toast from "react-hot-toast";
+
 import { Check } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Share2, FileText, Edit3, ChevronRight, BookOpen, Video, File, Download } from "lucide-react";
 import { FaFacebook, FaShareAlt, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { useCart } from "../../../components/context/CartContext";
+import { FaPlus } from "react-icons/fa6";
 
 // ---------- Right sticky sidebar ----------
 const SidebarCard = () => {
@@ -239,35 +243,35 @@ export default function CourseBody() {
             {activeTab === "add-on" && (
               <div>
                 <h3 className="font-bold text-lg mb-4 text-gray-800">Discover More Books</h3>
-           <div className="space-y-4">
-      {books.map((book) => (
-        <div
-          key={book.id}
-          className="flex gap-4 border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
-        >
-          <img
-            src={book.img}
-            alt={book.title}
-            className="w-20 h-28 object-cover rounded-lg shadow-sm border border-gray-200"
-          />
-          <div className="flex-1">
-            <h4 className="font-bold text-gray-800">{book.title}</h4>
-            <p
-              className="text-[#00316B] cursor-pointer text-sm mt-2 flex items-center hover:underline"
-              onClick={() => window.location.href = book.link}
-            >
-              View Details <ChevronRight size={16} className="ml-1" />
-            </p>
-            <div className="mt-3 flex items-center justify-between">
-              <span className="text-sm text-gray-600">{book.price}</span>
-              <button className="bg-blue-50 text-[#00316B] px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-100 transition">
-                Add to Cart
-              </button>
-            </div>
+          <div className="space-y-4">
+            {books.map((book) => (
+              <div
+                key={book.id}
+                className="flex gap-4 border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
+              >
+                <img
+                  src={book.img}
+                  alt={book.title}
+                  className="w-20 h-28 object-cover rounded-lg shadow-sm border border-gray-200"
+                />
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-800">{book.title}</h4>
+                  <p
+                    className="text-[#00316B] cursor-pointer text-sm mt-2 flex items-center hover:underline"
+                    onClick={() => window.location.href = book.link}
+                  >
+                    View Details <ChevronRight size={16} className="ml-1" />
+                  </p>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-sm text-gray-600">{book.price}</span>
+                    <button className="bg-blue-50 text-[#00316B] px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-100 transition">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
               </div>
             )}
 

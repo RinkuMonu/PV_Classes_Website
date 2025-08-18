@@ -1,5 +1,6 @@
 "use client";
-
+import toast from "react-hot-toast";
+import { useCart } from "../../../components/context/CartContext";
 import { useParams } from "next/navigation";
 import { useState,useEffect } from "react";
 import Image from "next/image";
@@ -8,6 +9,8 @@ import { FaPlus } from "react-icons/fa6";
 import axiosInstance from "../../axios/axiosInstance";
 
 export default function BookCategoryPage() {
+  const { addToCart, loading} = useCart();
+
   const params = useParams();
   const id = params.id;
   const [books, setBooks] = useState([]);
@@ -25,6 +28,24 @@ export default function BookCategoryPage() {
 
     fetchBooks();
   }, [id]);
+  const handleAdd = async (e, itemType, itemId) => {
+      e.stopPropagation();
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login to add items to cart.");
+        return;
+      }
+      const response = await addToCart({
+        itemType,
+        itemId,
+      });
+      console.log("response = ", response.success);
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    };
   // Book Data (You can fetch this from an API later)
 //   const books = [
 //     {
@@ -218,11 +239,21 @@ const filteredBooks = books
                     </div>
                   </div>
                 </Link>
+                <button
+                  onClick={(e) => handleAdd(e, "book", book?._id)}
+                  disabled={loading}
+                  className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
+                >
+                  <span className="mt-1 me-2">
+                    <FaPlus />
+                  </span>
+                  {loading ? "ADDING..." : "ADD"}
+                </button>
                 {/* The ADD button link is outside the main book link to avoid nesting */}
-                <Link href="/" className="flex absolute -bottom-27 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
+                {/* <Link href="/" className="flex absolute -bottom-27 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow">
                   <span className="mt-1 me-2"><FaPlus /></span>
                   ADD
-                </Link>
+                </Link> */}
               </div>
 
             ))}
