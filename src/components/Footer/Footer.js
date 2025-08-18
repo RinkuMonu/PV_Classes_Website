@@ -191,12 +191,6 @@ Current Affairs
                 </li>
                 <span className="hidden sm:inline">|</span>
 
-                <li>
-                  <Link href="/kycpolicy" className="hover:text-[#788406]">
-                    KYC Policy & Onboarding Process
-                  </Link>
-                </li>
-                <span className="hidden sm:inline">|</span>
 
                 <li>
                   <Link
