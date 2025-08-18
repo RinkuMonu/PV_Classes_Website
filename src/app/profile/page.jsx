@@ -181,8 +181,13 @@ export default function ProfilePage() {
                 </div>
             </div>
 
+
+
             {/* Tab Content */}
             <div>
+                 {/* <div className="w-20 h-20 rounded-full bg-[#204972]/10 flex items-center justify-center">
+        <User className="w-10 h-10 text-[#204972]" />
+      </div> */}
                 {/* Books */}
                 {activeTab === "books" && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -280,8 +285,10 @@ export default function ProfilePage() {
                 {/* My Detail */}
                 {activeTab === "detail" && (
                     <div className=" mx-auto overflow-hidden p-6 space-y-6">
-                        <div className="flex items-center justify-end">
-                          
+                        <div className="flex items-center justify-between">
+                           <div className="w-20 h-20 rounded-full bg-[#204972]/10 flex items-center justify-center">
+        <User className="w-10 h-10 text-[#204972]" />
+      </div>
                             {!isEditing && (
                                 <button
                                     onClick={() => setIsEditing(true)}
