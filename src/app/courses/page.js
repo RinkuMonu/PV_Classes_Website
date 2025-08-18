@@ -342,7 +342,6 @@ export default function CoursesPage() {
   fetchCourses();
 }, [examId]);
 
-
   const handleAddToCart = (course) => {
     if (cart.some((item) => item.id === course.id)) {
       alert("This course is already in your cart.");

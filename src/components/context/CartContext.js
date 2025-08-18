@@ -10,33 +10,36 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const [cartCount, setCartCount] = useState(null);
-
-  const [storageCart, setStorageCart] = useState(null);
   const [loading, setLoading] = useState(false);  
-
-  // 🛒 Fetch cart from backend
   const fetchCart = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
+      let data; // 👈 yaha declare kar do
+
       if (!token) {
-        const cartData = localStorage.getItem("guestCart");
-        setStorageCart(cartData ? JSON.parse(cartData) : []);
-        return;
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+        const response = await axiosInstance.get(
+          `/cart/get-storage?items=${encodeURIComponent(JSON.stringify(cartData))}`
+        );
+        data = response.data; // 👈 assign karo
+      } else {
+        const response = await axiosInstance.get(`/cart/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        data = response.data; // 👈 assign karo
       }
 
-      const { data } = await axiosInstance.get(`/cart/`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCart(data?.cart?.items); 
+      // ab yaha safely use kar sakte ho
+      setCart(data?.cart?.items || []);
       setCartCount(data?.cart?.items?.length || 0);
+
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.warn("Cart not found, setting empty cart.");
-        setCart([]); // agar user ke liye cart na ho
+        setCart([]); 
+        setCartCount(0);
       } else {
         console.error("Error fetching cart:", error);
       }
@@ -45,14 +48,14 @@ export const CartProvider = ({ children }) => {
     }
   };
   // 🛒 Add to cart
-  const addToCart = async ({ itemType, itemId }) => {
+  const addToCart = async ({ itemType, itemId,quantity=1 }) => {
     const token = localStorage.getItem("token");
     try {
       setLoading(true);
       if (token) {
         const { data } = await axiosInstance.post(
           `/cart/add`,
-          { itemType, itemId },
+          { itemType, itemId,quantity },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -71,7 +74,10 @@ export const CartProvider = ({ children }) => {
         } else {
           localCart.push({ itemType, itemId, quantity: 1 });
         }
+
         localStorage.setItem("cart", JSON.stringify(localCart));
+        fetchCart();
+
         return { success: true, message: "Item added to local cart" };
       }
     } catch (error) {
@@ -90,46 +96,77 @@ export const CartProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const { data } = await axiosInstance.delete(`/cart/remove/${itemId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (token) {
+        // ✅ User logged in -> Remove from DB cart
+        const { data } = await axiosInstance.delete(`/cart/remove/${itemId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      fetchCart();
-      return { success: true, message: data.message };
+        fetchCart();
+        return { success: true, message: data.message };
+      } else {
+        // ✅ User not logged in -> Remove from localStorage cart
+        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // filter item out
+        localCart = localCart.filter((item) => item.itemId !== itemId);
+
+        // update localStorage
+        localStorage.setItem("cart", JSON.stringify(localCart));
+
+        // refresh UI
+        fetchCart();
+        return { success: true, message: "Item removed from local cart" };
+      }
     } catch (error) {
       console.error("Error removing from cart:", error);
-      return { success: false, message: error.response?.data?.message || "Failed to remove" };
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to remove",
+      };
     } finally {
       setLoading(false);
     }
   };
-
   // 🛒 Update item quantity
-  const updateQuantity = async (change,current, itemId) => {
+  const updateQuantity = async (change, current, itemId) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-
-      // 👇 new quantity = current + change
       const newQuantity = (current || 0) + change;
-      if (newQuantity < 1) return; // safeguard
-
-      const { data } = await axiosInstance.put(
-        `/cart/update`,
-        {
-          itemId: itemId,
-          quantity: newQuantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      if (newQuantity < 1) return;
+      if (token) {
+        const { data } = await axiosInstance.put(
+          `/cart/update`,
+          {
+            itemId: itemId,
+            quantity: newQuantity,
           },
-        }
-      );
-      fetchCart();
-      return { success: true, message: data.message };
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        fetchCart();
+        return { success: true, message: data.message };
+      } else {
+        // ✅ User not logged in -> update localStorage cart
+        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        localCart = localCart.map((item) =>
+          item.itemId === itemId
+            ? { ...item, quantity: newQuantity }
+            : item
+        );
+
+        localStorage.setItem("cart", JSON.stringify(localCart));
+
+        fetchCart();
+        return { success: true, message: "Quantity updated in local cart" };
+      }
     } catch (error) {
       console.error("Error updating quantity:", error);
       return {
@@ -165,7 +202,6 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cart,
-        storageCart,
         loading,
         fetchCart,
         addToCart,

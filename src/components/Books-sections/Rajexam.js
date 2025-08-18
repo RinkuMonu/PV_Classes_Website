@@ -64,24 +64,19 @@ export default function rajexambooks() {
   
       fetchBook();
     }, []);
-    const handleAdd = async (e, itemType, itemId) => {
-      e.stopPropagation();
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login to add items to cart.");
-        return;
-      }
-      const response = await addToCart({
-        itemType,
-        itemId,
-      });
-      console.log("response = ", response.success);
-      if (response.success) {
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    };
+   const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();    
+    const response = await addToCart({
+      itemType,
+      itemId,
+    });
+    console.log("response = ", response.success);
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   return (
     <section className="px-6 py-8 bg-white">
       {Object.entries(booksData).map(([subCatId, subCatData]) => (
