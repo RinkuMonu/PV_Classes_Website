@@ -13,7 +13,7 @@ import {
   Menu,
   X,
   ChevronUp,
-  LogIn, UserPlus,
+  LogIn, User,
   ArrowRight,
   Trash2,
   Minus,
@@ -267,10 +267,10 @@ const handleDecrement = (id) => {
 
            Login
             </Link>
-             {/* <Link href="/register" className="relative py-2 px-3 inline-flex gap-1">
-              <UserPlus size={16} className="mt-1"/>
-           Register
-            </Link> */}
+             <Link href="/profile" className="relative py-2 px-3 inline-flex gap-1">
+              <User size={16} className="mt-1"/>
+           My Profile
+            </Link>
           </div>
         </div>
       </div>
@@ -421,7 +421,7 @@ const handleDecrement = (id) => {
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                   <span className="font-semibold text-[#115D8E]">
-                    ₹{item?.discount_price.toLocaleString()}
+                    {/* ₹{item?.discount_price.toLocaleString()} */}
                   </span>
                   <button
                     onClick={() => handleDelete(item?.itemId)}
