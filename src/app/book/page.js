@@ -45,6 +45,7 @@ export default function Book() {
 
     fetchBook();
   }, []);
+  
     console.log("booksData = ",booksData);
     const handleAdd = async (e, itemType, itemId, book) => {
       e.stopPropagation();

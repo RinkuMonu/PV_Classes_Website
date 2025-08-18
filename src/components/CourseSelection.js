@@ -694,7 +694,8 @@ export default function CoursesSection() {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {courses.map((course) => (
                     <Link
-                      href={`/courses/${course?.slug}`}
+                      // href={`/courses/${course?.slug}`}
+                      href={`/courses/${course?._id}`}
                       key={course?._id}
                       className="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                     >

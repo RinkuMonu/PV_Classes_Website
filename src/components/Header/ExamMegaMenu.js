@@ -201,6 +201,7 @@ export default function ExamMegaMenu() {
  const fetchExams = async () => {
   try {
     const res = await axiosInstance.get(`/exams/type/${activeExamType._id}`);
+    console.log("Fetched exams:", res.data); // Debugging line
     setExams(res.data);
   } catch (err) {
     if (err.response && err.response.status === 404) {
@@ -263,14 +264,15 @@ fetchExams();
             >
               <div className="w-10 h-10 relative">
                 <Image
-                  src={exam?.logo || "/vercel.svg"}
+                  // src={`http://localhost:5000${exam?.logo}` || "/vercel.svg"}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${exam?.logo}` || "/vercel.svg"}
                   alt={exam.name}
                   fill
                   className="object-contain rounded-full"
                 />
               </div>
               <span className="text-sm font-medium text-gray-800 group-hover:text-[#00316B]">
-                {exam.name}
+                {exam.name} 
               </span>
             </Link>
           ))}
