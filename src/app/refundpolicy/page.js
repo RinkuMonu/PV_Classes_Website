@@ -3,7 +3,7 @@ import React from "react";
 
 export default function RefundPolicy() {
   return (
-<section className="container">
+<section className="container py-6">
  <div className="max-w-5xl mx-auto px-6 py-12 bg-[#E6EEF5]">
 
       <h1 className="text-4xl font-bold text-center text-[#204972] mb-4">

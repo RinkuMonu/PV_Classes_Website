@@ -168,40 +168,30 @@ Current Affairs
 
             <div className="border-t-2 border-[#788406] w-full mb-6"></div>
 
-            <div className="mb-6">
-              <ul className="flex flex-wrap justify-center gap-6 sm:gap-10 text-base text-center">
-                <li>
-                  <Link href="/privacypolicy" className="hover:text-[#788406]">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <span className="hidden sm:inline">|</span>
+         <div className="mb-6">
+  <ul className="flex flex-wrap justify-center text-base text-center">
+    <li>
+      <Link href="/privacypolicy" className="hover:text-[#788406]">
+        Privacy Policy
+      </Link>
+    </li>
+    <span className="px-4 sm:px-6 md:px-24">|</span>
 
-                <li>
-                  <Link href="/refundpolicy" className="hover:text-[#788406]">
-                    Cancellation & Refund Policy
-                  </Link>
-                </li>
-                <span className="hidden sm:inline">|</span>
+    <li>
+      <Link href="/refundpolicy" className="hover:text-[#788406]">
+        Cancellation & Refund Policy
+      </Link>
+    </li>
+    <span className="px-4 sm:px-6 md:px-24">|</span>
 
-                <li>
-                  <Link href="/termsofuse" className="hover:text-[#788406]">
-                    Terms of Use
-                  </Link>
-                </li>
-                <span className="hidden sm:inline">|</span>
+    <li>
+      <Link href="/termsofuse" className="hover:text-[#788406]">
+        Terms of Use
+      </Link>
+    </li>
+  </ul>
+</div>
 
-
-                <li>
-                  <Link
-                    href="/chargebackpolicy"
-                    className="hover:text-[#788406]"
-                  >
-                    Chargeback & Cancellation Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
 
             <div className="text-center text-base mt-auto">
               © 2025 PV Classes . All rights reserved.
