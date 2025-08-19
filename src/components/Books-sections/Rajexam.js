@@ -113,7 +113,7 @@ export default function rajexambooks() {
                   <div className="relative w-full h-64">
                     <Image
                       src={`http://localhost:5000/uploads/book/${book?.images[0]}`}
-                      alt={book?.book_title}
+                      alt="Book Cover"
                       fill
                       className="object-cover p-2"
                     />
