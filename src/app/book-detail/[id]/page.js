@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -8,9 +9,22 @@ import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { GrSecure } from "react-icons/gr";
 import { FiShoppingBag } from "react-icons/fi";
 import axiosInstance from "../../axios/axiosInstance";
-
+import { useCart } from "../../../components/context/CartContext";
 
 export default function ProductPage() {
+  const { addToCart, loading } = useCart();
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();
+    const response = await addToCart({
+      itemType,
+      itemId,
+    });
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   const params = useParams();
   const id = params.id;
   const [books, setBooks] = useState([]);
@@ -100,10 +114,10 @@ export default function ProductPage() {
 
           <div className="flex gap-4 mt-6 md:ml-16">
             {/* Add to Bag */}
-            <Link href="/addtocart" className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold text-base hover:bg-yellow-50 transition-colors duration-200">
+            <button onClick={(e) => handleAdd(e, "book", books?._id)} className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold text-base hover:bg-yellow-50 transition-colors duration-200">
               <FiShoppingBag className="text-[#616602] text-lg" />
               <span className="text-[#616602]">Add To Cart</span>
-            </Link>           
+            </button>           
           </div>
 
         </div>
