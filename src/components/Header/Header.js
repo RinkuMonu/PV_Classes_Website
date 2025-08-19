@@ -271,9 +271,9 @@ console.log("total = ", total);
           </nav>
 
             <div className="flex items-center">
-            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
+            {/* <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Tag size={20} />
-            </button>
+            </button> */}
             <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
