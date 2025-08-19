@@ -171,7 +171,7 @@ export default function BookCategoryPage() {
           {filteredBooks?.[0]?.book_category_id?.name}{" "}
           <span className="text-gray-500 text-sm">
             (Showing "{filteredBooks.length}" items)
-          </span>
+          </span></h1>  
           <div className="flex justify-end mb-4">
             <select
               value={sortOption}

@@ -53,21 +53,14 @@ export default function Footer() {
                         Courses
                       </Link>
                     </li>
+                   
                     <li className="group transition-all duration-200 hover:pl-2">
-                      <Link
-                        href="/services/switch"
-                        className="hover:text-[#009fe3]"
-                      >
-                        Faculty
-                      </Link>
-                    </li>
-                    <li className="group transition-all duration-200 hover:pl-2">
-                      <Link href="" className="hover:text-[#009fe3]">
+                      <Link href="/book" className="hover:text-[#009fe3]">
                         Books
                       </Link>
                     </li>
                     <li className="group transition-all duration-200 hover:pl-2">
-                      <Link href="/blog" className="hover:text-[#009fe3]">
+                      <Link href="/previous-year-question" className="hover:text-[#009fe3]">
                         Previous Year Questions
                       </Link>
                     </li>
@@ -77,14 +70,7 @@ export default function Footer() {
                 <div className="mt-10 md:mt-0 md:ml-4">
                   <h3 className="font-bold text-lg mb-4">Support</h3>
                   <ul className="space-y-2 text-base">
-                    <li className="group transition-all duration-200 hover:pl-2">
-                      <Link
-                        href="#"
-                        className="hover:text-[#009fe3]"
-                      >
-                        FAQs
-                      </Link>
-                    </li>
+                    
                     {/* <li className="group transition-all duration-200 hover:pl-2">
                       <Link
                         href="/services/escrow"
@@ -109,7 +95,7 @@ export default function Footer() {
                   <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/switch"
+                        href="/courses"
                         className="hover:text-[#009fe3]"
                       >
                         All India Exam
@@ -117,7 +103,7 @@ export default function Footer() {
                     </li>
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/escrow"
+                        href="/courses"
                         className="hover:text-[#009fe3]"
                       >
                         Rajasthan Exams
@@ -125,7 +111,7 @@ export default function Footer() {
                     </li>
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/connected-banking"
+                        href="/courses"
                         className="hover:text-[#009fe3]"
                       >
                         3<sup>rd</sup> Grade
@@ -133,7 +119,7 @@ export default function Footer() {
                     </li>
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/connected-banking"
+                        href="/current-affairs"
                         className="hover:text-[#009fe3]"
                       >
                         Current Affairs
@@ -154,7 +140,7 @@ export default function Footer() {
                       <FaFacebook size={24} />
                     </Link>
                     <Link
-                      href=""
+                      href="https://www.youtube.com/@pvclasses" target="blank"
                       className="text-gray-200 hover:text-[#009fe3] transition-colors"
                     >
                       <FaYoutube size={24} />
