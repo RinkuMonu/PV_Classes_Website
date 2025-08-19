@@ -21,9 +21,7 @@ export default function Home() {
 </div>
       <FacultySlider/>
       <CurrentAffairs />
-     <div className="container px-4 md:px-0">
        <BannerImg2 />
-     </div>
       <CTA />
       <Testimonials />
 
