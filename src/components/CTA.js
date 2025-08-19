@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function OfferSection() {
   return (
-    <section className="w-full flex justify-center items-center px-4 sm:px-8 md:px-16 py-4">
+    <section id="cta" className="w-full flex justify-center items-center px-4 sm:px-8 md:px-16 pt-4 pb-14">
       <div className="w-full max-w-7xl rounded-2xl p-1 sm:p-10 bg-gradient-to-r from-[#00316b] to-[#616602] text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-8">
 
 

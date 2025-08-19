@@ -146,7 +146,7 @@ const filteredBooks = books
 
     <div className="p-6">
       <div className="text-sm mb-2">
-        <span className="cursor-pointer  text-[#204972] hover:underline">Home</span> &gt;{" "}
+      <Link href={"/"} className="text-[#204972] hover:underline">Home</Link> &gt;{" "}
         <span className=" text-[#204972] font-medium">{filteredBooks?.[0]?.book_category_id?.name}</span>
       </div>
       <h1 className="text-2xl text-[#204972] font-bold mb-6">
