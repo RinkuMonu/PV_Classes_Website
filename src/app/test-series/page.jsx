@@ -157,12 +157,7 @@ function Page() {
     fetchTestSeries();
   }, []);
   const handleAdd = async (e, itemType, itemId) => {
-    e.stopPropagation();
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Please login to add items to cart.");
-      return;
-    }
+    e.stopPropagation();    
     const response = await addToCart({
       itemType,
       itemId,
