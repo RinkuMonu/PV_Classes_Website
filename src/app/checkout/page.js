@@ -454,7 +454,7 @@ const checkout = async (total) => {
                           onChange={handleAddressChange}
                         >
                           <option value="">Select Address</option>
-                          <option value="old">Old address</option>
+                          <option value="old">Existing address</option>
                           <option value="new">Add new address...</option>
                         </select>
                         <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
@@ -714,7 +714,7 @@ const checkout = async (total) => {
                     </button>
 
                     <Link
-                      href="/products"
+                      href="/"
                       className="block w-full py-4 px-6 border border-gray-300 text-[#384D89] text-center font-semibold rounded-lg hover:bg-[#384D89] hover:text-white transition-all duration-300"
                     >
                       Continue Shopping

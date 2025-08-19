@@ -112,8 +112,8 @@ export default function rajexambooks() {
 
                   <div className="relative w-full h-64">
                     <Image
-                      src={`http://localhost:5000/uploads/book/${book?.images[0]}`}
-                      alt={book?.book_title}
+                      src={`http://localhost:5000/uploads/book/${book?.images?.[0]}`}
+                      alt={book?.title}
                       fill
                       className="object-cover p-2"
                     />
@@ -121,7 +121,7 @@ export default function rajexambooks() {
 
                   <div className="p-3">
                     <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                      {book?.book_title}
+                      {book?.title}
                     </p>
 
                     <div className="mt-2 flex items-center gap-2">
