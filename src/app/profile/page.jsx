@@ -1,17 +1,75 @@
 "use client";
-import { useState } from "react";
+import toast from "react-hot-toast";
+import { useState,useEffect } from "react";
 import { Search, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import axiosInstance from "../axios/axiosInstance";
 
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState("detail");
     const [search, setSearch] = useState("");
+
+    useEffect(() => {
+        const fetchUser = async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await axiosInstance.get("/users/getUser", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            });
+            setUserDetails({
+                name: res?.data?.data?.name || "",
+                email: res?.data?.data?.email || "",
+                phone: res?.data?.data?.phone || "",
+                profile_image_url:res?.data?.data?.profile_image_url || null,
+            });
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        }
+        };
+
+        fetchUser();
+    }, [axiosInstance]);
     const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
         phone: "",
+        profile_image: null,
     });
+    console.log("User Details:", userDetails);
+    const handleSubmit = async (e) => {
+        const token = localStorage.getItem("token");
+        e.preventDefault();
+
+        try {
+            const formData = new FormData();
+            formData.append("name", userDetails.name);
+            formData.append("email", userDetails.email);
+            formData.append("phone", userDetails.phone);
+
+            if (userDetails.profile_image) {
+            formData.append("profile_image", userDetails.profile_image); // ✅ backend expects this
+            }
+
+            const res = await axiosInstance.put("/users/updateUser", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+            });
+
+            toast.success("Profile updated successfully 🎉");
+            console.log("Update response:", res.data);
+
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating user:", error);
+            toast.error("Failed to update profile ❌");
+        }
+    };
 
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -303,109 +361,133 @@ export default function ProfilePage() {
                         </div>
 
                         <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                setIsEditing(false);
-                            }}
+                            onSubmit={handleSubmit}
                             className="space-y-5"
                         >
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div className="animate-fadeIn">
-                                <label className="block text-sm font-medium text-gray-600 mb-1.5">Full Name</label>
+                            <div className="animate-fadeIn">
+                                <label className="block text-sm font-medium text-gray-600 mb-1.5">Profile Image</label>
                                 {isEditing ? (
                                     <div className="relative">
-                                        <input
-                                            type="text"
-                                            value={userDetails.name}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                if (/^[A-Za-z\s]*$/.test(value)) {
-                                                    setUserDetails({ ...userDetails, name: value });
-                                                }
-                                            }}
-                                            placeholder="Your Name "
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) =>
+                                        setUserDetails({ ...userDetails, profile_image: e.target.files[0] })
+                                        }
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-white focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
+                                    />
+                                    </div>
+                                ) : (
+                                    <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
+                                    {userDetails.profile_image_url ? (
+                                        <img
+                                        src={userDetails.profile_image_url}
+                                        alt="Profile"
+                                        className="h-12 w-12 rounded-full object-cover border mr-2"
                                         />
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    ) : (
+                                        <span className="text-gray-400">No profile image</span>
+                                    )}
+                                    </div>
+                                )}
+                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div className="animate-fadeIn">
+                                    <label className="block text-sm font-medium text-gray-600 mb-1.5">Full Name</label>
+                                    {isEditing ? (
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={userDetails.name}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    if (/^[A-Za-z\s]*$/.test(value)) {
+                                                        setUserDetails({ ...userDetails, name: value });
+                                                    }
+                                                }}
+                                                placeholder="Your Name "
+                                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
+                                            {userDetails.name || <span className="text-gray-400">Not provided</span>}
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                        {userDetails.name || <span className="text-gray-400">Not provided</span>}
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
 
-                            {/* Phone */}
-                            <div className="animate-fadeIn">
-                                <label className="block text-sm font-medium text-gray-600 mb-1.5">Phone Number</label>
-                                {isEditing ? (
-                                    <div className="relative">
-                                        <input
-                                            type="tel"
-                                            value={userDetails.phone}
-                                            onChange={(e) => {
-                                                const value = e.target.value.replace(/\D/g, "");
-                                                if (value === "" || /^[6-9]\d{0,9}$/.test(value)) {
-                                                    setUserDetails({ ...userDetails, phone: value });
-                                                }
-                                            }}
-                                            maxLength={10}
-                                            placeholder="Your Phone "
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
-                                        />
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                {/* Phone */}
+                                <div className="animate-fadeIn">
+                                    <label className="block text-sm font-medium text-gray-600 mb-1.5">Phone Number</label>
+                                    {isEditing ? (
+                                        <div className="relative">
+                                            <input
+                                                type="tel"
+                                                value={userDetails.phone}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, "");
+                                                    if (value === "" || /^[6-9]\d{0,9}$/.test(value)) {
+                                                        setUserDetails({ ...userDetails, phone: value });
+                                                    }
+                                                }}
+                                                maxLength={10}
+                                                placeholder="Your Phone "
+                                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                             </svg>
+                                            {userDetails.phone || <span className="text-gray-400">Not provided</span>}
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                        </svg>
-                                        {userDetails.phone || <span className="text-gray-400">Not provided</span>}
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
 
-                            {/* Email */}
-                            <div className="animate-fadeIn">
-                                <label className="block text-sm font-medium text-gray-600 mb-1.5">Email Address</label>
-                                {isEditing ? (
-                                    <div className="relative">
-                                        <input
-                                            type="email"
-                                            value={userDetails.email}
-                                            onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
-                                            placeholder="Your Email"
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
-                                        />
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                {/* Email */}
+                                <div className="animate-fadeIn">
+                                    <label className="block text-sm font-medium text-gray-600 mb-1.5">Email Address</label>
+                                    {isEditing ? (
+                                        <div className="relative">
+                                            <input
+                                                type="email"
+                                                value={userDetails.email}
+                                                onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
+                                                placeholder="Your Email"
+                                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#204972] focus:border-transparent focus:outline-none transition-all duration-200"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                             </svg>
+                                            {userDetails.email || <span className="text-gray-400">Not provided</span>}
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className="px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                        </svg>
-                                        {userDetails.email || <span className="text-gray-400">Not provided</span>}
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
-                      </div>
 
-                            {/* Buttons */}
+                                {/* Buttons */}
                             {isEditing && (
                                 <div className="flex justify-end gap-3 pt-2 animate-fadeIn">
                                     <button
