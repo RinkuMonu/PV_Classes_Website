@@ -59,7 +59,6 @@ export default function BookCategoryPage() {
 
   const [languageFilter, setLanguageFilter] = useState("");
   const [editionFilter, setEditionFilter] = useState("");
-
   const filteredBooks = books.filter((book) => {
     return (
       (languageFilter === "" || book.language === languageFilter) &&
