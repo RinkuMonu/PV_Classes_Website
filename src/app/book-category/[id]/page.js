@@ -40,53 +40,7 @@ export default function BookCategoryPage() {
       toast.error(response.message);
     }
   };
-  // Book Data (You can fetch this from an API later)
-  //   const books = [
-  //     {
-  //       id: 1,
-  //       title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
-  //       price: 161,
-  //       oldPrice: 170,
-  //       discount: "5% OFF",
-  //       tag: "New Arrivals",
-  //       img: "/image/book1.webp",
-  //       language: "Hindi",
-  //       edition: 2024,
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "REET Level 2nd Science Math's 1st Language Hindi 2nd...",
-  //       price: 161,
-  //       oldPrice: 170,
-  //       discount: "5% OFF",
-  //       tag: "New Arrivals",
-  //       img: "/image/book1.webp",
-  //       language: "Hindi",
-  //       edition: 2024,
-  //     },
-  //     {
-  //       id: 3,
-  //       title: "REET Level 2nd Science Math's Language 2nd Sanskrit/English",
-  //       price: 1187,
-  //       oldPrice: 1250,
-  //       discount: "5% OFF",
-  //       tag: "Bestselling",
-  //       img: "/image/book1.webp",
-  //       language: "English",
-  //       edition: 2023,
-  //     },
-  //     {
-  //       id: 4,
-  //       title: "Social Studies Teaching Methods (REET Level-II)",
-  //       price: 114,
-  //       oldPrice: 120,
-  //       discount: "5% OFF",
-  //       tag: "Bestselling",
-  //       img: "/image/book1.webp",
-  //       language: "Hindi",
-  //       edition: 2021,
-  //     },
-  //   ];
+
 
   const [languageFilter, setLanguageFilter] = useState("");
   const [editionFilter, setEditionFilter] = useState("");
@@ -146,32 +100,16 @@ export default function BookCategoryPage() {
 
     <div className="p-6">
       <div className="text-sm mb-2">
-      <Link href={"/"} className="text-[#204972] hover:underline">Home</Link> &gt;{" "}
+        <Link href={"/"} className="text-[#204972] hover:underline">Home</Link> &gt;{" "}
         <span className=" text-[#204972] font-medium">{filteredBooks?.[0]?.book_category_id?.name}</span>
       </div>
-      <h1 className="text-2xl text-[#204972] font-bold mb-6">
-        {filteredBooks?.[0]?.book_category_id?.name}{" "}
-        <span className="text-gray-500 text-sm">
-          (Showing "{filteredBooks.length}" items)
-        </span>
-        <div className="flex justify-end mb-4">
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className="border rounded px-2 py-1 text-sm text-[#616602]"
-          >
-            <option>Latest</option>
-            <option>Oldest</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-          </select>
-
-        </div>
+     
         <h1 className="text-2xl text-[#204972] font-bold mb-6">
           {filteredBooks?.[0]?.book_category_id?.name}{" "}
           <span className="text-gray-500 text-sm">
             (Showing "{filteredBooks.length}" items)
-          </span></h1>  
+          </span>
+        </h1>  
           <div className="flex justify-end mb-4">
             <select
               value={sortOption}
@@ -184,7 +122,6 @@ export default function BookCategoryPage() {
               <option>Price: High to Low</option>
             </select>
           </div>
-        </h1>
         <div className="grid grid-cols-12 gap-6">
           <aside className="col-span-3 bg-white rounded-lg shadow p-4 h-fit">
             <h2 className="font-semibold mb-4">Filters</h2>
@@ -259,14 +196,14 @@ export default function BookCategoryPage() {
                       <div className="relative w-full h-64">
                         <Image
                           src={book?.full_image?.[0]}
-                          alt={book?.book_title}
+                          alt={book?.title}
                           fill
                           className="object-cover p-2"
                         />
                       </div>
                       <div className="p-3">
                         <p className="text-sm font-medium line-clamp-2 mb-2">
-                          {book?.book_title}
+                          {book?.title}
                         </p>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-lg">
@@ -308,7 +245,7 @@ export default function BookCategoryPage() {
             </div>
           </main>
         </div>
-      </div>
+    </div>
     </>
   );
 }
