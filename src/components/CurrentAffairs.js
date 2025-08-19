@@ -171,13 +171,21 @@ export default function CurrentAffairsSlider() {
 
   return (
     <div className="px-4 md:px-16 py-12 bg-gradient-to-b from-gray-50 to-white">
-      <div className="mb-6 px-4 md:px-0" data-aos="fade-up">
+      <div className="mb-6 px-4 md:px-0 flex justify-between items-center" data-aos="fade-up">
         <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#204972]">
           <span className="bg-clip-text bg-gradient-to-r md:ml-4 from-[#115D8E] to-[#204972]">
             Stay Updated, Stay Ahead
           </span>{" "}
           with Latest Current Affairs
         </h3>
+        <div className="">
+          <Link
+            href="/current-affairs"
+            className="bg-[#204972] text-white px-8 py-2 rounded-md"
+          >
+            See All <span className="ml-1">→</span>
+          </Link>
+        </div>
       </div>
 
       {affairs.length > 0 ? (
@@ -242,14 +250,14 @@ export default function CurrentAffairsSlider() {
         </div>
       )}
 
-      <div className="flex float-end mt-6 me-3">
+      {/* <div className="flex float-end mt-6 me-3">
         <Link
           href="/current-affairs"
           className="bg-[#204972] text-white px-8 py-2 rounded-md"
         >
           See All <span className="ml-1">→</span>
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -207,7 +207,7 @@ const Banner = () => {
           .swiper-button-prev {
             width: 50px;
             height: 50px;
-            background: rgba(157, 48, 137, 0.8);
+            background: rgb(3 36 71 / 49%);
             border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(15px);
