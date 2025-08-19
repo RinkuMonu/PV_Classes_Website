@@ -27,20 +27,20 @@ export default function Footer() {
 
                   <div className="space-y-2 text-sm">
                     <div className="flex items-start">
-                    <FaLocationDot className="text-3xl text-[#788406] mt-1" />
-                    <p className="pl-3 hover:text-[#009fe3]">
-                      Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer,
-                      Jagatpura, Jaipur Rajasthan, India, 302017
-                    </p>
-                  </div>
-                  <div className="flex items-start">
-                    <IoMail className="text-xl text-[#788406] mt-1" />
-                    <p className="pl-3 hover:text-[#009fe3]">info@7unique.in</p>
-                  </div>
-                  <div className="flex items-start">
-                    <IoMdCall className="text-xl text-[#788406] mt-1" />
-                    <p className="pl-3 hover:text-[#009fe3]">0141-4511098</p>
-                  </div>
+                      <FaLocationDot className="text-3xl text-[#788406] mt-1" />
+                      <p className="pl-3 hover:text-[#009fe3]">
+                        Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer,
+                        Jagatpura, Jaipur Rajasthan, India, 302017
+                      </p>
+                    </div>
+                    <div className="flex items-start">
+                      <IoMail className="text-xl text-[#788406] mt-1" />
+                      <p className="pl-3 hover:text-[#009fe3]">info@7unique.in</p>
+                    </div>
+                    <div className="flex items-start">
+                      <IoMdCall className="text-xl text-[#788406] mt-1" />
+                      <p className="pl-3 hover:text-[#009fe3]">0141-4511098</p>
+                    </div>
                   </div>
 
                 </div>
@@ -79,23 +79,23 @@ export default function Footer() {
                   <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/switch"
+                        href="#"
                         className="hover:text-[#009fe3]"
                       >
                         FAQs
                       </Link>
                     </li>
-                    <li className="group transition-all duration-200 hover:pl-2">
+                    {/* <li className="group transition-all duration-200 hover:pl-2">
                       <Link
                         href="/services/escrow"
                         className="hover:text-[#009fe3]"
                       >
                         Career
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
-                        href="/services/connected-banking"
+                        href="/#cta"
                         className="hover:text-[#009fe3]"
                       >
                         Contact Us
@@ -106,13 +106,13 @@ export default function Footer() {
 
                 <div className="mt-10 md:mt-0">
                   <h3 className="font-bold text-lg mb-4">Government Exam</h3>
-                   <ul className="space-y-2 text-base">
+                  <ul className="space-y-2 text-base">
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link
                         href="/services/switch"
                         className="hover:text-[#009fe3]"
                       >
-All India Exam
+                        All India Exam
                       </Link>
                     </li>
                     <li className="group transition-all duration-200 hover:pl-2">
@@ -128,19 +128,19 @@ All India Exam
                         href="/services/connected-banking"
                         className="hover:text-[#009fe3]"
                       >
-3<sup>rd</sup> Grade
+                        3<sup>rd</sup> Grade
                       </Link>
                     </li>
-                     <li className="group transition-all duration-200 hover:pl-2">
+                    <li className="group transition-all duration-200 hover:pl-2">
                       <Link
                         href="/services/connected-banking"
                         className="hover:text-[#009fe3]"
                       >
-Current Affairs
+                        Current Affairs
                       </Link>
                     </li>
                   </ul>
-<div className="flex gap-4 mt-6 md:mt-12">
+                  <div className="flex gap-4 mt-6 md:mt-12">
                     <Link
                       href=""
                       className="text-gray-200 hover:text-[#009fe3] transition-colors"
@@ -168,29 +168,29 @@ Current Affairs
 
             <div className="border-t-2 border-[#788406] w-full mb-6"></div>
 
-         <div className="mb-6">
-  <ul className="flex flex-wrap justify-center text-base text-center">
-    <li>
-      <Link href="/privacypolicy" className="hover:text-[#788406]">
-        Privacy Policy
-      </Link>
-    </li>
-    <span className="px-4 sm:px-6 md:px-24">|</span>
+            <div className="mb-6">
+              <ul className="flex flex-wrap justify-center text-base text-center">
+                <li>
+                  <Link href="/privacypolicy" className="hover:text-[#788406]">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <span className="px-4 sm:px-6 md:px-24">|</span>
 
-    <li>
-      <Link href="/refundpolicy" className="hover:text-[#788406]">
-        Cancellation & Refund Policy
-      </Link>
-    </li>
-    <span className="px-4 sm:px-6 md:px-24">|</span>
+                <li>
+                  <Link href="/refundpolicy" className="hover:text-[#788406]">
+                    Cancellation & Refund Policy
+                  </Link>
+                </li>
+                <span className="px-4 sm:px-6 md:px-24">|</span>
 
-    <li>
-      <Link href="/termsofuse" className="hover:text-[#788406]">
-        Terms of Use
-      </Link>
-    </li>
-  </ul>
-</div>
+                <li>
+                  <Link href="/termsofuse" className="hover:text-[#788406]">
+                    Terms of Use
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
 
             <div className="text-center text-base mt-auto">

@@ -74,7 +74,7 @@ export default function BookCategoryPage() {
     <div className="p-6">
 
       <div className="text-sm mb-2">
-        <span className="cursor-pointer  text-[#204972] hover:underline">Home</span> &gt;{" "}
+        <Link href={"/"} className="text-[#204972] hover:underline">Home</Link> &gt;{" "}
         <span className=" text-[#204972] font-medium">REET Exam Special</span>
       </div>
 

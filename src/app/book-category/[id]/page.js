@@ -142,15 +142,30 @@ export default function BookCategoryPage() {
        </div>
      </section>
 
-      <div className="p-6">
-        <div className="text-sm mb-2">
-          <span className="cursor-pointer  text-[#204972] hover:underline">
-            Home
-          </span>{" "}
-          &gt;{" "}
-          <span className=" text-[#204972] font-medium">
-            {filteredBooks?.[0]?.book_category_id?.name}
-          </span>
+
+
+    <div className="p-6">
+      <div className="text-sm mb-2">
+      <Link href={"/"} className="text-[#204972] hover:underline">Home</Link> &gt;{" "}
+        <span className=" text-[#204972] font-medium">{filteredBooks?.[0]?.book_category_id?.name}</span>
+      </div>
+      <h1 className="text-2xl text-[#204972] font-bold mb-6">
+        {filteredBooks?.[0]?.book_category_id?.name}{" "}
+        <span className="text-gray-500 text-sm">
+          (Showing "{filteredBooks.length}" items)
+        </span>
+        <div className="flex justify-end mb-4">
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="border rounded px-2 py-1 text-sm text-[#616602]"
+          >
+            <option>Latest</option>
+            <option>Oldest</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+          </select>
+
         </div>
         <h1 className="text-2xl text-[#204972] font-bold mb-6">
           {filteredBooks?.[0]?.book_category_id?.name}{" "}
