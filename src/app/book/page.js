@@ -54,30 +54,27 @@ export default function Book() {
 
   return (
     <>
-      {/* Banner Section */}
-      <section className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-        {/* Desktop / Tablet Banner */}
-        <div className="absolute inset-0 hidden sm:block">
-          <Image
-            src="/Image/Banner/main-book-banner.jpg"
-            alt="Banner Desktop"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
+      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+  <div className="absolute inset-0 hidden sm:block">
+    <Image
+      src="/Image/Banner/main-book-banner.jpg"
+      alt="Banner Desktop"
+      fill
+      className="object-cover object-center"
+      priority
+    />
+  </div>
+  <div className="absolute inset-0 block sm:hidden">
+    <Image
+      src="/Image/pv-mobile/book-banner-mob.jpg"
+      alt="Banner Mobile"
+      fill
+      className="object-cover object-center"
+      priority
+    />
+  </div>
+</section>
 
-        {/* Mobile Banner */}
-        <div className="absolute inset-0 block sm:hidden">
-          <Image
-            src="/Image/pv-mobile/main-book-banner-mob.jpg"
-            alt="Banner Mobile"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-      </section>
 
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row gap-6 p-4 sm:p-6 lg:p-8">
@@ -119,14 +116,15 @@ export default function Book() {
                 </div>
 
                 {/* Books Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                   {subCatData?.books?.map((book) => (
                     <div
                       key={book?._id}
                       className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative bg-white"
                     >
-                      <Link href={book?._id ? `/book-detail/${book?._id}` : "/"}>
-
+                      <Link
+                        href={book?._id ? `/book-detail/${book?._id}` : "/"}
+                      >
                         {book?.tag?.map((tag, index) => (
                           <div
                             key={index}
@@ -137,16 +135,14 @@ export default function Book() {
                           </div>
                         ))}
 
-
                         <div className="relative w-full h-40 sm:h-56 md:h-64">
                           <Image
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
                             alt={book?.book_title || "Book image"}
                             fill
-                            className="object-cover p-2"
+                            className="object-contain p-2"
                           />
                         </div>
-
 
                         <div className="p-2 sm:p-3">
                           <p className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-2">
@@ -159,7 +155,13 @@ export default function Book() {
                             </span>
                             {book?.discount_price && (
                               <span className="text-[11px] sm:text-sm text-[#204972] font-medium">
-                                ({Math.round(((book.price - book.discount_price) / book.price) * 100)}% OFF)
+                                (
+                                {Math.round(
+                                  ((book.price - book.discount_price) /
+                                    book.price) *
+                                    100
+                                )}
+                                % OFF)
                               </span>
                             )}
                           </div>
