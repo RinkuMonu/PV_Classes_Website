@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function CourseHero({ bannerSrc = "/Image/courseBanner.jpg" }) {
+export default function CourseHero({ bannerSrc = "/Image/Banner/courses-banner.jpg" }) {
     return (
         <section className="relative overflow-hidden bg-[#FAFBF6]">
             <Image
@@ -9,7 +9,7 @@ export default function CourseHero({ bannerSrc = "/Image/courseBanner.jpg" }) {
                 width={920}
                 height={520}
                 priority
-                className="relative z-[1] mx-auto w-full object-cover md:ml-auto" style={{height:"50vh"}}
+                className="relative z-[1] mx-auto w-full object-cover md:ml-auto" style={{height:"60vh"}}
             />
 
         </section>
