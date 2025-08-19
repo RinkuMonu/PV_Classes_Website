@@ -638,6 +638,8 @@ export default function CourseDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [openVideo, setOpenVideo] = useState(null);
 
+const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     if (!id) return;
     const fetchCourse = async () => {
@@ -751,52 +753,120 @@ export default function CourseDetailsPage() {
             </div>
           </div>
 
-          {/* Course Content */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="border-b p-6">
-              <h2 className="text-2xl font-bold text-gray-900">Course content</h2>
-              <p className="text-gray-600 mt-1">27 sessions • 15th minutes • 26th bike ticket length</p>
+{/* Course Content */}
+<div className="bg-white rounded-xl shadow-sm overflow-hidden">
+  <div className="border-b p-6">
+    <h2 className="text-2xl font-bold text-gray-900">Course content</h2>
+    <p className="text-gray-600 mt-1">
+      {course?.videos?.length || 0} lectures • {course?.validity || "N/A"} validity
+    </p>
+  </div>
+
+  <div className="divide-y">
+    {course.videos?.map((video, i) => {
+      // YouTube embed url generate
+      let embedUrl = "";
+      if (video.url.includes("youtu.be")) {
+        embedUrl = `https://www.youtube.com/embed/${
+          video.url.split("youtu.be/")[1].split("?")[0]
+        }`;
+      } else if (video.url.includes("watch?v=")) {
+        embedUrl = `https://www.youtube.com/embed/${
+          video.url.split("watch?v=")[1].split("&")[0]
+        }`;
+      }
+
+      const isLocked = !course.isFree; // yaha aap video.isFree bhi use kar sakte ho future me
+
+      return (
+        <div key={i} className="p-4 hover:bg-gray-50">
+          <div
+            className="flex justify-between items-center cursor-pointer"
+            onClick={() => {
+              if (isLocked) {
+                setShowModal(true);
+              } else {
+                setOpenVideo(openVideo === i ? null : i);
+              }
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="bg-gray-100 rounded-md p-2">
+                <FiPlay
+                  className={`${
+                    isLocked ? "text-gray-300" : "text-gray-500"
+                  }`}
+                />
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900">{video.title}</h3>
+                <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                  <span>{i + 1} lecture</span>
+                  <span>•</span>
+                  <span>{Math.floor(video.duration / 60)} min</span>
+                </p>
+              </div>
             </div>
 
-            <div className="divide-y">
-              {course.videos?.map((video, i) => (
-                <div key={i} className="p-4 hover:bg-gray-50">
-                  <div
-                    className="flex justify-between items-center cursor-pointer"
-                    onClick={() => setOpenVideo(openVideo === i ? null : i)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="bg-gray-100 rounded-md p-2">
-                        <FiPlay className="text-gray-500" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900">{video.title}</h3>
-                        <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                          <span>{i + 1} lecture</span>
-                          <span>•</span>
-                          <span>{Math.floor(video.duration / 60)} min</span>
-                        </p>
-                      </div>
-                    </div>
-                    <a
-                      href={video.url}
-                      target="_blank"
-                      className="text-blue-600 hover:underline text-sm font-medium"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Preview
-                    </a>
-                  </div>
-
-                  {openVideo === i && video.longDescription && (
-                    <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm">
-                      {video.longDescription}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {!isLocked ? (
+              <span className="text-blue-600 text-sm font-medium">Play</span>
+            ) : (
+              <span className="text-gray-400 text-sm font-medium">🔒 Locked</span>
+            )}
           </div>
+
+          {/* Video description + embed (only if free and opened) */}
+          {!isLocked && openVideo === i && (
+            <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm space-y-3">
+              {video.longDescription && <p>{video.longDescription}</p>}
+              <div className="aspect-video">
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={embedUrl}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+{/* Modal */}
+{showModal && (
+  <div className="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50">
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+      <h2 className="text-xl font-bold text-gray-900 mb-3">Course Locked</h2>
+      <p className="text-gray-600 mb-6">
+        इस video को देखने के लिए आपको course खरीदना होगा।
+      </p>
+      <div className="flex gap-3 justify-center">
+        <button
+          className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+          onClick={() => setShowModal(false)}
+        >
+          Cancel
+        </button>
+        {/* <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          onClick={() => {
+            setShowModal(false);
+            // yaha aap Buy Now / Checkout page redirect karwa sakte ho
+          }}
+        >
+          Buy Now
+        </button> */}
+      </div>
+    </div>
+  </div>
+)}
+
 
           {/* Requirements */}
           <div className="bg-white rounded-xl shadow-sm p-6">
