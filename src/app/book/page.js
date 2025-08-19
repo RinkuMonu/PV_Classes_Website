@@ -138,7 +138,7 @@ export default function Book() {
                         <div className="relative w-full h-40 sm:h-56 md:h-64">
                           <Image
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
-                            alt={book?.book_title || "Book image"}
+                            alt={book?.title || "Book image"}
                             fill
                             className="object-contain p-2"
                           />
@@ -146,7 +146,7 @@ export default function Book() {
 
                         <div className="p-2 sm:p-3">
                           <p className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-2">
-                            {book?.book_title}
+                            {book?.title}
                           </p>
 
                           <div className="mt-1 sm:mt-2 flex items-center gap-2 flex-wrap">
