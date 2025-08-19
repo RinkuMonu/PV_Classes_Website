@@ -205,6 +205,8 @@ function Page() {
                     key={series?._id}
                     className="relative w-full max-w-sm rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
+
+                                  <Link href={`/test-series/${series?._id}`}>
                     {/* Title + Tag */}
                     <div className="px-4 pt-4">
                       <div className="flex justify-between items-start">
@@ -255,7 +257,7 @@ function Page() {
                         </div>
                       </div>
                     </div>
-
+</Link>
                     {/* Add to cart button */}
                     <button
                       onClick={(e) => handleAdd(e, "testSeries", series?._id)}
