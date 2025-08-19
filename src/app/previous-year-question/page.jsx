@@ -476,6 +476,7 @@ export default function PreviousYearPapers() {
                           {pyq.status === "free" ? (
                             <a
                               href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
+                              target="blank"
                               download
                               className="p-2 inline-flex bg-[#00316B] text-white rounded hover:bg-blue-900 transition"
                             >
