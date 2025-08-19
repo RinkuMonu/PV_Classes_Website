@@ -346,9 +346,9 @@ console.log("total = ", total);
               <div className="flex-shrink-0">
                 <img
                   src={item?.details
-?.images
+?.full_image
 ?.[0]}
-                  alt={item?.details?.book_title
+                  alt={item?.details?.title
 }
                   className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
                 />
@@ -358,7 +358,7 @@ console.log("total = ", total);
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 <div>
                   <h3 className="text-gray-800 font-semibold text-base sm:text-lg leading-snug line-clamp-2 mb-1">
-                    {item?.details?.book_title}
+                    {item?.details?.title}
                   </h3>
                   {item?.details?.book_category_id && (
                     <p className="text-xs text-gray-500 mb-3">
