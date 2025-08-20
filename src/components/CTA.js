@@ -14,7 +14,7 @@ export default function OfferSection() {
 
         <div className="relative z-10 w-full md:w-1/2 text-center md:text-left md:ml-16">
           <div className="mb-2">
-            <span className="inline-block px-3 py-1 bg-[#009FE3]/20 text-[#fff] text-sm font-medium rounded-full border border-[#009FE3]/30">
+            <span className="inline-block px-3 py-1 bg-[#009FE3]/20 text-white text-sm font-medium rounded-full border border-[#009FE3]/30">
               🎓 Special Offer
             </span>
           </div>
