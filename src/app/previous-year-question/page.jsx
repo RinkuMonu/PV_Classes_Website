@@ -326,18 +326,25 @@ export default function PreviousYearPapers() {
 
   return (
     <>
-      {/* Banner */}
-      <section className="relative w-full h-[60vh] text-white">
-        <div className="absolute inset-0">
+
+         <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+        <div className="absolute inset-0 hidden sm:block">
           <Image
             src="/Image/Banner/pyq-banner.webp"
-            alt="Banner"
+            alt="Banner Desktop"
             fill
             className="object-cover object-center"
             priority
           />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/pyq-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
         </div>
       </section>
 

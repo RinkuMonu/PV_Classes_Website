@@ -32,15 +32,26 @@ export default function Page() {
 
   return (
     <>
-      <section className="relative w-full h-[40vh] md:h-[60vh]">
-        <Image
-          src="/Image/Banner/test-banner.webp"
-          alt="Banner"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-      </section>
+       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+             <div className="absolute inset-0 hidden sm:block">
+               <Image
+                 src="/Image/Banner/test-banner.webp"
+                 alt="Banner Desktop"
+                 fill
+                 className="object-cover object-center"
+                 priority
+               />
+             </div>
+             <div className="absolute inset-0 block sm:hidden">
+               <Image
+                 src="/Image/pv-mobile/test-banner-mob.webp"
+                 alt="Banner Mobile"
+                 fill
+                 className="object-cover object-center"
+                 priority
+               />
+             </div>
+           </section>
 
       <div className="px-3 md:px-20 py-8">
         {testSeriesData?.map((examGroup) => (
