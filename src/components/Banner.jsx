@@ -1,236 +1,151 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/autoplay";
-import { ArrowRight, Link } from "lucide-react";
-import axiosInstance from "../app/axios/axiosInstance";
-
-
-
+"use client"
+import { useEffect, useState } from "react"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Autoplay, Pagination, Navigation } from "swiper/modules"
+import "swiper/css"
+import "swiper/css/pagination"
+import "swiper/css/navigation"
+import "swiper/css/autoplay"
+import axiosInstance from "../app/axios/axiosInstance"
 
 const Banner = () => {
-    const slugify = (text) =>
-        text.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
+  const slugify = (text) => text.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")
 
-    const [banners, setBanners] = useState([]);
-    const [deviceType, setDeviceType] = useState();
-    const [categories, setCategories] = useState([]);
-    const [isNewArrival, setIsNewArrival] = useState(false);
-console.log(banners)
+  const [banners, setBanners] = useState([])
+  const [deviceType, setDeviceType] = useState()
+  const [categories, setCategories] = useState([])
+  const [isNewArrival, setIsNewArrival] = useState(false)
 
-    // ✅ Detect "new arrivals" banner
-    // useEffect(() => {
-    //     const hasNewArrivalBanner = banners.some(
-    //         (banner) => banner.description === "newArrival"
-    //     );
-    //     setIsNewArrival(hasNewArrivalBanner);
-    // }, [banners]);
+  useEffect(() => {
+    const checkDevice = () => {
+      const isMobile = window.innerWidth <= 768
+      setDeviceType(isMobile ? "mobile" : "desktop")
+    }
 
-    // ✅ Fetch categories
-    // useEffect(() => {
-    //     const fetchCategories = async () => {
-    //         try {
-    //             const res = await axiosInstance.get(`/website`);
-    //             const data = await res.json();
-    //             if (Array.isArray(data.website?.categories)) {
-    //                 setCategories(data.website.categories.map((cat) => cat.name));
-    //             }
-    //         } catch (error) {
-    //             console.error("Failed to fetch categories:", error);
-    //         }
-    //     };
-    //     fetchCategories();
-    // }, []);
+    checkDevice()
+    window.addEventListener("resize", checkDevice)
+    return () => window.removeEventListener("resize", checkDevice)
+  }, [])
 
-    // ✅ Correct API call for newArrival
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             let url = `/products`;
-    //             if (isNewArrival) {
-    //                 url += `&newArrival=true`; // ✅ correct param
-    //             }
-    //             console.log("🟢 Fetching products from:", url);
-    //             const res = await fetch(url);
-    //             const data = await res.json();
-    //             // handle data.products here if needed
-    //         } catch (err) {
-    //             console.error("Failed to fetch products", err);
-    //         }
-    //     };
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const endpoint = deviceType === "mobile" ? "mobile" : "desktop"
+        const res = await axiosInstance.get(`/banners/${endpoint}`)
+        const data = res.data
+        const filtered = (data.banners || []).filter((item) => item.deviceType === deviceType)
+        setBanners(filtered)
+      } catch (err) {
+        console.error("Failed to fetch banners", err)
+      }
+    }
 
-    //     fetchProducts();
-    // }, [isNewArrival]);
+    fetchBanners()
+  }, [deviceType])
 
-    // ✅ Device type detection
-    useEffect(() => {
-        const checkDevice = () => {
-            const isMobile = window.innerWidth <= 768;
-            setDeviceType(isMobile ? "mobile" : "desktop");
-        };
+  if (banners.length === 0) return null
 
-        checkDevice();
-        window.addEventListener("resize", checkDevice);
-        return () => window.removeEventListener("resize", checkDevice);
-    }, []);
-    // useEffect(() => {
-    //   const checkDevice = () => {
-    //     const isMobile = /android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos/i
-    //       .test(navigator.userAgent);
-    //     setDeviceType(isMobile ? "mobile" : "desktop");
-    //   };
-
-    //   checkDevice();
-    // }, []);
-
-
-    // ✅ Fetch banners based on device
-    useEffect(() => {
-        const fetchBanners = async () => {
-            try {
-                const endpoint = deviceType === "mobile" ? "mobile" : "desktop";
-                const res = await axiosInstance.get(
-                    `/banners/${endpoint}`
-                );
-                const data = res.data;
-                const filtered = (data.banners || []).filter(
-                    (item) => item.deviceType === deviceType
-                );
-                setBanners(filtered);
-            } catch (err) {
-                console.error("Failed to fetch banners", err);
-            }
-        };
-        fetchBanners();
-    }, [deviceType]);
-
-
-    if (banners.length === 0) return null;
-
-    return (
-        <section className="relative w-full">
-        {/* <h1>hfjdksdjf</h1> */}
-            <div className="relative overflow-hidden">
-                <Swiper
-                    slidesPerView={1}
-                    spaceBetween={0}
-                    loop={true}
-                    pagination={{
-                        clickable: true,
-                        dynamicBullets: true,
-                    }}
-                    navigation={{
-                        nextEl: ".swiper-button-next",
-                        prevEl: ".swiper-button-prev",
-                    }}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }}
-                    modules={[Autoplay, Pagination, Navigation]}
-                    className="w-full h-auto"
-                >
-                    {banners.map((item) => (
-                        <SwiperSlide key={item._id}>
-                            <div className="relative w-full h-auto">
-                                <img
-                                    src={item.full_image}
-                                    alt={item.bannerName}
-                                    className="w-full h-auto object-fill"
-                                    loading="eager"
-                                />
-                                {/* <div className="absolute inset-0 flex items-center justify-center text-white text-center z-20 px-4">
-                                    <div className="w-full max-w-3xl space-y-4">
-                                        <div className="flex flex-row justify-center items-center gap-3 -mt-16 sm:mt-72">
-                                            <Link
-                                                to={item?.description}
-                                                className="group inline-flex items-center justify-center gap-2 py-1 px-4 text-xs font-bold bg-white text-black rounded-full shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.background = "rgb(157 48 137)";
-                                                    e.currentTarget.style.color = "white";
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.background = "white";
-                                                    e.currentTarget.style.color = "black";
-                                                }}
-                                            >
-                                                <span>Shop {item?.description}</span>
-                                                <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-                                            </Link>
-                                            <a
-                                                href="/products"
-                                                className="group inline-flex items-center justify-center gap-2 py-1 px-4 text-sm font-bold rounded-full transition-all duration-300 border-2 border-[#c1467f] hover:border-[#384d89] hover:bg-[#384d89] bg-[#c1467f] text-white"
-                                            >
-                                                <span>View All Products</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div> */}
-                            </div>
-                        </SwiperSlide>
-                    ))}
-
-                    {/* Navigation Buttons */}
-                    <div className="swiper-button-prev hidden sm:flex" />
-                    <div className="swiper-button-next hidden sm:flex" />
-                </Swiper>
-
-                {/* Swiper Styles */}
-                <style jsx global>{`
+  return (
+    <section className="relative w-full bg-gradient-to-br from-background via-muted/30 to-background">
+      <div className="relative overflow-hidden rounded-2xl mx-4 my-6 shadow-2xl border border-border/20">
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={0}
+          loop={true}
+          pagination={{
+            clickable: true,
+            dynamicBullets: true,
+          }}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          modules={[Autoplay, Pagination, Navigation]}
+          className="w-full h-auto rounded-2xl"
+        >
+          {banners.map((item) => (
+            <SwiperSlide key={item._id}>
+              <div className="relative w-full h-auto group">
+                <img
+                  src={item.full_image || "/placeholder.svg"}
+                  alt={item.bannerName}
+                  className="w-full h-auto object-cover rounded-2xl transition-transform duration-700 group-hover:scale-105"
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent rounded-2xl" />
+                <div className="absolute top-6 left-6 bg-primary/90 backdrop-blur-sm text-primary-foreground px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
+                  Featured Course
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+          <div className="swiper-button-prev hidden sm:flex" />
+          <div className="swiper-button-next hidden sm:flex" />
+        </Swiper>
+        <style jsx global>{`
           .swiper-pagination {
-            bottom: 20px !important;
+            bottom: 24px !important;
           }
 
           .swiper-pagination-bullet {
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.4);
-            border: 2px solid rgba(255, 255, 255, 0.6);
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 50%;
-            margin: 0 6px;
+            margin: 0 8px;
             opacity: 1;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           }
 
           .swiper-pagination-bullet-active {
-            width: 30px;
-            background: white;
-            border-radius: 7px;
-            border-color: white;
+            width: 32px;
+            background: #15803d;
+            border-radius: 8px;
+            border-color: #15803d;
+            box-shadow: 0 4px 12px rgba(21, 128, 61, 0.4);
           }
 
           .swiper-button-next,
           .swiper-button-prev {
-            width: 50px;
-            height: 50px;
-            background: rgb(3 36 71 / 49%);
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px);
-            transition: all 0.3s ease;
+            border: 2px solid #15803d;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(21, 128, 61, 0.15);
           }
 
           .swiper-button-next:hover,
           .swiper-button-prev:hover {
-            background: rgb(157, 48, 137);
-            border-color: white;
+            background: #15803d;
+            border-color: #15803d;
             transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(21, 128, 61, 0.3);
           }
 
           .swiper-button-next:after,
           .swiper-button-prev:after {
-            font-size: 18px;
-            color: white;
+            font-size: 20px;
+            color: #15803d;
             font-weight: bold;
+            transition: color 0.3s ease;
+          }
+
+          .swiper-button-next:hover:after,
+          .swiper-button-prev:hover:after {
+            color: white;
           }
         `}</style>
-            </div>
-        </section>
-    );
-};
+      </div>
+    </section>
+  )
+}
 
-export default Banner;
+export default Banner
