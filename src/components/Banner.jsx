@@ -105,7 +105,6 @@ console.log(banners)
                 console.error("Failed to fetch banners", err);
             }
         };
-
         fetchBanners();
     }, [deviceType]);
 
