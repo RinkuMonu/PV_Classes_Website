@@ -374,7 +374,7 @@ export default function CoursesPage() {
       )}
 
       {/* COURSES */}
-      <section id="courses" className="mx-auto max-w-7xl px-20 pt-4 pb-8">
+      <section id="courses" className="mx-auto max-w-7xl md:px-20  px-6 pt-4 pb-8">
         {isLoading ? (
           <p className="text-center">Loading...</p>
         ) : pageItems.length > 0 ? (
@@ -384,7 +384,7 @@ export default function CoursesPage() {
                 <a
                   key={c._id}
                   href={`/courses/${c._id}`}
-                  className="border rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
+                  className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
                   <img
                     src={c.imagesFullPath?.[0]}
@@ -412,7 +412,7 @@ export default function CoursesPage() {
                         )}
                       </div>
                       <button
-                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                        className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
                       >
                         Add to Cart
                       </button>
