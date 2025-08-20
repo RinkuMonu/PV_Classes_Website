@@ -334,6 +334,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
+import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2 } from "react-icons/fi";
 
 export default function CourseDetailsPage() {
@@ -551,10 +552,33 @@ export default function CourseDetailsPage() {
   const baseCoursePrice = course.price || 0;
 
   return (
+<>
+ <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+        <div className="absolute inset-0 hidden sm:block">
+          <Image
+            src="/Image/Banner/course-deatail-banner.webp"
+            alt="Banner Desktop"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/course-detail-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      </section>
+
+
     <section className="relative z-10 pt-10 md:pt-6 bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-[1160px] px-4 py-8 flex flex-col md:flex-row gap-8">
         {/* Main Content */}
-        <div className="w-full md:w-2/3 space-y-8">
+        <div className="">
           {/* Course Header */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex flex-col md:flex-row gap-6">
@@ -886,5 +910,6 @@ export default function CourseDetailsPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

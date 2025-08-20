@@ -57,7 +57,7 @@ export default function Book() {
       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
   <div className="absolute inset-0 hidden sm:block">
     <Image
-      src="/Image/Banner/main-book-banner.jpg"
+      src="/Image/Banner/main-book-banner.webp"
       alt="Banner Desktop"
       fill
       className="object-cover object-center"
@@ -66,7 +66,7 @@ export default function Book() {
   </div>
   <div className="absolute inset-0 block sm:hidden">
     <Image
-      src="/Image/pv-mobile/book-banner-mob.jpg"
+      src="/Image/pv-mobile/book-banner-mob.webp"
       alt="Banner Mobile"
       fill
       className="object-cover object-center"
