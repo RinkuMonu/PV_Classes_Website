@@ -3,6 +3,7 @@
    FILE: app/test-series/[id]/page.jsx
    ========================================================= */
 "use client";
+import { useCart } from "../../../components/context/CartContext";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
@@ -11,14 +12,12 @@ import toast from "react-hot-toast";
 import { Share2, Clock, FileText, BookOpen, HelpCircle, Award } from "lucide-react";
 
 export default function TestSeriesUnified() {
-    const params = useParams();
+   
+  const params = useParams();
   const seriesParam = params?.id ?? params?.slug;
   const seriesId = Array.isArray(seriesParam) ? seriesParam[0] : seriesParam;
-
   // ---------- Details state ----------
   const [series, setSeries] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   // ---------- View mode ----------
   // 'details' | 'attempt' | 'result'
   const [mode, setMode] = useState("details");
@@ -46,8 +45,6 @@ export default function TestSeriesUnified() {
       } catch (error) {
         console.error(error);
         toast.error("Failed to load test series.");
-      } finally {
-        setLoading(false);
       }
     })();
   }, [seriesId]);
@@ -186,7 +183,7 @@ export default function TestSeriesUnified() {
 
   // =================== RENDER ===================
 
-  if (loading) return <div className="p-6">Loading...</div>;
+  // if (loading) return <div className="p-6">Loading...</div>;
 
   if (!series) return <div className="p-6">Test series not found.</div>;
 
@@ -434,6 +431,13 @@ export default function TestSeriesUnified() {
 
 /* ---------- Sidebar Card ---------- */
 function SidebarCard({ series }) {
+  const { addToCart, loading } = useCart();
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();
+    const response = await addToCart({ itemType, itemId });
+    if (response?.success) toast.success(response.message);
+    else toast.error(response?.message || "Failed to add");
+  }; 
   const img = series?.image_urls?.[0] || (series?.images?.[0]
     ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
     : "/placeholder-test.jpg");
@@ -473,7 +477,7 @@ function SidebarCard({ series }) {
             </div>
           </div>
         </div>
-        <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl">
+        <button onClick={(e) => handleAdd(e, "testSeries", series?._id)} className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl">
           Add to Library
         </button>
         <div className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer">

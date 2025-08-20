@@ -43,18 +43,19 @@ export default function Page() {
       </section>
 
       <div className="px-3 md:px-20 py-8">
-        {testSeriesData.map((examGroup) => (
-          <div key={examGroup.exam_id} className="mb-10">
-            <h2 className="text-2xl font-bold mb-4">{examGroup.exam_name}</h2>
+        {testSeriesData?.map((examGroup) => (
+          <div key={examGroup?.exam_id} className="mb-10">
+            <h2 className="text-2xl font-bold mb-4">{examGroup?.exam_name}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-2 md:p-6">
-              {examGroup.series.map((series) => {
+              {examGroup?.series?.map((series) => {
                 const discount =
-                  Math.round(((series.price - series.discount_price) / series.price) * 100) || 0;
+                  Math.round(((series?.price - series?.discount_price) / series?.price) * 100) || 0;
+
                 const imgSrc =
                   series?.image_urls?.[0] ||
                   (series?.images?.[0]
-                    ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
+                    ? `http://localhost:5000/uploads/testSeries/${series?.images?.[0]}`
                     : "/placeholder-test.jpg");
 
                 return (
@@ -77,7 +78,7 @@ export default function Page() {
                           <div className="relative w-full h-full rounded-lg overflow-hidden">
                             <Image
                               src={imgSrc}
-                              alt={series?.title}
+                              alt={series?.title || "Test Series"}
                               fill
                               className="object-cover hover:scale-105 transition-transform duration-500"
                             />
@@ -128,6 +129,7 @@ export default function Page() {
           </div>
         ))}
       </div>
+
     </>
   );
 }

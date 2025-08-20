@@ -139,7 +139,6 @@ const examData = {
 
 export default function Header() {
   const { cart,storageCart, updateQuantity, removeFromCart, fetchCart,cartCount } = useCart();
-  console.log("cart = ", cart);
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [examsMenuOpen, setExamsMenuOpen] = useState(false);
