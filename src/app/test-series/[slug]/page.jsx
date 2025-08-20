@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { Share2, Clock, FileText, BookOpen, HelpCircle, Award } from "lucide-react";
 
 export default function TestSeriesUnified() {
-   
+
   const params = useParams();
   const seriesParam = params?.id ?? params?.slug;
   const seriesId = Array.isArray(seriesParam) ? seriesParam[0] : seriesParam;
@@ -35,6 +35,43 @@ export default function TestSeriesUnified() {
   const [result, setResult] = useState(null);
 
   const timerRef = useRef(null);
+
+  const [completedTests, setCompletedTests] = useState({});
+
+
+
+
+  const [hasAccess, setHasAccess] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token"); // 🔑 localStorage से token लेना
+        if (!token) {
+          setHasAccess(false);
+          return;
+        }
+
+        const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.data.message === "Access granted") {
+          setHasAccess(true);
+        } else {
+          setHasAccess(false);
+        }
+      } catch (err) {
+        console.error("Access check failed:", err);
+        setHasAccess(false);
+      }
+    })();
+  }, [seriesId]);
+
+
+
 
   // ---------------- Fetch details ----------------
   useEffect(() => {
@@ -269,6 +306,7 @@ export default function TestSeriesUnified() {
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <h3 className="text-xl font-semibold mb-3">Available Tests</h3>
               <div className="space-y-3">
+
                 {(series.tests || []).map((test) => (
                   <div
                     key={test._id}
@@ -285,19 +323,34 @@ export default function TestSeriesUnified() {
                         </div>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleStart(test)}
-                      className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
-                    >
-                      Start
-                    </button>
+
+                    {hasAccess ? (
+                      <button
+                        onClick={() => handleStart(test)}
+                        className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
+                      >
+                        Start
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="px-4 py-2 rounded-lg bg-gray-300 text-gray-600 font-semibold cursor-not-allowed flex items-center gap-2"
+                      >
+                        🔒 Locked
+                      </button>
+                    )}
                   </div>
                 ))}
+
+
                 {(!series.tests || series.tests.length === 0) && (
                   <div className="text-sm text-gray-500">No tests added yet.</div>
                 )}
               </div>
             </div>
+
+
+            
 
             {/* FAQs (static) */}
             <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm">
@@ -437,7 +490,7 @@ function SidebarCard({ series }) {
     const response = await addToCart({ itemType, itemId });
     if (response?.success) toast.success(response.message);
     else toast.error(response?.message || "Failed to add");
-  }; 
+  };
   const img = series?.image_urls?.[0] || (series?.images?.[0]
     ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
     : "/placeholder-test.jpg");
