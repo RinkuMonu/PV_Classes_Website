@@ -20,6 +20,7 @@ const Banner = () => {
     const [deviceType, setDeviceType] = useState();
     const [categories, setCategories] = useState([]);
     const [isNewArrival, setIsNewArrival] = useState(false);
+console.log(banners)
 
     // ✅ Detect "new arrivals" banner
     // useEffect(() => {
@@ -104,7 +105,6 @@ const Banner = () => {
                 console.error("Failed to fetch banners", err);
             }
         };
-
         fetchBanners();
     }, [deviceType]);
 
