@@ -86,38 +86,45 @@ export default function CurrentAffairsPage() {
   return (
     <>
       {/* Banner */}
-      <section className="relative w-full h-[60vh]">
-        <div className="absolute inset-0">
-          <Image src="/Image/Banner/current-banner.webp" alt="Banner" fill className="object-cover object-center" priority />
-          <div className="absolute inset-0" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
-          {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-            Government Exams Preparation & Download PDFs
-          </h1>
-          <p className="mt-4 text-lg sm:text-xl max-w-2xl">
-            Prepare for your exams with the latest resources, mock tests, and study materials.
-          </p> */}
+         <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+                  <div className="absolute inset-0 hidden sm:block">
+                    <Image
+                      src="/Image/Banner/current-banner.webp"
+                      alt="Banner Desktop"
+                      fill
+                      className="object-cover object-center"
+                      priority
+                    />
+                  </div>
+                  <div className="absolute inset-0 block sm:hidden">
+                    <Image
+                      src="/Image/pv-mobile/current-banner-mob.webp"
+                      alt="Banner Mobile"
+                      fill
+                      className="object-cover object-center"
+                      priority
+                    />
+                  </div>
+<div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
           <div className="absolute top-64 mt-6 flex space-x-4">
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-base border transition font-bold ${selectedCategory === cat
-                    ? "bg-[#00316B] text-white border-[#00316B]"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                    }`}
+                  className={`px-4 py-2 rounded-full text-base border transition font-bold ${
+                    selectedCategory === cat
+                      ? "bg-[#00316B] text-white border-[#00316B]"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                  }`}
                 >
                   {cat}
                 </button>
               ))}
-
-
             </div>
           </div>
         </div>
-      </section>
+                </section>
 
       {/* Content */}
       <div className="bg-gray-50 min-h-screen px-3 md:px-20 pb-4">
@@ -259,7 +266,10 @@ export default function CurrentAffairsPage() {
                             <div className="relative">
                             
                               <Image
-                                src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+                                src={
+                                  // `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                                   `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                                }
                                 alt={item.title}
                                 width={200}
                                 height={400}

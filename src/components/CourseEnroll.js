@@ -22,14 +22,14 @@ export default function CourseEnroll() {
           </div>
 
           {/* Right Image */}
-          <div className="flex justify-center md:justify-end">
+          <div className="flex justify-center md:justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-accent/20 rounded-full blur-3xl transform scale-110"></div>
               <Image
-                src="/Image/pv-logo.png"
+                src="/Image/pv-mobile/faculties-mob.webp"
                 alt="Course Illustration"
-                width={300}
-                height={300}
+                width={240}
+                height={240}
                 className="relative max-w-full h-auto drop-shadow-2xl rounded-2xl"
               />
             </div>
