@@ -206,9 +206,7 @@ export default function CurrentAffairsSlider() {
                   >
                     <Image
                       src={
-                        item.image.startsWith("http")
-                          ? item.image
-                          : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                        `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
                       }
                       alt={item.title}
                       width={200}

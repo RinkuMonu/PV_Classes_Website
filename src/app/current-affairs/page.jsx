@@ -259,7 +259,10 @@ export default function CurrentAffairsPage() {
                             <div className="relative">
                             
                               <Image
-                                src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+                                src={
+                                  // `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                                   `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                                }
                                 alt={item.title}
                                 width={200}
                                 height={400}
