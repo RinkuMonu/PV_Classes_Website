@@ -330,7 +330,7 @@ export default function PreviousYearPapers() {
       <section className="relative w-full h-[60vh] text-white">
         <div className="absolute inset-0">
           <Image
-            src="/Image/Banner/pyq-banner.jpg"
+            src="/Image/Banner/pyq-banner.webp"
             alt="Banner"
             fill
             className="object-cover object-center"
