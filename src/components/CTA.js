@@ -13,7 +13,7 @@ export default function OfferSection() {
 
         <div className="relative z-10 w-full md:w-1/2 text-center md:text-left md:ml-16">
           <div className="mb-2">
-            <span className="inline-block px-3 py-1 bg-[#009FE3]/20 text-[#009FE3] text-sm font-medium rounded-full border border-[#009FE3]/30">
+            <span className="inline-block px-3 py-1 bg-[#009FE3]/20 text-[#fff] text-sm font-medium rounded-full border border-[#009FE3]/30">
               🎓 Special Offer
             </span>
           </div>
@@ -32,10 +32,10 @@ export default function OfferSection() {
             Get the most out of our teaching with Plus. Join thousands of successful students.
           </p>
 
-          <button className="group relative bg-gradient-to-r from-white to-blue-50 text-[#00316b] font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20">
+          {/* <button className="group relative bg-gradient-to-r from-white to-blue-50 text-[#00316b] font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20">
             <span className="relative z-10">Claim Your Free Month</span>
             <div className="absolute inset-0 bg-gradient-to-r from-[#87B105] to-[#ABC129] rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-          </button>
+          </button> */}
 
           <div className="mt-6 flex items-center justify-center md:justify-start gap-4 text-sm text-blue-200">
             <div className="flex items-center gap-1">

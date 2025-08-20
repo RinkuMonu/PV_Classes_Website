@@ -19,7 +19,7 @@ export default function Home() {
       <Rajexam />
       <FacultySlider />
       <CurrentAffairs />
-      <BannerImg2 />
+      {/* <BannerImg2 /> */}
       <CTA />
       <Testimonials />
 

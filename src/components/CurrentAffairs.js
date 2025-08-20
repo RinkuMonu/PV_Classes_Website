@@ -77,9 +77,7 @@ export default function CurrentAffairsSlider() {
                         <div className="overflow-hidden rounded-t-2xl">
                           <Image
                             src={
-                              item.image.startsWith("http")
-                                ? item.image
-                                : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                              item.image.startsWith("http") ? item.image :  `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
                             }
                             alt={item.title}
                             width={200}
