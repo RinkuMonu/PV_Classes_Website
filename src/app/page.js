@@ -13,15 +13,13 @@ export default function Home() {
   return (
     <>
 
-<Banner />
+      <Banner />
       <CoursesSection />
       <CourseEnroll />
-<div className="container md:px-14 px-1">
-   <Rajexam />
-</div>
-      <FacultySlider/>
+      <Rajexam />
+      <FacultySlider />
       <CurrentAffairs />
-       <BannerImg2 />
+      <BannerImg2 />
       <CTA />
       <Testimonials />
 
