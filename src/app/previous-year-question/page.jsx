@@ -1,16 +1,23 @@
 
+
+
 // "use client";
 // import toast from "react-hot-toast";
 // import { useState, useEffect } from "react";
 // import Image from "next/image";
-// import { FaDownload, FaShareAlt, FaWhatsapp, FaFacebook, FaTwitter, FaShoppingCart } from "react-icons/fa";
+// import { 
+//   FaDownload, 
+//   FaShareAlt, 
+//   FaWhatsapp, 
+//   FaFacebook, 
+//   FaTwitter, 
+//   FaShoppingCart 
+// } from "react-icons/fa";
 // import axiosInstance from "../axios/axiosInstance";
 // import { useCart } from "../../components/context/CartContext";
 
-
 // export default function PreviousYearPapers() {
-
-//   const { addToCart} = useCart();
+//   const { addToCart } = useCart();
 //   const [pyqs, setPyqs] = useState([]);
 //   const [search, setSearch] = useState("");
 //   const [openId, setOpenId] = useState(null);
@@ -48,51 +55,50 @@
 //   };
 
 //   // Filter PYQs based on search
-//   const filteredPyqs = pyqs.filter(pyq => 
+//   const filteredPyqs = pyqs.filter(pyq =>
 //     pyq.exam.toLowerCase().includes(search.toLowerCase())
 //   );
 
-
-//    const handleAdd = async (e, itemType, itemId) => {
-//       e.stopPropagation();
-//       const token = localStorage.getItem("token");
-//       if (!token) {
-//         toast.error("Please login to add items to cart.");
-//         return;
-//       }
-//       const response = await addToCart({
-//         itemType,
-//         itemId,
-//       });
-//       console.log("response = ", response.success);
-//       if (response.success) {
-//         toast.success(response.message);
-//       } else {
-//         toast.error(response.message);
-//       }
-//     };
+//   // Handle Add to Cart
+//   const handleAdd = async (e, itemType, itemId) => {
+//     e.stopPropagation();
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//       toast.error("Please login to add items to cart.");
+//       return;
+//     }
+//     const response = await addToCart({
+//       itemType,
+//       itemId,
+//     });
+//     if (response.success) {
+//       toast.success(response.message);
+//     } else {
+//       toast.error(response.message);
+//     }
+//   };
 
 //   return (
 //     <>
-//       {/* Banner */}
-//       <section className="relative w-full h-[60vh] text-white">
-//         <div className="absolute inset-0">
+
+//          <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+//         <div className="absolute inset-0 hidden sm:block">
 //           <Image
-//             src="/Image/Banner/pyq-banner.jpg"
-//             alt="Banner"
+//             src="/Image/Banner/pyq-banner.webp"
+//             alt="Banner Desktop"
 //             fill
 //             className="object-cover object-center"
 //             priority
 //           />
-//           {/* <div className="absolute inset-0 bg-black/40" /> */}
 //         </div>
-//         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
-//           {/* <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-//             Government Exams Preparation & Download PDFs
-//           </h1>
-//           <p className="mt-4 text-lg sm:text-xl max-w-2xl">
-//             Prepare for your exams with the latest resources, mock tests, and study materials.
-//           </p> */}
+//         <div className="absolute inset-0 block sm:hidden">
+//           <Image
+//             src="/Image/pv-mobile/pyq-banner-mob.webp"
+//             alt="Banner Mobile"
+//             fill
+//             className="object-cover object-center"
+//             priority
+//           />
 //         </div>
 //       </section>
 
@@ -144,6 +150,8 @@
 //                   <th className="p-3 font-medium text-left">Sr. No.</th>
 //                   <th className="p-3 font-medium text-left">Exam</th>
 //                   <th className="p-3 font-medium text-left">Description</th>
+//                   <th className="p-3 font-medium text-left">Category</th>
+//                   <th className="p-3 font-medium text-center">Price</th>
 //                   <th className="p-3 font-medium text-center">Action</th>
 //                 </tr>
 //               </thead>
@@ -159,6 +167,26 @@
 //                         <td className="p-3">{idx + 1}</td>
 //                         <td className="p-3 font-medium">{pyq.exam}</td>
 //                         <td className="p-3">{pyq.description}</td>
+//                         <td className="p-3">{pyq.category}</td>
+//                         <td className="p-3 text-center">
+//                           {pyq.status === "free" ? (
+//                             <span className="text-green-600 font-semibold">Free</span>
+//                           ) : (
+//                             <>
+//                               <span className="line-through text-gray-500 mr-2">
+//                                 ₹{pyq.price}
+//                               </span>
+//                               <span className="text-green-700 font-bold">
+//                                 ₹{pyq.finalPrice}
+//                               </span>
+//                               {pyq.discount > 0 && (
+//                                 <span className="ml-2 text-sm text-red-500">
+//                                   ({pyq.discount}% OFF)
+//                                 </span>
+//                               )}
+//                             </>
+//                           )}
+//                         </td>
 //                         <td className="p-3 flex justify-center gap-2 relative">
 //                           {/* Share Button */}
 //                           <button
@@ -180,7 +208,6 @@
 //                                 </span>
 //                                 <span className="text-sm font-medium text-gray-700">WhatsApp</span>
 //                               </a>
-
 //                               <a
 //                                 href={shareLinks.facebook}
 //                                 target="_blank"
@@ -209,15 +236,16 @@
 //                           {/* Conditional Button */}
 //                           {pyq.status === "free" ? (
 //                             <a
-//                               // href={`http://localhost:5000/${pyq.pdfUrl}`}
-//                                 href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
+//                               href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
+//                               target="blank"
 //                               download
 //                               className="p-2 inline-flex bg-[#00316B] text-white rounded hover:bg-blue-900 transition"
 //                             >
 //                               <FaDownload className="mt-1 me-1" /> Download
 //                             </a>
 //                           ) : (
-//                             <button className="p-2 inline-flex bg-green-600 text-white rounded hover:bg-green-700 transition"
+//                             <button
+//                               className="p-2 inline-flex bg-green-600 text-white rounded hover:bg-green-700 transition"
 //                               onClick={(e) => handleAdd(e, "pyq", pyq._id)}
 //                               disabled={loading}
 //                             >
@@ -230,7 +258,7 @@
 //                   })
 //                 ) : (
 //                   <tr>
-//                     <td colSpan="4" className="p-6 text-center">
+//                     <td colSpan="6" className="p-6 text-center">
 //                       No matching exams found.
 //                     </td>
 //                   </tr>
@@ -246,29 +274,26 @@
 
 
 
-
 "use client";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { 
   FaDownload, 
   FaShareAlt, 
   FaWhatsapp, 
-  FaFacebook, 
-  FaTwitter, 
-  FaShoppingCart 
+  FaFacebook
 } from "react-icons/fa";
 import axiosInstance from "../axios/axiosInstance";
-import { useCart } from "../../components/context/CartContext";
 
 export default function PreviousYearPapers() {
-  const { addToCart } = useCart();
   const [pyqs, setPyqs] = useState([]);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const dropdownRef = useRef(null);
 
   // Fetch PYQs from backend
   useEffect(() => {
@@ -285,6 +310,23 @@ export default function PreviousYearPapers() {
     fetchPyqs();
   }, []);
 
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenId(null);
+      }
+    }
+    if (openId) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openId]);
+
   const toggleDropdown = (id) => {
     setOpenId(openId === id ? null : id);
   };
@@ -295,8 +337,7 @@ export default function PreviousYearPapers() {
     const text = encodeURIComponent(`Check out ${pyq.exam} PYQ: ${pdfUrl}`);
     return {
       whatsapp: `https://wa.me/?text=${text}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pdfUrl)}`,
-      twitter: `https://twitter.com/intent/tweet?text=${text}`
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pdfUrl)}`
     };
   };
 
@@ -305,39 +346,27 @@ export default function PreviousYearPapers() {
     pyq.exam.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Handle Add to Cart
-  const handleAdd = async (e, itemType, itemId) => {
-    e.stopPropagation();
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Please login to add items to cart.");
-      return;
-    }
-    const response = await addToCart({
-      itemType,
-      itemId,
-    });
-    if (response.success) {
-      toast.success(response.message);
-    } else {
-      toast.error(response.message);
-    }
-  };
-
   return (
     <>
       {/* Banner */}
-      <section className="relative w-full h-[60vh] text-white">
-        <div className="absolute inset-0">
+      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+        <div className="absolute inset-0 hidden sm:block">
           <Image
-            src="/Image/Banner/pyq-banner.jpg"
-            alt="Banner"
+            src="/Image/Banner/pyq-banner.webp"
+            alt="Banner Desktop"
             fill
             className="object-cover object-center"
             priority
           />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/pyq-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
         </div>
       </section>
 
@@ -390,7 +419,6 @@ export default function PreviousYearPapers() {
                   <th className="p-3 font-medium text-left">Exam</th>
                   <th className="p-3 font-medium text-left">Description</th>
                   <th className="p-3 font-medium text-left">Category</th>
-                  <th className="p-3 font-medium text-center">Price</th>
                   <th className="p-3 font-medium text-center">Action</th>
                 </tr>
               </thead>
@@ -407,25 +435,6 @@ export default function PreviousYearPapers() {
                         <td className="p-3 font-medium">{pyq.exam}</td>
                         <td className="p-3">{pyq.description}</td>
                         <td className="p-3">{pyq.category}</td>
-                        <td className="p-3 text-center">
-                          {pyq.status === "free" ? (
-                            <span className="text-green-600 font-semibold">Free</span>
-                          ) : (
-                            <>
-                              <span className="line-through text-gray-500 mr-2">
-                                ₹{pyq.price}
-                              </span>
-                              <span className="text-green-700 font-bold">
-                                ₹{pyq.finalPrice}
-                              </span>
-                              {pyq.discount > 0 && (
-                                <span className="ml-2 text-sm text-red-500">
-                                  ({pyq.discount}% OFF)
-                                </span>
-                              )}
-                            </>
-                          )}
-                        </td>
                         <td className="p-3 flex justify-center gap-2 relative">
                           {/* Share Button */}
                           <button
@@ -435,7 +444,10 @@ export default function PreviousYearPapers() {
                             <FaShareAlt className="mt-1 me-1" /> Share
                           </button>
                           {openId === pyq._id && (
-                            <div className="absolute top-13 right-30 bg-white shadow-xl rounded-xl border w-48 z-50 overflow-hidden animate-fadeIn">
+                            <div 
+                              ref={dropdownRef}
+                              className="absolute top-13 right-30 bg-white shadow-xl rounded-xl border w-48 z-50 overflow-hidden animate-fadeIn"
+                            >
                               <a
                                 href={shareLinks.whatsapp}
                                 target="_blank"
@@ -458,46 +470,25 @@ export default function PreviousYearPapers() {
                                 </span>
                                 <span className="text-sm font-medium text-gray-700">Facebook</span>
                               </a>
-                              <a
-                                href={shareLinks.twitter}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 p-3 hover:bg-sky-50 transition-colors"
-                              >
-                                <span className="p-2 bg-sky-100 rounded-full">
-                                  <FaTwitter className="text-sky-500" />
-                                </span>
-                                <span className="text-sm font-medium text-gray-700">Twitter / X</span>
-                              </a>
                             </div>
                           )}
 
-                          {/* Conditional Button */}
-                          {pyq.status === "free" ? (
-                            <a
-                              href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
-                              target="blank"
-                              download
-                              className="p-2 inline-flex bg-[#00316B] text-white rounded hover:bg-blue-900 transition"
-                            >
-                              <FaDownload className="mt-1 me-1" /> Download
-                            </a>
-                          ) : (
-                            <button
-                              className="p-2 inline-flex bg-green-600 text-white rounded hover:bg-green-700 transition"
-                              onClick={(e) => handleAdd(e, "pyq", pyq._id)}
-                              disabled={loading}
-                            >
-                              <FaShoppingCart className="mt-1 me-1" /> Add to Cart
-                            </button>
-                          )}
+                          {/* Download Button */}
+                          <a
+                            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
+                            target="blank"
+                            download
+                            className="p-2 inline-flex bg-[#00316B] text-white rounded hover:bg-blue-900 transition"
+                          >
+                            <FaDownload className="mt-1 me-1" /> Download
+                          </a>
                         </td>
                       </tr>
                     );
                   })
                 ) : (
                   <tr>
-                    <td colSpan="6" className="p-6 text-center">
+                    <td colSpan="5" className="p-6 text-center">
                       No matching exams found.
                     </td>
                   </tr>

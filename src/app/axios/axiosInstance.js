@@ -18,6 +18,8 @@ axiosInstance.interceptors.request.use(
             }
         }
         return config;
+
+        
     },
     (error) => Promise.reject(error)
 );
@@ -27,8 +29,9 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            console.error('Unauthorized! Redirecting to login...');
+            // console.error('Unauthorized! Redirecting to login...');
             // You can redirect user or remove token here
+                  return Promise.reject({ silent: true }); // custom reject
         }
         return Promise.reject(error);
     }

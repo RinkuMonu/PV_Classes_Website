@@ -1,10 +1,31 @@
 "use client";
 import React from "react";
+import Image from "next/image"
 
 export default function RefundPolicy() {
   return (
-<section className="container py-6">
- <div className="max-w-5xl mx-auto px-6 py-12 bg-[#E6EEF5]">
+<section className="">
+  <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-2">
+            <div className="absolute inset-0 hidden sm:block">
+              <Image
+                src="/Image/Banner/refund-banner.webp"
+                alt="Banner Desktop"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+            <div className="absolute inset-0 block sm:hidden">
+              <Image
+                src="/Image/pv-mobile/refund-mob.webp"
+                alt="Banner Mobile"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+          </section>
+ <div className="px-16 py-12 bg-[#E6EEF5]">
 
       <h1 className="text-4xl font-bold text-center text-[#204972] mb-4">
 

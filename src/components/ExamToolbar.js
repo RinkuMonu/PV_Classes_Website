@@ -53,7 +53,7 @@ export default function ExamToolbar({
     }, []);
 
     return (
-        <section className="mx-auto max-w-7xl px-20">
+        <section className="mx-auto max-w-7xl md:px-20 px-6">
             {/* Row 1: big category tabs + Online/Offline switch */}
             <div className="mt-4 flex items-center justify-between gap-3">
                 <div className="relative flex-1">
@@ -111,13 +111,13 @@ export default function ExamToolbar({
                 {subFilters.map((t) => (
                     <button
                         key={t}
-                        className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-800 hover:border-neutral-400"
+                        className="rounded-full border text-start w-100 border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-800 hover:border-neutral-400"
                     >
                         {t}
                     </button>
                 ))}
 
-                <div className="ms-auto flex items-center gap-2">
+                <div className="md:ms-auto flex items-center gap-2">
                     <div className="relative">
                         <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">🔍</span>
                         <input
