@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -8,9 +9,22 @@ import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { GrSecure } from "react-icons/gr";
 import { FiShoppingBag } from "react-icons/fi";
 import axiosInstance from "../../axios/axiosInstance";
-
+import { useCart } from "../../../components/context/CartContext";
 
 export default function ProductPage() {
+  const { addToCart, loading } = useCart();
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();
+    const response = await addToCart({
+      itemType,
+      itemId,
+    });
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   const params = useParams();
   const id = params.id;
   const [books, setBooks] = useState([]);
@@ -100,15 +114,10 @@ export default function ProductPage() {
 
           <div className="flex gap-4 mt-6 md:ml-16">
             {/* Add to Bag */}
-            <Link href="/addtocart" className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold text-base hover:bg-yellow-50 transition-colors duration-200">
+            <button onClick={(e) => handleAdd(e, "book", books?._id)} className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold text-base hover:bg-yellow-50 transition-colors duration-200">
               <FiShoppingBag className="text-[#616602] text-lg" />
-              <span className="text-[#616602]">Add To Bag</span>
-            </Link>
-
-            {/* Buy Now */}
-            <Link href="/buynow" className="px-14 py-3 bg-[#616602] text-white font-medium rounded-md hover:bg-[#0281ad] transition-colors duration-200">
-              Buy Now
-            </Link>
+              <span className="text-[#616602]">Add To Cart</span>
+            </button>           
           </div>
 
         </div>
@@ -116,7 +125,7 @@ export default function ProductPage() {
         {/* Product Details */}
         <div className="flex-1 space-y-4">
           <h1 className="text-2xl font-semibold">
-            {books?.book_title}
+            {books?.title}
           </h1>
           <p className="text-gray-500">By PV Classes</p>
           <div className="flex items-baseline gap-3">
@@ -139,7 +148,7 @@ export default function ProductPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold mt-4">
-              {books?.book_title}
+              {books?.title}
             </h2>
             <p className="text-sm text-gray-700 leading-relaxed">
               {books?.book_description}
@@ -230,7 +239,7 @@ export default function ProductPage() {
                     <div className="relative w-full h-64">
                       <Image
                         src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
-                        alt={book?.book_title || "Book image"}
+                        alt={book?.title || "Book image"}
                         fill
                         className="object-cover p-2"
                       />
@@ -239,7 +248,7 @@ export default function ProductPage() {
 
                     <div className="p-3">
                       <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                        {book?.book_title}
+                        {book?.title}
                       </p>
 
                       <div className="mt-2 flex items-center gap-2">
