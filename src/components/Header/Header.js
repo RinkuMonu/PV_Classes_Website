@@ -368,7 +368,7 @@ console.log("total = ", total);
 
                 <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                   <span className="font-semibold text-[#115D8E]">
-                    ₹{item?.details?.discount_price.toLocaleString()}
+                    {/* ₹{item?.details?.discount_price.toLocaleString()} */}
                   </span>
                   <button
                     onClick={() => removeFromCart(item?.itemId)}
