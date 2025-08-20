@@ -866,7 +866,7 @@ export default function CourseDetailsPage() {
 
   useEffect(() => {
     if (!id) return;
-    
+
     const fetchCourse = async () => {
       try {
         const res = await axiosInstance.get(`/courses/${id}`);
@@ -916,7 +916,7 @@ export default function CourseDetailsPage() {
 
         const initialSelections = comboItems.map((_, index) => index) || [];
         setSelectedComboItems(initialSelections);
-        
+
         // Check if user has purchased this course
         await checkCourseAccess(id);
       } catch (err) {
@@ -925,7 +925,7 @@ export default function CourseDetailsPage() {
         setLoading(false);
       }
     };
-    
+
     fetchCourse();
   }, [id]);
 
@@ -1069,7 +1069,7 @@ export default function CourseDetailsPage() {
 
   return (
 <>
- <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+ <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-4">
         <div className="absolute inset-0 hidden sm:block">
           <Image
             src="/Image/Banner/course-deatail-banner.webp"
@@ -1091,12 +1091,12 @@ export default function CourseDetailsPage() {
       </section>
 
 
-    <section className="relative z-10 pt-10 md:pt-6 bg-gray-50 min-h-screen">
-      <div className="mx-auto max-w-[1160px] px-4 py-8 flex flex-col md:flex-row gap-8">
+ <section className="relative z-10 pt-10 md:pt-6 bg-gray-50 min-h-screen">
+      <div className="px-6 py-4 flex flex-col md:flex-row gap-8">
         {/* Main Content */}
         <div className="">
           {/* Course Header */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
             <div className="flex flex-col md:flex-row gap-6">
               {course?.imagesFullPath?.[0] && (
                 <img
@@ -1106,7 +1106,7 @@ export default function CourseDetailsPage() {
                 />
               )}
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{course?.title}</h1>
+                <h1 className="text-2xl font-bold text-[#204972] mb-2">{course?.title}</h1>
                 <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -1136,8 +1136,8 @@ export default function CourseDetailsPage() {
           </div>
 
           {/* What You'll Learn */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">What you'll learn</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 my-4">
+            <h2 className="text-2xl font-bold text-[#204972] mb-4">What you'll learn</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {course.topics?.map((topic, i) => (
                 <div key={i} className="flex items-start">
@@ -1150,7 +1150,7 @@ export default function CourseDetailsPage() {
 
           {/* Combo Items Section with Selection */}
           {course.comboItems && course.comboItems.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 my-4">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-900">Add Combo Items</h2>
                 <div className="flex items-center">
@@ -1192,15 +1192,15 @@ export default function CourseDetailsPage() {
             </div>
           )}
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore Content</h2>
-            <h1 className="text-3xl text-gray-900 mb-2">{course?.title}</h1>
+          <div className="bg-white rounded-xl shadow-sm p-6 my-4">
+            <h2 className="text-2xl font-bold text-[#204972] mb-4">Explore Content</h2>
+            <h1 className="text-xl text-gray-600 mb-2">{course?.title}</h1>
             <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
           </div>
 
           {/* Our Features */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Our features</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 my-4">
+            <h2 className="text-2xl font-bold text-[#204972] mb-4">Our features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {course.features?.map((feature, i) => (
                 <div key={i} className="flex items-start">
@@ -1212,8 +1212,8 @@ export default function CourseDetailsPage() {
           </div>
 
           {/* Explore Related Topics */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore related topics</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 my-4">
+            <h2 className="text-2xl font-bold text-[#204972] mb-4">Explore related topics</h2>
             <div className="flex flex-wrap gap-2">
               {["Cell Biology", "Human Physiology", "Plant Physiology", "Genetics"].map((topic, i) => (
                 <span
@@ -1229,7 +1229,7 @@ export default function CourseDetailsPage() {
           {/* Course Content */}
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div className="border-b p-6">
-              <h2 className="text-2xl font-bold text-gray-900">Course content</h2>
+              <h2 className="text-2xl font-bold text-[#204972]">Course content</h2>
               <p className="text-gray-600 mt-1">
                 {course?.videos?.length || 0} lectures • {course?.validity || "N/A"} validity
               </p>
@@ -1329,8 +1329,8 @@ export default function CourseDetailsPage() {
           )}
 
           {/* Requirements */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Requirements</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 my-4">
+            <h2 className="text-2xl font-bold text-[#204972] mb-4">Requirements</h2>
             <ul className="list-disc pl-5 text-gray-700 space-y-2">
               <li>Basic understanding of biology concepts</li>
               <li>NCERT Biology textbooks (Class 11 & 12)</li>
@@ -1361,11 +1361,11 @@ export default function CourseDetailsPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg mb-3 transition">
+              <button className="w-full bg-[#204972] hover:bg-[#616602] text-white font-medium py-3 rounded-lg mb-3 transition">
                 Add to cart
               </button>
 
-              <button className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 rounded-lg transition">
+              <button className="w-full border-2 border-[#204972] text-[#204972] hover:bg-blue-50 font-medium py-3 rounded-lg transition">
                 Buy now
               </button>
 

@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useCart } from "../../components/context/CartContext";
 
 export default function BookCategoryPage() {
-  const { addToCart} = useCart();  
+  const { addToCart} = useCart();
 
   // Book Data (You can fetch this from an API later)
   const books = [
@@ -65,7 +65,7 @@ export default function BookCategoryPage() {
       (editionFilter === "" || book.edition.toString() === editionFilter)
     );
   });
-  
+
   return (
     <>
 
@@ -183,7 +183,6 @@ export default function BookCategoryPage() {
                 <p className="text-sm font-medium line-clamp-2 mb-2">
                   {book.title}
                 </p>
-
 
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-lg">₹{book.price}</span>

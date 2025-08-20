@@ -66,7 +66,7 @@ export default function Book() {
   </div>
   <div className="absolute inset-0 block sm:hidden">
     <Image
-      src="/Image/pv-mobile/book-banner-mob.webp"
+      src="/Image/pv-mobile/main-book-banner-mob.webp"
       alt="Banner Mobile"
       fill
       className="object-cover object-center"
