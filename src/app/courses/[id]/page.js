@@ -928,19 +928,42 @@ export default function CourseDetailsPage() {
     fetchCourse();
   }, [id]);
 
-  const checkCourseAccess = async (courseId) => {
-    try {
-      const response = await axiosInstance.get(`/access/check/${courseId}`);
-      if (response.data.message.includes("granted")) {
-        setHasPurchased(true);
-      }
-    } catch (error) {
-      console.error("Error checking course access:", error);
+  // const checkCourseAccess = async (courseId) => {
+  //   try {
+  //     const response = await axiosInstance.get(`/access/check/${courseId}`);
+  //     if (response.data.message.includes("granted")) {
+  //       setHasPurchased(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error checking course access:", error);
+  //     setHasPurchased(false);
+  //   } finally {
+  //     setCheckingAccess(false);
+  //   }
+  // };
+
+    const checkCourseAccess = async (courseId) => {
+  try {
+    const response = await axiosInstance.get(`/access/check/${courseId}`);
+    if (response.data.message.includes("granted")) {
+      setHasPurchased(true);
+    } else {
       setHasPurchased(false);
-    } finally {
-      setCheckingAccess(false);
     }
-  };
+  } catch (error) {
+    // Agar 403 aaya to sirf access false set karna hai, console me kuch log nahi karna
+    if (error.response && error.response.status === 403) {
+      setHasPurchased(false);
+    } else {
+      // optional: agar koi aur error aaya (500, network issue), tabhi log karo
+      console.error("Unexpected error checking course access:", error);
+    }
+  } finally {
+    setCheckingAccess(false);
+  }
+};
+
+
 
   const calculateTotalPrice = () => {
     if (!course) return 0;
