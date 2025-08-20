@@ -60,7 +60,7 @@ export default function RajExamBooks() {
             {subCatData?.books?.map((book) => (
               <div
                 key={book?._id}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-[#009FE3]/10"
+                className="bg-white relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-[#009FE3]/10"
               >
                 <Link href={book?._id ? `/book-detail/${book?._id}` : "/"}>
                   {book?.tag?.map((tag, index) => (
