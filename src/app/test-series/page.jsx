@@ -34,7 +34,7 @@ export default function Page() {
     <>
       <section className="relative w-full h-[40vh] md:h-[60vh]">
         <Image
-          src="/Image/Banner/testseries-banner.jpg"
+          src="/Image/Banner/test-banner.webp"
           alt="Banner"
           fill
           className="object-cover object-center"

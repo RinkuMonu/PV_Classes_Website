@@ -18,9 +18,10 @@ export default function FacultySlider() {
   };
 
   const bannerImages = [
-    "/Image/Banner/Faculty-1.jpg",
-    "/Image/Banner/Faculty-2.jpg",
-    "/Image/Banner/Faculty-3.jpg",
+    "/Image/Banner/faculty-1.webp",
+    "/Image/Banner/faculty-2.webp",
+    "/Image/Banner/faculty-3.webp",
+    "/Image/Banner/faculty-4.webp",
   ];
 
   return (

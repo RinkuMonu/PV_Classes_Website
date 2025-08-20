@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function CourseHero({ bannerSrc = "/Image/Banner/courses-banner.jpg" }) {
+export default function CourseHero({ bannerSrc = "/Image/Banner/courses-banner.webp" }) {
     return (
         <section className="relative overflow-hidden bg-[#FAFBF6]">
             <Image
