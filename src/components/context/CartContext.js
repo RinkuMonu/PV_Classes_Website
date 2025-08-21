@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { createContext, useContext, useState, useEffect } from "react";
 import axiosInstance from "../../app/axios/axiosInstance";
 // import { headers } from "next/headers";
+// import { headers } from "next/headers";
 
 
 const CartContext = createContext();
@@ -15,23 +16,20 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-
-      let data; // 👈 yaha declare kar do
-
+      let data;
       if (!token) {
         const cartData = JSON.parse(localStorage.getItem("cart")) || [];
         const response = await axiosInstance.get(
           `/cart/get-storage?items=${encodeURIComponent(JSON.stringify(cartData))}`
         );
-        data = response.data; // 👈 assign karo
+        data = response.data;
       } else {
         const response = await axiosInstance.get(`/cart/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        data = response.data; // 👈 assign karo
+        data = response.data;
       }
 
-      // ab yaha safely use kar sakte ho
       setCart(data?.cart?.items || []);
       setCartCount(data?.cart?.items?.length || 0);
 
@@ -181,10 +179,13 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     try {
       setLoading(true);
-      const userId = localStorage.getItem("userId");
-
-      const { data } = await axiosInstance.post(`/api/cart/clear`, { userId });
-      setCart({ items: [], subtotal: 0, tax: 0, total: 0 });
+      const token = localStorage.getItem("token");
+      const { data } = await axiosInstance.delete(`/cart/clear`, { 
+        headers: {
+          Authorization: `Bearer ${token}`,
+        } 
+      });
+      setCart(null);
       return { success: true, message: data.message };
     } catch (error) {
       console.error("Error clearing cart:", error);
