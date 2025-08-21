@@ -1,5 +1,8 @@
 "use client"
-import { useEffect, useState } from "react"
+import toast from "react-hot-toast";
+
+import { useEffect, useState } from "react";
+import CheckoutSuccessPopup from "../../components/CheckoutSuccessPopup";
 // import QRCode from "react-qr-code"
 import { ChevronLeft, Wallet, Check, CreditCard, Clock, Shield } from "lucide-react"
 // import logo from "../assest/logo.jpg"
@@ -16,9 +19,27 @@ import axiosInstance from "../axios/axiosInstance";
 
 
 function AddressShipping() {
-  const { cart,cartCount } = useCart();
-  
-  const [isNewAddress, setIsNewAddress] = useState(false)
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [oldTotalPrice, setOldTotalPrice] = useState(0);
+  const { cart,clearCart } = useCart();
+  const [couponCode, setCouponCode] = useState({ code: "", discount: "" });
+  const handleApplyCoupon = (discount) => {
+    let discountedAmount = oldTotalPrice;
+    const value = parseFloat(discount.replace(/[^0-9.]/g, ""));
+    if (typeof discount === "string" && discount.includes("%")) {
+      discountedAmount = totalAmount - (totalAmount * value) / 100;
+    } else {
+      discountedAmount = totalAmount - value;
+    }
+    if (discountedAmount < 0) discountedAmount = 0;
+
+    setTotalAmount(discountedAmount);
+    toast.success(`✅ Coupon applied! Final amount: ₹${discountedAmount}`);
+  };
+
+
+
+  const [isNewAddress, setIsNewAddress] = useState(true)
   const [selectedAddress, setSelectedAddress] = useState("")
   const [selectedShipping, setSelectedShipping] = useState("1")
   const [selectedPayment, setSelectedPayment] = useState("")
@@ -33,12 +54,23 @@ function AddressShipping() {
   const [state, setState] = useState("")
   const [city, setCity] = useState("")
   const [errors, setErrors] = useState({})
-  const [touchedFields, setTouchedFields] = useState({})
+  const [touchedFields, setTouchedFields] = useState({});
+  const [coupon,setCoupon] = useState([]);
   const token = "zsdfgyxchh"
-  const total = cart?.reduce(
-    (sum, item) => sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
-    0
-  );
+  const [totalAmount, setTotalAmount] = useState(0);
+  let total = 0;
+  useEffect(() => {
+    const total = cart?.reduce(
+      (sum, item) =>
+        sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
+      0
+    );
+
+    setTotalAmount(total);
+    setOldTotalPrice(total);
+  }, [cart]);
+
+  console.log("total amount = ",totalAmount);
   const [userdata, setUserData] = useState({
     name: "",
     email: "",
@@ -76,45 +108,40 @@ function AddressShipping() {
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
-    };
-const checkout = async (total) => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found!");
-      return;
+  };
+  const checkout = async (total) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found!");
+        return;
+      }
+      const payload = {
+        user: userdata, 
+        cart: cart,
+        paymentMethod:"cod",
+        total: total,
+      };
+
+      const { data } = await axiosInstance.post("/checkout", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (data.message == 'Checkout successful, order created, access granted!') {
+        setOrderSuccess(true);
+        clearCart();
+      }
+    } catch (error) {
+      console.error("Checkout failed:", error);
     }
-    const payload = {
-      user: userdata, 
-      cart: cart,
-      paymentMethod:"cod",
-      total: total,
-    };
-
-    console.log("Checkout Payload:", payload);
-
-    // API call
-    const { data } = await axiosInstance.post("/checkout", payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (data.success) {
-      console.log("Checkout successful:", data);
-      // Success ke baad redirect ya success message
-    }
-  } catch (error) {
-    console.error("Checkout failed:", error);
-  }
-};
+  };
 
   useEffect(() => {
     fetchUserData();
   }, []);
   const validateField = (fieldName, value) => {
     let error = ''
-
     switch (fieldName) {
       case 'name':
         if (!value.trim()) error = 'Full name is required'
@@ -141,7 +168,6 @@ const checkout = async (total) => {
         else if (value.length < 10) error = 'Address must be at least 10 characters'
         break
     }
-
     setErrors(prev => ({ ...prev, [fieldName]: error }))
     return !error
   }
@@ -168,7 +194,7 @@ const checkout = async (total) => {
   const handleAddressChange = (e) => {
     const value = e.target.value;    
     setSelectedAddress(value);
-      setIsNewAddress(false);
+    setIsNewAddress(true);
 
     if (value === "new") {
       // Agar user new address dalna chahta hai toh saare fields empty ho jaye
@@ -183,15 +209,9 @@ const checkout = async (total) => {
       });
       setIsNewAddress(true);
     } else if (value === "old") {
-      // Agar saved address select hua toh API se data le lo
       fetchUserData();
       setIsNewAddress(true);
-
-    }else{
-      setIsNewAddress(false);
-
     }
-
     // Reset errors jab address type change ho
     if (value !== "new") {
       setErrors({});
@@ -263,26 +283,21 @@ const checkout = async (total) => {
           extractIntent: (res) => res.data?.data?.upiIntent || res.data?.upiUrl,
         },
       }
-
       if (!selectedPayment) {
         Swal.fire({
-  title: 'Failed!',
-  text: 'Please select a payment method.',
-  icon: 'error',
-  confirmButtonText: 'Retry',
-});
-
+        title: 'Failed!',
+        text: 'Please select a payment method.',
+        icon: 'error',
+        confirmButtonText: 'Retry',
+      });
         setIsLoading(false)
         return
       }
-
       const config = gatewayConfigs[selectedPayment]
       if (!config) throw new Error("Unsupported payment method")
-
       const response = await axios.post(config.apiUrl, config.payload, {
         headers: config.headers,
       })
-
       const rawLink = config.extractIntent(response)
       const cleanedLink = rawLink.replace(/\\/g, "")
       console.log("cleanedLink", rawLink)
@@ -292,13 +307,11 @@ const checkout = async (total) => {
     } catch (error) {
       console.error("Payment Error:", error)
       Swal.fire({
-  title: 'Failed!',
-  text: 'Payment initiation failed. Please try again.',
-  icon: 'error',
-  confirmButtonText: 'Retry',
-});
-
-      // Swal.fire("Payment initiation failed. Please try again.")
+        title: 'Failed!',
+        text: 'Payment initiation failed. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Retry',
+      });
     } finally {
       setIsLoading(false)
     }
@@ -307,8 +320,6 @@ const checkout = async (total) => {
   const handleonChange = (e) => {
     const { name, value } = e.target
     setUserData(prev => ({ ...prev, [name]: value }))
-
-    // Validate field if it's been touched before
     if (touchedFields[name]) {
       validateField(name, value)
     }
@@ -357,8 +368,25 @@ const checkout = async (total) => {
       console.error("Error fetching location:", error)
     }
   }
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      const token = localStorage.getItem("token"); // token localStorage se nikal rahe ho
+      try {
+        const { data } = await axiosInstance.get("/coupon", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCoupon(data.data || []);
+      } catch (error) {
+        console.error("Error fetching coupons:", error);
+      }
+    };
 
-  // Payment status check effect (unchanged from your original code)
+    fetchCoupons();
+  }, []);
+    console.log("Coupons:", coupon);
+
   let totalTime = 0
   useEffect(() => {
     if (!reference) return
@@ -415,9 +443,17 @@ const checkout = async (total) => {
     const sec = (seconds % 60).toString().padStart(2, "0")
     return `${min}:${sec}`
   }
-
+const [totalOrder, setTotalOrder] = useState({
+  user: userdata,
+  cart: cart,
+  total: {},
+  paymentMethod: "cod",
+});
   return (
     <>
+    {orderSuccess && (
+      <CheckoutSuccessPopup message="Your order has been placed successfully. You'll receive updates soon 🚚" />
+    )}
       <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
           {/* Header Section */}
@@ -432,11 +468,7 @@ const checkout = async (total) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Order Details */}
             <div className="lg:col-span-2 px-4">
-              <div className="bg-white rounded-lg shadow-sm border-2 border-gray-100 p-6 mb-6">
-                {/* Logo */}
-                <div className="mb-6">
-                  <img src={ "/placeholder.svg"} alt="logo" className="w-32 h-auto" />
-                </div>
+              <div className="bg-white rounded-lg shadow-sm border-2 border-gray-100 p-6 mb-6">               
 
                 {/* Shipping Information */}
                 <div className="mb-8">
@@ -448,15 +480,15 @@ const checkout = async (total) => {
                         Select Address
                       </label>
                       <div className="relative">
-                        <select
-                          className="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          value={selectedAddress}
-                          onChange={handleAddressChange}
-                        >
-                          <option value="">Select Address</option>
-                          <option value="old">Existing address</option>
-                          <option value="new">Add new address...</option>
-                        </select>
+                      <select
+                        className="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        value={selectedAddress}
+                        onChange={handleAddressChange}
+                      >
+                        <option value="old">Existing address</option>
+                        <option value="new">Add new address</option>
+                      </select>
+
                         <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
                           <svg
                             className="h-4 w-4"
@@ -606,17 +638,13 @@ const checkout = async (total) => {
                   <div className="space-y-3">
                     <div className="grid md:grid-cols-2 gap-3">
                       <label
-                        className={`flex items-start gap-4 p-5 rounded-xl border transition-all duration-300 shadow-sm cursor-pointer 
-        ${selectedPayment === "upi1"
-                            ? "border-purple-600 bg-purple-50 ring-2 ring-purple-300"
-                            : "border-gray-200 hover:bg-gray-50"
-                          }`}
+                        className={`flex items-start gap-4 p-5 rounded-xl border transition-all duration-300 shadow-sm cursor-pointer border-purple-600 bg-purple-50 ring-2 ring-purple-300`}
                       >
                         <input
                           type="radio"
                           name="payment"
-                          value="upi1"
-                          checked={selectedPayment === "upi1"}
+                          value="cod"
+                          checked={true}
                           onChange={(e) => setSelectedPayment(e.target.value)}
                           className="h-4 w-4 text-purple-600 focus:ring-purple-500"
                           style={{ accentColor: "rgb(157 48 137)" }}
@@ -652,29 +680,85 @@ const checkout = async (total) => {
                 <div className="p-6 space-y-6">
 
                   {/* Cart Items */}
-                {cart?.map((item) => (
-                  <div key={item?.itemId} className="flex gap-4 justify-between border-b pb-3">
-                    <img
-                      src={item?.details?.full_image?.[0]}
-                      alt={item?.details?.title}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1 text-right">
-                      <h4 className="font-medium text-[#14263F] text-sm">{item?.details?.title}</h4>
-                      <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
-                      <p className="font-semibold text-[#384D89] text-sm">
-                        ₹{item?.details?.discount_price * item?.quantity}
-                      </p>
+                  {cart?.map((item) => (
+                    <div key={item?.itemId} className="flex gap-4 justify-between border-b pb-3">
+                      <img
+                        src={item?.details?.full_image?.[0]}
+                        alt={item?.details?.title}
+                        className="w-16 h-16 object-cover rounded-lg"
+                      />
+                      <div className="flex-1 text-right">
+                        <h4 className="font-medium text-[#14263F] text-sm">{item?.details?.title}</h4>
+                        <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
+                        <p className="font-semibold text-[#384D89] text-sm">
+                          ₹{item?.details?.discount_price * item?.quantity}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
+                  {/* Coupon Section */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-[#2A4172]">Available Coupons</h3>
+                    
+                 <div className="space-y-4">
+                    {/* Coupon List */}
+                    {coupon?.map((c) => (
+                      <div
+                        key={c?._id}
+                        className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2"
+                      >
+                        <span className="text-sm font-medium text-[#14263F]">
+                          {c?.code} (
+                          {c?.discountType === "percentage"
+                            ? `${c?.discountValue}%`
+                            : `₹${c?.discountValue}`}
+                          )
+                        </span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(c?.code);
+                            setCouponCode({
+                              code: c?.code,
+                              discount:
+                                c?.discountType === "percentage"
+                                  ? `${c?.discountValue}%`
+                                  : `₹${c?.discountValue}`,
+                            }); // code + discount dono store honge
+                          }}
+                          className="text-xs bg-[#384D89] text-white px-3 py-1 rounded-lg hover:bg-[#2A4172] transition"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* Input + Apply Button */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={couponCode.code}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder="Enter or paste coupon code"
+                        className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#384D89]"
+                      />
+                      <button
+                        onClick={() => handleApplyCoupon(couponCode.discount)}
+                        className="text-sm bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                      >
+                        Apply
+                      </button>
+                    </div>
+
+                  </div>
+
+                  </div>
 
                   {/* Price Summary */}
                   <div className="space-y-4">
                     <div className="flex justify-between text-sm">
                       <span className="text-[#2A4172]">Subtotal</span>
-                      <span className="font-semibold text-[#14263F]">₹ {total}</span>
+                      <span className="font-semibold text-[#14263F]">₹ {totalAmount}</span>
                     </div>
 
                     {/* {discount > 0 && (
@@ -693,7 +777,7 @@ const checkout = async (total) => {
                       <div className="flex justify-between text-lg font-bold">
                         <span className="text-[#14263F]">Total</span>
                         <span className="bg-gradient-to-r from-[#384D89] to-[#2A4172] bg-clip-text text-transparent">
-                          ₹{total}
+                          ₹{totalAmount}
                         </span>
                       </div>
                     </div>
