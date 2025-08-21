@@ -11,6 +11,9 @@ import TestSeriesHome from "../components/TestSeriesHome";
 import HomeCoursesSection from "../components/HomeCoursesSection";
 import PyqSlider from "../components/PyqSlider";
 
+import LearningResources from "../components/LearningResources";
+import TrustedPlatform from "../components/TrustedPlatform";
+import ExamCategory from "../components/ExamCategory";
 
 
 export default function Home() {
@@ -18,16 +21,20 @@ export default function Home() {
     <>
 
       <Banner />
+      <TrustedPlatform />
       <CoursesSection />
       <CourseEnroll />
       <Rajexam />
+      <LearningResources />
       <FacultySlider />
       <TestSeriesHome />
+
       <CurrentAffairs />
       <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
       <PyqSlider />
+      <ExamCategory />
       <Testimonials />
 
     </>

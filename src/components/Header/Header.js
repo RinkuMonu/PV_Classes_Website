@@ -669,7 +669,8 @@ export default function Header() {
                     <div className="space-y-3">
                       <Link
                         href="/checkout"
-                        className="flex items-center justify-center gap-3 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 bg-gradient-to-r from-[#00316B] to-[#204972] hover:from-[#204972] hover:to-[#009FE3] shadow-lg hover:shadow-xl transform hover:scale-105 w-full"
+                        className="flex items-center cursor-pointer justify-center gap-3 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 bg-gradient-to-r from-[#00316B] to-[#204972] hover:from-[#204972] hover:to-[#009FE3] shadow-lg hover:shadow-xl transform hover:scale-105 w-full"
+                        onClick={() => setIsOpen(false)}
                       >
                         Proceed to Checkout
                         <ArrowRight className="w-5 h-5" />
