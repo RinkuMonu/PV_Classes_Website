@@ -7,6 +7,9 @@ import BannerImg2 from "../components/bannerimg2";
 import CurrentAffairs from "../components/CurrentAffairs";
 import FacultySlider from "../components/FacultySlider";
 import CTA from "../components/CTA";
+import LearningResources from "../components/LearningResources";
+import TrustedPlatform from "../components/TrustedPlatform";
+import ExamCategory from "../components/ExamCategory";
 
 
 export default function Home() {
@@ -14,13 +17,17 @@ export default function Home() {
     <>
 
       <Banner />
+      <TrustedPlatform />
       <CoursesSection />
       <CourseEnroll />
       <Rajexam />
+      <LearningResources />
       <FacultySlider />
+
       <CurrentAffairs />
       {/* <BannerImg2 /> */}
       <CTA />
+      <ExamCategory />
       <Testimonials />
 
     </>

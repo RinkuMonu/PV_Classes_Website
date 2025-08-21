@@ -9,10 +9,17 @@ import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { Share2, Clock, FileText, BookOpen, HelpCircle, Award } from "lucide-react";
+import {
+  Share2,
+  Clock,
+  FileText,
+  BookOpen,
+  HelpCircle,
+  Award,
+  CheckCircle,
+} from "lucide-react";
 
 export default function TestSeriesUnified() {
-
   const params = useParams();
   const seriesParam = params?.id ?? params?.slug;
   const seriesId = Array.isArray(seriesParam) ? seriesParam[0] : seriesParam;
@@ -38,10 +45,8 @@ export default function TestSeriesUnified() {
 
   const [completedTests, setCompletedTests] = useState({});
 
-
-
-
   const [hasAccess, setHasAccess] = useState(false);
+
 
   useEffect(() => {
     (async () => {
@@ -70,10 +75,8 @@ export default function TestSeriesUnified() {
     })();
   }, [seriesId]);
 
-
-
-
   // ---------------- Fetch details ----------------
+  console.log(series,"serise")
   useEffect(() => {
     (async () => {
       try {
@@ -86,6 +89,28 @@ export default function TestSeriesUnified() {
       }
     })();
   }, [seriesId]);
+ 
+useEffect(() => {
+  if (series?.attempts) {
+    const completed = {};
+    // Count attempts per test
+    const attemptCounts = {};
+    
+    series.attempts.forEach(attempt => {
+      if (!attemptCounts[attempt.test_id]) {
+        attemptCounts[attempt.test_id] = 0;
+      }
+      attemptCounts[attempt.test_id]++;
+      
+      // Mark as completed if it's submitted (not just ongoing)
+      if (attempt.status === 'submitted') {
+        completed[attempt.test_id] = true;
+      }
+    });
+    
+    setCompletedTests(completed);
+  }
+}, [series]);
 
   // ---------------- Timer helpers ----------------
   const startTimer = (sec) => {
@@ -111,7 +136,9 @@ export default function TestSeriesUnified() {
   const handleStart = async (test) => {
     try {
       setSelectedTest(test);
-      const res = await axiosInstance.post(`/test-series/${seriesId}/tests/${test._id}/start`);
+      const res = await axiosInstance.post(
+        `/test-series/${seriesId}/tests/${test._id}/start`
+      );
       setAttemptId(res.data.attempt_id);
       setPerQTime(res.data.perQuestionTimeSec || 30);
       setIndex(res.data.currentIndex);
@@ -152,7 +179,10 @@ export default function TestSeriesUnified() {
     try {
       const payload =
         q.type === "numeric"
-          ? { numericAnswer: numericAnswer === "" ? undefined : Number(numericAnswer) }
+          ? {
+              numericAnswer:
+                numericAnswer === "" ? undefined : Number(numericAnswer),
+            }
           : { selectedOptions };
 
       const res = await axiosInstance.post(
@@ -256,9 +286,7 @@ export default function TestSeriesUnified() {
     </div>
   );
 
-  const sidebar = (
-    <SidebarCard series={series} />
-  );
+  const sidebar = <SidebarCard series={series} />;
 
   // ---------- Mode: DETAILS ----------
   if (mode === "details") {
@@ -276,7 +304,9 @@ export default function TestSeriesUnified() {
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">Overview</h2>
               </div>
-              <p className="text-gray-600 leading-relaxed">{series.description}</p>
+              <p className="text-gray-600 leading-relaxed">
+                {series.description}
+              </p>
             </div>
 
             {/* Subjects */}
@@ -286,15 +316,23 @@ export default function TestSeriesUnified() {
                   <div className="bg-green-100 p-2 rounded-lg">
                     <FileText size={24} className="text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-800">Subjects & Tests</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Subjects & Tests
+                  </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
                   {series.subjects.map((subject) => (
-                    <div key={subject._id} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <div
+                      key={subject._id}
+                      className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm"
+                    >
                       <div className="flex justify-between items-center">
-                        <h4 className="font-semibold text-gray-800">{subject.name}</h4>
+                        <h4 className="font-semibold text-gray-800">
+                          {subject.name}
+                        </h4>
                         <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">
-                          {subject.test_count} {subject.test_count > 1 ? "Tests" : "Test"}
+                          {subject.test_count}{" "}
+                          {subject.test_count > 1 ? "Tests" : "Test"}
                         </span>
                       </div>
                     </div>
@@ -307,7 +345,6 @@ export default function TestSeriesUnified() {
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <h3 className="text-xl font-semibold mb-3">Available Tests</h3>
               <div className="space-y-3">
-
                 {(series.tests || []).map((test) => (
                   <div
                     key={test._id}
@@ -318,20 +355,41 @@ export default function TestSeriesUnified() {
                         <FileText size={20} className="text-blue-600" />
                       </div>
                       <div>
-                        <div className="font-medium text-gray-800">{test.title}</div>
+                        <div className="font-medium text-gray-800">
+                          {test.title}
+                        </div>
                         <div className="text-xs text-gray-500">
-                          Subject: {test.subject} • {test.questions?.length || 0} Questions • {test.perQuestionTimeSec || 30}s/Q
+                          Subject: {test.subject} •{" "}
+                          {test.questions?.length || 0} Questions •{" "}
+                          {test.perQuestionTimeSec || 30}s/Q
                         </div>
                       </div>
                     </div>
 
                     {hasAccess ? (
-                      <button
-                        onClick={() => handleStart(test)}
-                        className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
-                      >
-                        Start
-                      </button>
+                      completedTests[test._id] ? (
+                        <div className="flex gap-2">
+                          <button
+                            disabled
+                            className="px-3 py-2 rounded-lg bg-green-100 text-green-700 font-semibold flex items-center gap-2 text-sm"
+                          >
+                            <CheckCircle size={14} /> Completed
+                          </button>
+                          <button
+                            onClick={() => handleStart(test)}
+                            className="px-3 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 text-sm"
+                          >
+                            Retake
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleStart(test)}
+                          className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
+                        >
+                          Start
+                        </button>
+                      )
                     ) : (
                       <button
                         disabled
@@ -343,15 +401,13 @@ export default function TestSeriesUnified() {
                   </div>
                 ))}
 
-
                 {(!series.tests || series.tests.length === 0) && (
-                  <div className="text-sm text-gray-500">No tests added yet.</div>
+                  <div className="text-sm text-gray-500">
+                    No tests added yet.
+                  </div>
                 )}
               </div>
             </div>
-
-
-            
 
             {/* FAQs (static) */}
             <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm">
@@ -359,13 +415,18 @@ export default function TestSeriesUnified() {
                 <div className="bg-purple-100 p-2 rounded-lg">
                   <HelpCircle size={24} className="text-purple-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800">Frequently Asked Questions</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Frequently Asked Questions
+                </h2>
               </div>
               <div className="space-y-2">
                 <div className="border-b border-gray-100 py-4">
-                  <h4 className="font-semibold text-gray-800 mb-1">How can I access the tests?</h4>
+                  <h4 className="font-semibold text-gray-800 mb-1">
+                    How can I access the tests?
+                  </h4>
                   <p className="text-gray-600">
-                    After purchase, you will find all tests here and in your Library during your validity.
+                    After purchase, you will find all tests here and in your
+                    Library during your validity.
                   </p>
                 </div>
               </div>
@@ -387,7 +448,9 @@ export default function TestSeriesUnified() {
           <h2 className="text-xl font-semibold">
             {selectedTest?.title} — Question {index + 1} / {total}
           </h2>
-          <div className="font-mono text-xl">{String(timeLeft).padStart(2, "0")}s</div>
+          <div className="font-mono text-xl">
+            {String(timeLeft).padStart(2, "0")}s
+          </div>
         </div>
 
         {q ? (
@@ -425,18 +488,29 @@ export default function TestSeriesUnified() {
             )}
           </div>
         ) : (
-          <div className="p-4 border rounded-lg bg-white">Loading question…</div>
+          <div className="p-4 border rounded-lg bg-white">
+            Loading question…
+          </div>
         )}
 
         <div className="flex justify-between">
-          <button className="px-4 py-2 rounded-lg border" onClick={refreshCurrent}>
+          <button
+            className="px-4 py-2 rounded-lg border"
+            onClick={refreshCurrent}
+          >
             Refresh
           </button>
           <div className="space-x-2">
-            <button className="px-4 py-2 rounded-lg border" onClick={handleFinish}>
+            <button
+              className="px-4 py-2 rounded-lg border"
+              onClick={handleFinish}
+            >
               Finish
             </button>
-            <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white" onClick={handleNext}>
+            <button
+              className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+              onClick={handleNext}
+            >
               {index + 1 === total ? "Submit" : "Save & Next"}
             </button>
           </div>
@@ -460,7 +534,8 @@ export default function TestSeriesUnified() {
             </div>
             <div className="p-4 border rounded-lg">
               <div className="text-lg">
-                Total Marks: <span className="font-bold">{result.totalMarks}</span>
+                Total Marks:{" "}
+                <span className="font-bold">{result.totalMarks}</span>
               </div>
             </div>
           </>
@@ -492,13 +567,21 @@ function SidebarCard({ series }) {
     if (response?.success) toast.success(response.message);
     else toast.error(response?.message || "Failed to add");
   };
-  const img = series?.image_urls?.[0] || (series?.images?.[0]
-    ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
-    : "/placeholder-test.jpg");
+  const img =
+    series?.image_urls?.[0] ||
+    (series?.images?.[0]
+      ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
+      : "/placeholder-test.jpg");
   return (
     <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
       <div className="relative h-64 rounded-xl overflow-hidden mb-5">
-        <Image src={img} alt={series?.title} fill className="object-cover" priority />
+        <Image
+          src={img}
+          alt={series?.title}
+          fill
+          className="object-cover"
+          priority
+        />
         <span className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
           Test Series
         </span>
@@ -522,16 +605,24 @@ function SidebarCard({ series }) {
         <hr className="my-5 border-gray-100" />
         <div className="flex items-end justify-between mb-5">
           <div>
-            <span className="text-xs text-gray-500 line-through">₹{series?.price}</span>
+            <span className="text-xs text-gray-500 line-through">
+              ₹{series?.price}
+            </span>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-xl font-bold text-green-600">₹{series?.discount_price}</span>
+              <span className="text-xl font-bold text-green-600">
+                ₹{series?.discount_price}
+              </span>
               <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                {Math.round((1 - series?.discount_price / series?.price) * 100)}% OFF
+                {Math.round((1 - series?.discount_price / series?.price) * 100)}
+                % OFF
               </span>
             </div>
           </div>
         </div>
-        <button onClick={(e) => handleAdd(e, "testSeries", series?._id)} className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl">
+        <button
+          onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl"
+        >
           Add to Library
         </button>
         <div className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer">
