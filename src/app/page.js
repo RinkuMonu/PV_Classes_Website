@@ -7,6 +7,10 @@ import BannerImg2 from "../components/bannerimg2";
 import CurrentAffairs from "../components/CurrentAffairs";
 import FacultySlider from "../components/FacultySlider";
 import CTA from "../components/CTA";
+import TestSeriesHome from "../components/TestSeriesHome";
+import HomeCoursesSection from "../components/HomeCoursesSection";
+import PyqSlider from "../components/PyqSlider";
+
 
 
 export default function Home() {
@@ -18,9 +22,12 @@ export default function Home() {
       <CourseEnroll />
       <Rajexam />
       <FacultySlider />
+      <TestSeriesHome />
       <CurrentAffairs />
+      <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
+      <PyqSlider />
       <Testimonials />
 
     </>

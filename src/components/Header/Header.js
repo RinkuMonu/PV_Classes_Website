@@ -208,19 +208,19 @@ export default function Header() {
               <div className="p-1 bg-white/10 rounded-full">
                 <Phone size={14} />
               </div>
-              <span className="font-medium">+1 (396) 486 4709</span>
+              <span className="font-medium">0141-4511098</span>
             </div>
             <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
               <div className="p-1 bg-white/10 rounded-full">
                 <Mail size={14} />
               </div>
-              <span className="font-medium">enquery@domain.com</span>
+              <span className="font-medium">info@7unique.in</span>
             </div>
             <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
               <div className="p-1 bg-white/10 rounded-full">
                 <MapPin size={14} />
               </div>
-              <span className="font-medium">795 South Park Avenue, CA</span>
+              <span className="font-medium">Plot No 97, Dakshinpuri - I, Jagatpura, Jaipur Rajasthan, India, 302017</span>
             </div>
           </div>
           {/* Right */}
