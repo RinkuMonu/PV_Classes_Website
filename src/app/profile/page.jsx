@@ -262,13 +262,12 @@ export default function ProfilePage() {
             </div>
 
 
-
             {/* Tab Content */}
             <div>
 
                 {/* Books */}
 
-                {activeTab === "books" && (
+                {/* {activeTab === "books" && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                         {books?.map((book) => (
                             <div
@@ -293,57 +292,148 @@ export default function ProfilePage() {
                             </div>
                         ))}
                     </div>
+                )} */}
+                {activeTab === "books" && (
+                    <>
+                        {books?.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                                {books.map((book) => (
+                                    <div
+                                        key={book._id}
+                                        className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
+                                    >
+                                        <Link href={book._id ? `/book-detail/${book._id}` : "/"}>
+                                            <div className="relative w-full h-48 sm:h-64">
+                                                <Image
+                                                    src={`${book?.full_image?.[0] ||
+                                                        `/uploads/book/${book.images?.[0]}` ||
+                                                        "/default-book.jpg"
+                                                        }`}
+                                                    alt={book.title || "Book image"}
+                                                    fill
+                                                    className="object-cover p-2"
+                                                />
+                                            </div>
+                                            <div className="p-3">
+                                                <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                                                    {book.title}
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex justify-center items-center h-40 text-gray-500 text-sm font-medium">
+                                📚 No Books Found
+                            </div>
+                        )}
+                    </>
                 )}
+
 
                 {/* Courses */}
+
                 {activeTab === "courses" && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {courses?.map((item) => (
-                            <div
-                                key={item?.id}
-                                className="relative border border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 bg-white flex flex-col overflow-hidden group"
-                            >
-                                <div className="relative w-full h-44 sm:h-52 overflow-hidden">
-                                    <img
-                                        src={`${item?.imagesFullPath?.[0] || "/default-course.jpg"}`}
-                                        alt={item?.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    <span className="absolute top-3 left-3 bg-[#204972] text-white text-xs px-3 py-1 rounded-full shadow-lg z-10 overflow-hidden">
-                                        <span className="relative z-10">Popular</span>
-                                        <span className="absolute -inset-1 bg-white opacity-20 rounded-full animate-shine"></span>
-                                    </span>
-                                </div>
-
-                                <div className="p-4 sm:p-5 flex-1 flex flex-col">
-                                    <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-[#204972] transition-colors">
-                                        {item?.title}
-                                    </h3>
-                                    <p className="text-xs sm:text-sm text-gray-600 mb-4 line-clamp-2 transition-all group-hover:text-gray-700">
-                                        {item?.shortDescription
-                                        }
-                                    </p>
-
-
-                                    <div className="flex justify-end mt-3">
-                                        <div className="flex text-amber-400">
-                                            {[...Array(item?.rating)].map((_, i) => (
-                                                <svg key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-current" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                                                </svg>
-                                            ))}
+                    <>
+                        {courses?.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                                {courses.map((item) => (
+                                    <Link
+                                        href={item?._id ? `/courses/${item._id}` : "#"}
+                                        key={item?._id}
+                                        className="relative border border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 bg-white flex flex-col overflow-hidden group"
+                                    >
+                                        {/* Top Image */}
+                                        <div className="relative w-full h-44 sm:h-52 overflow-hidden">
+                                            <img
+                                                src={`${item?.imagesFullPath?.[0] || "/default-course.jpg"}`}
+                                                alt={item?.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            />
+                                            <span className="absolute top-3 left-3 bg-[#204972] text-white text-xs px-3 py-1 rounded-full shadow-lg z-10 overflow-hidden">
+                                                <span className="relative z-10">Popular</span>
+                                                <span className="absolute -inset-1 bg-white opacity-20 rounded-full animate-shine"></span>
+                                            </span>
                                         </div>
-                                        <span className="text-xs text-gray-500 ml-1">
-                                            ({`${item?.reviews ?? 0}`} reviews)
-                                        </span>
 
-                                    </div>
-                                </div>
+                                        {/* Course Details */}
+                                        <div className="p-4 sm:p-5 flex-1 flex flex-col">
+                                            <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-[#204972] transition-colors">
+                                                {item?.title}
+                                            </h3>
+                                            <p className="text-xs sm:text-sm text-gray-600 mb-4 line-clamp-2 transition-all group-hover:text-gray-700">
+                                                {item?.shortDescription}
+                                            </p>
+                                        </div>
+
+                                        {/* ================= Extra Details ================= */}
+                                        {item?.comboId && (
+                                            <div className="px-4 pb-4 border-t pt-3 bg-gray-50 space-y-4">
+
+                                                <h2 className="font-bold text-gray-800">Combo Items</h2>
+                                                {/* Books */}
+                                                {item?.comboId?.books?.length > 0 && (
+                                                    <div className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                                                        <h4 className="font-semibold text-[#204972] flex items-center gap-2 mb-2">
+                                                            📚 Books
+                                                        </h4>
+                                                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                                            {item.comboId.books.map((book) => (
+                                                                <li key={book._id} className="line-clamp-1">
+                                                                    {book.title}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                                {/* Test Series */}
+                                                {item?.comboId?.testSeries?.length > 0 && (
+                                                    <div className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                                                        <h4 className="font-semibold text-[#204972] flex items-center gap-2 mb-2">
+                                                            📝 Test Series
+                                                        </h4>
+                                                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                                            {item.comboId.testSeries.map((test) => (
+                                                                <li key={test._id} className="line-clamp-1">
+                                                                    {test.title}{" "}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        ({test.total_tests} Tests)
+                                                                    </span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                                {/* PYQs */}
+                                                {item?.comboId?.pyqs?.length > 0 && (
+                                                    <div className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                                                        <h4 className="font-semibold text-[#204972] flex items-center gap-2 mb-2">
+                                                            📄 PYQs
+                                                        </h4>
+                                                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                                            {item.comboId.pyqs.map((pyq) => (
+                                                                <li key={pyq._id} className="line-clamp-1">
+                                                                    {pyq.exam}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </Link>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        ) : (
+                            <div className="flex justify-center items-center h-40 text-gray-500 text-sm font-medium">
+                                🎓 No Courses Found
+                            </div>
+                        )}
+                    </>
                 )}
-
 
                 {/* My Detail */}
                 {activeTab === "detail" && (
@@ -687,75 +777,93 @@ export default function ProfilePage() {
                     </div>
                 )}
 
+
                 {/* Tests */}
                 {activeTab === "tests" && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {myTests?.map((series) => (
-                            <div
-                                key={series?._id}
-                                className="w-full rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                            >
-                                <div className="px-4 pt-4">
-                                    <h2 className="text-base sm:text-lg font-bold leading-snug">
-                                        {series?.title}
-                                    </h2>
-                                </div>
+                    <>
+                        {myTests?.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                                {myTests.map((series) => (
+                                    <div
+                                        key={series?._id}
+                                        className="w-full rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                                    >
+                                        <div className="px-4 pt-4">
+                                            <h2 className="text-base sm:text-lg font-bold leading-snug">
+                                                {series?.title}
+                                            </h2>
+                                        </div>
 
-                                <div className="relative w-full h-44 sm:h-56 px-4 mt-3">
-                                    <div className="relative w-full h-full rounded-lg overflow-hidden">
-                                        <Image
-                                            src={`${series?.full_image?.[0] || `/uploads/testSeries/${series.images?.[0]}` || "/default-test.jpg"}`}
-                                            alt={series?.title}
-                                            fill
-                                            className="object-cover hover:scale-105 transition-transform duration-500"
-                                        />
-                                        {series?.total_tests > 0 && (
-                                            <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
-                                                {series?.total_tests} Tests
+                                        <div className="relative w-full h-44 sm:h-56 px-4 mt-3">
+                                            <div className="relative w-full h-full rounded-lg overflow-hidden">
+                                                <Image
+                                                    src={`${series?.full_image?.[0] || `/uploads/testSeries/${series.images?.[0]}` || "/default-test.jpg"}`}
+                                                    alt={series?.title}
+                                                    fill
+                                                    className="object-cover hover:scale-105 transition-transform duration-500"
+                                                />
+                                                {series?.total_tests > 0 && (
+                                                    <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
+                                                        {series?.total_tests} Tests
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-                                </div>
+                                        </div>
 
-                                <div className="px-4 mb-4">
-                                    <p className="my-3 font-medium text-xs sm:text-sm">
-                                        Validity for {series?.validity}
-                                    </p>
-                                </div>
+                                        <div className="px-4 mb-4">
+                                            <p className="my-3 font-medium text-xs sm:text-sm">
+                                                Validity for {series?.validity}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500 font-medium">
+                                🚫 No Tests Found
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {/* PYQs */}
                 {activeTab === "pyqs" && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {pyqs?.map((pyq) => (
-                            <div
-                                key={pyq._id}
-                                className="p-4 border rounded-lg shadow hover:shadow-md flex flex-col justify-between bg-white"
-                            >
-                                <div>
-                                    <h3 className="text-base font-semibold text-gray-800 mb-2">
-                                        {pyq.exam}
-                                    </h3>
-                                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                                        {pyq.description}
-                                    </p>
-                                </div>
-                                <a
-                                    href={`http://localhost:5000/${pyq.pdfUrl}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 text-[#204972] hover:underline text-sm font-medium"
-                                >
-                                    <FileText className="w-4 h-4" />
-                                    View PDF
-                                </a>
+                    <>
+                        {pyqs?.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                {pyqs.map((pyq) => (
+                                    <div
+                                        key={pyq._id}
+                                        className="p-4 border rounded-lg shadow hover:shadow-md flex flex-col justify-between bg-white"
+                                    >
+                                        <div>
+                                            <h3 className="text-base font-semibold text-gray-800 mb-2">
+                                                {pyq.exam}
+                                            </h3>
+                                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                                {pyq.description}
+                                            </p>
+                                        </div>
+                                        <a
+                                            href={`http://localhost:5000/${pyq.pdfUrl}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-[#204972] hover:underline text-sm font-medium"
+                                        >
+                                            <FileText className="w-4 h-4" />
+                                            View PDF
+                                        </a>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500 font-medium">
+                                🚫 No PYQs Found
+                            </div>
+                        )}
+                    </>
                 )}
+
 
             </div>
         </div>
