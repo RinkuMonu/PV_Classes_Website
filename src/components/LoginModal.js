@@ -33,6 +33,7 @@ export default function LoginModal({ onClose }) {
       const res = await axiosInstance.post("users/get-otp", { phone });
       // console.log("OTP response:", res);
 
+      
       if (res.data?.message) {
         setOtpSent(true);
         toast.success(
@@ -97,6 +98,8 @@ export default function LoginModal({ onClose }) {
           })
         );
         toast.success(response.data.message);
+        //  router.push("/");
+        window.location.href = "/";
         router.refresh();
         onClose();
       } else {
