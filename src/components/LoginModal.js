@@ -180,7 +180,7 @@ export default function LoginModal({ onClose }) {
           {otpSent && (
             <>
               <div className="relative w-full">
-                <Link href="/" className="flex items-center justify-center gap-2">
+                {/* <Link href="/" className="flex items-center justify-center gap-2">
                   <Image
                     src="/Image/pv-logo.png"
                     alt="PV classes"
@@ -188,7 +188,7 @@ export default function LoginModal({ onClose }) {
                     height={40}
                     className="object-contain"
                   />
-                </Link>
+                </Link> */}
                 <label
                   htmlFor="otp"
                   className="absolute left-4 top-2 text-sm font-semibold text-[#115D8E] pointer-events-none"
