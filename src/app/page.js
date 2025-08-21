@@ -18,7 +18,7 @@ export default function Home() {
 
       <Banner />
       <TrustedPlatform />
-      {/* <CoursesSection /> */}
+      <CoursesSection />
       <CourseEnroll />
       <Rajexam />
       <LearningResources />
