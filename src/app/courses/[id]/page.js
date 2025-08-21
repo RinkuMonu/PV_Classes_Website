@@ -1499,9 +1499,9 @@ export default function CourseDetailsPage() {
                   Add to cart
                 </button>
 
-                <button className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 rounded-lg transition">
+                {/* <button className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 rounded-lg transition">
                   Buy now
-                </button>
+                </button> */}
 
                 <p className="text-center text-gray-600 text-sm mt-4">
                   30-Day Money-Back Guarantee
