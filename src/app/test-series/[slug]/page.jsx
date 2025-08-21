@@ -78,6 +78,7 @@ export default function TestSeriesUnified() {
     (async () => {
       try {
         const res = await axiosInstance.get(`/test-series/${seriesId}`);
+        console.log("Fetched series:", res.data.data);
         if (res.data.success) setSeries(res.data.data);
       } catch (error) {
         console.error(error);

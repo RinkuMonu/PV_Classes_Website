@@ -121,16 +121,16 @@ function AddressShipping() {
           Authorization: `Bearer ${token}`,
         },
       });
-      await axiosInstance.put(
-        `/coupon/${couponCode.couponId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      fetchCoupons();
+      // await axiosInstance.put(
+      //   `/coupon/${couponCode.couponId}`,
+      //   {},
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      // fetchCoupons();
       if (data.message == 'Checkout successful, order created, access granted!') {
         setOrderSuccess(true);
         clearCart();
