@@ -47,7 +47,7 @@ export default function FacultySlider() {
   const bannerImages = isMobile ? mobileImages : desktopImages
 
   return (
-    <div className="w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50/30 p-4 md:p-6">
+    <div className="w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50/30 p-4 md:p-6 md:px-18">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
           <div>
