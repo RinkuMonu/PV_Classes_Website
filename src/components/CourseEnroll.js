@@ -26,10 +26,10 @@ export default function CourseEnroll() {
             <div className="relative">
               <div className="absolute inset-0 bg-accent/20 rounded-full blur-3xl transform scale-110"></div>
               <Image
-                src="/Image/pv-mobile/faculties-mob.webp"
+                src="/Image/Banner/faculties-grp.webp"
                 alt="Course Illustration"
-                width={240}
-                height={240}
+                width={360}
+                height={360}
                 className="relative max-w-full h-auto drop-shadow-2xl rounded-2xl"
               />
             </div>

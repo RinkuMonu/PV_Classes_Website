@@ -8,7 +8,7 @@ export default function RefundPolicy() {
   <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-2">
             <div className="absolute inset-0 hidden sm:block">
               <Image
-                src="/Image/Banner/refund-banner.webp"
+                src="/Image/Banner/refund.webp"
                 alt="Banner Desktop"
                 fill
                 className="object-cover object-center"
