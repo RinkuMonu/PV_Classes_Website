@@ -170,8 +170,8 @@ export default function TestSeriesHome() {
                 const res = await axiosInstance.get("/test-series");
                 if (res?.data?.success) setTestSeriesData(res?.data?.data || []); // grouped by exam
             } catch (err) {
-                console.error("Error fetching test series:", err);
-                toast.error("Failed to load test series");
+                // console.error("Error fetching test series:", err);
+                // toast.error("Failed to load test series");
             }
         })();
     }, []);
