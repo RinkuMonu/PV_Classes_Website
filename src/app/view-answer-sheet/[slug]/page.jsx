@@ -135,7 +135,7 @@ export default function AnswerSheetPage() {
                 <button
                   key={test._id}
                   onClick={() => setActiveTestId(test._id)}
-                  className={`px-4 py-2 rounded-md ${
+                  className={`px-4 py-2 rounded-md cursor-pointer ${
                     activeTestId === test._id
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"

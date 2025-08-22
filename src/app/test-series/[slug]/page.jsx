@@ -47,9 +47,9 @@ export default function TestSeriesUnified() {
   const timerRef = useRef(null);
 
   const [completedTests, setCompletedTests] = useState({});
- console.log(completedTests?._id)
+  console.log(completedTests?._id);
   const [hasAccess, setHasAccess] = useState(false);
- const viewTest = (e, testId) => {
+  const viewTest = (e, testId) => {
     e.preventDefault();
     // If you need to send both seriesId and testId, do something like this:
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
@@ -356,9 +356,14 @@ export default function TestSeriesUnified() {
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">Available Tests</h3>
-                <Link href={`/view-answer-sheet/${seriesId}`} className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer">
-                  View All Answer
-                </Link>
+                {hasAccess && Object.keys(completedTests).length > 0 && (
+                  <Link
+                    href={`/view-answer-sheet/${seriesId}`}
+                    className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                  >
+                    View All Answer
+                  </Link>
+                )}
               </div>
               <div className="space-y-3">
                 {(series.tests || []).map((test) => (
@@ -397,8 +402,8 @@ export default function TestSeriesUnified() {
                           >
                             Retake
                           </button>
-                          <button onClick={(e)=>viewTest(e,test?._id)} 
-
+                          <button
+                            onClick={(e) => viewTest(e, test?._id)}
                             className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
                           >
                             View Answer
