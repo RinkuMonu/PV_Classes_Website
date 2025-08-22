@@ -319,13 +319,13 @@ export default function Header() {
               Current Affairs
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
-            <Link
+            {/* <Link
               href="#"
               className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               News
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
-            </Link>
+            </Link> */}
             <Link
               href="/book"
               className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
@@ -339,10 +339,10 @@ export default function Header() {
             {/* <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Tag size={20} />
             </button> */}
-            <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
+            {/* <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            </button> */}
             <button
               onClick={() => setIsOpen(true)}
               className="relative p-3 hover:bg-[#009FE3]/10 rounded-full transition-all duration-200 group"
@@ -825,13 +825,13 @@ export default function Header() {
             Current Affairs
           </Link>
 
-          <Link
+          {/* <Link
             href="#"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-gradient-to-r hover:from-[#00316B] hover:to-[#204972] hover:text-white px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3"
           >
             News
-          </Link>
+          </Link> */}
 
           <Link
             href="/book"
