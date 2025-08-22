@@ -22,23 +22,20 @@ function AddressShipping() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [oldTotalPrice, setOldTotalPrice] = useState(0);
   const { cart,clearCart } = useCart();
-  const [couponCode, setCouponCode] = useState({ code: "", discount: "" });
+  const [couponCode, setCouponCode] = useState({ code: "", discount: "",couponId: "" });
   const handleApplyCoupon = (discount) => {
     let discountedAmount = oldTotalPrice;
     const value = parseFloat(discount.replace(/[^0-9.]/g, ""));
     if (typeof discount === "string" && discount.includes("%")) {
-      discountedAmount = totalAmount - (totalAmount * value) / 100;
+      discountedAmount = oldTotalPrice - (oldTotalPrice * value) / 100;
     } else {
-      discountedAmount = totalAmount - value;
+      discountedAmount = oldTotalPrice - value;
     }
     if (discountedAmount < 0) discountedAmount = 0;
 
     setTotalAmount(discountedAmount);
     toast.success(`✅ Coupon applied! Final amount: ₹${discountedAmount}`);
   };
-
-
-
   const [isNewAddress, setIsNewAddress] = useState(true)
   const [selectedAddress, setSelectedAddress] = useState("")
   const [selectedShipping, setSelectedShipping] = useState("1")
@@ -72,6 +69,7 @@ function AddressShipping() {
 
   console.log("total amount = ",totalAmount);
   const [userdata, setUserData] = useState({
+    id:"",
     name: "",
     email: "",
     phone: "",
@@ -80,7 +78,6 @@ function AddressShipping() {
     address: "",
     pincode: "",
   });
-  console.log("userdata", userdata)
   const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -96,6 +93,7 @@ function AddressShipping() {
         });
         if (data?.data) {
           setUserData({
+            id: data.data._id || "",
             name: data.data.name || "",
             email: data.data.email || "",
             phone: data.data.phone || "",
@@ -109,25 +107,33 @@ function AddressShipping() {
         console.error("Failed to fetch user data:", error);
       }
   };
-  const checkout = async (total) => {
+  const checkout = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        console.error("No token found!");
+        toast.error("Please login to continue!");
         return;
       }
-      const payload = {
-        user: userdata, 
-        cart: cart,
-        paymentMethod:"cod",
-        total: total,
-      };
+      const payload = totalOrder;
 
       const { data } = await axiosInstance.post("/checkout", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (couponCode?.couponId) {
+        await axiosInstance.put(
+          `/coupon/${couponCode.couponId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+;
+      // fetchCoupons();
       if (data.message == 'Checkout successful, order created, access granted!') {
         setOrderSuccess(true);
         clearCart();
@@ -217,7 +223,6 @@ function AddressShipping() {
       setErrors({});
     }
   };
-
 
   const generateReferenceNumber = () => {
     const timestamp = Date.now()
@@ -382,10 +387,8 @@ function AddressShipping() {
         console.error("Error fetching coupons:", error);
       }
     };
-
     fetchCoupons();
   }, []);
-    console.log("Coupons:", coupon);
 
   let totalTime = 0
   useEffect(() => {
@@ -443,14 +446,24 @@ function AddressShipping() {
     const sec = (seconds % 60).toString().padStart(2, "0")
     return `${min}:${sec}`
   }
-const [totalOrder, setTotalOrder] = useState({
-  user: userdata,
-  cart: cart,
-  total: {},
-  paymentMethod: "cod",
-});
+  const [totalOrder, setTotalOrder] = useState({
+    user: userdata,
+    cart: [],
+    totalAmount: 0,
+    paymentMethod: "cod",
+  });
+  useEffect(() => {
+  setTotalOrder({
+    user: userdata,
+    cart: cart,
+    totalAmount: totalAmount,
+    paymentMethod: "cod",
+    couponId: couponCode.couponId,
+  });
+}, [cart, totalAmount, userdata,couponCode]);
+console.log("totalOrder = ", totalOrder);
   return (
-    <>
+    <> 
     {orderSuccess && (
       <CheckoutSuccessPopup message="Your order has been placed successfully. You'll receive updates soon 🚚" />
     )}
@@ -678,80 +691,99 @@ const [totalOrder, setTotalOrder] = useState({
                 </div>
 
                 <div className="p-6 space-y-6">
-
                   {/* Cart Items */}
-                  {cart?.map((item) => (
-                    <div key={item?.itemId} className="flex gap-4 justify-between border-b pb-3">
-                      <img
-                        src={item?.details?.full_image?.[0]}
-                        alt={item?.details?.title}
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
-                      <div className="flex-1 text-right">
-                        <h4 className="font-medium text-[#14263F] text-sm">{item?.details?.title}</h4>
-                        <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
-                        <p className="font-semibold text-[#384D89] text-sm">
-                          ₹{item?.details?.discount_price * item?.quantity}
-                        </p>
+                  {cart && cart?.length > 0 ? (
+                    cart?.map((item) => (
+                      <div
+                        key={item?.itemId}
+                        className="flex gap-4 justify-between border-b pb-3"
+                      >
+                        <img
+                          src={item?.details?.full_image?.[0]}
+                          alt={item?.details?.title}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1 text-right">
+                          <h4 className="font-medium text-[#14263F] text-sm">
+                            {item?.details?.title}
+                          </h4>
+                          <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
+                          <p className="font-semibold text-[#384D89] text-sm">
+                            ₹{item?.details?.discount_price * item?.quantity}
+                          </p>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-6">
+                      🛒 No items in your cart
                     </div>
-                  ))}
-
+                  )}
                   {/* Coupon Section */}
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-[#2A4172]">Available Coupons</h3>
-                    
-                 <div className="space-y-4">
-                    {/* Coupon List */}
-                    {coupon?.map((c) => (
-                      <div
-                        key={c?._id}
-                        className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2"
-                      >
-                        <span className="text-sm font-medium text-[#14263F]">
-                          {c?.code} (
-                          {c?.discountType === "percentage"
-                            ? `${c?.discountValue}%`
-                            : `₹${c?.discountValue}`}
-                          )
-                        </span>
-                        <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(c?.code);
-                            setCouponCode({
-                              code: c?.code,
-                              discount:
-                                c?.discountType === "percentage"
-                                  ? `${c?.discountValue}%`
-                                  : `₹${c?.discountValue}`,
-                            }); // code + discount dono store honge
-                          }}
-                          className="text-xs bg-[#384D89] text-white px-3 py-1 rounded-lg hover:bg-[#2A4172] transition"
-                        >
-                          Copy
-                        </button>
-                      </div>
-                    ))}
+                    <h3 className="text-sm font-semibold text-[#2A4172]">Available Coupons</h3>                    
+                    <div className="space-y-4">
+                      {/* Coupon List */}
+                     {coupon?.length > 0 ? (
+                        coupon.map((c) => (
+                          <div
+                            key={c?._id}
+                            className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2"
+                          >
+                            <span className="text-sm font-medium text-[#14263F]">
+                              {c?.code} (
+                              {c?.discountType === "percentage"
+                                ? `${c?.discountValue}%`
+                                : `₹${c?.discountValue}`}
+                              )
+                            </span>
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(c?.code);
+                                setCouponCode({
+                                  code: c?.code,
+                                  discount:
+                                    c?.discountType === "percentage"
+                                      ? `${c?.discountValue}%`
+                                      : `₹${c?.discountValue}`,
+                                  couponId: c?._id,
+                                });
+                              }}
+                              className="text-xs bg-[#384D89] text-white px-3 py-1 rounded-lg hover:bg-[#2A4172] transition"
+                            >
+                              Copy
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500 italic">No coupons available</p>
+                      )}
 
-                    {/* Input + Apply Button */}
-                    <div className="flex items-center gap-2">
+
+                      {/* Input + Apply Button */}
+                     <div className="flex items-center gap-2">
                       <input
                         type="text"
                         value={couponCode.code}
-                        onChange={(e) => setCouponCode(e.target.value)}
+                        onChange={(e) =>
+                          setCouponCode((prev) => ({ ...prev, code: e.target.value }))
+                        }
                         placeholder="Enter or paste coupon code"
                         className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#384D89]"
                       />
                       <button
                         onClick={() => handleApplyCoupon(couponCode.discount)}
-                        className="text-sm bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                        disabled={cart?.length === 0}
+                        className={`text-sm px-4 py-2 rounded-lg transition ${
+                          !couponCode.code?.trim()
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-green-600 text-white hover:bg-green-700"
+                        }`}
                       >
                         Apply
                       </button>
                     </div>
-
-                  </div>
-
+                    </div>
                   </div>
 
                   {/* Price Summary */}
@@ -791,11 +823,17 @@ const [totalOrder, setTotalOrder] = useState({
                   {/* Action Buttons */}
                   <div className="space-y-4">
                     <button
-                      onClick={() => checkout(total)}
-                      className="block w-full py-4 px-6 bg-[#384D89] text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5"
+                      onClick={checkout}
+                      disabled={cart?.length === 0}
+                      className={`block w-full py-4 px-6 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl cursor-pointer ${
+                        cart?.length === 0
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-[#384D89] hover:shadow-2xl transform hover:-translate-y-0.5"
+                      }`}
                     >
                       Proceed to Checkout
                     </button>
+
 
                     <Link
                       href="/"

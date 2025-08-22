@@ -10,10 +10,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 // ];
 
 const SUB_FILTERS_DEFAULT = [
-  "GK & Current Affairs",
-  "Teaching Aptitude (REET/CTET)",
-  "Banking (IBPS, SBI, RBI)",
-  "Defence (NDA, CDS, AFCAT)",
+  "All India Exams",
+  "Rajasthan Exams",
+  "current Affairs",
+  "3 grade Exams",
 ];
 
 
