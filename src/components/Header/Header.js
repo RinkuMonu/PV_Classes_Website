@@ -404,9 +404,9 @@ export default function Header() {
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {cart?.map((item) => (
+                      {cart?.map((item,index) => (
                         <div
-                          key={item?._id}
+                          key={index}
                           className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
                         >
                           {/* Product Image */}
@@ -577,9 +577,9 @@ export default function Header() {
               </div>
             ) : (
               <div className="space-y-6">
-                {cart?.map((item) => (
+                {cart?.map((item,index) => (
                   <div
-                    key={item?._id}
+                    key={index}
                     className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-[#009FE3]/20 bg-gradient-to-r from-white to-[#009FE3]/5 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-[#009FE3]/40"
                   >
                     {/* Product Image */}
@@ -704,9 +704,9 @@ export default function Header() {
 
         {/* Scrollable Content */}
         <div className="overflow-y-auto h-[calc(100%-88px)] p-4 space-y-4 custom-scrollbar">
-          {Object.keys(examData).map((category) => (
+          {Object.keys(examData).map((category,index) => (
             <div
-              key={category?._id}
+              key={index}
               className="bg-gradient-to-r from-[#009FE3]/5 to-[#87B105]/5 rounded-xl shadow-sm border border-[#009FE3]/20"
             >
               {/* Category */}
@@ -721,8 +721,8 @@ export default function Header() {
               {/* Tabs */}
               {activeCategory === category && (
                 <div className="mt-2 pl-4 space-y-2 pb-2">
-                  {Object.keys(examData[category].tabs).map((tab) => (
-                    <div key={tab?._id} className="rounded-lg">
+                  {Object.keys(examData[category].tabs).map((tab,index) => (
+                    <div key={index} className="rounded-lg">
                       <button
                         onClick={() => toggleTab(category, tab)}
                         className="w-full flex justify-between items-center px-3 py-2 text-sm font-semibold text-[#204972] hover:bg-[#009FE3]/10 rounded-lg transition-colors"
@@ -733,9 +733,9 @@ export default function Header() {
 
                       {openTabs[`${category}-${tab}`] && (
                         <ul className="mt-2 pl-4 space-y-2 text-sm text-[#204972]">
-                          {examData[category].tabs[tab].map((exam) => (
+                          {examData[category].tabs[tab].map((exam,index) => (
                             <li
-                              key={exam?._id}
+                              key={index}
                               className="hover:text-[#00316B] hover:font-semibold py-1 px-2 hover:bg-[#87B105]/10 rounded cursor-pointer transition-all duration-200"
                               onClick={() => setExamsMenuOpen(false)}
                             >
