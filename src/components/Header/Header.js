@@ -568,7 +568,7 @@ export default function Header() {
                 <h3 className="text-xl font-bold text-[#00316B] mb-3">Your cart is empty</h3>
                 <p className="text-[#204972] mb-8 text-lg">Add some items to get started!</p>
                 <Link
-                  href="/checkout"
+                  href="/"
                   className="flex items-center gap-2 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 bg-gradient-to-r from-[#00316B] to-[#204972] hover:from-[#204972] hover:to-[#009FE3] shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Continue Shopping
