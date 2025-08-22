@@ -461,7 +461,11 @@ export default function TestSeriesUnified() {
           </div>
 
           {/* RIGHT */}
-          <div className="lg:mt-0 mt-6">{sidebar}</div>
+          {!hasAccess && (
+            <div className="lg:mt-0 mt-6">
+              <SidebarCard series={series} hasAccess={hasAccess} />
+            </div>
+          )}
         </div>
       </section>
     );
