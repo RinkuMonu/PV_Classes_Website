@@ -3,8 +3,8 @@ import Link from "next/link"
 
 export default function CourseEnroll() {
   return (
-    <div className="px-4 md:px-10 lg:px-18 py-10">
-      <section className="w-full overflow-hidden p-8 md:p-12 bg-[#dee9f3] rounded-3xl border border-border shadow-xl">
+    <div className="px-4 md:px-6 lg:px-10 py-8">
+      <section className="w-full overflow-hidden p-8 md:p-6 md:px-12 bg-[#dee9f3] rounded-xl border border-border shadow-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12">
           {/* Left Content */}
           <div className="text-center md:text-left space-y-6">

@@ -60,7 +60,9 @@ export default function HomeCoursesSection() {
   }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+
+   <section className="md:px-14 bg-[#edf3f5] py-4 md:py-8">
+     <div className="mx-auto px-8 py-12 bg-white border-2 shadow-lg rounded-lg border-gray-200">
       <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#204972] text-center">
         Explore Popular Courses
       </h2>
@@ -69,5 +71,7 @@ export default function HomeCoursesSection() {
         <CategoryCoursesSection key={cat?._id} category={cat} />
       ))}
     </div>
+   </section>
+
   )
 }

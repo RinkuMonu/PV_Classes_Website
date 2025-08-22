@@ -220,81 +220,85 @@ export default function PyqSlider() {
     }
 
     return (
-        <section className="py-8 px-4 md:px-20">
-            <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
-                <div>
-                    <h2 className="text-3xl font-bold text-[#00316B] mb-2">
-                        Previous <span className="text-[#616606]">Year</span> Papers
-                    </h2>
-                    <div className="w-16 h-1 bg-gradient-to-r from-[#009FE3] to-[#0281AD] rounded-full"></div>
-                </div>
+        <section className="relative py-8 px-4 md:px-20 overflow-hidden">
+    {/* Decorative Circles */}
+    <span className="absolute top-15 left-5 w-20 h-20 bg-[#204972] rounded-full opacity-10 z-0"></span>
+    <span className="absolute bottom-20 right-10 w-32 h-32 bg-[#204972] rounded-full opacity-10 z-0"></span>
+    <span className="absolute top-3 left-5 w-12 h-12 bg-[#204972] rounded-full opacity-10 z-0"></span>
+    <span className="absolute bottom-10 right-1 w-16 h-16 bg-[#204972] rounded-full opacity-10 z-0"></span>
+
+    {/* Section content */}
+    <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20 relative z-10">
+      <div>
+        <h2 className="text-3xl font-bold text-[#00316B] mb-2">
+          Previous <span className="text-[#616606]">Year</span> Papers
+        </h2>
+        <div className="w-16 h-1 bg-gradient-to-r from-[#009FE3] to-[#0281AD] rounded-full"></div>
+      </div>
+    </div>
+
+    <Swiper
+      modules={[Autoplay, Pagination, Navigation]}
+      spaceBetween={20}
+      slidesPerView={1}
+      autoplay={{ delay: 3000, disableOnInteraction: false }}
+      pagination={{
+        clickable: true,
+        el: ".pyq-pagination",
+        bulletClass: "swiper-pagination-bullet",
+        bulletActiveClass: "swiper-pagination-bullet-active",
+      }}
+      navigation={{
+        nextEl: ".pyq-next",
+        prevEl: ".pyq-prev",
+      }}
+      breakpoints={{
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      }}
+      style={{ paddingBottom: "50px" }}
+      className="relative z-10"
+    >
+      {pyqs?.map((pyq, idx) => (
+        <SwiperSlide key={pyq?._id || idx}>
+          <div className="relative rounded-xl shadow-md p-5 bg-white flex flex-col justify-between h-full transition-transform duration-300 hover:shadow-lg">
+
+            <h3 className="text-lg font-semibold text-[#00316B] mb-2">
+              {pyq?.exam || "Unnamed Exam"}
+            </h3>
+
+
+            <p className="text-sm text-gray-600 mb-3 line-clamp-3 flex-grow">
+              {pyq?.description || "No description available."}
+            </p>
+
+            <span className="inline-block text-xs bg-blue-100 text-[#00316B] px-3 py-1 rounded-full mb-4">
+              {pyq?.category || "General"}
+            </span>
+
+
+            <div className="flex justify-between items-center mt-4">
+              <button
+                onClick={() => handleDownload(pyq?.pdfUrl, pyq?.exam)}
+                className="flex items-center gap-2 text-white bg-[#204972] px-3 py-2 rounded-lg hover:bg-[#616602] transition z-10 relative"
+              >
+                <FaDownload /> Download
+              </button>
+              <button
+                onClick={() => handleShare(pyq)}
+                className="flex items-center gap-2 text-[#00316B] hover:text-blue-700 transition z-10 relative"
+              >
+                <FaShareAlt /> Share
+              </button>
             </div>
-
-            <Swiper
-                modules={[Autoplay, Pagination, Navigation]}
-                spaceBetween={20}
-                slidesPerView={1}
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
-                pagination={{
-                    clickable: true,
-                    el: ".pyq-pagination",
-                    bulletClass: "swiper-pagination-bullet",
-                    bulletActiveClass: "swiper-pagination-bullet-active",
-                }}
-                navigation={{
-                    nextEl: ".pyq-next",
-                    prevEl: ".pyq-prev",
-                }}
-                breakpoints={{
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                }}
-                style={{ paddingBottom: "50px" }}
-            >
-                {pyqs?.map((pyq, idx) => (
-                    <SwiperSlide key={pyq?._id || idx}>
-                        <div className="relative border rounded-xl shadow-md p-5 bg-white flex flex-col justify-between h-full transition-transform duration-300 hover:shadow-lg">
-                            {/* Exam Name */}
-                            <h3 className="text-lg font-semibold text-[#00316B] mb-2">
-                                {pyq?.exam || "Unnamed Exam"}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-3 flex-grow">
-                                {pyq?.description || "No description available."}
-                            </p>
-
-                            {/* Category */}
-                            <span className="inline-block text-xs bg-blue-100 text-[#00316B] px-3 py-1 rounded-full mb-4">
-                                {pyq?.category || "General"}
-                            </span>
-
-                            {/* Actions */}
-                            <div className="flex justify-between items-center mt-4">
-                                <button
-                                    onClick={() => handleDownload(pyq?.pdfUrl, pyq?.exam)}
-                                    className="flex items-center gap-2 text-white bg-green-800 px-3 py-2 rounded hover:bg-green-900 transition z-10 relative"
-                                >
-                                    <FaDownload /> Download
-                                </button>
-                                <button
-                                    onClick={() => handleShare(pyq)}
-                                    className="flex items-center gap-2 text-[#00316B] hover:text-blue-700 transition z-10 relative"
-                                >
-                                    <FaShareAlt /> Share
-                                </button>
-                            </div>
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-
-            {/* Custom pagination */}
-            <div
-                className="pyq-pagination flex justify-center mt-4 space-x-2"
-                style={{ position: "relative", zIndex: 10 }}
-            />
-        </section>
-    );
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+ <div
+      className="pyq-pagination flex justify-center mt-4 space-x-2 relative z-10"
+    />
+  </section>
+);
 }
