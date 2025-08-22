@@ -1646,7 +1646,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Cart Mode Selection */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Select what to add to cart</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div 
@@ -1716,7 +1716,7 @@ export default function CourseDetailsPage() {
 
             {/* Combo Items Section with Selection */}
             {course.comboItems && course.comboItems.length > 0 && (cartMode === "combo" || cartMode === "both") && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-bold text-gray-900">Select Combo Items</h2>
                   <div className="flex items-center">
@@ -1786,14 +1786,14 @@ export default function CourseDetailsPage() {
               </div>
             )}
 
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore Content</h2>
               <h1 className="text-3xl text-gray-900 mb-2">{course?.title}</h1>
               <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
             </div>
 
             {/* Our Features */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Our features</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {course.features?.map((feature, i) => (
@@ -1806,7 +1806,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Explore Related Topics */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Explore related topics</h2>
               <div className="flex flex-wrap gap-2">
                 {["Cell Biology", "Human Physiology", "Plant Physiology", "Genetics"].map((topic, i) => (
@@ -1821,7 +1821,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Course Content */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden mt-6">
               <div className="border-b p-6">
                 <h2 className="text-2xl font-bold text-gray-900">Course content</h2>
                 <p className="text-gray-600 mt-1">
@@ -1923,7 +1923,7 @@ export default function CourseDetailsPage() {
             )}
 
             {/* Requirements */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Requirements</h2>
               <ul className="list-disc pl-5 text-gray-700 space-y-2">
                 <li>Basic understanding of biology concepts</li>
