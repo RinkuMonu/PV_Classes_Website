@@ -81,7 +81,7 @@
 //   return (
 //     <div className="mb-16">
 
-          
+
 
 //                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
 //                             <div>
@@ -342,7 +342,7 @@ export default function CategoryCoursesSection({ category }) {
               <Link
                 href={`/courses/${course?._id}`}
                 key={course?._id}
-                className="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="group border border-gray-200 rounded-xl bg-white overflow-hidden shadow-xl transition-all duration-300 hover:-translate-y-2"
               >
                 {course?.imagesFullPath?.length > 0 ? (
                   <div className="overflow-hidden">
