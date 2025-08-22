@@ -21,8 +21,13 @@ import axiosInstance from "../axios/axiosInstance";
 function AddressShipping() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [oldTotalPrice, setOldTotalPrice] = useState(0);
-  const { cart,clearCart } = useCart();
+  const [disabled,setDisabled] = useState(false);
+  const { cart,clearCart,setCartCount } = useCart();
   const [couponCode, setCouponCode] = useState({ code: "", discount: "",couponId: "" });
+  useEffect(() => {
+    setDisabled(!(cart && cart.length > 0));
+  }, [cart]);
+
   const handleApplyCoupon = (discount) => {
     let discountedAmount = oldTotalPrice;
     const value = parseFloat(discount.replace(/[^0-9.]/g, ""));
@@ -58,10 +63,17 @@ function AddressShipping() {
   let total = 0;
   useEffect(() => {
     const total = cart?.reduce(
-      (sum, item) =>
-        sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
+      (sum, item) => {
+        const price =
+          item?.details?.discount_price > 0
+            ? item?.details?.discount_price
+            : item?.details?.price;
+
+        return sum + (price * (item?.quantity || 1));
+      },
       0
     );
+
 
     setTotalAmount(total);
     setOldTotalPrice(total);
@@ -132,11 +144,13 @@ function AddressShipping() {
           }
         );
       }
-;
+      
       // fetchCoupons();
       if (data.message == 'Checkout successful, order created, access granted!') {
         setOrderSuccess(true);
         clearCart();
+        setCartCount(0);
+        setDisabled(false);
       }
     } catch (error) {
       console.error("Checkout failed:", error);
@@ -578,7 +592,13 @@ console.log("totalOrder = ", totalOrder);
                           </h4>
                           <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
                           <p className="font-semibold text-[#384D89] text-sm">
-                            ₹{item?.details?.discount_price * item?.quantity}
+                            ₹{
+                              (
+                                (item?.details?.discount_price > 0
+                                  ? item?.details?.discount_price
+                                  : item?.details?.price) * (item?.quantity || 1)
+                              )?.toLocaleString()
+                            }
                           </p>
                         </div>
                       </div>
@@ -642,7 +662,7 @@ console.log("totalOrder = ", totalOrder);
                       />
                       <button
                         onClick={() => handleApplyCoupon(couponCode.discount)}
-                        disabled={cart?.length === 0}
+                        disabled={disabled}
                         className={`text-sm px-4 py-2 rounded-lg transition ${
                           !couponCode.code?.trim()
                             ? "bg-gray-400 cursor-not-allowed"
@@ -693,7 +713,7 @@ console.log("totalOrder = ", totalOrder);
                   <div className="space-y-4">
                     <button
                       onClick={checkout}
-                      disabled={cart?.length === 0}
+                      disabled={disabled}
                       className={`block w-full py-4 px-6 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl cursor-pointer ${
                         cart?.length === 0
                           ? "bg-gray-400 cursor-not-allowed"
