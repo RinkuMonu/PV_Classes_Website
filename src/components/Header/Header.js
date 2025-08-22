@@ -188,9 +188,17 @@ export default function Header() {
 
   // const cartToDisplay = isLoggedIn ? cartItems : localCart;
   const total = cart?.reduce(
-    (sum, item) => sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
-    0
-  );
+  (sum, item) => {
+    const price =
+      item?.details?.discount_price > 0
+        ? item?.details?.discount_price
+        : item?.details?.price;
+
+    return sum + (price * (item?.quantity || 1));
+  },
+  0
+);
+
 
   console.log("total = ", total);
   return (
@@ -468,7 +476,13 @@ export default function Header() {
                               </div>
 
                               <span className="text-sm font-medium text-gray-700 flex justify-end">
-                                Total: ₹{(item?.details?.discount_price * item?.quantity).toLocaleString()}
+                                Total: ₹{
+                                    (
+                                      (item?.details?.discount_price > 0
+                                        ? item?.details?.discount_price
+                                        : item?.details?.price) * (item?.quantity || 1)
+                                    )?.toLocaleString()
+                                  }
                               </span>
                             </div>
                           </div>
@@ -484,7 +498,7 @@ export default function Header() {
                                 <span className="text-gray-400">({cart?.length} items)</span>
                               </span>
                               <span className="text-sm font-semibold text-gray-800">
-                                ₹{total.toLocaleString()}
+                                ₹{total?.toLocaleString()}
                               </span>
                             </div>
 
@@ -495,7 +509,7 @@ export default function Header() {
 
                             <div className="border-t border-dashed border-gray-300 pt-3 flex justify-between text-base font-bold text-gray-900">
                               <span>Total</span>
-                              <span>₹{total.toLocaleString()}</span>
+                              <span>₹{total?.toLocaleString()}</span>
                             </div>
                           </div>
 
@@ -606,7 +620,11 @@ export default function Header() {
 
                       <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                         <span className="font-bold text-[#87B105] text-lg">
-                          ₹{item?.details?.discount_price.toLocaleString()}
+                         ₹{(item?.details?.discount_price && item?.details?.discount_price > 0
+                            ? item?.details?.discount_price
+                            : item?.details?.price
+                          )?.toLocaleString()}
+
                         </span>
                         <button
                           onClick={() => removeFromCart(item?.itemId)}
@@ -638,7 +656,14 @@ export default function Header() {
                         </div>
 
                         <span className="text-sm font-bold text-[#00316B] flex justify-end">
-                          Total: ₹{(item?.details?.discount_price * item?.quantity).toLocaleString()}
+                          Total: ₹{
+                            (
+                              (item?.details?.discount_price > 0
+                                ? item?.details?.discount_price
+                                : item?.details?.price) * (item?.quantity || 1)
+                            )?.toLocaleString()
+                          }
+
                         </span>
                       </div>
                     </div>
@@ -652,7 +677,7 @@ export default function Header() {
                         <span className="font-medium">
                           Subtotal <span className="text-[#204972]/70">({cart?.length} items)</span>
                         </span>
-                        <span className="text-lg font-bold text-[#00316B]">₹{total.toLocaleString()}</span>
+                        <span className="text-lg font-bold text-[#00316B]">₹{total?.toLocaleString()}</span>
                       </div>
 
                       <div className="flex justify-between text-sm text-[#204972]">
@@ -662,7 +687,7 @@ export default function Header() {
 
                       <div className="border-t-2 border-dashed border-[#009FE3]/30 pt-4 flex justify-between text-xl font-bold text-[#00316B]">
                         <span>Total</span>
-                        <span>₹{total.toLocaleString()}</span>
+                        <span>₹{total?.toLocaleString()}</span>
                       </div>
                     </div>
 
