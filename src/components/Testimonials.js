@@ -150,6 +150,23 @@ export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if window is defined (client-side)
+    if (typeof window !== "undefined") {
+      const checkIsMobile = () => setIsMobile(window.innerWidth < 768);
+
+      // Initial check
+      checkIsMobile();
+
+      // Add event listener for window resize
+      window.addEventListener("resize", checkIsMobile);
+
+      // Cleanup
+      return () => window.removeEventListener("resize", checkIsMobile);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -186,7 +203,7 @@ export default function Testimonials() {
     }
   };
 
-  // ✅ show 3 testimonials at a time
+  // ✅ show 1 testimonial on mobile, 3 on desktop
   const getVisibleTestimonials = () => {
     if (testimonials?.length <= 3) return testimonials;
 
@@ -194,7 +211,6 @@ export default function Testimonials() {
     for (let i = 0; i < 3; i++) {
       visible.push(testimonials?.[(currentIndex + i) % testimonials?.length]);
     }
-    return visible;
   };
 
   return (
@@ -222,7 +238,7 @@ export default function Testimonials() {
           {getVisibleTestimonials()?.map((item, index) => (
             <div
               key={item?._id || index}
-              className="bg-white rounded-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-[#616606] relative overflow-hidden group"
+              className="bg-white rounded-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-[#616606] relative overflow-hidden group mx-auto w-full max-w-md md:max-w-none"
             >
               <div className="absolute top-4 right-4 text-[#204972]/10 text-6xl font-serif">"</div>
 
