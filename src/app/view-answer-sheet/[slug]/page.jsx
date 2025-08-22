@@ -1,7 +1,7 @@
 "use client";
 
 import axiosInstance from "../../axios/axiosInstance";
-import { useParams,useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AnswerSheetPage() {
@@ -9,64 +9,68 @@ export default function AnswerSheetPage() {
   const id = params?.slug || params?.id;
   const searchParams = useSearchParams();
   const testId = searchParams.get("testId");
-  console.log("test id = ",testId);
   const [loading, setLoading] = useState(true);
   const [testSeriesData, setTestSeriesData] = useState(null);
   const [activeTestId, setActiveTestId] = useState(null);
   const [studentName, setStudentName] = useState("Student");
   const [date, setDate] = useState(new Date().toLocaleDateString());
-  useEffect(()=>{
-    setActiveTestId(testId);
-  },[testId]);
- useEffect(() => {
-  if (!id) {
-    setLoading(false);
-    return;
-  }
 
-  const fetchAnswerSheet = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `/test-series/get-answer-sheet/${id}`
-      );
-
-      setTestSeriesData(response.data.data);
-
-      const testsData = response.data.data.tests || [];
-
-      if (testsData.length > 0) {
-        let selectedTest;
-
-        if (testId) {
-          // ✅ if query param testId exists, pick that test
-          selectedTest = testsData.find((t) => t._id === testId);
-        }
-
-        if (!selectedTest) {
-          // ✅ otherwise fallback to the first test
-          selectedTest = testsData[0];
-        }
-
-        setActiveTestId(selectedTest._id);
-
-        if (selectedTest.attempt?.createdAt) {
-          setDate(new Date(selectedTest.attempt.createdAt).toLocaleDateString());
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching answer sheet:", error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (testId) {
+      setActiveTestId(testId);
     }
-  };
+  }, [testId]);
 
-  fetchAnswerSheet();
-}, [id, testId]);
+  useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
+    const fetchAnswerSheet = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/test-series/get-answer-sheet/${id}`
+        );
+
+        setTestSeriesData(response.data.data);
+
+        const testsData = response.data.data.tests || [];
+        const attemptedTests = testsData.filter(test => test.attempt); // Only tests with attempts
+
+        if (attemptedTests.length > 0) {
+          let selectedTest;
+
+          if (testId) {
+            // ✅ if query param testId exists, pick that test (if it has attempt)
+            selectedTest = attemptedTests.find((t) => t._id === testId);
+          }
+
+          if (!selectedTest) {
+            // ✅ otherwise fallback to the first attempted test
+            selectedTest = attemptedTests[0];
+          }
+
+          setActiveTestId(selectedTest._id);
+
+          if (selectedTest.attempt?.createdAt) {
+            setDate(new Date(selectedTest.attempt.createdAt).toLocaleDateString());
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching answer sheet:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnswerSheet();
+  }, [id, testId]);
 
   const series = testSeriesData || {};
   const tests = series.tests || [];
-  const currentTest = tests.find(test => test._id === activeTestId) || {};
+  const attemptedTests = tests.filter(test => test.attempt); // Only tests with attempts
+  const currentTest = attemptedTests.find(test => test._id === activeTestId) || {};
 
   if (loading) {
     return (
@@ -82,6 +86,20 @@ export default function AnswerSheetPage() {
         <p className="text-lg text-red-600">
           Error loading answer sheet data or invalid ID.
         </p>
+      </div>
+    );
+  }
+
+  // Show message if no tests have been attempted
+  if (attemptedTests.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-xl font-semibold mb-4">No Attempted Tests Found</h2>
+          <p className="text-gray-600">
+            You haven't attempted any tests in this series yet.
+          </p>
+        </div>
       </div>
     );
   }
@@ -108,12 +126,12 @@ export default function AnswerSheetPage() {
           </div>
         </div>
 
-        {/* Test Selection - Only show if tests exist */}
-        {tests.length > 0 && (
+        {/* Test Selection - Only show attempted tests */}
+        {attemptedTests.length > 0 && (
           <div className="p-4 border-b">
             <h2 className="text-lg font-semibold mb-2">Select Test</h2>
             <div className="flex flex-wrap gap-2">
-              {tests.map((test) => (
+              {attemptedTests.map((test) => (
                 <button
                   key={test._id}
                   onClick={() => setActiveTestId(test._id)}
