@@ -40,7 +40,7 @@ export default function RajExamBooks() {
   }
 
   return (
-    <section className="px-16 py-12 bg-gradient-to-br from-slate-50 to-blue-50/30">
+    <section className="md:px-16 px-4 py-12 bg-gradient-to-br from-slate-50 to-blue-50/30">
       {Object.entries(booksData).map(([subCatId, subCatData]) => (
         <div key={subCatId} className="mb-12">
           <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
@@ -50,7 +50,7 @@ export default function RajExamBooks() {
             </div>
             <Link
               href={`/book-category/${subCatData?.books?.[0]?.category?._id}`}
-              className="flex items-center bg-[#87B105] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#616602] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="flex items-center bg-[#87B105] text-white px-3 py-2 md:px-6 md:py-3 rounded-lg font-semibold hover:bg-[#616602] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               See All <span className="ml-2 text-lg">→</span>
             </Link>

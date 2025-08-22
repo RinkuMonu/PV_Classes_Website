@@ -49,14 +49,15 @@ export default function CurrentAffairsSlider() {
           </span>{" "}
           with Latest Current Affairs
         </h3>
-        <div className="">
-          <Link
-            href="/current-affairs"
-            className="bg-[#204972] text-white px-8 py-2 rounded-md"
-          >
-            See All <span className="ml-1">→</span>
-          </Link>
-        </div>
+        <div>
+  <Link
+    href="/current-affairs"
+    className="bg-[#204972] text-white px-6 sm:px-8 py-2 rounded-md whitespace-nowrap text-sm sm:text-base"
+  >
+    See All <span className="ml-1">→</span>
+  </Link>
+</div>
+
       </div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#009FE3]/10 to-transparent rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#616602]/10 to-transparent rounded-full blur-3xl"></div>
