@@ -3,6 +3,7 @@
    FILE: app/test-series/[id]/page.jsx
    ========================================================= */
 "use client";
+import { useRouter } from "next/navigation";
 import { useCart } from "../../../components/context/CartContext";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
@@ -18,8 +19,10 @@ import {
   Award,
   CheckCircle,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function TestSeriesUnified() {
+  const router = useRouter();
   const params = useParams();
   const seriesParam = params?.id ?? params?.slug;
   const seriesId = Array.isArray(seriesParam) ? seriesParam[0] : seriesParam;
@@ -44,14 +47,17 @@ export default function TestSeriesUnified() {
   const timerRef = useRef(null);
 
   const [completedTests, setCompletedTests] = useState({});
-
+ console.log(completedTests?._id)
   const [hasAccess, setHasAccess] = useState(false);
-
-
+ const viewTest = (e, testId) => {
+    e.preventDefault();
+    // If you need to send both seriesId and testId, do something like this:
+    router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
+  };
   useEffect(() => {
     (async () => {
       try {
-        const token = localStorage.getItem("token"); // 🔑 localStorage से token लेना
+        const token = localStorage.getItem("token");
         if (!token) {
           setHasAccess(false);
           return;
@@ -76,40 +82,43 @@ export default function TestSeriesUnified() {
   }, [seriesId]);
 
   // ---------------- Fetch details ----------------
-  console.log(series,"serise")
+  console.log(series, "serise");
+  const fetchSeries = async () => {
+    try {
+      const res = await axiosInstance.get(`/test-series/${seriesId}`);
+      if (res.data.success) setSeries(res.data.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load test series.");
+    }
+  };
+
+  // ✅ Call it on mount / when seriesId changes
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axiosInstance.get(`/test-series/${seriesId}`);
-        if (res.data.success) setSeries(res.data.data);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to load test series.");
-      }
-    })();
+    fetchSeries();
   }, [seriesId]);
- 
-useEffect(() => {
-  if (series?.attempts) {
-    const completed = {};
-    // Count attempts per test
-    const attemptCounts = {};
-    
-    series.attempts.forEach(attempt => {
-      if (!attemptCounts[attempt.test_id]) {
-        attemptCounts[attempt.test_id] = 0;
-      }
-      attemptCounts[attempt.test_id]++;
-      
-      // Mark as completed if it's submitted (not just ongoing)
-      if (attempt.status === 'submitted') {
-        completed[attempt.test_id] = true;
-      }
-    });
-    
-    setCompletedTests(completed);
-  }
-}, [series]);
+
+  useEffect(() => {
+    if (series?.attempts) {
+      const completed = {};
+      // Count attempts per test
+      const attemptCounts = {};
+
+      series.attempts.forEach((attempt) => {
+        if (!attemptCounts[attempt.test_id]) {
+          attemptCounts[attempt.test_id] = 0;
+        }
+        attemptCounts[attempt.test_id]++;
+
+        // Mark as completed if it's submitted (not just ongoing)
+        if (attempt.status === "submitted") {
+          completed[attempt.test_id] = true;
+        }
+      });
+
+      setCompletedTests(completed);
+    }
+  }, [series]);
 
   // ---------------- Timer helpers ----------------
   const startTimer = (sec) => {
@@ -246,6 +255,7 @@ useEffect(() => {
     setSelectedOptions([]);
     setNumericAnswer("");
     setResult(null);
+    fetchSeries();
   };
 
   // =================== RENDER ===================
@@ -285,7 +295,9 @@ useEffect(() => {
     </div>
   );
 
-  const sidebar = <SidebarCard series={series} />;
+  const sidebar = !hasAccess && (
+    <SidebarCard series={series} hasAccess={hasAccess} />
+  );
 
   // ---------- Mode: DETAILS ----------
   if (mode === "details") {
@@ -342,7 +354,12 @@ useEffect(() => {
 
             {/* Embedded Tests */}
             <div className="bg-white p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Available Tests</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold">Available Tests</h3>
+                <Link href={`/view-answer-sheet/${seriesId}`} className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer">
+                  View All Answer
+                </Link>
+              </div>
               <div className="space-y-3">
                 {(series.tests || []).map((test) => (
                   <div
@@ -376,9 +393,15 @@ useEffect(() => {
                           </button>
                           <button
                             onClick={() => handleStart(test)}
-                            className="px-3 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 text-sm"
+                            className="px-3 py-2 rounded-lg cursor-pointer bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 text-sm"
                           >
                             Retake
+                          </button>
+                          <button onClick={(e)=>viewTest(e,test?._id)} 
+
+                            className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
+                          >
+                            View Answer
                           </button>
                         </div>
                       ) : (
@@ -558,7 +581,7 @@ useEffect(() => {
 }
 
 /* ---------- Sidebar Card ---------- */
-function SidebarCard({ series }) {
+function SidebarCard({ series, hasAccess }) {
   const { addToCart, loading } = useCart();
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
@@ -566,6 +589,21 @@ function SidebarCard({ series }) {
     if (response?.success) toast.success(response.message);
     else toast.error(response?.message || "Failed to add");
   };
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: series?.title,
+          text: "Check out this test series!",
+          url: window.location.href,
+        })
+        .catch((err) => console.error("Share failed:", err));
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
   const img =
     series?.image_urls?.[0] ||
     (series?.images?.[0]
@@ -618,13 +656,18 @@ function SidebarCard({ series }) {
             </div>
           </div>
         </div>
-        <button
-          onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-          className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl"
+        {!hasAccess && (
+          <button
+            onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl"
+          >
+            Add to Library
+          </button>
+        )}
+        <div
+          onClick={handleShare}
+          className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer"
         >
-          Add to Library
-        </button>
-        <div className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer">
           <Share2 size={18} className="text-blue-500" />
           <span className="text-sm font-medium">Share</span>
         </div>
