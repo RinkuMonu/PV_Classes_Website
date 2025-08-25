@@ -7,30 +7,30 @@ export default function ExamCategory() {
     {
       title: "3rd Grade",
       tags: ["Level 1", "Level 2", "Level 3"],
-      icon: <FaFlask className="text-6xl text-pink-500" />,
-      bg: "bg-pink-50",
+      icon: <FaFlask className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
 link: "/courses",
     },
     {
       title: "Current Affairs",
       tags: ["GK", "Indian Economy", "Geography"],
-      icon: <FaGraduationCap className="text-6xl text-yellow-500" />,
-      bg: "bg-yellow-50",
+      icon: <FaGraduationCap className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
       link: "/current-affairs",
     },
 
     {
       title: "All India Exam",
       tags: ["Central", "Politics"],
-      icon: <FaLandmark className="text-6xl text-indigo-500" />,
-      bg: "bg-indigo-50",
+      icon: <FaLandmark className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
       link: "/courses",
     },
     {
       title: "Govt Job Exams",
       tags: ["SSC", "Banking"],
-      icon: <FaBriefcase className="text-6xl text-green-500" />,
-      bg: "bg-green-50",
+      icon: <FaBriefcase className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
       link: "/courses",
     },
 
