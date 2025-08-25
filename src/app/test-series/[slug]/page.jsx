@@ -359,7 +359,7 @@ export default function TestSeriesUnified() {
                 {hasAccess && Object.keys(completedTests).length > 0 && (
                   <Link
                     href={`/view-answer-sheet/${seriesId}`}
-                    className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                    className="px-2 py-2 bg-[#00316B] text-white rounded-lg hover:bg-[#00316B]/80 transition cursor-pointer"
                   >
                     View All Answer
                   </Link>
@@ -474,32 +474,42 @@ export default function TestSeriesUnified() {
   // ---------- Mode: ATTEMPT ----------
   if (mode === "attempt") {
     return (
-      <div className="max-w-3xl mx-auto p-6 space-y-4">
+      <div className="max-w-4xl mx-auto p-6 space-y-4 min-h-[50vh]">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">
             {selectedTest?.title} — Question {index + 1} / {total}
           </h2>
-          <div className="font-mono text-xl">
-            {String(timeLeft).padStart(2, "0")}s
-          </div>
+        <div className="flex items-center justify-center p-3 rounded-full bg-[#00316B]/90 text-white text-xl font-bold shadow-md">
+  {String(timeLeft).padStart(2, "0")}s
+</div>
+
         </div>
 
         {q ? (
-          <div className="p-4 border rounded-lg bg-white">
-            <div className="mb-3 text-gray-800">{q.statement}</div>
+          <div className="p-4 shadow-lg rounded-lg bg-white">
+            <div className="mb-3 text-gray-800 font-semibold">{q.statement}</div>
 
             {q.type?.includes("mcq") && (
               <div className="space-y-2">
                 {q.options?.map((op) => (
                   <label
                     key={op.key}
-                    className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                    className="flex items-center gap-2 p-3 border border-[#00316B] rounded-lg cursor-pointer hover:bg-gray-50"
                   >
                     <input
                       type={q.type === "mcq_single" ? "radio" : "checkbox"}
                       name="opt"
                       checked={selectedOptions.includes(op.key)}
                       onChange={() => toggleOption(op.key)}
+                        className="
+    h-5 w-5 
+    text-[#00316B] 
+    border-gray-300 
+    focus:ring-2 focus:ring-[#00316B] focus:ring-offset-1
+    rounded cursor-pointer
+    transition-all duration-200
+  "
+
                     />
                     <span className="font-medium">{op.key}.</span>
                     <span>{op.text}</span>
@@ -526,20 +536,20 @@ export default function TestSeriesUnified() {
 
         <div className="flex justify-between">
           <button
-            className="px-4 py-2 rounded-lg border"
+            className="px-4 py-2 rounded-lg bg-[#00316B] text-white"
             onClick={refreshCurrent}
           >
             Refresh
           </button>
           <div className="space-x-2">
             <button
-              className="px-4 py-2 rounded-lg border"
+              className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
               onClick={handleFinish}
             >
               Finish
             </button>
             <button
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+              className="px-4 py-2 rounded-lg bg-[#00316B] text-white"
               onClick={handleNext}
             >
               {index + 1 === total ? "Submit" : "Save & Next"}
@@ -553,36 +563,48 @@ export default function TestSeriesUnified() {
   // ---------- Mode: RESULT ----------
   if (mode === "result") {
     return (
-      <div className="max-w-3xl mx-auto p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Result — {selectedTest?.title}</h2>
-        {result ? (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Stat label="Total" value={result.totalQuestions} />
-              <Stat label="Correct" value={result.correctCount} />
-              <Stat label="Wrong" value={result.wrongCount} />
-              <Stat label="Unattempted" value={result.unattemptedCount} />
-            </div>
-            <div className="p-4 border rounded-lg">
-              <div className="text-lg">
-                Total Marks:{" "}
-                <span className="font-bold">{result.totalMarks}</span>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="p-4 border rounded-lg">No result data.</div>
-        )}
+  <div className="max-w-3xl mx-auto p-6 space-y-6">
+  <h2 className="text-3xl font-extrabold text-gray-800">
+    Result — <span className="text-[#00316B]">{selectedTest?.title}</span>
+  </h2>
 
-        <div className="flex gap-3">
-          <button
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg"
-            onClick={backToDetails}
-          >
-            Back to Series
-          </button>
+  {result ? (
+    <>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Stat label="Total" value={result.totalQuestions} />
+        <Stat label="Correct" value={result.correctCount} />
+        <Stat label="Wrong" value={result.wrongCount} />
+        <Stat label="Unattempted" value={result.unattemptedCount} />
+      </div>
+
+      {/* Marks Section */}
+      <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+        <div className="text-lg text-gray-700">
+          Total Marks:{" "}
+          <span className="font-bold text-[#00316B] text-xl">
+            {result.totalMarks}
+          </span>
         </div>
       </div>
+    </>
+  ) : (
+    <div className="p-5 rounded-xl border border-gray-200 shadow-sm text-gray-500">
+      No result data.
+    </div>
+  )}
+
+  {/* Actions */}
+  <div className="flex gap-3 pt-4 justify-end">
+    <button
+      className="bg-[#00316B] hover:bg-[#00316B]/80 text-white px-5 py-3 rounded-xl font-medium shadow-md transition"
+      onClick={backToDetails}
+    >
+      Back to Series
+    </button>
+  </div>
+</div>
+
     );
   }
 
@@ -687,10 +709,25 @@ function SidebarCard({ series, hasAccess }) {
 
 /* ---------- Small stat tile ---------- */
 function Stat({ label, value }) {
+  // Map labels to Tailwind color classes
+  const colors = {
+    Total: "text-[#00316B]",        // default blue
+    Correct: "text-green-700",
+    Wrong: "text-red-700",
+    Unattempted: "text-gray-700",
+  };
+
   return (
-    <div className="p-4 rounded-lg border bg-white">
-      <div className="text-sm text-gray-500">{label}</div>
-      <div className="text-2xl font-bold">{value}</div>
+    <div className="p-5 rounded-xl bg-white shadow hover:shadow-md transition-shadow">
+      <div className="text-sm font-medium text-gray-500">{label}</div>
+      <div
+        className={`text-3xl font-extrabold mt-1 ${
+          colors[label] || "text-[#00316B]"
+        }`}
+      >
+        {value}
+      </div>
     </div>
   );
 }
+

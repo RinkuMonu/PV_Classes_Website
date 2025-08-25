@@ -217,35 +217,36 @@ export default function TestSeriesHome() {
                                 return (
                                     <div
                                         key={series?._id}
-                                        className="relative w-full rounded-2xl shadow-md border border-gray-100 overflow-hidden bg-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                                        className="relative w-full rounded-2xl border border-gray-100 bg-white shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
                                     >
                                         <Link href={`/test-series/${series?._id || ""}`} className="block">
-                                            {/* Card Top */}
-                                            <div className="px-4 pt-4">
+                                            {/* Card Header */}
+                                            <div className="px-5 pt-5">
                                                 <div className="flex justify-between items-start">
-                                                    <h2 className="text-lg font-bold leading-snug line-clamp-2 text-gray-800">
+                                                    <h2 className="text-lg md:text-xl font-semibold leading-snug text-gray-800 line-clamp-2">
                                                         {series?.title || "Untitled Test Series"}
                                                     </h2>
+                                                       {series?.total_tests > 0 && (
+                                                        <div className="absolute top-3 right-3 bg-gradient-to-r from-[#1d3a5f] to-[#204972] text-white text-xs md:text-sm px-3 py-0 rounded-full font-medium shadow-md">
+                                                            {series?.total_tests} Tests
+                                                        </div>
+                                                    )}
                                                     {series?.title_tag && (
-                                                        <span className="bg-gradient-to-r from-[#204972] to-[#204972] text-xs px-2 py-1 md:py-2 rounded-full font-semibold text-white shadow-sm">
+                                                        <span className="absolute top-10 right-3 bg-gradient-to-r from-[#1d3a5f] to-[#204972] text-[11px] md:text-xs px-3 py-1 rounded-full font-semibold text-white shadow">
                                                             {series?.title_tag}
                                                         </span>
                                                     )}
                                                 </div>
 
                                                 {/* Image */}
-                                                <div className="relative w-full h-52 mt-4">
+                                                <div className="relative w-full h-56 mt-4 group">
                                                     <Image
                                                         src={imgSrc}
                                                         alt={series?.title || "Test Series"}
                                                         fill
-                                                        className="object-cover rounded-xl hover:scale-105 transition-transform duration-500"
+                                                        className="object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                                                     />
-                                                    {series?.total_tests > 0 && (
-                                                        <div className="absolute bottom-3 left-3 bg-[#204972] text-white px-3 py-1 md:py-2 text-xs font-bold rounded-full shadow-md">
-                                                            {series?.total_tests} Tests
-                                                        </div>
-                                                    )}
+                                                 
                                                 </div>
 
                                                 {/* Validity */}
@@ -256,18 +257,18 @@ export default function TestSeriesHome() {
                                                     </span>
                                                 </p>
 
-                                                {/* Price */}
-                                                <div className="px-1 pb-5 mt-2">
+                                                {/* Price Section */}
+                                                <div className="px-1 mt-3 mb-20">
                                                     <div className="flex justify-between items-center">
                                                         <div>
-                                                            <span className="text-[#204972] font-bold text-lg">
+                                                            <span className="text-[#204972] font-bold text-2xl">
                                                                 ₹{series?.discount_price || 0}
                                                             </span>
                                                             <span className="text-gray-400 line-through text-sm ml-2">
                                                                 ₹{series?.price || 0}
                                                             </span>
                                                         </div>
-                                                        <div className="text-green-700 text-xs font-semibold bg-green-50 px-2 py-1 rounded-md">
+                                                        <div className="text-green-700 text-sm font-bold bg-green-100 px-3 py-1 rounded-lg">
                                                             {discount}% OFF
                                                         </div>
                                                     </div>
@@ -275,16 +276,17 @@ export default function TestSeriesHome() {
                                             </div>
                                         </Link>
 
-                                        {/* Add to Cart */}
+                                        {/* Big Add to Cart Button */}
                                         <button
                                             onClick={(e) => handleAdd(e, "testSeries", series?._id)}
                                             disabled={loading}
-                                            className="flex items-center justify-center gap-2 absolute bottom-3 right-3 bg-[#788406] px-3 py-1.5 rounded-lg text-white/80 text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
+                                            className="w-[90%] mx-auto mb-4 flex items-center justify-center gap-2 absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#00316B] px-6 py-2 rounded-xl text-white text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                                         >
-                                            <FaPlus />
-                                            {loading ? "ADDING..." : "ADD"}
+                                            <FaPlus className="text-sm" />
+                                            {loading ? "ADDING..." : "ADD TO CART"}
                                         </button>
                                     </div>
+
                                 );
                             })}
                         </div>
