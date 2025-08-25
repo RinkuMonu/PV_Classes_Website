@@ -54,8 +54,8 @@ export default function Page() {
       </section>
 
       <div className="px-3 md:px-20 py-8">
-        {testSeriesData?.map((examGroup) => (
-          <div key={examGroup?.exam_id} className="mb-12">
+        {testSeriesData?.map((examGroup,index) => (
+          <div key={index} className="mb-12">
             <h2 className="text-2xl text-[#204972] font-bold mb-6">{examGroup?.exam_name}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
