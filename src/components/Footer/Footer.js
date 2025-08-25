@@ -1,12 +1,29 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
 import { FaLocationDot, FaArrowRightLong } from "react-icons/fa6";
 import { IoMail } from "react-icons/io5";
 import { IoMdCall } from "react-icons/io";
 import Link from "next/link";
+import axiosInstance from "../../app/axios/axiosInstance";
 
 export default function Footer() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axiosInstance.get("/book-categories/");
+        setCategories(res.data.data);
+        console.log(res?.data?.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
   return (
     <>
       <footer className="relative bg-gradient-to-br from-[#616602] to-[#00316B] text-white">
@@ -18,7 +35,7 @@ export default function Footer() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
                 <div className="lg:pl-4">
                   <Image
-                    src="/image/pv-logo.png"
+                    src="/image/pv_footer_logo.png"
                     alt="PV_Classes Logo"
                     width={120}
                     height={60}
@@ -76,6 +93,30 @@ export default function Footer() {
                         Previous Year Questions
                       </Link>
                     </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/test-series"
+                        className="hover:text-[#009fe3]"
+                      >
+                        Online Test Series
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link href="/#" className="hover:text-[#009fe3]">
+                        Free Study Material
+                      </Link>
+                    </li>
+                   
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link href="/#" className="hover:text-[#009fe3]">
+                        Career Guidance
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link href="/#" className="hover:text-[#009fe3]">
+                        Success Stories
+                      </Link>
+                    </li>
                   </ul>
                 </div>
 
@@ -90,6 +131,11 @@ export default function Footer() {
                         Career
                       </Link>
                     </li> */}
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link href="/about-us" className="hover:text-[#009fe3]">
+                        About Us
+                      </Link>
+                    </li>
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link href="/contact-us" className="hover:text-[#009fe3]">
                         Contact Us
@@ -124,6 +170,19 @@ export default function Footer() {
                         Current Affairs
                       </Link>
                     </li>
+                    {categories.map((cat) => (
+                      <li
+                        key={cat._id}
+                        className="group transition-all duration-200 hover:pl-2"
+                      >
+                        <Link
+                          href={`/courses`}
+                          className="hover:text-[#009fe3]"
+                        >
+                          {cat.name}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                   <div className="flex gap-4 mt-6 md:mt-12">
                     <Link
