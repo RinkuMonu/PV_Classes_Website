@@ -12,8 +12,8 @@ import Link from "next/link";
 export default function ExamCategory() {
   const categories = [
     {
-      title: "defence Exams",
-      tags: ["Level 1", "Level 2", "Level 3"],
+      title: "Defence Exams",
+      tags: ["NDA", "SSB"],
       icon: <FaFlask className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
 link: "http://localhost:3000/courses?exam=68ac3c02a5a435b640ada61b",
@@ -28,7 +28,7 @@ link: "http://localhost:3000/courses?exam=68ac3c02a5a435b640ada61b",
 
     {
       title: "Banking Exams",
-      tags: ["Central", "Politics"],
+      tags: ["SBI", "IBPS", "RBI"],
       icon: <FaLandmark className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
       link: "http://localhost:3000/courses?exam=68ac35d6a5a435b640ada5f3",
