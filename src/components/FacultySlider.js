@@ -87,7 +87,7 @@ export default function FacultySlider() {
 
       <style jsx global>{`
         .slick-dots {
-          bottom: 25px !important;
+          bottom: -20px !important;
         }
         .slick-dots li {
           margin: -8px 8px !important;

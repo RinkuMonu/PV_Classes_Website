@@ -308,7 +308,7 @@ export default function CategoryCoursesSection({ category }) {
           {/* Exam Types */}
           {examTypes?.length > 0 && (
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">Exam Types</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">Exam Types</h3>
               <div className="flex flex-wrap gap-2">
                 {examTypes?.map((type) => (
                   <button
@@ -330,7 +330,7 @@ export default function CategoryCoursesSection({ category }) {
           {/* Exams */}
           {exams?.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">Exams</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">Exams</h3>
               <div className="flex flex-wrap gap-2">
                 {exams?.map((exam) => (
                   <button
@@ -371,7 +371,7 @@ export default function CategoryCoursesSection({ category }) {
             ))}
           </div>
         ) : courses?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses?.map((course) => (
               <Link
                 href={`/courses/${course?._id}`}

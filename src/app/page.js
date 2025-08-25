@@ -30,13 +30,12 @@ export default function Home() {
       <TestSeriesHome />
 
       <CurrentAffairs />
-      {/* <TrustedPlatform /> */}
       <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
       <PyqSlider />
       <ExamCategory />
-      <TrustedPlatform />
+      {/* <TrustedPlatform /> */}
       <Testimonials />
 
     </>

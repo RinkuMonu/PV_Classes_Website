@@ -40,7 +40,7 @@ export default function LearningResources() {
         <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl text-[#204972] font-bold mb-3">
           Learning Resources
         </h2>
-        <p className="text-gray-600 text-base sm:text-lg md:text-xl max-w-2xl mx-auto md:mx-0 mb-8">
+        <p className="text-gray-600 text-lg sm:text-lg md:text-xl mx-auto md:mx-0 mb-8">
           A diverse array of learning materials to enhance your educational journey.
         </p>
       </div>
