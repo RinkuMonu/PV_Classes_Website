@@ -178,7 +178,7 @@ export default function RajExamBooks() {
             </div>
             <Link
               href={`/book-category/${subCatData?.books?.[0]?.category?._id || ""}`}
-              className="flex items-center bg-[#87B105] text-white md:px-6 md:py-3 px-3 py-1 rounded-lg font-semibold hover:bg-[#616602] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="flex items-center bg-[#87B105] text-white md:px-5 md:py-2 px-3 py-1 rounded-lg font-semibold hover:bg-[#616602] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               See All <span className="ml-2 text-lg">→</span>
             </Link>

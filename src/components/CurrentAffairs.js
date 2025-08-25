@@ -233,7 +233,7 @@ export default function CurrentAffairsSlider() {
                   data-aos-delay={index * 100}
                 >
                   <Link href={`/current-affairs/${item?.slug || ""}`}>
-                    <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 bg-white group border border-[#009FE3]/20 hover:border-[#0281AD]/40 backdrop-blur-sm">
+                    <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 bg-white group border border-[#009FE3]/20 hover:border-[#0281AD]/40 backdrop-blur-sm">
                       <div className="absolute inset-0 bg-gradient-to-r from-[#00316B]/5 via-transparent to-[#87B105]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                       <div
