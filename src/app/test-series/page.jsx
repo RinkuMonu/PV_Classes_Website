@@ -32,30 +32,30 @@ export default function Page() {
 
   return (
     <>
-       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-             <div className="absolute inset-0 hidden sm:block">
-               <Image
-                 src="/Image/Banner/test-banner.webp"
-                 alt="Banner Desktop"
-                 fill
-                 className="object-cover object-center"
-                 priority
-               />
-             </div>
-             <div className="absolute inset-0 block sm:hidden">
-               <Image
-                 src="/Image/pv-mobile/test-banner-mob.webp"
-                 alt="Banner Mobile"
-                 fill
-                 className="object-cover object-center"
-                 priority
-               />
-             </div>
-           </section>
+      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+        <div className="absolute inset-0 hidden sm:block">
+          <Image
+            src="/Image/Banner/test-banner.webp"
+            alt="Banner Desktop"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/test-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      </section>
 
       <div className="px-3 md:px-20 py-8">
-        {testSeriesData?.map((examGroup) => (
-          <div key={examGroup?.exam_id} className="mb-10">
+        {testSeriesData?.map((examGroup,index) => (
+          <div key={index} className="mb-10">
             <h2 className="text-2xl text-[#204972] font-bold mb-4">{examGroup?.exam_name}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-2 md:p-6">
@@ -123,18 +123,18 @@ export default function Page() {
                       </div>
                     </Link>
 
-                   <div className="px-4 pb-4 flex">
-  <button
-    onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-    disabled={loading}
-    className="flex bg-[#204972] px-2 py-1 rounded-md text-[#fff] text-sm font-bold shadow"
-  >
-    <span className="mt-1 me-2">
-      <FaPlus />
-    </span>
-    {loading ? "ADDING..." : "ADD"}
-  </button>
-</div>
+                    <div className="px-4 pb-4 flex">
+                      <button
+                        onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+                        disabled={loading}
+                        className="flex bg-[#204972] px-2 py-1 rounded-md text-[#fff] text-sm font-bold shadow"
+                      >
+                        <span className="mt-1 me-2">
+                          <FaPlus />
+                        </span>
+                        {loading ? "ADDING..." : "ADD"}
+                      </button>
+                    </div>
 
                   </div>
                 );

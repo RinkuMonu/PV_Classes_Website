@@ -35,7 +35,7 @@ export default function Home() {
       {/* <BannerImg2 /> */}
       <CTA />
       <PyqSlider />
-      <ExamCategory />
+      {/* <ExamCategory /> */}
       <TrustedPlatform />
       <Testimonials />
 
