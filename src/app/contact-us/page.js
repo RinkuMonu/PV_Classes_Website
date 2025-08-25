@@ -24,26 +24,39 @@ export default function Contact() {
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.firstName.trim() || formData.firstName.length < 2) {
+    // First name validation (only letters, min 2)
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required.";
+    } else if (!/^[A-Za-z]+$/.test(formData.firstName)) {
+      newErrors.firstName = "First name must contain only letters.";
+    } else if (formData.firstName.length < 2) {
       newErrors.firstName = "First name must be at least 2 characters.";
     }
 
-    if (!formData.lastName.trim() || formData.lastName.length < 2) {
+    // Last name validation (only letters, min 2)
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required.";
+    } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
+      newErrors.lastName = "Last name must contain only letters.";
+    } else if (formData.lastName.length < 2) {
       newErrors.lastName = "Last name must be at least 2 characters.";
     }
 
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
 
+    // Phone validation (only numbers & exactly 10 digits)
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required.";
-    } else if (!/^\d{10,}$/.test(formData.phone.replace(/\D/g, ""))) {
-      newErrors.phone = "Enter a valid phone number (at least 10 digits).";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be exactly 10 digits.";
     }
 
+    // Message validation
     if (!formData.message.trim() || formData.message.length < 10) {
       newErrors.message = "Message must be at least 10 characters.";
     }
@@ -52,12 +65,9 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      
-      
       setFormData({
         firstName: "",
         lastName: "",
@@ -68,7 +78,6 @@ export default function Contact() {
       setErrors({});
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,7 +91,7 @@ export default function Contact() {
             We'd love to hear from you. Send us a message and we'll respond as
             soon as possible.
           </p>
-          <div className="flex justify-center space-x-8 opacity-90">
+          {/* <div className="flex justify-center space-x-8 opacity-90">
             <div className="flex items-center">
               <Phone className="w-5 h-5 mr-2" />
               <span>24/7 Support</span>
@@ -95,7 +104,7 @@ export default function Contact() {
               <MapPin className="w-5 h-5 mr-2" />
               <span>Multiple Locations</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -114,11 +123,14 @@ export default function Contact() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Left: Form */}
             <div className="p-8">
-               <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       First name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -132,10 +144,17 @@ export default function Contact() {
                       }`}
                       placeholder="First name"
                     />
-                    {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                    {errors.firstName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.firstName}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Last name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -149,13 +168,20 @@ export default function Contact() {
                       }`}
                       placeholder="Last name"
                     />
-                    {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                    {errors.lastName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.lastName}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -169,12 +195,17 @@ export default function Contact() {
                     }`}
                     placeholder="you@example.com"
                   />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 {/* Phone */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Phone number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -183,17 +214,23 @@ export default function Contact() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
+                    maxLength={10}
                     className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${
                       errors.phone ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="+91-1234567890"
                   />
-                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -207,7 +244,11 @@ export default function Contact() {
                     }`}
                     placeholder="Leave us a message..."
                   />
-                  {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Submit */}
@@ -218,8 +259,12 @@ export default function Contact() {
                     backgroundColor: "#0F437B",
                     "--tw-ring-color": "#13773E",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#13773E")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0F437B")}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#13773E")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#0F437B")
+                  }
                 >
                   Send Message
                 </button>
@@ -242,7 +287,7 @@ export default function Contact() {
         </div>
 
         {/* Our Corporate Offices section */}
-        <div className="mb-16">
+        <div className="mb-16 mt-10">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
             Our Corporate Offices
           </h2>
@@ -260,10 +305,10 @@ export default function Contact() {
               </h3>
               <p className="text-gray-600 mb-4">Speak to our friendly team.</p>
               <a
-                href="mailto:support@utkarsh.com"
+                href="mailto:info@7unique.in"
                 className="text-gray-900 font-medium hover:underline"
               >
-                support@utkarsh.com
+                info@7unique.in
               </a>
             </div>
 
@@ -280,9 +325,11 @@ export default function Contact() {
               </h3>
               <p className="text-gray-600 mb-4">Visit our office HQ.</p>
               <div className="text-gray-900">
-                <p className="font-medium">Utkarsh Bhawan - Near Mandap</p>
-                <p>Restaurant, 9th Chopasani Road, Jodhpur,</p>
-                <p>Rajasthan 342003</p>
+                <p className="font-medium">
+                  Plot No 97, Dakshinpuri - I, Shrikishan
+                </p>
+                <p>Sanganer, Jagatpura, Jaipur Rajasthan,</p>
+                <p>India, 302017</p>
               </div>
             </div>
 
@@ -299,10 +346,10 @@ export default function Contact() {
               </h3>
               <p className="text-gray-600 mb-4">Mon-Sat from 9am to 6pm.</p>
               <a
-                href="tel:+919773366869"
+                href="tel:0141-4511098"
                 className="text-gray-900 font-medium hover:underline"
               >
-                +91-9773366869
+                0141-4511098
               </a>
             </div>
           </div>
