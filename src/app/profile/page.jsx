@@ -347,7 +347,7 @@ export default function ProfilePage() {
                                         {/* Top Image */}
                                         <div className="relative w-full h-44 sm:h-52 overflow-hidden">
                                             <img
-                                                src={`${item?.imagesFullPath?.[0] || "/default-course.jpg"}`}
+                                                src={`${item?.full_image?.[0] || "/default-course.jpg"}`}
                                                 alt={item?.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
