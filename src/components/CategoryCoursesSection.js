@@ -192,50 +192,84 @@ export default function CategoryCoursesSection({ category }) {
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (!category?._id) return
-    const fetchExamTypes = async () => {
-      try {
-        const res = await axiosInstance.get(`/exam-types/category/${category?._id}`)
-        setExamTypes(res?.data || [])
-        if (res?.data?.length > 0) {
-          setSelectedExamType(res?.data?.[0] || null)
-        }
-      } catch (err) {
-        console.error("Error fetching exam types", err)
-      }
-    }
-    fetchExamTypes()
-  }, [category?._id])
+  // useEffect(() => {
+  //   if (!category?._id) return
+  //   const fetchExamTypes = async () => {
+  //     try {
+  //       const res = await axiosInstance.get(`/exam-types/category/${category?._id}`)
+  //       setExamTypes(res?.data || [])
+  //       if (res?.data?.length > 0) {
+  //         setSelectedExamType(res?.data?.[0] || null)
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching exam types", err)
+  //     }
+  //   }
+  //   fetchExamTypes()
+  // }, [category?._id])
+
 
   useEffect(() => {
-    if (!selectedExamType?._id) return
+  if (!category?._id) return;
 
-    const fetchExams = async () => {
-      try {
-        const res = await axiosInstance.get(`/exams/type/${selectedExamType?._id}`)
+  const fetchExamTypes = async () => {
+    try {
+      const res = await axiosInstance.get(`/exam-types/category/${category?._id}`);
 
-        if (Array.isArray(res?.data) && res?.data?.length > 0) {
-          setExams(res?.data || [])
-          setSelectedExam(res?.data?.[0] || null)
-        } else {
-          setExams([])
-          setSelectedExam(null)
-          setCourses([])
-        }
-      } catch (err) {
-        if (err?.response?.status === 404) {
-          setExams([])
-          setSelectedExam(null)
-          setCourses([])
-        } else {
-          console.error("Error fetching exams:", err?.response?.data || err?.message)
-        }
+      if (Array.isArray(res?.data) && res.data.length > 0) {
+        setExamTypes(res.data);
+        setSelectedExamType(res.data[0] || null);
+      } else {
+        setExamTypes([]);
+        setSelectedExamType(null);
+      }
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        // 404 => no exam types found
+        setExamTypes([]);
+        setSelectedExamType(null);
+      } else {
+        console.error("Error fetching exam types:", err?.response?.data || err?.message);
       }
     }
+  };
 
-    fetchExams()
-  }, [selectedExamType?._id])
+  fetchExamTypes();
+}, [category?._id]);
+
+
+
+
+  useEffect(() => {
+  if (!selectedExamType?._id) return;
+
+  const fetchExams = async () => {
+    try {
+      const res = await axiosInstance.get(`/exams/type/${selectedExamType?._id}`);
+
+      if (Array.isArray(res?.data) && res?.data?.length > 0) {
+        setExams(res.data);
+        setSelectedExam(res.data[0] || null);
+      } else {
+        setExams([]);
+        setSelectedExam(null);
+        setCourses([]);
+      }
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        // 404 ka matlab sirf data nahi mila
+        setExams([]);
+        setSelectedExam(null);
+        setCourses([]);
+      } else {
+        console.error("Error fetching exams:", err?.response?.data || err?.message);
+      }
+    }
+  };
+
+  fetchExams();
+}, [selectedExamType?._id]);
+
 
   useEffect(() => {
     if (!selectedExam?._id) return

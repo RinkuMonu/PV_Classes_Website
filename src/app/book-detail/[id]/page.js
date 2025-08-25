@@ -204,7 +204,7 @@ export default function ProductPage() {
 
       {/* Recentally Books */}
       <section className="px-6 py-8 bg-white m-12">
-        {Object.entries(booksData).map(([subCatId, subCatData]) => (
+        {Object.entries(booksData).slice(2, 3).map(([subCatId, subCatData]) => (
           <div key={subCatId} className="mb-10">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-[#204972]">
