@@ -123,7 +123,7 @@ export default function CategoryAffairsPage() {
         </h1>
         <button
           onClick={() => setFilterOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full hover:bg-blue-800 transition"
+          className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full hover:bg-blue-800 transition cursor-pointer"
         >
           <Filter size={16} /> Filter
         </button>
@@ -137,7 +137,7 @@ export default function CategoryAffairsPage() {
             <div className="flex justify-between items-center mb-6 relative">
               <h2 className="text-lg font-semibold">Filters</h2>
               <button onClick={() => setFilterOpen(false)}>
-                <X className="text-gray-600 hover:text-black" />
+                <X className="text-gray-600 hover:text-black cursor-pointer" />
               </button>
             </div>
 
@@ -149,7 +149,7 @@ export default function CategoryAffairsPage() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1 rounded-full text-sm border transition ${selectedCategory === cat
+                    className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedCategory === cat
                       ? "bg-[#00316B] text-white border-[#00316B]"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                       }`}
@@ -175,7 +175,7 @@ export default function CategoryAffairsPage() {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedTag("")}
-                  className={`px-3 py-1 rounded-full text-sm border transition ${selectedTag === ""
+                  className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedTag === ""
                     ? "bg-[#00316B] text-white border-[#00316B]"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                     }`}
@@ -186,7 +186,7 @@ export default function CategoryAffairsPage() {
                   <button
                     key={tag}
                     onClick={() => setSelectedTag(tag)}
-                    className={`px-3 py-1 rounded-full text-sm border transition ${selectedTag === tag
+                    className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedTag === tag
                       ? "bg-[#00316B] text-white border-[#00316B]"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                       }`}

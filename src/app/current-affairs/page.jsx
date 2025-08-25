@@ -470,7 +470,7 @@ export default function CurrentAffairsPage() {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-base border transition font-bold ${
+                  className={`px-4 py-2 rounded-full text-base border transition font-bold cursor-pointer ${
                     selectedCategory === cat
                       ? "bg-[#00316B] text-white border-[#00316B]"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -489,7 +489,7 @@ export default function CurrentAffairsPage() {
         <div className="container mx-auto px-4 py-6 flex justify-end">
           <button
             onClick={() => setFilterOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full hover:bg-blue-800 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full hover:bg-blue-800 transition cursor-pointer"
           >
             <Filter size={16} /> Filter
           </button>
@@ -511,13 +511,13 @@ export default function CurrentAffairsPage() {
           <div className="fixed inset-0 z-50 flex" onClick={() => setFilterOpen(false)}>
             <div className="flex-1 bg-black/50 transition-opacity duration-300"></div>
             <div
-              className="w-80 h-full bg-white shadow-xl p-6 overflow-y-auto animate-slide-in"
+              className="w-80 h-full bg-white shadow-xl p-6 overflow-y-auto animate-slide-in "
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6 relative">
                 <h2 className="text-lg font-semibold">Filters</h2>
                 <button onClick={() => setFilterOpen(false)}>
-                  <X className="text-gray-600 hover:text-black" />
+                  <X className="text-gray-600 hover:text-black cursor-pointer" />
                 </button>
               </div>
 
@@ -529,7 +529,7 @@ export default function CurrentAffairsPage() {
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-1 rounded-full text-sm border transition ${
+                      className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
                         selectedCategory === cat
                           ? "bg-[#00316B] text-white border-[#00316B]"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -549,7 +549,7 @@ export default function CurrentAffairsPage() {
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="flex-1 border rounded-md p-2 text-sm"
+                    className="flex-1 border rounded-md p-2 text-sm "
                   />
                   <input
                     type="date"
@@ -566,7 +566,7 @@ export default function CurrentAffairsPage() {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setSelectedTag("")}
-                    className={`px-3 py-1 rounded-full text-sm border transition ${
+                    className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
                       selectedTag === ""
                         ? "bg-[#00316B] text-white border-[#00316B]"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -578,7 +578,7 @@ export default function CurrentAffairsPage() {
                     <button
                       key={tag}
                       onClick={() => setSelectedTag(tag)}
-                      className={`px-3 py-1 rounded-full text-sm border transition ${
+                      className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
                         selectedTag === tag
                           ? "bg-[#00316B] text-white border-[#00316B]"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
