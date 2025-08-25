@@ -3,8 +3,10 @@ import axios from 'axios';
 const axiosInstance = axios.create({
     // baseURL: 'https://api.7uniqueverfiy.com/api',
 
+
     // baseURL: 'http://192.168.1.39:5000/api',
     baseURL: ' http://localhost:5000/api'
+
     // headers: {
     //     'Content-Type': 'application/json',
     // },
@@ -21,7 +23,6 @@ axiosInstance.interceptors.request.use(
         }
         return config;
 
-        
     },
     (error) => Promise.reject(error)
 );

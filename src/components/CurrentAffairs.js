@@ -199,7 +199,7 @@ export default function CurrentAffairsSlider() {
   }, []);
 
   return (
-    <section className="md:py-18">
+    <section className="md:py-14">
       <div className="px-4 md:px-16 py-12  bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00316B]/5 via-transparent to-[#87B105]/5"></div>
         <div className="mb-6 px-4 md:px-0 flex justify-between items-center" data-aos="fade-up">

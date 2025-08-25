@@ -149,7 +149,7 @@
 //       <div className="relative bg-card border-b border-border">
 //         <div className="max-w-7xl mx-auto px-6 py-16">
 //           <div className="text-center">
-//             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-6">
+//             <div className="inline-flex items-center gap-2 bg-[#204972]/10 text-[#204972] px-4 py-2 rounded-full text-sm font-semibold mb-6">
 //               <FaGraduationCap className="text-lg" />
 //               <span>Educational Excellence</span>
 //             </div>
@@ -167,8 +167,8 @@
 //           <div className="lg:col-span-1">
 //             <div className="bg-card border border-border rounded-lg p-6 sticky top-6">
 //               <div className="flex items-center gap-3 mb-8">
-//                 <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-//                   <FaFilter className="text-primary-foreground text-sm" />
+//                 <div className="w-10 h-10 bg-[#204972] rounded-lg flex items-center justify-center">
+//                   <FaFilter className="text-[#204972]-foreground text-sm" />
 //                 </div>
 //                 <h2 className="text-xl font-bold text-card-foreground">Course Navigator</h2>
 //               </div>
@@ -176,8 +176,8 @@
 //               {/* Categories Section */}
 //               <div className="mb-8">
 //                 <div className="flex items-center gap-3 mb-4">
-//                   <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-//                     <FaBook className="text-primary text-sm" />
+//                   <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+//                     <FaBook className="text-[#204972] text-sm" />
 //                   </div>
 //                   <h3 className="font-semibold text-card-foreground">Categories</h3>
 //                   <span className="bg-muted text-muted-foreground text-xs font-medium px-2 py-1 rounded-full">
@@ -194,7 +194,7 @@
 //                       }}
 //                       className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
 //                         activeCategory?._id === cat?._id
-//                           ? "bg-primary text-primary-foreground shadow-sm"
+//                           ? "bg-[#204972] text-[#204972]-foreground shadow-sm"
 //                           : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
 //                       }`}
 //                     >
@@ -268,7 +268,7 @@
 //                 <span className="text-muted-foreground font-medium">Learning Path:</span>
 //                 {activeCategory && (
 //                   <>
-//                     <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+//                     <span className="bg-[#204972]/10 text-[#204972] px-3 py-1 rounded-full font-medium">
 //                       {activeCategory.name}
 //                     </span>
 //                     <FaChevronRight className="text-muted-foreground text-xs" />
@@ -309,15 +309,15 @@
 //                       onClick={() => setActiveExam(exam)}
 //                       className={`p-4 rounded-lg border transition-all duration-200 text-left ${
 //                         activeExam?._id === exam?._id
-//                           ? "border-primary bg-primary/5 shadow-sm"
+//                           ? "border-primary bg-[#204972]/5 shadow-sm"
 //                           : "border-border hover:border-primary/50 hover:shadow-sm bg-background"
 //                       }`}
 //                     >
 //                       <div className="flex items-center justify-between">
 //                         <div className="font-semibold text-foreground">{exam?.name}</div>
 //                         {activeExam?._id === exam?._id && (
-//                           <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-//                             <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
+//                           <div className="w-6 h-6 bg-[#204972] rounded-full flex items-center justify-center">
+//                             <div className="w-2 h-2 bg-[#204972]-foreground rounded-full"></div>
 //                           </div>
 //                         )}
 //                       </div>
@@ -361,8 +361,8 @@
 //                         </div>
 //                       ) : (
 //                         <div className="w-full h-48 bg-muted flex items-center justify-center">
-//                           <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
-//                             <FaBook className="text-primary text-xl" />
+//                           <div className="w-16 h-16 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+//                             <FaBook className="text-[#204972] text-xl" />
 //                           </div>
 //                         </div>
 //                       )}
@@ -371,14 +371,14 @@
 //                         <div className="flex justify-between items-start mb-4">
 //                           <span
 //                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
-//                               course?.isFree ? "bg-secondary/10 text-secondary" : "bg-primary/10 text-primary"
+//                               course?.isFree ? "bg-secondary/10 text-secondary" : "bg-[#204972]/10 text-[#204972]"
 //                             }`}
 //                           >
 //                             {course?.isFree ? "FREE COURSE" : "PREMIUM"}
 //                           </span>
 //                         </div>
 
-//                         <h3 className="font-bold text-lg mb-3 text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+//                         <h3 className="font-bold text-lg mb-3 text-foreground line-clamp-2 group-hover:text-[#204972] transition-colors">
 //                           {course?.title}
 //                         </h3>
 //                         <p className="text-muted-foreground text-sm mb-6 line-clamp-3">{course?.overview}</p>
@@ -387,7 +387,7 @@
 //                           <span className="font-bold text-xl text-foreground">
 //                             {course?.isFree ? "Free Access" : `₹${course?.price}`}
 //                           </span>
-//                           <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
+//                           <div className="flex items-center gap-2 text-[#204972] font-medium group-hover:gap-3 transition-all">
 //                             <span className="text-sm">View Course</span>
 //                             <FaArrowRight className="text-sm transform group-hover:translate-x-1 transition-transform" />
 //                           </div>
@@ -571,10 +571,10 @@ export default function CoursesSection() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative bg-card border-b border-border">
+      <div className="relative bg-blue-50/30 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#204972]/10 text-[#204972] px-4 py-2 rounded-full text-sm font-semibold mb-6">
               <FaGraduationCap className="text-lg" />
               <span>Educational Excellence</span>
             </div>
@@ -590,10 +590,10 @@ export default function CoursesSection() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-lg p-6 sticky top-6">
+            <div className="bg-blue-50/30 border border-border rounded-lg p-6 sticky top-6">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <FaFilter className="text-primary-foreground text-sm" />
+                <div className="w-10 h-10 bg-[#204972] rounded-lg flex items-center justify-center">
+                  <FaFilter className="text-white text-sm" />
                 </div>
                 <h2 className="text-xl font-bold text-card-foreground">Course Navigator</h2>
               </div>
@@ -601,11 +601,11 @@ export default function CoursesSection() {
               {/* Categories Section */}
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <FaBook className="text-primary text-sm" />
+                  <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                    <FaBook className="text-[#204972] text-sm" />
                   </div>
                   <h3 className="font-semibold text-card-foreground">Categories</h3>
-                  <span className="bg-muted text-muted-foreground text-xs font-medium px-2 py-1 rounded-full">
+                  <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
                     {categories?.length}
                   </span>
                 </div>
@@ -617,13 +617,13 @@ export default function CoursesSection() {
                         setActiveCategory(cat)
                         setCurrentStep(2)
                       }}
-                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
+                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${
                         activeCategory?._id === cat?._id
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
+                          ? "bg-[#204972] text-white shadow-sm"
+                          : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <div className="font-medium text-sm">{cat?.name}</div>
+                      <div className="font-medium text-sm cursor-pointer">{cat?.name}</div>
                     </button>
                   ))}
                 </div>
@@ -633,11 +633,11 @@ export default function CoursesSection() {
               {activeCategory && examTypes?.length > 0 && (
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center">
-                      <FaGraduationCap className="text-secondary text-sm" />
+                    <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                      <FaGraduationCap className="text-[#204972] text-sm" />
                     </div>
-                    <h3 className="font-semibold text-card-foreground">Exam Types</h3>
-                    <span className="bg-muted text-muted-foreground text-xs font-medium px-2 py-1 rounded-full">
+                    <h3 className="font-semibold">Exam Types</h3>
+                    <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
                       {examTypes?.length}
                     </span>
                   </div>
@@ -651,8 +651,8 @@ export default function CoursesSection() {
                         }}
                         className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
                           activeExamType?._id === type?._id
-                            ? "bg-secondary text-secondary-foreground shadow-sm"
-                            : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
+                            ? "bg-[#204972] text-secondary-foreground shadow-sm"
+                            : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
                         }`}
                       >
                         <div className="font-medium text-sm">{type?.name}</div>
@@ -666,8 +666,8 @@ export default function CoursesSection() {
               {activeExamType && exams?.length > 0 && (
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
-                      <FaCertificate className="text-accent text-sm" />
+                    <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                      <FaCertificate className="text-[#204972] text-sm" />
                     </div>
                     <h3 className="font-semibold text-card-foreground">Search Exams</h3>
                   </div>
@@ -688,12 +688,12 @@ export default function CoursesSection() {
 
           <div className="lg:col-span-3">
             {/* Breadcrumb */}
-            <div className="bg-card border border-border rounded-lg p-4 mb-6">
+            <div className="bg-blue-50/30 border border-border rounded-lg p-4 mb-6">
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground font-medium">Learning Path:</span>
                 {activeCategory && (
                   <>
-                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+                    <span className="bg-[#204972]/10 text-[#204972] px-3 py-1 rounded-full font-medium">
                       {activeCategory?.name}
                     </span>
                     <FaChevronRight className="text-muted-foreground text-xs" />
@@ -701,25 +701,25 @@ export default function CoursesSection() {
                 )}
                 {activeExamType && (
                   <>
-                    <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full font-medium">
+                    <span className="bg-[#ABC129]/10 text-secondary px-3 py-1 rounded-full font-medium">
                       {activeExamType?.name}
                     </span>
                     <FaChevronRight className="text-muted-foreground text-xs" />
                   </>
                 )}
                 {activeExam && (
-                  <span className="bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">{activeExam?.name}</span>
+                  <span className="bg-[#ABC129]/10 text-accent px-3 py-1 rounded-full font-medium">{activeExam?.name}</span>
                 )}
               </div>
             </div>
 
             {/* Exams Grid */}
             {activeExamType && filteredExams?.length > 0 && (
-              <div className="bg-card border border-border rounded-lg p-6 mb-6">
+              <div className="bg-blue-50/30 border border-border rounded-lg p-6 mb-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold text-card-foreground">Available Exams</h3>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                    <span className="text-sm text-muted-foreground bg-[#204972]/10 px-3 py-1 rounded-full">
                       {filteredExams?.length} exam{filteredExams?.length !== 1 ? "s" : ""} found
                     </span>
                     {isLoading && (
@@ -734,15 +734,15 @@ export default function CoursesSection() {
                       onClick={() => setActiveExam(exam)}
                       className={`p-4 rounded-lg border transition-all duration-200 text-left ${
                         activeExam?._id === exam?._id
-                          ? "border-primary bg-primary/5 shadow-sm"
+                          ? "border-primary bg-[#204972]/5 shadow-sm"
                           : "border-border hover:border-primary/50 hover:shadow-sm bg-background"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="font-semibold text-foreground">{exam?.name}</div>
                         {activeExam?._id === exam?._id && (
-                          <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                            <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
+                          <div className="w-6 h-6 bg-[#204972] rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-[#204972]-foreground rounded-full"></div>
                           </div>
                         )}
                       </div>
@@ -752,13 +752,13 @@ export default function CoursesSection() {
               </div>
             )}
 
-            <div className="bg-card border border-border rounded-lg p-6">
+            <div className="bg-blue-50/30 border border-border rounded-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-bold text-card-foreground">
                   {activeExam ? `Courses for ${activeExam?.name}` : "Available Courses"}
                 </h3>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                  <span className="text-sm text-muted-foreground bg-[#204972]/10 px-3 py-1 rounded-full">
                     {courses?.length} course{courses?.length !== 1 ? "s" : ""} available
                   </span>
                   {isLoading && (
@@ -779,15 +779,15 @@ export default function CoursesSection() {
                       {course?.images?.length > 0 ? (
                         <div className="w-full h-48 overflow-hidden">
                           <img
-                            src={`${course?.imagesFullPath?.[0]}`}
+                            src={`${course?.full_image?.[0]}`}
                             alt={course?.title || "Course Image"}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                       ) : (
-                        <div className="w-full h-48 bg-muted flex items-center justify-center">
-                          <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
-                            <FaBook className="text-primary text-xl" />
+                        <div className="w-full h-48 flex items-center justify-center">
+                          <div className="w-16 h-16 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                            <FaBook className="text-[#204972] text-xl" />
                           </div>
                         </div>
                       )}
@@ -796,14 +796,14 @@ export default function CoursesSection() {
                         <div className="flex justify-between items-start mb-4">
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              course?.isFree ? "bg-secondary/10 text-secondary" : "bg-primary/10 text-primary"
+                              course?.isFree ? "bg-secondary/10 text-secondary" : "bg-[#204972]/10 text-[#204972]"
                             }`}
                           >
                             {course?.isFree ? "FREE COURSE" : "PREMIUM"}
                           </span>
                         </div>
 
-                        <h3 className="font-bold text-lg mb-3 text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+                        <h3 className="font-bold text-lg mb-3 text-foreground line-clamp-2 group-hover:text-[#204972] transition-colors">
                           {course?.title}
                         </h3>
                         <p className="text-muted-foreground text-sm mb-6 line-clamp-3">{course?.overview}</p>
@@ -812,7 +812,7 @@ export default function CoursesSection() {
                           <span className="font-bold text-xl text-foreground">
                             {course?.isFree ? "Free Access" : `₹${course?.price}`}
                           </span>
-                          <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
+                          <div className="flex items-center gap-2 text-[#204972] font-medium group-hover:gap-3 transition-all">
                             <span className="text-sm">View Course</span>
                             <FaArrowRight className="text-sm transform group-hover:translate-x-1 transition-transform" />
                           </div>
@@ -823,7 +823,7 @@ export default function CoursesSection() {
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-24 h-24 bg-[#204972]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <FaBook className="text-muted-foreground text-2xl" />
                   </div>
                   <h3 className="text-xl font-bold text-foreground mb-3">
