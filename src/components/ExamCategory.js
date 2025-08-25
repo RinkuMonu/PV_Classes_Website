@@ -16,7 +16,9 @@ export default function ExamCategory() {
       tags: ["NDA", "SSB"],
       icon: <FaFlask className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-link: "http://localhost:3000/courses?exam=68ac3c02a5a435b640ada61b",
+
+      link: "/courses",
+
     },
     {
       title: "Current Affairs",

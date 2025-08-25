@@ -106,7 +106,7 @@ export default function Footer() {
                         Free Study Material
                       </Link>
                     </li>
-                   
+
                     <li className="group transition-all duration-200 hover:pl-2">
                       <Link href="/#" className="hover:text-[#009fe3]">
                         Career Guidance
@@ -136,9 +136,35 @@ export default function Footer() {
                         About Us
                       </Link>
                     </li>
+                   
                     <li className="group transition-all duration-200 hover:pl-2">
+
                       <Link href="/contact-us" className="hover:text-[#009fe3]">
                         Contact Us
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/privacy-policy"
+                        className="hover:text-[#009fe3]"
+                      >
+                        Privacy Policy
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/terms-of-use"
+                        className="hover:text-[#009fe3]"
+                      >
+                        Terms of Use
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
+                      <Link
+                        href="/cancellation-and-refund-policy"
+                        className="hover:text-[#009fe3]"
+                      >
+                        Cancellation & Refund Policy
                       </Link>
                     </li>
                   </ul>
@@ -211,7 +237,7 @@ export default function Footer() {
 
             <div className="border-t-2 border-[#788406] w-full mb-6"></div>
 
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <ul className="flex flex-wrap justify-center text-base text-center">
                 <li>
                   <Link href="/privacy-policy" className="hover:text-[#788406]">
@@ -236,7 +262,7 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             <div className="text-center text-base mt-auto">
               © 2025 PV Classes . All rights reserved.
