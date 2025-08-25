@@ -108,14 +108,14 @@ export default function ExamToolbar({
 
             {/* Row 2: sub filters + search + filter icon */}
             <div className="mt-3 flex flex-wrap items-center gap-2">
-                {subFilters.map((t) => (
+                {/* {subFilters.map((t) => (
                     <button
                         key={t}
                         className="rounded-full border text-start w-100 border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-800 hover:border-neutral-400"
                     >
                         {t}
                     </button>
-                ))}
+                ))} */}
 
                 <div className="md:ms-auto flex items-center gap-2">
                     <div className="relative">
