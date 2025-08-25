@@ -123,16 +123,19 @@ export default function Page() {
                       </div>
                     </Link>
 
-                    <button
-                      onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-                      disabled={loading}
-                      className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow"
-                    >
-                      <span className="mt-1 me-2">
-                        <FaPlus />
-                      </span>
-                      {loading ? "ADDING..." : "ADD"}
-                    </button>
+                   <div className="px-4 pb-4 flex">
+  <button
+    onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+    disabled={loading}
+    className="flex bg-[#204972] px-2 py-1 rounded-md text-[#fff] text-sm font-bold shadow"
+  >
+    <span className="mt-1 me-2">
+      <FaPlus />
+    </span>
+    {loading ? "ADDING..." : "ADD"}
+  </button>
+</div>
+
                   </div>
                 );
               })}

@@ -266,7 +266,7 @@ export default function TestSeriesUnified() {
 
   const banner = (
     <div className="max-w-6xl mx-auto px-4 mb-10">
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-10 px-8 rounded-2xl shadow-xl">
+      <div className="bg-gradient-to-r from-[#204972] to-[#616602] text-white py-10 px-8 rounded-2xl shadow-xl">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 mb-3">
             {series.title_tag && (
@@ -310,8 +310,8 @@ export default function TestSeriesUnified() {
             {/* Overview */}
             <div className="bg-white p-6 rounded-2xl shadow-sm mb-8">
               <div className="flex items-center gap-3 mb-5">
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <BookOpen size={24} className="text-blue-600" />
+                <div className="bg-blue-50 p-2 rounded-lg">
+                  <BookOpen size={24} className="text-[#204972]" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">Overview</h2>
               </div>
@@ -324,8 +324,8 @@ export default function TestSeriesUnified() {
             {series.subjects?.length > 0 && (
               <div className="bg-white p-6 rounded-2xl shadow-sm mb-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="bg-green-100 p-2 rounded-lg">
-                    <FileText size={24} className="text-green-600" />
+                  <div className="bg-blue-50 p-2 rounded-lg">
+                    <FileText size={24} className="text-[#204972]" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-800">
                     Subjects & Tests
@@ -341,7 +341,7 @@ export default function TestSeriesUnified() {
                         <h4 className="font-semibold text-gray-800">
                           {subject.name}
                         </h4>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">
+                        <span className="bg-blue-50 text-[#204972] text-xs font-bold px-2.5 py-1 rounded-full">
                           {subject.test_count}{" "}
                           {subject.test_count > 1 ? "Tests" : "Test"}
                         </span>
@@ -355,7 +355,7 @@ export default function TestSeriesUnified() {
             {/* Embedded Tests */}
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold">Available Tests</h3>
+                <h3 className="text-lg text-[#204972] font-semibold">Available Tests</h3>
                 {hasAccess && Object.keys(completedTests).length > 0 && (
                   <Link
                     href={`/view-answer-sheet/${seriesId}`}
@@ -372,8 +372,8 @@ export default function TestSeriesUnified() {
                     className="border border-gray-100 p-4 rounded-xl flex flex-wrap gap-3 items-center justify-between hover:border-blue-200 hover:bg-blue-50 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <FileText size={20} className="text-blue-600" />
+                      <div className="bg-blue-50 p-2 rounded-lg">
+                        <FileText size={20} className="text-[#204972]" />
                       </div>
                       <div>
                         <div className="font-medium text-gray-800">
@@ -439,8 +439,8 @@ export default function TestSeriesUnified() {
             {/* FAQs (static) */}
             <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-purple-100 p-2 rounded-lg">
-                  <HelpCircle size={24} className="text-purple-600" />
+                <div className="bg-blue-50 p-2 rounded-lg">
+                  <HelpCircle size={24} className="text-[#204972]" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">
                   Frequently Asked Questions
@@ -628,14 +628,14 @@ function SidebarCard({ series, hasAccess }) {
           className="object-cover"
           priority
         />
-        <span className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+        <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
           Test Series
         </span>
       </div>
       <div className="p-2">
         <h2 className="text-xl font-bold text-gray-800">{series?.title}</h2>
         <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
-          <Award size={16} className="text-indigo-600" />
+          <Award size={16} className="text-[#204972]" />
           {series?.exam_id?.name}
         </p>
         <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
@@ -655,7 +655,7 @@ function SidebarCard({ series, hasAccess }) {
               ₹{series?.price}
             </span>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-xl font-bold text-green-600">
+              <span className="text-xl font-bold text-[#204972]">
                 ₹{series?.discount_price}
               </span>
               <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
@@ -668,7 +668,7 @@ function SidebarCard({ series, hasAccess }) {
         {!hasAccess && (
           <button
             onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl"
+            className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
           >
             Add to Library
           </button>
