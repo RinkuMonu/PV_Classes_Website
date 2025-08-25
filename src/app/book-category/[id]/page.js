@@ -92,7 +92,7 @@ export default function BookCategoryPage() {
       {/* Page Content */}
       <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f0f4f8] py-6 px-4 sm:px-8">
         {/* Header Section */}
-        <div className="max-w-7xl mx-auto">
+        <div className=" mx-auto">
           {/* Breadcrumb */}
           <div className="flex items-center text-sm mb-4">
             <Link
@@ -313,7 +313,7 @@ export default function BookCategoryPage() {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                   {filteredBooks?.map((book) => (
                     <div
                       key={book?._id}
