@@ -5,11 +5,11 @@ import Link from "next/link"
 export default function ExamCategory() {
   const categories = [
     {
-      title: "3rd Grade",
+      title: "defence Exams",
       tags: ["Level 1", "Level 2", "Level 3"],
       icon: <FaFlask className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-link: "/courses",
+link: "http://localhost:3000/courses?exam=68ac3c02a5a435b640ada61b",
     },
     {
       title: "Current Affairs",
@@ -20,18 +20,18 @@ link: "/courses",
     },
 
     {
-      title: "All India Exam",
+      title: "Banking Exams",
       tags: ["Central", "Politics"],
       icon: <FaLandmark className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "/courses",
+      link: "http://localhost:3000/courses?exam=68ac35d6a5a435b640ada5f3",
     },
     {
-      title: "Govt Job Exams",
+      title: "Utarpardesh State Exams",
       tags: ["SSC", "Banking"],
       icon: <FaBriefcase className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "/courses",
+      link: "http://localhost:3000/courses?exam=68ac31d0a5a435b640ada5dd",
     },
 
   ];
