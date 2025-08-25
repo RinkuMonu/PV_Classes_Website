@@ -91,13 +91,18 @@ export default function Footer() {
                       </Link>
                     </li> */}
                     <li className="group transition-all duration-200 hover:pl-2">
+                      <Link href="/about-us" className="hover:text-[#009fe3]">
+                        About Us
+                      </Link>
+                    </li>
+                    <li className="group transition-all duration-200 hover:pl-2">
                       <Link href="/contact-us" className="hover:text-[#009fe3]">
                         Contact Us
                       </Link>
                     </li>
                   </ul>
                 </div>
-
+                        
                 <div className="mt-10 md:mt-0">
                   <h3 className="font-bold text-lg mb-4">Government Exam</h3>
                   <ul className="space-y-2 text-base">

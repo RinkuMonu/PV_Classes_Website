@@ -414,7 +414,7 @@ export default function Header() {
                       {cart?.map((item,index) => (
                         <div
                           key={index}
-                          className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
+                          className="flex flex-col sm:flex-row gap-4 relative  p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
                         >
                           {/* Product Image */}
                           <div className="flex-shrink-0">
@@ -429,7 +429,7 @@ export default function Header() {
                           </div>
 
                           {/* Product Details */}
-                          <div className="flex-1 flex flex-col justify-between min-w-0">
+                          <div className=" min-w-0">
                             <div>
                               <h3 className="text-gray-800 font-semibold text-base sm:text-lg leading-snug line-clamp-2 mb-1">
                                 {item?.details?.title}
@@ -593,7 +593,7 @@ export default function Header() {
                 {cart?.map((item,index) => (
                   <div
                     key={index}
-                    className="flex flex-col sm:flex-row gap-4 p-5 rounded-2xl border border-[#009FE3]/20 bg-gradient-to-r from-white to-[#009FE3]/5 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-[#009FE3]/40"
+                    className="flex flex-col  gap-4 p-5 rounded-2xl border border-[#009FE3]/20 bg-gradient-to-r from-white to-[#009FE3]/5 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-[#009FE3]/40"
                   >
                     {/* Product Image */}
                     <div className="flex-shrink-0">
