@@ -598,13 +598,56 @@ export default function Header() {
                   >
                     {/* Product Image */}
                     <div className="flex-shrink-0">
-                      <img
-                        src={item?.details?.full_image?.[0] || "/placeholder.svg"}
-                        alt={item?.details?.title}
-                        className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
-                      />
-                    </div>
+                      {item?.itemType === "combo" ? (
+                        <div className="grid grid-cols-2 gap-3">
+                          {/* Books */}
+                          {item?.details?.books?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.books?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">Books</span>
+                            </div>
+                          )}
 
+                          {/* Courses */}
+                          {item?.details?.courses?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.courses?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">Courses</span>
+                            </div>
+                          )}
+
+                          {/* PYQs */}
+                          {item?.details?.pyqs?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.pyqs?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">PYQs</span>
+                            </div>
+                          )}
+
+                          {/* Test Series */}
+                          {item?.details?.testSeries?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.testSeries?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">Test Series</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <img
+                          src={item?.details?.full_image?.[0] || "/placeholder.svg"}
+                          alt={item?.details?.title}
+                          className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                        />
+                      )}
+                    </div>
                     {/* Product Details */}
                     <div className="flex-1 flex flex-col justify-between min-w-0">
                       <div>
@@ -634,8 +677,8 @@ export default function Header() {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
-
-                      <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
+                      {item?.itemType !== "combo" ?(
+                        <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
                         <div className="flex items-center border-2 border-[#009FE3]/20 rounded-xl overflow-hidden bg-white">
                           <button
                             onClick={() => updateQuantity(-1, item?.quantity, item?.itemId)}
@@ -666,6 +709,7 @@ export default function Header() {
 
                         </span>
                       </div>
+                      ):null}                      
                     </div>
                   </div>
                 ))}

@@ -465,6 +465,7 @@ function AddressShipping() {
     totalAmount: 0,
     paymentMethod: "cod",
   });
+  console.log("totalOrder = ", totalOrder);
   useEffect(() => {
   setTotalOrder({
     cart: cart,
@@ -581,11 +582,57 @@ console.log("totalOrder = ", totalOrder);
                         key={item?.itemId}
                         className="flex gap-4 justify-between border-b pb-3"
                       >
-                        <img
-                          src={item?.details?.full_image?.[0]}
-                          alt={item?.details?.title}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
+                        <div className="flex-shrink-0">
+                          {item?.itemType === "combo" ? (
+                            <div className="grid grid-cols-2 gap-3">
+                              {/* Books */}
+                              {item?.details?.books?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.books?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">Books</span>
+                                </div>
+                              )}
+
+                              {/* Courses */}
+                              {item?.details?.courses?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.courses?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">Courses</span>
+                                </div>
+                              )}
+
+                              {/* PYQs */}
+                              {item?.details?.pyqs?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.pyqs?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">PYQs</span>
+                                </div>
+                              )}
+
+                              {/* Test Series */}
+                              {item?.details?.testSeries?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.testSeries?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">Test Series</span>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <img
+                              src={item?.details?.full_image?.[0] || "/placeholder.svg"}
+                              alt={item?.details?.title}
+                              className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                            />
+                          )}
+                        </div>
                         <div className="flex-1 text-right">
                           <h4 className="font-medium text-[#14263F] text-sm">
                             {item?.details?.title}
