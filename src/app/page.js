@@ -21,7 +21,7 @@ export default function Home() {
     <>
 
       <Banner />
-      <TrustedPlatform />
+
       <CoursesSection />
       <CourseEnroll />
       <Rajexam />
@@ -30,11 +30,13 @@ export default function Home() {
       <TestSeriesHome />
 
       <CurrentAffairs />
+      {/* <TrustedPlatform /> */}
       <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
       <PyqSlider />
       <ExamCategory />
+      <TrustedPlatform />
       <Testimonials />
 
     </>

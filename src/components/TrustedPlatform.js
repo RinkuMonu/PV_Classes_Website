@@ -34,7 +34,7 @@ export default function TrustedPlatform() {
   ];
 
   return (
-    <section className="px-4 sm:px-6 md:px-12 lg:px-16 py-12 md:py-16">
+    <section className="px-4 sm:px-6 md:px-12 lg:px-16 py-12 md:py-10">
 
       <h2 className="text-2xl sm:text-3xl md:text-4xl text-[#204972] font-bold text-center mb-3">
         A Platform Trusted by Students

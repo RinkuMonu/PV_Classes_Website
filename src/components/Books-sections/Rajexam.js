@@ -167,12 +167,12 @@ export default function RajExamBooks() {
 
   return (
     <section className="md:px-16 px-4 py-12 bg-gradient-to-br from-slate-50 to-blue-50/30">
-      {Object.entries(booksData || {}).map(([subCatId, subCatData]) => (
+      {Object.entries(booksData || {}).slice(1, 3).map(([subCatId, subCatData]) => (
         <div key={subCatId} className="mb-12">
           <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
             <div>
               <h3 className="text-3xl font-bold text-[#00316B] mb-2">
-                {subCatData?.book_subcategory_name || "Unnamed Subcategory"}
+                {subCatData?.book_subcategory_name || "Unnamed Subcategory"}  Books
               </h3>
               <div className="w-16 h-1 bg-gradient-to-r from-[#009FE3] to-[#0281AD] rounded-full"></div>
             </div>

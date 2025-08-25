@@ -165,7 +165,7 @@ export default function PreviousYearPapers() {
                           {/* Share Button */}
                           <button
                             onClick={() => toggleDropdown(pyq._id)}
-                            className="p-2 inline-flex hover:bg-blue-100 rounded transition text-[#00316B]"
+                            className="p-2 inline-flex hover:bg-blue-100 rounded transition text-[#00316B] cursor-pointer"
                           >
                             <FaShareAlt className="mt-1 me-1" /> Share
                           </button>

@@ -165,7 +165,7 @@ export default function CoursesPage() {
                   className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
                   <img
-                    src={c?.imagesFullPath?.[0] || "/vercel.svg"}
+                    src={c?.full_image?.[0] || "/vercel.svg"}
                     alt={c?.title || "Course"}
                     className="w-full h-48 object-cover rounded-t-lg"
                   />

@@ -130,3 +130,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+button {
+cursor: pointer !important;
+}
+

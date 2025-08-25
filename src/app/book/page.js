@@ -55,25 +55,25 @@ export default function Book() {
   return (
     <>
       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-  <div className="absolute inset-0 hidden sm:block">
-    <Image
-      src="/Image/Banner/main-book-banner.webp"
-      alt="Banner Desktop"
-      fill
-      className="object-cover object-center"
-      priority
-    />
-  </div>
-  <div className="absolute inset-0 block sm:hidden">
-    <Image
-      src="/Image/pv-mobile/main-book-banner-mob.webp"
-      alt="Banner Mobile"
-      fill
-      className="object-cover object-center"
-      priority
-    />
-  </div>
-</section>
+        <div className="absolute inset-0 hidden sm:block">
+          <Image
+            src="/Image/Banner/main-book-banner.webp"
+            alt="Banner Desktop"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/main-book-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      </section>
 
 
       {/* Main Content */}
@@ -105,7 +105,7 @@ export default function Book() {
               <div key={subCatId} className="mb-8 sm:mb-10">
                 <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
                   <h2 className="text-xl sm:text-2xl font-bold text-[#204972]">
-                    {subCatData.book_subcategory_name}
+                    {subCatData.book_subcategory_name} Books
                   </h2>
                   <Link
                     href={`/book-category/${subCatData?.books?.[0]?.category?._id}`}
@@ -159,7 +159,7 @@ export default function Book() {
                                 {Math.round(
                                   ((book.price - book.discount_price) /
                                     book.price) *
-                                    100
+                                  100
                                 )}
                                 % OFF)
                               </span>
