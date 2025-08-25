@@ -36,6 +36,7 @@ export default function Home() {
       <CTA />
       <PyqSlider />
       <ExamCategory />
+      <TrustedPlatform />
       <Testimonials />
 
     </>

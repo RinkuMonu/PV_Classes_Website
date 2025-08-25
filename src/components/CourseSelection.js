@@ -473,35 +473,78 @@ export default function CoursesSection() {
   }, [])
 
   // Fetch exam types when active category changes
-  useEffect(() => {
-    if (!activeCategory?._id) return
+  // useEffect(() => {
+  //   if (!activeCategory?._id) return
 
-    const fetchExamTypes = async () => {
-      setIsLoading(true)
-      try {
-        const res = await axiosInstance.get(`/exam-types/category/${activeCategory?._id}`)
-        setExamTypes(res?.data || [])
-        if (res?.data?.length > 0) {
-          setActiveExamType(res?.data?.[0])
-          setCurrentStep(2)
-        } else {
-          setActiveExamType(null)
-          setExams([])
-          setCourses([])
-          setCurrentStep(2)
-        }
-      } catch (err) {
-        console.error("Error fetching exam types", err?.response?.data || err?.message)
-        setExamTypes([])
-        setActiveExamType(null)
-        setExams([])
-        setCourses([])
-      } finally {
-        setIsLoading(false)
+  //   const fetchExamTypes = async () => {
+  //     setIsLoading(true)
+  //     try {
+  //       const res = await axiosInstance.get(`/exam-types/category/${activeCategory?._id}`)
+  //       setExamTypes(res?.data || [])
+  //       if (res?.data?.length > 0) {
+  //         setActiveExamType(res?.data?.[0])
+  //         setCurrentStep(2)
+  //       } else {
+  //         setActiveExamType(null)
+  //         setExams([])
+  //         setCourses([])
+  //         setCurrentStep(2)
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching exam types", err?.response?.data || err?.message)
+  //       setExamTypes([])
+  //       setActiveExamType(null)
+  //       setExams([])
+  //       setCourses([])
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+  //   fetchExamTypes()
+  // }, [activeCategory])
+
+
+  useEffect(() => {
+  if (!activeCategory?._id) return;
+
+  const fetchExamTypes = async () => {
+    setIsLoading(true);
+    try {
+      const res = await axiosInstance.get(`/exam-types/category/${activeCategory?._id}`);
+
+      if (Array.isArray(res?.data) && res.data.length > 0) {
+        setExamTypes(res.data);
+        setActiveExamType(res.data[0]);
+        setCurrentStep(2);
+      } else {
+        setExamTypes([]);
+        setActiveExamType(null);
+        setExams([]);
+        setCourses([]);
+        setCurrentStep(2);
       }
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        // Gracefully handle no data case
+        setExamTypes([]);
+        setActiveExamType(null);
+        setExams([]);
+        setCourses([]);
+        setCurrentStep(2);
+      } else {
+        console.error("Error fetching exam types:", err?.response?.data || err?.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
-    fetchExamTypes()
-  }, [activeCategory])
+  };
+
+  fetchExamTypes();
+}, [activeCategory]);
+
+
+
+
 
   // Fetch exams when active exam type changes
   useEffect(() => {

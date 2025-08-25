@@ -105,7 +105,7 @@ export default function Book() {
               <div key={subCatId} className="mb-8 sm:mb-10">
                 <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
                   <h2 className="text-xl sm:text-2xl font-bold text-[#204972]">
-                    {subCatData.book_subcategory_name}
+                    {subCatData.book_subcategory_name} Books
                   </h2>
                   <Link
                     href={`/book-category/${subCatData?.books?.[0]?.category?._id}`}
