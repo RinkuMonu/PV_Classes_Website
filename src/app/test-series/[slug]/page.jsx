@@ -54,34 +54,66 @@ export default function TestSeriesUnified() {
     // If you need to send both seriesId and testId, do something like this:
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
   };
-  useEffect(() => {
-    (async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setHasAccess(false);
-          return;
-        }
 
-        const res = await axiosInstance.get(`/access/check/${seriesId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
 
-        if (res.data.message === "Access granted") {
-          setHasAccess(true);
-        } else {
-          setHasAccess(false);
-        }
-      } catch (err) {
-        console.error("Access check failed:", err);
-        setHasAccess(false);
-      }
-    })();
-  }, [seriesId]);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         setHasAccess(false);
+  //         return;
+  //       }
+
+  //       const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (res.data.message === "Access granted") {
+  //         setHasAccess(true);
+  //       } else {
+  //         setHasAccess(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("Access check failed:", err);
+  //       setHasAccess(false);
+  //     }
+  //   })();
+  // }, [seriesId]);
 
   // ---------------- Fetch details ----------------
+  
+  useEffect(() => {
+  (async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setHasAccess(false);
+        return;
+      }
+
+      const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        validateStatus: (status) => status < 500, // 4xx को error मत मानो
+      });
+
+      if (res.status === 200 && res.data.message === "Access granted") {
+        setHasAccess(true);
+      } else {
+        setHasAccess(false);
+      }
+    } catch (err) {
+      console.error("Access check failed:", err);
+      setHasAccess(false);
+    }
+  })();
+}, [seriesId]);
+
+  
   console.log(series, "serise");
   const fetchSeries = async () => {
     try {
