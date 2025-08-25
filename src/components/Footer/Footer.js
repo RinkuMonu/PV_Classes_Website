@@ -136,13 +136,9 @@ export default function Footer() {
                         About Us
                       </Link>
                     </li>
+                   
                     <li className="group transition-all duration-200 hover:pl-2">
-                      <Link
-                        href="/contact-us"
-                        className="hover:text-[#009fe3]"
-                      ></Link>
-                    </li>
-                    <li className="group transition-all duration-200 hover:pl-2">
+
                       <Link href="/contact-us" className="hover:text-[#009fe3]">
                         Contact Us
                       </Link>
