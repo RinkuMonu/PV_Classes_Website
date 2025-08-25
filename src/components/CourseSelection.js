@@ -702,7 +702,7 @@ export default function CoursesSection() {
                       {examTypes?.length}
                     </span>
                   </div>
-                  <div className="space-y-2 max-h-48 overflow-y-auto scrollbar-hide">
+                  <div className="space-y-2 max-h-48 overflow-y-hidden scrollbar-hide">
                     {examTypes?.map((type) => (
                       <button
                         key={type?._id}
