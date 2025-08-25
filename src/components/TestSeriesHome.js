@@ -279,7 +279,7 @@ export default function TestSeriesHome() {
                                         <button
                                             onClick={(e) => handleAdd(e, "testSeries", series?._id)}
                                             disabled={loading}
-                                            className="flex items-center justify-center gap-2 absolute bottom-3 right-3 bg-gradient-to-r from-yellow-200 to-yellow-400 px-3 py-1.5 rounded-lg text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
+                                            className="flex items-center justify-center gap-2 absolute bottom-3 right-3 bg-[#788406] px-3 py-1.5 rounded-lg text-white/80 text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
                                         >
                                             <FaPlus />
                                             {loading ? "ADDING..." : "ADD"}

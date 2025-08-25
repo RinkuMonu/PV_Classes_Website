@@ -61,8 +61,8 @@ export default function HomeCoursesSection() {
 
   return (
 
-   <section className="md:px-14 bg-[#edf3f5] py-4 md:py-8">
-     <div className="mx-auto px-8 py-12 bg-white border-2 shadow-lg rounded-lg border-gray-200">
+ <section className="bg-gray-50">
+     <div className="mx-auto px-8 md:px-20 py-10 border-2 rounded-lg border-gray-200">
       <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#204972] text-center">
         Explore Popular Courses
       </h2>
