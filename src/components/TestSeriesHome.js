@@ -227,7 +227,7 @@ export default function TestSeriesHome() {
                                                         {series?.title || "Untitled Test Series"}
                                                     </h2>
                                                     {series?.title_tag && (
-                                                        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-xs px-2 py-1 rounded-full font-semibold text-white shadow-sm">
+                                                        <span className="bg-gradient-to-r from-[#204972] to-[#204972] text-xs px-2 py-1 md:py-2 rounded-full font-semibold text-white shadow-sm">
                                                             {series?.title_tag}
                                                         </span>
                                                     )}
@@ -242,7 +242,7 @@ export default function TestSeriesHome() {
                                                         className="object-cover rounded-xl hover:scale-105 transition-transform duration-500"
                                                     />
                                                     {series?.total_tests > 0 && (
-                                                        <div className="absolute bottom-3 left-3 bg-indigo-600 text-white px-3 py-1 text-xs font-bold rounded-full shadow-md">
+                                                        <div className="absolute bottom-3 left-3 bg-[#204972] text-white px-3 py-1 md:py-2 text-xs font-bold rounded-full shadow-md">
                                                             {series?.total_tests} Tests
                                                         </div>
                                                     )}
@@ -260,7 +260,7 @@ export default function TestSeriesHome() {
                                                 <div className="px-1 pb-5 mt-2">
                                                     <div className="flex justify-between items-center">
                                                         <div>
-                                                            <span className="text-indigo-700 font-bold text-lg">
+                                                            <span className="text-[#204972] font-bold text-lg">
                                                                 ₹{series?.discount_price || 0}
                                                             </span>
                                                             <span className="text-gray-400 line-through text-sm ml-2">

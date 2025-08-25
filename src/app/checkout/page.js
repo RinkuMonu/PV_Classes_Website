@@ -21,8 +21,13 @@ import axiosInstance from "../axios/axiosInstance";
 function AddressShipping() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [oldTotalPrice, setOldTotalPrice] = useState(0);
-  const { cart,clearCart } = useCart();
+  const [disabled,setDisabled] = useState(false);
+  const { cart,clearCart,setCartCount } = useCart();
   const [couponCode, setCouponCode] = useState({ code: "", discount: "",couponId: "" });
+  useEffect(() => {
+    setDisabled(!(cart && cart.length > 0));
+  }, [cart]);
+
   const handleApplyCoupon = (discount) => {
     let discountedAmount = oldTotalPrice;
     const value = parseFloat(discount.replace(/[^0-9.]/g, ""));
@@ -58,10 +63,17 @@ function AddressShipping() {
   let total = 0;
   useEffect(() => {
     const total = cart?.reduce(
-      (sum, item) =>
-        sum + ((item?.details?.discount_price || 0) * (item?.quantity || 1)),
+      (sum, item) => {
+        const price =
+          item?.details?.discount_price > 0
+            ? item?.details?.discount_price
+            : item?.details?.price;
+
+        return sum + (price * (item?.quantity || 1));
+      },
       0
     );
+
 
     setTotalAmount(total);
     setOldTotalPrice(total);
@@ -132,11 +144,13 @@ function AddressShipping() {
           }
         );
       }
-;
+      
       // fetchCoupons();
       if (data.message == 'Checkout successful, order created, access granted!') {
         setOrderSuccess(true);
         clearCart();
+        setCartCount(0);
+        setDisabled(false);
       }
     } catch (error) {
       console.error("Checkout failed:", error);
@@ -197,32 +211,32 @@ function AddressShipping() {
     validateField(fieldName, value)
   }
 
-  const handleAddressChange = (e) => {
-    const value = e.target.value;    
-    setSelectedAddress(value);
-    setIsNewAddress(true);
+  // const handleAddressChange = (e) => {
+  //   const value = e.target.value;    
+  //   setSelectedAddress(value);
+  //   setIsNewAddress(true);
 
-    if (value === "new") {
-      // Agar user new address dalna chahta hai toh saare fields empty ho jaye
-      setUserData({
-        name: "",
-        email: "",
-        phone: "",
-        state: "",
-        city: "",
-        address: "",
-        pincode: "",
-      });
-      setIsNewAddress(true);
-    } else if (value === "old") {
-      fetchUserData();
-      setIsNewAddress(true);
-    }
-    // Reset errors jab address type change ho
-    if (value !== "new") {
-      setErrors({});
-    }
-  };
+  //   if (value === "new") {
+  //     // Agar user new address dalna chahta hai toh saare fields empty ho jaye
+  //     setUserData({
+  //       name: "",
+  //       email: "",
+  //       phone: "",
+  //       state: "",
+  //       city: "",
+  //       address: "",
+  //       pincode: "",
+  //     });
+  //     setIsNewAddress(true);
+  //   } else if (value === "old") {
+  //     fetchUserData();
+  //     setIsNewAddress(true);
+  //   }
+  //   // Reset errors jab address type change ho
+  //   if (value !== "new") {
+  //     setErrors({});
+  //   }
+  // };
 
   const generateReferenceNumber = () => {
     const timestamp = Date.now()
@@ -447,20 +461,18 @@ function AddressShipping() {
     return `${min}:${sec}`
   }
   const [totalOrder, setTotalOrder] = useState({
-    user: userdata,
     cart: [],
     totalAmount: 0,
     paymentMethod: "cod",
   });
   useEffect(() => {
   setTotalOrder({
-    user: userdata,
     cart: cart,
     totalAmount: totalAmount,
     paymentMethod: "cod",
     couponId: couponCode.couponId,
   });
-}, [cart, totalAmount, userdata,couponCode]);
+}, [cart, totalAmount,couponCode]);
 console.log("totalOrder = ", totalOrder);
   return (
     <> 
@@ -484,10 +496,8 @@ console.log("totalOrder = ", totalOrder);
               <div className="bg-white rounded-lg shadow-sm border-2 border-gray-100 p-6 mb-6">               
 
                 {/* Shipping Information */}
-                <div className="mb-8">
-                  {/* <h2 className="text-xl font-bold mb-4 text-gray-900">Shipping Information</h2> */}
+                {/* <div className="mb-8">
                   <div className="space-y-4">
-                    {/* Address Selection */}
                     <div>
                       <label className="block text-sm font-semibold text-gray-800 mb-2">
                         Select Address
@@ -515,136 +525,9 @@ console.log("totalOrder = ", totalOrder);
                         </div>
                       </div>
                     </div>
-
-
-                    {/* New Address Form */}
-                    {isNewAddress && (
-                      <div className="space-y-6 p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
-                        {/* Error summary */}
-                        {Object.values(errors).some(error => error) && (
-                          <div className="bg-red-100/60 border border-red-300 rounded-lg p-4">
-                            <div className="flex">
-                              <div className="flex-shrink-0">
-                                <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                                </svg>
-                              </div>
-                              <div className="ml-3">
-                                <h3 className="text-sm font-medium text-red-800">Please fix the following errors:</h3>
-                                <div className="mt-2 text-sm text-red-700">
-                                  <ul className="list-disc pl-5 space-y-1">
-                                    {errors.name && <li>{errors.name}</li>}
-                                    {errors.email && <li>{errors.email}</li>}
-                                    {errors.phone && <li>{errors.phone}</li>}
-                                    {errors.pinCode && <li>{errors.pinCode}</li>}
-                                    {errors.address && <li>{errors.address}</li>}
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-1">Full Name *</label>
-                            <input
-                              type="text"
-                              name="name"
-                              className={`w-full rounded-xl border bg-white shadow-sm transition-all ${errors.name ? 'border-red-500' : 'border-gray-300'} px-3 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
-                              value={userdata.name}
-                              onChange={handleonChange}
-                              onBlur={() => handleBlur('name')}
-                              placeholder="Enter your name"
-                            />
-                            {errors.name && <p className="mt-1 text-xs text-red-500 italic">
-                              {errors.name}</p>}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-1">Phone *</label>
-                            <input
-                              type="tel"
-                              name="phone"
-                              className={`w-full rounded-xl border bg-white shadow-sm transition-all ${errors.phone ? 'border-red-500' : 'border-gray-300'} px-3 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
-                              value={userdata.phone}
-                              onChange={(e) => {
-                                const val = e.target.value.replace(/\D/g, "").slice(0, 10)
-                                handleonChange({ target: { name: 'phone', value: val } })
-                                if (touchedFields.phone) validateField('phone', val)
-                              }}
-                              onBlur={() => handleBlur('phone')}
-                              placeholder="Enter phone number"
-                            />
-                            {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-semibold text-gray-800 mb-1">Email *</label>
-                          <input
-                            type="email"
-                            name="email"
-                            className={`w-full rounded-xl border bg-white shadow-sm transition-all ${errors.email ? 'border-red-500' : 'border-gray-300'} px-3 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
-                            value={userdata.email}
-                            onChange={handleonChange}
-                            onBlur={() => handleBlur('email')}
-                            placeholder="Enter email address"
-                          />
-                          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-1">PIN Code *</label>
-                            <input
-                              type="text"
-                              className={`w-full rounded-xl border bg-white shadow-sm transition-all ${errors.pinCode ? 'border-red-500' : 'border-gray-300'} px-3 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
-                              value={userdata.pincode}
-                              onChange={handlePinCodeChange}
-                              onBlur={() => handleBlur('pinCode')}
-                              placeholder="Enter PIN code"
-                            />
-                            {errors.pinCode && <p className="mt-1 text-sm text-red-600">{errors.pinCode}</p>}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-1">State</label>
-                            <input
-                              type="text"
-                              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 bg-gray-100"
-                              value={userdata.state}
-                              readOnly
-                              placeholder="Auto-filled"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-1">City</label>
-                            <input
-                              type="text"
-                              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 bg-gray-100"
-                              value={userdata.city}
-                              readOnly
-                              placeholder="Auto-filled"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-semibold text-gray-800 mb-1">Address *</label>
-                          <textarea
-                            name="address"
-                            className={`w-full rounded-xl border bg-white shadow-sm transition-all ${errors.address ? 'border-red-500' : 'border-gray-300'} px-3 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
-                            rows={3}
-                            value={userdata.address}
-                            onChange={handleonChange}
-                            onBlur={() => handleBlur('address')}
-                            placeholder="Enter complete address (House no, Building, Street, Area)"
-                          />
-                          {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
-                        </div>
-                      </div>
-                    )}
+                    
                   </div>
-                </div>              
+                </div>               */}
                 {/* Payment Method */}
                 <div className="mb-8">
                   <h2 className="text-xl font-bold mb-4 text-gray-900">Payment Method</h2>
@@ -709,7 +592,13 @@ console.log("totalOrder = ", totalOrder);
                           </h4>
                           <p className="text-xs text-gray-500">Qty: {item?.quantity}</p>
                           <p className="font-semibold text-[#384D89] text-sm">
-                            ₹{item?.details?.discount_price * item?.quantity}
+                            ₹{
+                              (
+                                (item?.details?.discount_price > 0
+                                  ? item?.details?.discount_price
+                                  : item?.details?.price) * (item?.quantity || 1)
+                              )?.toLocaleString()
+                            }
                           </p>
                         </div>
                       </div>
@@ -773,7 +662,7 @@ console.log("totalOrder = ", totalOrder);
                       />
                       <button
                         onClick={() => handleApplyCoupon(couponCode.discount)}
-                        disabled={cart?.length === 0}
+                        disabled={disabled}
                         className={`text-sm px-4 py-2 rounded-lg transition ${
                           !couponCode.code?.trim()
                             ? "bg-gray-400 cursor-not-allowed"
@@ -824,7 +713,7 @@ console.log("totalOrder = ", totalOrder);
                   <div className="space-y-4">
                     <button
                       onClick={checkout}
-                      disabled={cart?.length === 0}
+                      disabled={disabled}
                       className={`block w-full py-4 px-6 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl cursor-pointer ${
                         cart?.length === 0
                           ? "bg-gray-400 cursor-not-allowed"
