@@ -271,9 +271,9 @@ export default function CourseDetailsPage() {
             {/* Course Header */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex flex-col md:flex-row gap-6">
-                {course?.imagesFullPath?.[0] && (
+                {course?.full_image?.[0] && (
                   <img
-                    src={course.imagesFullPath[0]}
+                    src={course.full_image[0]}
                     alt={course.title}
                     className="w-full md:w-64 h-48 object-cover rounded-lg"
                   />
