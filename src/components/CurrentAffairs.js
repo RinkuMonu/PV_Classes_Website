@@ -212,7 +212,7 @@ export default function CurrentAffairsSlider() {
           <div className="flex justify-center">
   <Link
     href="/current-affairs"
-    className="bg-[#204972] text-white px-4 sm:px-6 md:px-8 py-2 rounded-md whitespace-nowrap text-sm sm:text-base"
+    className="bg-[#204972] text-white px-4 sm:px-6 md:px-8 py-2 cursor-pointer rounded-md whitespace-nowrap text-sm sm:text-base"
   >
     See All <span className="ml-1">→</span>
   </Link>
