@@ -30,7 +30,7 @@ export default function Home() {
       <TestSeriesHome />
 
       <CurrentAffairs />
-      <TrustedPlatform />
+      {/* <TrustedPlatform /> */}
       <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
