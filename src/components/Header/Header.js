@@ -144,7 +144,7 @@ export default function Header() {
     setActiveCategory(activeCategory === category ? null : category)
   }
 
-
+  console.log("cart = ", cart);
   // ✅ Track login state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -186,7 +186,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // const cartToDisplay = isLoggedIn ? cartItems : localCart;
   const total = cart?.reduce(
   (sum, item) => {
     const price =
@@ -601,26 +600,6 @@ export default function Header() {
                       {item?.itemType === "combo" ? (
                         <div className="grid grid-cols-2 gap-3">
                           {/* Books */}
-                          {item?.details?.books?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <span className="text-lg font-bold text-[#00316B]">
-                                {item?.details?.books?.length}
-                              </span>
-                              <span className="text-xs text-[#204972]">Books</span>
-                            </div>
-                          )}
-
-                          {/* Courses */}
-                          {item?.details?.courses?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <span className="text-lg font-bold text-[#00316B]">
-                                {item?.details?.courses?.length}
-                              </span>
-                              <span className="text-xs text-[#204972]">Courses</span>
-                            </div>
-                          )}
-
-                          {/* PYQs */}
                           {item?.details?.pyqs?.length > 0 && (
                             <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
                               <span className="text-lg font-bold text-[#00316B]">
@@ -629,16 +608,34 @@ export default function Header() {
                               <span className="text-xs text-[#204972]">PYQs</span>
                             </div>
                           )}
-
-                          {/* Test Series */}
-                          {item?.details?.testSeries?.length > 0 && (
+                          {item?.details?.books?.length > 0 && (
                             <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <span className="text-lg font-bold text-[#00316B]">
-                                {item?.details?.testSeries?.length}
-                              </span>
-                              <span className="text-xs text-[#204972]">Test Series</span>
+                              <img
+                                src={item?.details?.books?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                alt={item?.details?.books?.[0]?.title}
+                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                              />
+                              <span className="text-xs text-[#204972]">books</span>
                             </div>
                           )}
+                          {item?.details?.testSeries?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <img
+                                src={item?.details?.testSeries?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                alt={item?.details?.testSeries?.[0]?.title}
+                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                              />
+                              <span className="text-xs text-[#204972]">test series</span>
+                            </div>
+                          )}
+                          {item?.details?.course?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.course?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">courses</span>
+                            </div>
+                          )}                          
                         </div>
                       ) : (
                         <img
