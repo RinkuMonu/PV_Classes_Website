@@ -482,11 +482,10 @@ export default function CurrentAffairsPage() {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-base border transition font-bold cursor-pointer mt-10 ${
-                    selectedCategory === cat
+                  className={`px-4 py-2 rounded-full text-base border transition font-bold cursor-pointer mt-10 ${selectedCategory === cat
                       ? "bg-[#00316B] text-white border-[#00316B]"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -509,7 +508,7 @@ export default function CurrentAffairsPage() {
               onClick={() => setFilterOpen(true)}
               className="flex items-center gap-2 px-4 py-2.5 bg-[#00316B] text-white rounded-lg transition cursor-pointer shadow-md"
             >
-              <Filter size={18} /> Filter Results
+              <Filter size={18} /> Filter
             </button>
           </div>
 
@@ -519,7 +518,7 @@ export default function CurrentAffairsPage() {
               <Link
                 key={cat}
                 href={`/current-affairs/category/${cat?.toLowerCase()?.replace(/\s+/g, "-")}`}
-                className="px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium border border-gray-200 hover:bg-[#00316B] hover:text-white transition-all shadow-sm"
+                className="px-4 py-2 bg-[#00316B] text-white rounded-lg text-sm font-medium border border-gray-200 hover:bg-[#00316B] hover:text-white transition-all shadow-sm"
               >
                 {cat}
               </Link>
@@ -536,7 +535,7 @@ export default function CurrentAffairsPage() {
               >
                 <div className="flex justify-between items-center mb-6 pb-3 border-b">
                   <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
-                  <button 
+                  <button
                     onClick={() => setFilterOpen(false)}
                     className="p-1 rounded-full hover:bg-gray-100 transition"
                   >
@@ -552,11 +551,10 @@ export default function CurrentAffairsPage() {
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${
-                          selectedCategory === cat
+                        className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${selectedCategory === cat
                             ? "bg-[#00316B] text-white border-[#00316B] shadow-sm"
                             : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                        }`}
+                          }`}
                       >
                         {cat}
                       </button>
@@ -595,11 +593,10 @@ export default function CurrentAffairsPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => setSelectedTag("")}
-                      className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${
-                        selectedTag === ""
+                      className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${selectedTag === ""
                           ? "bg-[#00316B] text-white border-[#00316B] shadow-sm"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                      }`}
+                        }`}
                     >
                       All
                     </button>
@@ -607,11 +604,10 @@ export default function CurrentAffairsPage() {
                       <button
                         key={tag}
                         onClick={() => setSelectedTag(tag)}
-                        className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${
-                          selectedTag === tag
+                        className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer ${selectedTag === tag
                             ? "bg-[#00316B] text-white border-[#00316B] shadow-sm"
                             : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                        }`}
+                          }`}
                       >
                         {tag}
                       </button>
@@ -671,7 +667,7 @@ export default function CurrentAffairsPage() {
                   );
                   if (!catItems || catItems?.length === 0) return null;
                   return (
-                    <div key={cat} className="bg-white rounded-xl shadow-sm p-6">
+                    <div key={cat} className="bg-white rounded-xl p-6">
                       <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl md:text-2xl font-bold text-gray-900">{cat}</h2>
                         <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
@@ -681,7 +677,7 @@ export default function CurrentAffairsPage() {
                       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {catItems?.map((item) => (
                           <Link key={item?._id} href={`/current-affairs/${item?.slug}`}>
-                            <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white border border-gray-100 group">
+                            <div className="rounded-xl overflow-hidden shadow-xl hover:shadow-xl transition-all duration-300 bg-white border border-gray-100 group">
                               <div className="relative overflow-hidden">
                                 <Image
                                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${item?.image || ""}`}
@@ -700,10 +696,10 @@ export default function CurrentAffairsPage() {
                                   <CalendarDays size={14} />
                                   {item?.publishDate
                                     ? new Date(item?.publishDate).toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                      })
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
                                     : "N/A"}
                                 </div>
                                 <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#00316B] transition-colors">
@@ -736,37 +732,34 @@ export default function CurrentAffairsPage() {
                     <button
                       onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className={`p-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        currentPage === 1
+                      className={`p-2 rounded-lg text-sm font-medium transition-all duration-300 ${currentPage === 1
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                           : "bg-white text-gray-700 hover:bg-blue-50 hover:text-[#00316B]"
-                      }`}
+                        }`}
                     >
                       <ChevronLeft size={18} />
                     </button>
-                    
+
                     {getVisiblePages()?.map((page) => (
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-300 ${
-                          currentPage === page
+                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-300 ${currentPage === page
                             ? "bg-[#00316B] text-white shadow"
                             : "bg-white text-gray-700 hover:bg-blue-50 hover:text-[#00316B]"
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>
                     ))}
-                    
+
                     <button
                       onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className={`p-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        currentPage === totalPages
+                      className={`p-2 rounded-lg text-sm font-medium transition-all duration-300 ${currentPage === totalPages
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                           : "bg-white text-gray-700 hover:bg-blue-50 hover:text-[#00316B]"
-                      }`}
+                        }`}
                     >
                       <ChevronRight size={18} />
                     </button>
