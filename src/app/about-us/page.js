@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function AboutUs() {
   return (
@@ -106,9 +107,9 @@ export default function AboutUs() {
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Get in touch with our team to discuss how we can help you achieve your goals.
           </p>
-          <button className="bg-white text-[#204972] px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors">
+          <Link href={"/contact-us"} className="bg-white text-[#204972] px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors">
             Contact Us
-          </button>
+          </Link>
         </div>
       </section>
 
