@@ -11,15 +11,15 @@ import { useCart } from "../../components/context/CartContext";
 const formatINR = (n) =>
   typeof n === "number"
     ? new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        maximumFractionDigits: 0,
-      }).format(n)
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(n)
     : "—";
 
 export default function CoursesPage() {
-  const { addToCart} = useCart();
-  
+  const { addToCart, isOpen, openCart, closeCart } = useCart();
+
   const searchParams = useSearchParams();
   const examId = searchParams?.get("exam");
 
@@ -86,7 +86,7 @@ export default function CoursesPage() {
     ?.filter((c) =>
       q?.trim()
         ? c?.title?.toLowerCase()?.includes(q?.toLowerCase()) ||
-          (c?.shortTitle || "")?.toLowerCase()?.includes(q?.toLowerCase())
+        (c?.shortTitle || "")?.toLowerCase()?.includes(q?.toLowerCase())
         : true
     );
 
@@ -97,10 +97,20 @@ export default function CoursesPage() {
     if (page > pages) setPage(1);
   }, [pages, page]);
 
+
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      const el = document.getElementById("courses");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main className="min-h-screen bg-white">
       <CourseHero />
-
       <ExamToolbar
         categories={[]} // remove if not needed
         selected={cat}
@@ -166,6 +176,7 @@ export default function CoursesPage() {
                 >
                   <img
                     src={c?.full_image?.[0] || "/vercel.svg"}
+                    // src={`http://localhost:5000${c?.images?.[0]}`}
                     alt={c?.title || "Course"}
                     className="w-full h-48 object-cover rounded-t-lg"
                   />
@@ -190,11 +201,15 @@ export default function CoursesPage() {
                         )}
                       </div>
                       <button
-                         onClick={(e) => handleAdd(e, "course",c?._id)}
+                        onClick={(e) => {
+                          handleAdd(e, "course", c?._id);
+                          openCart();
+                        }}
                         className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
                       >
                         Add to Cart
                       </button>
+
                     </div>
                   </div>
                 </a>

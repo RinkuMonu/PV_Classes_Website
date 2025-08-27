@@ -8,7 +8,7 @@ import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
 
 export default function CourseDetailsPage() {
-  const { addToCart } = useCart();  
+  const { addToCart, isOpen, openCart, closeCart } = useCart();
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -90,7 +90,7 @@ export default function CourseDetailsPage() {
       }
     } catch (error) {
       if (error?.response?.status === 401) {
-        return null; 
+        return null;
       } else if (error?.response?.status === 403) {
         setHasPurchased(false);
       }
@@ -99,12 +99,12 @@ export default function CourseDetailsPage() {
       setCheckingAccess(false);
     }
   };
-  
+
   const calculateTotalPrice = () => {
     if (!course) return 0;
-    
+
     let total = 0;
-    
+
     if (cartMode === "course") {
       total = course?.price || 0;
     } else if (cartMode === "combo") {
@@ -129,18 +129,18 @@ export default function CourseDetailsPage() {
         });
       }
     }
-    
+
     return total;
   };
 
   const calculateDiscount = () => {
     if (!course?.comboId) return 0;
-    
+
     let originalComboPrice = 0;
     course?.comboItems?.forEach(item => {
       originalComboPrice += item?.itemId?.price || 0;
     });
-    
+
     return originalComboPrice - (course?.comboId?.discount_price || 0);
   };
 
@@ -165,7 +165,7 @@ export default function CourseDetailsPage() {
     } else {
       toast.error(response.message);
     }
-  }; 
+  };
 
   if (loading || checkingAccess) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -210,11 +210,10 @@ export default function CourseDetailsPage() {
 
     return (
       <div
-        className={`flex flex-col sm:flex-row gap-4 p-4 border rounded-lg transition-all ${
-          selectAll
+        className={`flex flex-col sm:flex-row gap-4 p-4 border rounded-lg transition-all ${selectAll
             ? "border-[#204972] bg-blue-50"
             : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
-        }`}
+          }`}
       >
         <div className="flex items-start gap-3">
           {imageUrl ? (
@@ -259,7 +258,7 @@ export default function CourseDetailsPage() {
   const totalPrice = calculateTotalPrice();
   const baseCoursePrice = course?.price || 0;
   const discountAmount = calculateDiscount();
-  
+
   return (
     <>
       <section className="relative w-full h-[70vh] sm:h-[40vh] lg:h-[50vh] text-white mb-6 sm:mb-8">
@@ -295,9 +294,10 @@ export default function CourseDetailsPage() {
             {/* Course Header */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
               <div className="flex flex-col md:flex-row gap-6">
-                {course?.full_image?.[0] && (
+                {course?.images?.[0] && (
                   <img
                     src={course.full_image[0]}
+                    // src={`http://localhost:5000${course?.images?.[0]}`}
                     alt={course.title}
                     className="w-full md:w-64 h-48 object-cover rounded-lg border"
                   />
@@ -341,11 +341,10 @@ export default function CourseDetailsPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Course Only */}
                 <div
-                  className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
-                    selectedOption?.type === "course"
+                  className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${selectedOption?.type === "course"
                       ? "border-[#204972] bg-blue-50 shadow-md"
                       : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
-                  }`}
+                    }`}
                   onClick={() => (
                     setSelectedOption({ type: "course", id: course._id }),
                     setCartMode("course")
@@ -358,11 +357,10 @@ export default function CourseDetailsPage() {
                 {/* Combo Only */}
                 {course.comboItems && course.comboItems.length > 0 && (
                   <div
-                    className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
-                      selectedOption?.type === "combo"
+                    className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${selectedOption?.type === "combo"
                         ? "border-[#204972] bg-blue-50 shadow-md"
                         : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
-                    }`}
+                      }`}
                     onClick={() => {
                       setSelectedOption({
                         type: "combo",
@@ -381,7 +379,7 @@ export default function CourseDetailsPage() {
                 )}
 
                 {/* Both Course and Combo */}
-                {course.comboItems && course.comboItems.length > 0 && (
+                {/* {course.comboItems && course.comboItems.length > 0 && (
                   <div
                     className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
                       selectedOption?.type === "both"
@@ -402,7 +400,7 @@ export default function CourseDetailsPage() {
                       ₹{baseCoursePrice + (course.comboId?.discount_price || 0)}
                     </p>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -476,8 +474,8 @@ export default function CourseDetailsPage() {
                   <div className="text-right">
                     <div className="text-lg font-bold text-[#616602]">
                       {cartMode === "combo" ? "Combo Total: " : "Combo Price: "}
-                      ₹{selectAll && course.comboId?.discount_price 
-                        ? course.comboId.discount_price 
+                      ₹{selectAll && course.comboId?.discount_price
+                        ? course.comboId.discount_price
                         : selectedComboItems.reduce((sum, index) => sum + course.comboItems[index].price, 0)
                       }
                     </div>
@@ -617,13 +615,17 @@ export default function CourseDetailsPage() {
                   </div>
                 </div>
 
-                <button 
-                  onClick={(e) => handleAdd(e, selectedOption.type, selectedOption.id)}
+                <button
+                  onClick={(e) => {
+                    handleAdd(e, selectedOption.type, selectedOption.id);
+                    openCart();
+                  }}
                   className="w-full bg-[#788406] hover:bg-[#16385d] text-white font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2"
                 >
                   <FiShoppingCart />
                   Add to cart
                 </button>
+
 
                 <p className="text-center text-hite text-sm mt-4 flex items-center justify-center">
                   <FiAward className="mr-1 text-amber-500" />

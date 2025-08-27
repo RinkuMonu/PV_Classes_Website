@@ -311,7 +311,7 @@ import axiosInstance from "../../axios/axiosInstance";
 import { useCart } from "../../../components/context/CartContext";
 
 export default function ProductPage() {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
     const response = await addToCart({
@@ -358,7 +358,7 @@ export default function ProductPage() {
       desc: "Secure payment options"
     },
   ];
-  
+
   const [mainImage, setMainImage] = useState();
   useEffect(() => {
     setMainImage(books?.full_image?.[0]);
@@ -380,7 +380,7 @@ export default function ProductPage() {
     <>
       <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-5">
         {/* Breadcrumb */}
-    
+
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Image Gallery */}
@@ -424,13 +424,13 @@ export default function ProductPage() {
                 Bestseller
               </span>
             </div>
-            
+
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {books?.title}
             </h1>
-            
+
             <p className="text-gray-500 mb-4">By PV Classes</p>
-            
+
             <div className="flex items-center gap-2 mb-4">
               <div className="flex text-yellow-400">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -441,7 +441,7 @@ export default function ProductPage() {
               </div>
               <span className="text-gray-500 text-sm">(42 reviews)</span>
             </div>
-            
+
             <div className="flex items-baseline gap-3 mb-6">
               <span className="text-3xl font-bold text-[#204972]">₹{books?.discount_price}</span>
               {books?.discount_price && books?.price && (
@@ -453,28 +453,47 @@ export default function ProductPage() {
                 </>
               )}
             </div>
-            
+
             <div className="mb-6">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${books?.stock > 0 ? "text-green-800 bg-green-100" : "text-red-800 bg-red-100"}`}>
                 {books?.stock > 0 ? "In Stock" : "Out of Stock"}
               </span>
             </div>
-            
+
             <p className="text-gray-700 leading-relaxed mb-6">
               {books?.book_description}
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <button 
-                onClick={(e) => handleAdd(e, "book", books?._id)} 
+              <button
+                onClick={(e) => {
+                  handleAdd(e, "book", books?._id);
+                  openCart();
+                }}
                 disabled={loading || books?.stock <= 0}
                 className="flex items-center justify-center gap-2 px-8 py-3 bg-[#616602] text-white rounded-lg font-semibold hover:bg-[#4d5501] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     ADDING...
                   </>
@@ -485,13 +504,14 @@ export default function ProductPage() {
                   </>
                 )}
               </button>
-              
+
+
               {/* <button className="flex items-center justify-center gap-2 px-8 py-3 border-2 border-[#616602] text-[#616602] rounded-lg font-semibold hover:bg-[#616602] hover:text-white transition-colors">
                 <BsStars className="text-lg" />
                 BUY NOW
               </button> */}
             </div>
-            
+
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               {features.map((feature, index) => (
@@ -539,7 +559,7 @@ export default function ProductPage() {
                           {tag.charAt(0).toUpperCase() + tag.slice(1)}
                         </div>
                       ))} */}
-                      
+
                       <div className="relative w-full h-60 bg-gray-100">
                         <Image
                           src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}

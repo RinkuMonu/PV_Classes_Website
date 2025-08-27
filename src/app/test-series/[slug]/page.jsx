@@ -84,36 +84,36 @@ export default function TestSeriesUnified() {
   // }, [seriesId]);
 
   // ---------------- Fetch details ----------------
-  
+
   useEffect(() => {
-  (async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setHasAccess(false);
+          return;
+        }
+
+        const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          validateStatus: (status) => status < 500, // 4xx को error मत मानो
+        });
+
+        if (res.status === 200 && res.data.message === "Access granted") {
+          setHasAccess(true);
+        } else {
+          setHasAccess(false);
+        }
+      } catch (err) {
+        console.error("Access check failed:", err);
         setHasAccess(false);
-        return;
       }
+    })();
+  }, [seriesId]);
 
-      const res = await axiosInstance.get(`/access/check/${seriesId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        validateStatus: (status) => status < 500, // 4xx को error मत मानो
-      });
 
-      if (res.status === 200 && res.data.message === "Access granted") {
-        setHasAccess(true);
-      } else {
-        setHasAccess(false);
-      }
-    } catch (err) {
-      console.error("Access check failed:", err);
-      setHasAccess(false);
-    }
-  })();
-}, [seriesId]);
-
-  
   console.log(series, "serise");
   const fetchSeries = async () => {
     try {
@@ -220,9 +220,9 @@ export default function TestSeriesUnified() {
       const payload =
         q.type === "numeric"
           ? {
-              numericAnswer:
-                numericAnswer === "" ? undefined : Number(numericAnswer),
-            }
+            numericAnswer:
+              numericAnswer === "" ? undefined : Number(numericAnswer),
+          }
           : { selectedOptions };
 
       const res = await axiosInstance.post(
@@ -511,9 +511,9 @@ export default function TestSeriesUnified() {
           <h2 className="text-xl font-semibold">
             {selectedTest?.title} — Question {index + 1} / {total}
           </h2>
-        <div className="flex items-center justify-center p-3 rounded-full bg-[#00316B]/90 text-white text-xl font-bold shadow-md">
-  {String(timeLeft).padStart(2, "0")}s
-</div>
+          <div className="flex items-center justify-center p-3 rounded-full bg-[#00316B]/90 text-white text-xl font-bold shadow-md">
+            {String(timeLeft).padStart(2, "0")}s
+          </div>
 
         </div>
 
@@ -533,7 +533,7 @@ export default function TestSeriesUnified() {
                       name="opt"
                       checked={selectedOptions.includes(op.key)}
                       onChange={() => toggleOption(op.key)}
-                        className="
+                      className="
     h-5 w-5 
     text-[#00316B] 
     border-gray-300 
@@ -595,47 +595,47 @@ export default function TestSeriesUnified() {
   // ---------- Mode: RESULT ----------
   if (mode === "result") {
     return (
-  <div className="max-w-3xl mx-auto p-6 space-y-6">
-  <h2 className="text-3xl font-extrabold text-gray-800">
-    Result — <span className="text-[#00316B]">{selectedTest?.title}</span>
-  </h2>
+      <div className="max-w-3xl mx-auto p-6 space-y-6">
+        <h2 className="text-3xl font-extrabold text-gray-800">
+          Result — <span className="text-[#00316B]">{selectedTest?.title}</span>
+        </h2>
 
-  {result ? (
-    <>
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Stat label="Total" value={result.totalQuestions} />
-        <Stat label="Correct" value={result.correctCount} />
-        <Stat label="Wrong" value={result.wrongCount} />
-        <Stat label="Unattempted" value={result.unattemptedCount} />
-      </div>
+        {result ? (
+          <>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Stat label="Total" value={result.totalQuestions} />
+              <Stat label="Correct" value={result.correctCount} />
+              <Stat label="Wrong" value={result.wrongCount} />
+              <Stat label="Unattempted" value={result.unattemptedCount} />
+            </div>
 
-      {/* Marks Section */}
-      <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
-        <div className="text-lg text-gray-700">
-          Total Marks:{" "}
-          <span className="font-bold text-[#00316B] text-xl">
-            {result.totalMarks}
-          </span>
+            {/* Marks Section */}
+            <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+              <div className="text-lg text-gray-700">
+                Total Marks:{" "}
+                <span className="font-bold text-[#00316B] text-xl">
+                  {result.totalMarks}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="p-5 rounded-xl border border-gray-200 shadow-sm text-gray-500">
+            No result data.
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex gap-3 pt-4 justify-end">
+          <button
+            className="bg-[#00316B] hover:bg-[#00316B]/80 text-white px-5 py-3 rounded-xl font-medium shadow-md transition"
+            onClick={backToDetails}
+          >
+            Back to Series
+          </button>
         </div>
       </div>
-    </>
-  ) : (
-    <div className="p-5 rounded-xl border border-gray-200 shadow-sm text-gray-500">
-      No result data.
-    </div>
-  )}
-
-  {/* Actions */}
-  <div className="flex gap-3 pt-4 justify-end">
-    <button
-      className="bg-[#00316B] hover:bg-[#00316B]/80 text-white px-5 py-3 rounded-xl font-medium shadow-md transition"
-      onClick={backToDetails}
-    >
-      Back to Series
-    </button>
-  </div>
-</div>
 
     );
   }
@@ -645,7 +645,7 @@ export default function TestSeriesUnified() {
 
 /* ---------- Sidebar Card ---------- */
 function SidebarCard({ series, hasAccess }) {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
     const response = await addToCart({ itemType, itemId });
@@ -721,11 +721,15 @@ function SidebarCard({ series, hasAccess }) {
         </div>
         {!hasAccess && (
           <button
-            onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+            onClick={(e) => {
+              handleAdd(e, "testSeries", series?._id);
+              openCart();
+            }}
             className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
           >
             Add to Library
           </button>
+
         )}
         <div
           onClick={handleShare}
@@ -753,9 +757,8 @@ function Stat({ label, value }) {
     <div className="p-5 rounded-xl bg-white shadow hover:shadow-md transition-shadow">
       <div className="text-sm font-medium text-gray-500">{label}</div>
       <div
-        className={`text-3xl font-extrabold mt-1 ${
-          colors[label] || "text-[#00316B]"
-        }`}
+        className={`text-3xl font-extrabold mt-1 ${colors[label] || "text-[#00316B]"
+          }`}
       >
         {value}
       </div>

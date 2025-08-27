@@ -161,7 +161,7 @@ import { FaPlus, FaBookOpen } from "react-icons/fa";
 import Link from "next/link";
 
 export default function TestSeriesHome() {
-    const { addToCart, loading } = useCart();
+    const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
     const [testSeriesData, setTestSeriesData] = useState([]);
 
     useEffect(() => {
@@ -226,7 +226,7 @@ export default function TestSeriesHome() {
                                                     <h2 className="text-lg md:text-xl font-semibold leading-snug text-gray-800 line-clamp-2">
                                                         {series?.title || "Untitled Test Series"}
                                                     </h2>
-                                                       {series?.total_tests > 0 && (
+                                                    {series?.total_tests > 0 && (
                                                         <div className="absolute top-3 right-3 bg-gradient-to-r from-[#1d3a5f] to-[#204972] text-white text-xs md:text-sm px-3 py-0 rounded-full font-medium shadow-md">
                                                             {series?.total_tests} Tests
                                                         </div>
@@ -246,7 +246,7 @@ export default function TestSeriesHome() {
                                                         fill
                                                         className="object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                                                     />
-                                                 
+
                                                 </div>
 
                                                 {/* Validity */}
@@ -278,13 +278,17 @@ export default function TestSeriesHome() {
 
                                         {/* Big Add to Cart Button */}
                                         <button
-                                            onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+                                            onClick={(e) => {
+                                                handleAdd(e, "testSeries", series?._id);
+                                                openCart();
+                                            }}
                                             disabled={loading}
                                             className="w-[90%] mx-auto mb-4 flex items-center justify-center gap-2 absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#00316B] px-6 py-2 rounded-xl text-white text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                                         >
                                             <FaPlus className="text-sm" />
                                             {loading ? "ADDING..." : "ADD TO CART"}
                                         </button>
+
                                     </div>
 
                                 );
