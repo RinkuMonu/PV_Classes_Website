@@ -380,12 +380,12 @@ export default function Header() {
 
             >
               {/* Header */}
-              <div className="flex justify-between items-center p-4 border-b border-gray-400 text-white bg-[#115D8E]">
+              {/* <div className="flex justify-between items-center p-4 border-b border-gray-400 text-white bg-[#115D8E]">
                 <h2 className="text-lg font-semibold ">Your Shopping Cart</h2>
                 <button onClick={closeCart}>
                   <X size={20} />
                 </button>
-              </div>
+              </div> */}
 
               {/* Scrollable Cart Content */}
               <div className="flex flex-col h-[calc(100%-64px)] ">

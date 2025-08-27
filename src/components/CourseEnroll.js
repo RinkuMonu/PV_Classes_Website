@@ -16,7 +16,7 @@ export default function CourseEnroll() {
             </p>
             <Link href="/courses" className="inline-block">
               <button className="bg-[#87b105] text-primary-foreground  md:px-6 md:py-2 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Enroll Now
+                Get Started
               </button>
             </Link>
           </div>
