@@ -18,11 +18,13 @@ import {
   Trash2,
   Minus,
   Plus,
+  Tag,
 } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import ExamMegaMenu from "./ExamMegaMenu"
 import LoginModal from "../LoginModal"
 import { useCart } from "../context/CartContext"
+import { FaPhone } from "react-icons/fa"
 const examData = {
   "Government Exam": {
     tabs: {
@@ -130,7 +132,7 @@ const examData = {
 const isLoggedIn = true;
 
 export default function Header() {
-  const { cart, storageCart, updateQuantity, removeFromCart, fetchCart, cartCount } = useCart();
+  const { cart, storageCart, updateQuantity, removeFromCart, fetchCart, cartCount, isOpen, openCart, closeCart } = useCart();
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [examsMenuOpen, setExamsMenuOpen] = useState(false);
@@ -139,7 +141,7 @@ export default function Header() {
   const [openTabs, setOpenTabs] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false)
   const lastScrollRef = useRef(0)
-  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, setIsOpen] = useState(false)
   const toggleCategory = (category) => {
     setActiveCategory(activeCategory === category ? null : category)
   }
@@ -187,16 +189,16 @@ export default function Header() {
   }, [])
 
   const total = cart?.reduce(
-  (sum, item) => {
-    const price =
-      item?.details?.discount_price > 0
-        ? item?.details?.discount_price
-        : item?.details?.price;
+    (sum, item) => {
+      const price =
+        item?.details?.discount_price > 0
+          ? item?.details?.discount_price
+          : item?.details?.price;
 
-    return sum + (price * (item?.quantity || 1));
-  },
-  0
-);
+      return sum + (price * (item?.quantity || 1));
+    },
+    0
+  );
 
 
   console.log("total = ", total);
@@ -221,13 +223,13 @@ export default function Header() {
               <div className="p-1 bg-white/10 rounded-full">
                 <Mail size={14} />
               </div>
-              <span className="font-medium">info@7unique.in</span>
+              <span className="font-medium">Pvclasses01@gmail.com</span>
             </div>
             <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
               <div className="p-1 bg-white/10 rounded-full">
                 <MapPin size={14} />
               </div>
-              <span className="font-medium">Plot No 97, Dakshinpuri - I, Jagatpura, Jaipur Rajasthan, India, 302017</span>
+              <span className="font-medium">PV Classes, Jaipur Rajasthan, India, 302017</span>
             </div>
           </div>
           {/* Right */}
@@ -343,15 +345,18 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center">
-            {/* <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
-              <Tag size={20} />
-            </button> */}
-            {/* <button className="relative p-2 hover:bg-blue-100 rounded-full transition">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button> */}
+
+            <Link href="/contact-us">
+              <button className="flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition">
+                <FaPhone size={16} />
+                <span>Contact Us</span>
+              </button>
+            </Link>
+
+
+
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={openCart}
               className="relative p-3 hover:bg-[#009FE3]/10 rounded-full transition-all duration-200 group"
             >
               <ShoppingCart size={20} className="text-[#204972] group-hover:text-[#009FE3]" />
@@ -359,9 +364,11 @@ export default function Header() {
                 {cartCount}
               </span>
             </button>
+
+
             {isOpen && (
               <div
-                onClick={() => setIsOpen(false)}
+                onClick={closeCart}
                 className="fixed inset-0 bg-black/40 z-40"
               />
             )}
@@ -375,7 +382,7 @@ export default function Header() {
               {/* Header */}
               <div className="flex justify-between items-center p-4 border-b border-gray-400 text-white bg-[#115D8E]">
                 <h2 className="text-lg font-semibold ">Your Shopping Cart</h2>
-                <button onClick={() => setIsOpen(false)}>
+                <button onClick={closeCart}>
                   <X size={20} />
                 </button>
               </div>
@@ -411,17 +418,17 @@ export default function Header() {
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {cart?.map((item,index) => (
+                      {cart?.map((item, index) => (
                         <div
                           key={index}
                           className="flex flex-col sm:flex-row gap-4 relative  p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 "
                         >
                           {/* Product Image */}
-                          <div className="flex-shrink-0">
+                          <div className="flex-shrink-0">f
                             <img
-                              src={item?.details
-                                ?.full_image
-                                ?.[0]}
+                              src={item?.details?.full_image?.[0]}
+                              // src={`http://localhost:5000${item?.details?.images?.[0]}`}
+
                               alt={item?.details?.title
                               }
                               className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
@@ -476,12 +483,12 @@ export default function Header() {
 
                               <span className="text-sm font-medium text-gray-700 flex justify-end">
                                 Total: ₹{
-                                    (
-                                      (item?.details?.discount_price > 0
-                                        ? item?.details?.discount_price
-                                        : item?.details?.price) * (item?.quantity || 1)
-                                    )?.toLocaleString()
-                                  }
+                                  (
+                                    (item?.details?.discount_price > 0
+                                      ? item?.details?.discount_price
+                                      : item?.details?.price) * (item?.quantity || 1)
+                                  )?.toLocaleString()
+                                }
                               </span>
                             </div>
                           </div>
@@ -554,18 +561,17 @@ export default function Header() {
         </div>
       </div>
 
-      {isOpen && <div onClick={() => setIsOpen(false)} className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" />}
+      {isOpen && <div onClick={closeCart} className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" />}
 
       {/* Offcanvas */}
       <div
-        className={`fixed top-0 right-0 h-full bg-white w-80 md:w-96 shadow-2xl z-50 transform transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full bg-white w-80 md:w-96 shadow-2xl z-50 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-[#009FE3]/20 text-white bg-gradient-to-r from-[#00316B] to-[#204972]">
           <h2 className="text-xl font-bold">Your Shopping Cart</h2>
-          <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/20 rounded-full transition-colors">
+          <button onClick={closeCart} className="p-2 hover:bg-white/20 rounded-full transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -590,7 +596,7 @@ export default function Header() {
               </div>
             ) : (
               <div className="space-y-6">
-                {cart?.map((item,index) => (
+                {cart?.map((item, index) => (
                   <div
                     key={index}
                     className="flex flex-col  gap-4 p-5 rounded-2xl border border-[#009FE3]/20 bg-gradient-to-r from-white to-[#009FE3]/5 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-[#009FE3]/40"
@@ -635,11 +641,12 @@ export default function Header() {
                               </span>
                               <span className="text-xs text-[#204972]">courses</span>
                             </div>
-                          )}                          
+                          )}
                         </div>
                       ) : (
                         <img
                           src={item?.details?.full_image?.[0] || "/placeholder.svg"}
+                          // src={`http://localhost:5000${item?.details?.images?.[0]}`}
                           alt={item?.details?.title}
                           className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
                         />
@@ -660,7 +667,7 @@ export default function Header() {
 
                       <div className="flex items-center justify-between text-sm sm:text-base mt-auto">
                         <span className="font-bold text-[#87B105] text-lg">
-                         ₹{(item?.details?.discount_price && item?.details?.discount_price > 0
+                          ₹{(item?.details?.discount_price && item?.details?.discount_price > 0
                             ? item?.details?.discount_price
                             : item?.details?.price
                           )?.toLocaleString()}
@@ -674,39 +681,39 @@ export default function Header() {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
-                      {item?.itemType !== "combo" ?(
+                      {item?.itemType !== "combo" ? (
                         <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
-                        <div className="flex items-center border-2 border-[#009FE3]/20 rounded-xl overflow-hidden bg-white">
-                          <button
-                            onClick={() => updateQuantity(-1, item?.quantity, item?.itemId)}
-                            className="px-3 py-2 hover:bg-[#009FE3]/10 disabled:opacity-50 transition-colors"
-                            disabled={item?.quantity <= 1}
-                          >
-                            <Minus className="w-4 h-4 text-[#204972]" />
-                          </button>
-                          <span className="px-4 text-sm font-bold min-w-[40px] text-center text-[#00316B]">
-                            {item?.quantity}
+                          <div className="flex items-center border-2 border-[#009FE3]/20 rounded-xl overflow-hidden bg-white">
+                            <button
+                              onClick={() => updateQuantity(-1, item?.quantity, item?.itemId)}
+                              className="px-3 py-2 hover:bg-[#009FE3]/10 disabled:opacity-50 transition-colors"
+                              disabled={item?.quantity <= 1}
+                            >
+                              <Minus className="w-4 h-4 text-[#204972]" />
+                            </button>
+                            <span className="px-4 text-sm font-bold min-w-[40px] text-center text-[#00316B]">
+                              {item?.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateQuantity(1, item?.quantity, item?.itemId)}
+                              className="px-3 py-2 hover:bg-[#009FE3]/10 transition-colors"
+                            >
+                              <Plus className="w-4 h-4 text-[#204972]" />
+                            </button>
+                          </div>
+
+                          <span className="text-sm font-bold text-[#00316B] flex justify-end">
+                            Total: ₹{
+                              (
+                                (item?.details?.discount_price > 0
+                                  ? item?.details?.discount_price
+                                  : item?.details?.price) * (item?.quantity || 1)
+                              )?.toLocaleString()
+                            }
+
                           </span>
-                          <button
-                            onClick={() => updateQuantity(1, item?.quantity, item?.itemId)}
-                            className="px-3 py-2 hover:bg-[#009FE3]/10 transition-colors"
-                          >
-                            <Plus className="w-4 h-4 text-[#204972]" />
-                          </button>
                         </div>
-
-                        <span className="text-sm font-bold text-[#00316B] flex justify-end">
-                          Total: ₹{
-                            (
-                              (item?.details?.discount_price > 0
-                                ? item?.details?.discount_price
-                                : item?.details?.price) * (item?.quantity || 1)
-                            )?.toLocaleString()
-                          }
-
-                        </span>
-                      </div>
-                      ):null}                      
+                      ) : null}
                     </div>
                   </div>
                 ))}
@@ -736,7 +743,7 @@ export default function Header() {
                       <Link
                         href="/checkout"
                         className="flex items-center cursor-pointer justify-center gap-3 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 bg-gradient-to-r from-[#00316B] to-[#204972] hover:from-[#204972] hover:to-[#009FE3] shadow-lg hover:shadow-xl transform hover:scale-105 w-full"
-                        onClick={() => setIsOpen(false)}
+                        onClick={closeCart}
                       >
                         Proceed to Checkout
                         <ArrowRight className="w-5 h-5" />
@@ -770,7 +777,7 @@ export default function Header() {
 
         {/* Scrollable Content */}
         <div className="overflow-y-auto h-[calc(100%-88px)] p-4 space-y-4 custom-scrollbar">
-          {Object.keys(examData).map((category,index) => (
+          {Object.keys(examData).map((category, index) => (
             <div
               key={index}
               className="bg-gradient-to-r from-[#009FE3]/5 to-[#87B105]/5 rounded-xl shadow-sm border border-[#009FE3]/20"
@@ -787,7 +794,7 @@ export default function Header() {
               {/* Tabs */}
               {activeCategory === category && (
                 <div className="mt-2 pl-4 space-y-2 pb-2">
-                  {Object.keys(examData[category].tabs).map((tab,index) => (
+                  {Object.keys(examData[category].tabs).map((tab, index) => (
                     <div key={index} className="rounded-lg">
                       <button
                         onClick={() => toggleTab(category, tab)}
@@ -799,7 +806,7 @@ export default function Header() {
 
                       {openTabs[`${category}-${tab}`] && (
                         <ul className="mt-2 pl-4 space-y-2 text-sm text-[#204972]">
-                          {examData[category].tabs[tab].map((exam,index) => (
+                          {examData[category].tabs[tab].map((exam, index) => (
                             <li
                               key={index}
                               className="hover:text-[#00316B] hover:font-semibold py-1 px-2 hover:bg-[#87B105]/10 rounded cursor-pointer transition-all duration-200"

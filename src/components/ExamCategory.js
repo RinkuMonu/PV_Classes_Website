@@ -17,7 +17,7 @@ export default function ExamCategory() {
       icon: <FaFlask className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
 
-      link: "/courses",
+      link: "/courses?exam=68ac3c02a5a435b640ada61b",
 
     },
     {
@@ -33,14 +33,14 @@ export default function ExamCategory() {
       tags: ["SBI", "IBPS", "RBI"],
       icon: <FaLandmark className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "http://localhost:3000/courses?exam=68ac35d6a5a435b640ada5f3",
+      link: "/courses?exam=68ac35d6a5a435b640ada5f3",
     },
     {
       title: "Utarpardesh State Exams",
       tags: ["SSC", "Banking"],
       icon: <FaBriefcase className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "http://localhost:3000/courses?exam=68ac31d0a5a435b640ada5dd",
+      link: "/courses?exam=68ac31d0a5a435b640ada5dd",
     },
   ];
 

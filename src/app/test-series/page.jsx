@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Page() {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const [testSeriesData, setTestSeriesData] = useState([]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Page() {
       </section>
 
       <div className="px-3 md:px-20 py-8">
-        {testSeriesData?.map((examGroup,index) => (
+        {testSeriesData?.map((examGroup, index) => (
           <div key={index} className="mb-12">
             <h2 className="text-2xl text-[#204972] font-bold mb-6">{examGroup?.exam_name}</h2>
 
@@ -126,13 +126,17 @@ export default function Page() {
                     {/* Action Section */}
                     <div className="px-4 pb-4">
                       <button
-                        onClick={(e) => handleAdd(e, "testSeries", series?._id)}
+                        onClick={(e) => {
+                          handleAdd(e, "testSeries", series?._id);
+                          openCart();
+                        }}
                         disabled={loading}
                         className="w-full flex items-center justify-center gap-2 bg-[#204972] text-white text-sm font-semibold py-2 rounded-lg shadow hover:bg-[#163452] transition-colors"
                       >
                         <FaPlus className="text-xs" />
                         {loading ? "ADDING..." : "ADD"}
                       </button>
+
                     </div>
                   </div>
                 );

@@ -66,28 +66,28 @@
 //   return (
 //     <>
 //       {/* Banner */}
-      // <section className="relative w-full h-[60vh] sm:h-[50vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-      //   {/* Desktop Banner */}
-      //   <div className="absolute inset-0 hidden sm:block">
-      //     <Image
-      //       src="/Image/Banner/book-banner.webp"
-      //       alt="Banner Desktop"
-      //       fill
-      //       className="object-cover object-center"
-      //       priority
-      //     />
-      //   </div>
-      //   {/* Mobile Banner */}
-      //   <div className="absolute inset-0 block sm:hidden">
-      //     <Image
-      //       src="/Image/pv-mobile/book-banner-mob.webp"
-      //       alt="Banner Mobile"
-      //       fill
-      //       className="object-cover object-center"
-      //       priority
-      //     />
-      //   </div>
-      // </section>
+// <section className="relative w-full h-[60vh] sm:h-[50vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+//   {/* Desktop Banner */}
+//   <div className="absolute inset-0 hidden sm:block">
+//     <Image
+//       src="/Image/Banner/book-banner.webp"
+//       alt="Banner Desktop"
+//       fill
+//       className="object-cover object-center"
+//       priority
+//     />
+//   </div>
+//   {/* Mobile Banner */}
+//   <div className="absolute inset-0 block sm:hidden">
+//     <Image
+//       src="/Image/pv-mobile/book-banner-mob.webp"
+//       alt="Banner Mobile"
+//       fill
+//       className="object-cover object-center"
+//       priority
+//     />
+//   </div>
+// </section>
 
 //       {/* Page Content */}
 //       <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f0f4f8] py-6 px-4 sm:px-8">
@@ -408,7 +408,7 @@ import { IoIosClose } from "react-icons/io";
 import axiosInstance from "../../axios/axiosInstance";
 
 export default function BookCategoryPage() {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const params = useParams();
   const id = params.id;
 
@@ -466,7 +466,7 @@ export default function BookCategoryPage() {
   return (
     <>
       {/* Banner */}
-       <section className="relative w-full h-[60vh] sm:h-[50vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+      <section className="relative w-full h-[60vh] sm:h-[50vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
         {/* Desktop Banner */}
         <div className="absolute inset-0 hidden sm:block">
           <Image
@@ -519,7 +519,7 @@ export default function BookCategoryPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 onClick={() => setMobileFiltersOpen(true)}
                 className="lg:hidden flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-[#083776]/20 text-[#083776] shadow-sm hover:shadow-md transition-all"
               >
@@ -595,18 +595,16 @@ export default function BookCategoryPage() {
                       />
                       <label
                         htmlFor={`language-${lang}`}
-                        className={`flex items-center cursor-pointer text-sm transition-all ${
-                          languageFilter === lang
+                        className={`flex items-center cursor-pointer text-sm transition-all ${languageFilter === lang
                             ? "text-[#083776] font-medium"
                             : "text-[#083776]/80 hover:text-[#083776]"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 transition-all ${
-                            languageFilter === lang
+                          className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 transition-all ${languageFilter === lang
                               ? "border-[#616606] bg-[#616606]/10 shadow-inner"
                               : "border-[#083776]/40 hover:border-[#616606]"
-                          }`}
+                            }`}
                         >
                           {languageFilter === lang && (
                             <svg
@@ -648,18 +646,16 @@ export default function BookCategoryPage() {
                       />
                       <label
                         htmlFor={`edition-${year}`}
-                        className={`flex items-center cursor-pointer text-sm transition-all ${
-                          editionFilter === year.toString()
+                        className={`flex items-center cursor-pointer text-sm transition-all ${editionFilter === year.toString()
                             ? "text-[#083776] font-medium"
                             : "text-[#083776]/80 hover:text-[#083776]"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 transition-all ${
-                            editionFilter === year.toString()
+                          className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 transition-all ${editionFilter === year.toString()
                               ? "border-[#616606] bg-[#616606]/10 shadow-inner"
                               : "border-[#083776]/40 hover:border-[#616606]"
-                          }`}
+                            }`}
                         >
                           {editionFilter === year.toString() && (
                             <svg
@@ -686,7 +682,7 @@ export default function BookCategoryPage() {
             {/* Mobile Filters Overlay */}
             {mobileFiltersOpen && (
               <div className="fixed inset-0 z-50 lg:hidden">
-                <div 
+                <div
                   className="absolute inset-0 bg-black/30"
                   onClick={() => setMobileFiltersOpen(false)}
                 ></div>
@@ -719,18 +715,16 @@ export default function BookCategoryPage() {
                           />
                           <label
                             htmlFor={`language-mobile-${lang}`}
-                            className={`flex items-center cursor-pointer text-sm ${
-                              languageFilter === lang
+                            className={`flex items-center cursor-pointer text-sm ${languageFilter === lang
                                 ? "text-[#083776] font-medium"
                                 : "text-[#083776]/80"
-                            }`}
+                              }`}
                           >
                             <span
-                              className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 ${
-                                languageFilter === lang
+                              className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 ${languageFilter === lang
                                   ? "border-[#616606] bg-[#616606]/10"
                                   : "border-[#083776]/40"
-                              }`}
+                                }`}
                             >
                               {languageFilter === lang && (
                                 <svg
@@ -771,18 +765,16 @@ export default function BookCategoryPage() {
                           />
                           <label
                             htmlFor={`edition-mobile-${year}`}
-                            className={`flex items-center cursor-pointer text-sm ${
-                              editionFilter === year.toString()
+                            className={`flex items-center cursor-pointer text-sm ${editionFilter === year.toString()
                                 ? "text-[#083776] font-medium"
                                 : "text-[#083776]/80"
-                            }`}
+                              }`}
                           >
                             <span
-                              className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 ${
-                                editionFilter === year.toString()
+                              className={`w-5 h-5 inline-block mr-3 rounded-full border flex-shrink-0 ${editionFilter === year.toString()
                                   ? "border-[#616606] bg-[#616606]/10"
                                   : "border-[#083776]/40"
-                              }`}
+                                }`}
                             >
                               {editionFilter === year.toString() && (
                                 <svg
@@ -892,7 +884,7 @@ export default function BookCategoryPage() {
                                   {Math.round(
                                     ((book.price - book.discount_price) /
                                       book.price) *
-                                      100
+                                    100
                                   )}
                                   % off
                                 </span>
@@ -908,7 +900,10 @@ export default function BookCategoryPage() {
                       {/* Add Button */}
                       <div className="p-4 pt-0 mt-auto">
                         <button
-                          onClick={(e) => handleAdd(e, "book", book?._id)}
+                          onClick={(e) => {
+                            handleAdd(e, "book", book?._id);
+                            openCart();
+                          }}
                           disabled={loading}
                           className="w-full bg-gradient-to-r from-[#616606] to-[#083776] hover:from-[#083776] hover:to-[#616606] text-white font-medium py-2.5 rounded-lg text-sm transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
                         >

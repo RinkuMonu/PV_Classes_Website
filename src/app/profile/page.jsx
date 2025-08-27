@@ -348,6 +348,8 @@ export default function ProfilePage() {
                                         <div className="relative w-full h-44 sm:h-52 overflow-hidden">
                                             <img
                                                 src={`${item?.full_image?.[0] || "/default-course.jpg"}`}
+                                                // src={`http://localhost:5000${item?.images?.[0]}`}
+
                                                 alt={item?.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
