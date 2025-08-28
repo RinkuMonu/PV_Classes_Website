@@ -704,14 +704,14 @@ export default function CourseDetailsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50 p-4">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
             <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
               <FiLock className="text-2xl text-red-500" />
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-3">Course Locked</h2>
             <p className="text-gray-600 mb-6">
-              इस video को देखने के लिए आपको course खरीदना होगा।
+              To watch this video, you need to purchase the course
             </p>
             <div className="flex gap-3 justify-center">
               <button
