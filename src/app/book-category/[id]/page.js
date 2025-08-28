@@ -859,13 +859,13 @@ export default function BookCategoryPage() {
                           )}
 
                           {/* Book Image */}
-                          <div className="relative w-full h-60 bg-gradient-to-br from-[#f0f4f8] to-[#e2e8f0] flex items-center justify-center p-5">
-                            <div className="w-32 h-44 relative shadow-lg rounded-md overflow-hidden">
+                          <div className="relative bg-gradient-to-br from-[#f0f4f8] to-[#e2e8f0] flex items-center justify-center p-5">
+                            <div className="w-full h-44 relative shadow-lg rounded-md overflow-hidden">
                               <Image
                                 src={book?.full_image?.[0]}
                                 alt={book?.title}
                                 fill
-                                className="object-cover"
+                                className=""
                               />
                             </div>
                           </div>
