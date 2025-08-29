@@ -91,13 +91,10 @@ function AddressShipping() {
     pincode: "",
   });
   const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("No token found!");
-          return;
-        }
+    const token = localStorage.getItem("token");
+    if (token){
 
+      try {
         const { data } = await axiosInstance.get("/users/getUser", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,6 +115,7 @@ function AddressShipping() {
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
+    }  
   };
   const checkout = async () => {
     try {
@@ -390,16 +388,21 @@ function AddressShipping() {
   useEffect(() => {
     const fetchCoupons = async () => {
       const token = localStorage.getItem("token"); // token localStorage se nikal rahe ho
-      try {
-        const { data } = await axiosInstance.get("/coupon", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setCoupon(data.data || []);
-      } catch (error) {
-        console.error("Error fetching coupons:", error);
+      if(token){
+        try {
+          const { data } = await axiosInstance.get("/coupon", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setCoupon(data.data || []);
+        } catch (error) {
+          console.error("Error fetching coupons:", error);
+        }
+      }else{
+        setCoupon([]);
       }
+      
     };
     fetchCoupons();
   }, []);

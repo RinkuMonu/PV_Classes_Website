@@ -335,11 +335,19 @@ export default function Header() {
               News
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link> */}
-            <Link
+            {/* <Link
               href="/book"
               className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Books
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
+            </Link> */}
+
+              <Link
+              href="/notes"
+              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+            >
+              Notes
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
           </nav>
@@ -906,12 +914,20 @@ export default function Header() {
             News
           </Link> */}
 
-          <Link
+          {/* <Link
             href="/book"
             onClick={() => setMobileMenuOpen(false)}
             className="hover:bg-gradient-to-r hover:from-[#00316B] hover:to-[#204972] hover:text-white px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3"
           >
             Books
+          </Link> */}
+
+           <Link
+            href="/notes"
+            onClick={() => setMobileMenuOpen(false)}
+            className="hover:bg-gradient-to-r hover:from-[#00316B] hover:to-[#204972] hover:text-white px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3"
+          >
+            Notes
           </Link>
         </nav>
       </div>
