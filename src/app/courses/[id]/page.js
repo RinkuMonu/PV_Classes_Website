@@ -600,7 +600,7 @@ export default function CourseDetailsPage() {
           {/* Sidebar */}
           <div className="w-full md:w-96 space-y-6">
             {/* Pricing Card */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-6">
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-20">
               <div className="p-6 bg-[#204972] text-white">
                 <div className="flex flex-col gap-2 mb-4">
                   <div className="flex items-end gap-2">
