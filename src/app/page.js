@@ -14,6 +14,7 @@ import PyqSlider from "../components/PyqSlider";
 import LearningResources from "../components/LearningResources";
 import TrustedPlatform from "../components/TrustedPlatform";
 import ExamCategory from "../components/ExamCategory";
+import FAQ from "../components/FAQs";
 
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
       <PyqSlider />
       <ExamCategory />
       {/* <TrustedPlatform /> */}
+      <FAQ />
       <Testimonials />
 
     </>

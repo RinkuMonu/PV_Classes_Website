@@ -255,6 +255,16 @@ export default function Notes() {
   const dropdownRef = useRef(null);
   const filterRef = useRef(null);
 
+  // Gradient colors based on the provided palette
+  const gradientColors = [
+    "linear-gradient(135deg, #00316B 0%, #009FE3 100%)",
+    "linear-gradient(135deg, #204972 0%, #0281AD 100%)",
+    "linear-gradient(135deg, #788406 0%, #87B105 100%)",
+    "linear-gradient(135deg, #616602 0%, #ABC129 100%)",
+    "linear-gradient(135deg, #00316B 0%, #788406 100%)",
+    "linear-gradient(135deg, #009FE3 0%, #ABC129 100%)",
+  ];
+
   // Fetch Notes from backend
   useEffect(() => {
     const fetchPyqs = async () => {
@@ -339,10 +349,10 @@ export default function Notes() {
       </section>
 
       {/* Main Content */}
-      <div className="py-6 px-3 md:px-20 mx-auto">
+      <div className="py-6 px-3 md:px-20 mx-auto max-w-7xl">
         {/* Header with Title and Search */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-[#00316B] mb-4 md:mb-0">Notes</h1>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-[#00316B] mb-4 md:mb-0">Study Notes</h1>
           
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-2/3">
             {/* Search */}
@@ -352,14 +362,13 @@ export default function Notes() {
               </div>
               <input
                 type="text"
-                placeholder="Search by title..."
-                className="w-full pl-10 pr-4 py-2 border border-[#00316B] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
+                placeholder="Search notes by title or description..."
+                className="w-full pl-10 pr-4 py-3 border border-[#00316B] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
-       
           </div>
         </div>
 
@@ -372,21 +381,29 @@ export default function Notes() {
             <p className="mt-3 text-[#00316B]">Loading Notes...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4">
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
             <p className="text-red-700">Error: {error}</p>
           </div>
         ) : filteredPyqs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredPyqs.map((pyq, idx) => {
               const shareLinks = getShareLinks(pyq);
+              const gradientStyle = gradientColors[idx % gradientColors.length];
+              
               return (
-                <div key={pyq._id} className="bg-white rounded-lg border border-[#00316B] shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <div className="p-4">
+                <div key={pyq._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  {/* Card header with gradient */}
+                  <div 
+                    className="h-2"
+                    style={{ background: gradientStyle }}
+                  ></div>
+                  
+                  <div className="p-4" >
                     <div className="flex justify-between items-start mb-3">
-                      <span className="px-3 py-1 bg-[#00316B] text-white text-xs font-medium rounded-full">
+                      <span className="px-3 py-1 bg-gray-100 text-[#00316B] text-xs font-medium rounded-full">
                         {pyq.subject || "General"}
                       </span>
-                      <span className="text-gray-500 text-sm">#{idx + 1}</span>
+                      <span className="text-gray-500 text-xs">#{idx + 1}</span>
                     </div>
                     
                     <h3 className="font-bold text-lg mb-2 text-[#00316B] line-clamp-2">{pyq.title}</h3>
@@ -396,10 +413,10 @@ export default function Notes() {
                       <div className="relative" ref={dropdownRef}>
                         <button
                           onClick={() => toggleDropdown(pyq._id)}
-                          className="flex items-center gap-1 text-[#00316B] hover:bg-blue-100 transition-colors p-2 rounded"
+                          className="flex items-center gap-1 text-[#00316B] hover:text-[#009FE3] transition-colors p-2 rounded-full"
                         >
                           <FaShareAlt className="text-sm" />
-                          <span className="text-sm font-medium">Share</span>
+                          <span className="text-xs font-medium">Share</span>
                         </button>
                         
                         {openId === pyq._id && (
@@ -434,10 +451,10 @@ export default function Notes() {
                         href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-[#00316B] hover:bg-blue-900 text-white px-3 py-2 rounded transition-colors"
+                        className="flex items-center gap-2 bg-[#00316B] hover:bg-[#009FE3] text-white px-3 py-2 rounded-lg transition-colors text-sm"
                       >
-                        <FaDownload className="text-sm" />
-                        <span className="text-sm font-medium">Download</span>
+                        <FaDownload className="text-xs" />
+                        <span className="font-medium">Download</span>
                       </a>
                     </div>
                   </div>
@@ -446,7 +463,7 @@ export default function Notes() {
             })}
           </div>
         ) : (
-          <div className="text-center py-12 bg-white rounded-lg border border-[#00316B] shadow-sm">
+          <div className="text-center py-12 bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="mb-4">
               <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -462,7 +479,39 @@ export default function Notes() {
         )}
       </div>
 
-  
+      {/* Mobile Filter Panel */}
+      {filterOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
+          <div ref={filterRef} className="absolute right-0 top-0 h-full w-3/4 bg-white p-4 shadow-xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-lg font-bold text-[#00316B]">Filter Notes</h2>
+              <button onClick={() => setFilterOpen(false)} className="p-2">
+                <FaTimes className="text-[#00316B]" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="font-medium text-[#00316B]">By Subject</h3>
+              {subjects.map((subject) => (
+                <button
+                  key={subject}
+                  onClick={() => {
+                    setSelectedSubject(subject);
+                    setFilterOpen(false);
+                  }}
+                  className={`block w-full text-left px-4 py-3 rounded-lg ${
+                    selectedSubject === subject
+                      ? "bg-[#00316B] text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {subject}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

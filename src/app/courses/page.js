@@ -81,7 +81,16 @@ export default function CoursesPage() {
 
   const filtered = courses
     ?.filter((c) => (mode ? c?.mode === mode : true))
-    ?.filter((c) => (lang === "All" ? true : c?.language === lang))
+    // ?.filter((c) => (lang === "All" ? true : c?.language === lang))
+    ?.filter((c) => {
+  if (lang === "All") return true;
+  // normalize both selected language & course languages
+  const courseLangs = (c?.language || "")
+    .split(",")                    // split by comma
+    .map((l) => l.trim().toLowerCase()); // clean + lowercase
+  return courseLangs.includes(lang.toLowerCase());
+})
+
     ?.filter((c) => (freeOnly ? c?.isFree : true))
     ?.filter((c) =>
       q?.trim()
@@ -98,7 +107,7 @@ export default function CoursesPage() {
   }, [pages, page]);
 
 
-    useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       const el = document.getElementById("courses");
       if (el) {
@@ -215,18 +224,26 @@ export default function CoursesPage() {
                 </a>
               ))}
             </div>
-            <div className="mt-6 flex justify-center">
-              {page < pages ? (
+            <div className="mt-6 flex justify-center gap-4">
+              {page > 1 && (
+                <button
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                >
+                  ◂ Previous
+                </button>
+              )}
+
+              {page < pages && (
                 <button
                   className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
                   onClick={() => setPage((p) => Math.min(p + 1, pages))}
                 >
-                  View more <span>▾</span>
+                  View more ▾
                 </button>
-              ) : (
-                <span className="text-sm text-neutral-500"></span>
               )}
             </div>
+
           </>
         ) : (
           <p className="text-center">No courses found.</p>

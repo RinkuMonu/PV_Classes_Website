@@ -6,12 +6,12 @@ import { FaArrowRight } from "react-icons/fa6";
 export default function LearningResources() {
   const resources = [
     {
-      title: "Reference Books",
+      title: "Reference Notes",
       description:
         "Our experts have created thorough study materials that break down complicated concepts into easily understandable content",
       img: "/Image/boooks.webp",
       bg: "bg-[#87b105]/20 hover:bg-[#87b105]/30",
-      link: "/book",
+      link: "/notes",
       button: true,
     },
     {
