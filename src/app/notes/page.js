@@ -238,7 +238,9 @@ import {
   FaFacebook,
   FaSearch,
   FaFilter,
-  FaTimes
+  FaTimes,
+  FaBook,
+  FaClock
 } from "react-icons/fa";
 import axiosInstance from "../axios/axiosInstance";
 
@@ -255,7 +257,7 @@ export default function Notes() {
   const dropdownRef = useRef(null);
   const filterRef = useRef(null);
 
-  // Gradient colors based on the provided palette
+  // Enhanced gradient colors with more variations
   const gradientColors = [
     "linear-gradient(135deg, #00316B 0%, #009FE3 100%)",
     "linear-gradient(135deg, #204972 0%, #0281AD 100%)",
@@ -263,6 +265,8 @@ export default function Notes() {
     "linear-gradient(135deg, #616602 0%, #ABC129 100%)",
     "linear-gradient(135deg, #00316B 0%, #788406 100%)",
     "linear-gradient(135deg, #009FE3 0%, #ABC129 100%)",
+    "linear-gradient(135deg, #0281AD 0%, #87B105 100%)",
+    "linear-gradient(135deg, #204972 0%, #ABC129 100%)",
   ];
 
   // Fetch Notes from backend
@@ -324,6 +328,18 @@ export default function Notes() {
     return matchesSearch && matchesSubject;
   });
 
+  // Function to generate a random file size (for demo purposes)
+  const getRandomFileSize = () => {
+    const sizes = ["2.5 MB", "3.1 MB", "1.8 MB", "4.2 MB", "2.9 MB"];
+    return sizes[Math.floor(Math.random() * sizes.length)];
+  };
+
+  // Function to generate a random date (for demo purposes)
+  const getRandomDate = () => {
+    const dates = ["Oct 12, 2023", "Sep 5, 2023", "Nov 20, 2023", "Aug 15, 2023"];
+    return dates[Math.floor(Math.random() * dates.length)];
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Banner - Kept exactly as original */}
@@ -352,9 +368,12 @@ export default function Notes() {
       <div className="py-6 px-3 md:px-20 mx-auto max-w-7xl">
         {/* Header with Title and Search */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-[#00316B] mb-4 md:mb-0">Study Notes</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-[#00316B] mb-2">Study Notes</h1>
+            <p className="text-gray-600">Access comprehensive study materials for your exam preparation</p>
+          </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-2/3">
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-2/3 mt-4 md:mt-0">
             {/* Search */}
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -363,20 +382,31 @@ export default function Notes() {
               <input
                 type="text"
                 placeholder="Search notes by title or description..."
-                className="w-full pl-10 pr-4 py-3 border border-[#00316B] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
+                className="w-full pl-10 pr-4 py-3 border border-[#00316B]/30 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
+            {/* Filter Button for Mobile */}
+            <div className="block md:hidden">
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="flex items-center gap-2 w-full justify-center px-4 py-3 bg-[#00316B] text-white rounded-full shadow-md hover:bg-[#009FE3] transition-colors"
+              >
+                <FaFilter className="text-sm" />
+                <span>Filter</span>
+              </button>
+            </div>
           </div>
         </div>
 
-     
+      
+
 
         {/* Notes Grid */}
         {loading ? (
-          <div className="text-center py-10">
+          <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00316B] mx-auto"></div>
             <p className="mt-3 text-[#00316B]">Loading Notes...</p>
           </div>
@@ -385,47 +415,63 @@ export default function Notes() {
             <p className="text-red-700">Error: {error}</p>
           </div>
         ) : filteredPyqs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPyqs.map((pyq, idx) => {
               const shareLinks = getShareLinks(pyq);
               const gradientStyle = gradientColors[idx % gradientColors.length];
+              const fileSize = getRandomFileSize();
+              const dateAdded = getRandomDate();
               
               return (
-                <div key={pyq._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <div key={pyq._id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 border border-gray-100">
                   {/* Card header with gradient */}
                   <div 
-                    className="h-2"
+                    className="h-3"
                     style={{ background: gradientStyle }}
                   ></div>
                   
-                  <div className="p-4" >
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="px-3 py-1 bg-gray-100 text-[#00316B] text-xs font-medium rounded-full">
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-4">
+                      <span 
+                        className="px-3 py-1.5 text-white text-xs font-medium rounded-full shadow-sm"
+                        style={{ background: gradientStyle }}
+                      >
                         {pyq.subject || "General"}
                       </span>
-                      <span className="text-gray-500 text-xs">#{idx + 1}</span>
+                      <span className="text-gray-400 text-xs flex items-center">
+                        <FaClock className="mr-1 text-xs" /> {dateAdded}
+                      </span>
                     </div>
                     
-                    <h3 className="font-bold text-lg mb-2 text-[#00316B] line-clamp-2">{pyq.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{pyq.description}</p>
+                    <h3 className="font-bold text-lg mb-3 text-[#00316B] line-clamp-2 leading-tight">{pyq.title}</h3>
+                    <p className="text-gray-600 text-sm mb-5 line-clamp-3 leading-relaxed">{pyq.description}</p>
                     
-                    <div className="flex justify-between items-center mt-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="text-xs text-gray-500 flex items-center">
+                        <FaDownload className="mr-1" /> {fileSize}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        PDF Format
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                       <div className="relative" ref={dropdownRef}>
                         <button
                           onClick={() => toggleDropdown(pyq._id)}
-                          className="flex items-center gap-1 text-[#00316B] hover:text-[#009FE3] transition-colors p-2 rounded-full"
+                          className="flex items-center gap-1.5 text-[#00316B] hover:text-[#009FE3] transition-colors p-2 rounded-full text-sm"
                         >
                           <FaShareAlt className="text-sm" />
-                          <span className="text-xs font-medium">Share</span>
+                          <span className="font-medium">Share</span>
                         </button>
                         
                         {openId === pyq._id && (
-                          <div className="absolute left-0 bottom-full mb-2 bg-white shadow-xl rounded-lg border border-gray-200 w-40 z-10 overflow-hidden">
+                          <div className="absolute left-0 bottom-full mb-2 bg-white shadow-xl rounded-xl border border-gray-200 w-44 z-10 overflow-hidden">
                             <a
                               href={shareLinks.whatsapp}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-3 p-3 hover:bg-green-50 transition-colors text-gray-700"
+                              className="flex items-center gap-3 p-3 hover:bg-green-50 transition-colors text-gray-700 border-b border-gray-100"
                             >
                               <span className="p-2 bg-green-100 rounded-full">
                                 <FaWhatsapp className="text-green-600 text-sm" />
@@ -451,10 +497,10 @@ export default function Notes() {
                         href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-[#00316B] hover:bg-[#009FE3] text-white px-3 py-2 rounded-lg transition-colors text-sm"
+                        className="flex items-center gap-2 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
                       >
                         <FaDownload className="text-xs" />
-                        <span className="font-medium">Download</span>
+                        <span>Download</span>
                       </a>
                     </div>
                   </div>
@@ -463,18 +509,29 @@ export default function Notes() {
             })}
           </div>
         ) : (
-          <div className="text-center py-12 bg-white rounded-lg border border-gray-200 shadow-sm">
+          <div className="text-center py-16 bg-white rounded-xl border border-gray-200 shadow-sm">
             <div className="mb-4">
-              <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg className="mx-auto h-16 w-16 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-[#00316B] mb-1">No notes found</h3>
+            <h3 className="text-xl font-medium text-[#00316B] mb-2">No notes found</h3>
             <p className="text-gray-500 max-w-md mx-auto">
               {search || selectedSubject !== "All" 
                 ? "Try adjusting your search or filter to find what you're looking for." 
                 : "It looks like there are no notes available at the moment."}
             </p>
+            {(search || selectedSubject !== "All") && (
+              <button 
+                onClick={() => {
+                  setSearch("");
+                  setSelectedSubject("All");
+                }}
+                className="mt-4 px-4 py-2 bg-[#00316B] text-white rounded-full text-sm font-medium hover:bg-[#009FE3] transition-colors"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -482,10 +539,10 @@ export default function Notes() {
       {/* Mobile Filter Panel */}
       {filterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-          <div ref={filterRef} className="absolute right-0 top-0 h-full w-3/4 bg-white p-4 shadow-xl">
+          <div ref={filterRef} className="absolute right-0 top-0 h-full w-3/4 bg-white p-5 shadow-xl">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold text-[#00316B]">Filter Notes</h2>
-              <button onClick={() => setFilterOpen(false)} className="p-2">
+              <button onClick={() => setFilterOpen(false)} className="p-2 rounded-full hover:bg-gray-100">
                 <FaTimes className="text-[#00316B]" />
               </button>
             </div>
@@ -499,9 +556,9 @@ export default function Notes() {
                     setSelectedSubject(subject);
                     setFilterOpen(false);
                   }}
-                  className={`block w-full text-left px-4 py-3 rounded-lg ${
+                  className={`block w-full text-left px-4 py-3 rounded-xl transition-all ${
                     selectedSubject === subject
-                      ? "bg-[#00316B] text-white"
+                      ? "bg-gradient-to-r from-[#00316B] to-[#009FE3] text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >

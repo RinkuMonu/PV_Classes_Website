@@ -25,13 +25,14 @@ export default function Home() {
 
       <CoursesSection />
       <CourseEnroll />
-      <Rajexam />
+      {/* <Rajexam /> */}
       <LearningResources />
+            <HomeCoursesSection />
+
       <FacultySlider />
       <TestSeriesHome />
 
       <CurrentAffairs />
-      <HomeCoursesSection />
       {/* <BannerImg2 /> */}
       <CTA />
       <PyqSlider />
