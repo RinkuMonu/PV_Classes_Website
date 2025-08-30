@@ -211,8 +211,8 @@ export default function CourseDetailsPage() {
     return (
       <div
         className={`flex flex-col sm:flex-row gap-4 p-4 border rounded-lg transition-all ${selectAll
-            ? "border-[#204972] bg-blue-50"
-            : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
+          ? "border-[#204972] bg-blue-50"
+          : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
           }`}
       >
         <div className="flex items-start gap-3">
@@ -342,8 +342,8 @@ export default function CourseDetailsPage() {
                 {/* Course Only */}
                 <div
                   className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${selectedOption?.type === "course"
-                      ? "border-[#204972] bg-blue-50 shadow-md"
-                      : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
+                    ? "border-[#204972] bg-blue-50 shadow-md"
+                    : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
                     }`}
                   onClick={() => (
                     setSelectedOption({ type: "course", id: course._id }),
@@ -358,8 +358,8 @@ export default function CourseDetailsPage() {
                 {course.comboItems && course.comboItems.length > 0 && (
                   <div
                     className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${selectedOption?.type === "combo"
-                        ? "border-[#204972] bg-blue-50 shadow-md"
-                        : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
+                      ? "border-[#204972] bg-blue-50 shadow-md"
+                      : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
                       }`}
                     onClick={() => {
                       setSelectedOption({
@@ -585,6 +585,145 @@ export default function CourseDetailsPage() {
                 })}
               </div>
             </div>
+
+        {/* Faculty Section */}
+<div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
+  <h2 className="text-xl font-bold text-[#204972] mb-6 border-b pb-3 flex items-center">
+    <svg className="w-5 h-5 mr-2 text-[#204972]" fill="currentColor" viewBox="0 0 20 20">
+      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
+    </svg>
+    Meet Your Expert Instructors
+  </h2>
+
+  {course.faculty && course.faculty.length > 0 ? (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {course.faculty.map((facultyMember, index) => {
+        // Generate a gradient color based on index
+        const gradientColors = [
+          "from-blue-50 to-indigo-50",
+          "from-green-50 to-teal-50",
+          "from-purple-50 to-pink-50",
+          "from-orange-50 to-red-50"
+        ];
+        const textColors = [
+          "text-blue-600",
+          "text-green-600",
+          "text-purple-600",
+          "text-red-600"
+        ];
+        const bgColors = [
+          "bg-blue-100 text-blue-700",
+          "bg-green-100 text-green-700",
+          "bg-purple-100 text-purple-700",
+          "bg-red-100 text-red-700"
+        ];
+        
+        const colorIndex = index % 4;
+        const gradientClass = gradientColors[colorIndex];
+        const textColorClass = textColors[colorIndex];
+        const bgColorClass = bgColors[colorIndex];
+        
+        // Get faculty photo URL
+        const facultyPhoto = facultyMember.photo 
+          ? `http://localhost:5000${facultyMember.photo}`
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
+        
+        return (
+          <div key={facultyMember._id} className={`flex flex-col sm:flex-row items-start p-5 bg-gradient-to-r ${gradientClass} rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100`}>
+            <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-5 mx-auto sm:mx-0">
+              <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md">
+                <img
+                  src={facultyPhoto}
+                  alt={facultyMember.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="font-semibold text-gray-800 text-lg">{facultyMember.name}</h3>
+              {facultyMember.experience && (
+                <p className="text-sm text-gray-700 mb-3">
+                  <span className="font-medium">Experience: </span>
+                  {facultyMember.experience}
+                </p>
+              )}
+              {facultyMember.specialization && (
+                <div className={`${bgColorClass} px-3 py-1 rounded-full text-xs inline-block`}>
+                  {facultyMember.specialization}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  ) : (
+    <div className="text-center py-8 text-gray-500">
+      <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <p className="mt-3">No faculty information available</p>
+    </div>
+  )}
+
+  <div className="mt-8 pt-6 border-t border-gray-200">
+    <h3 className="font-medium text-gray-800 mb-4 flex items-center">
+      <svg className="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"></path>
+      </svg>
+      Why learn from our expert faculty?
+    </h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex items-start">
+        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-800">Industry Experts</h4>
+          <p className="text-sm text-gray-600 mt-1">Learn from professionals with real-world experience</p>
+        </div>
+      </div>
+      <div className="flex items-start">
+        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-800">Proven Results</h4>
+          <p className="text-sm text-gray-600 mt-1">Track record of student success and achievements</p>
+        </div>
+      </div>
+      <div className="flex items-start">
+        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-800">Doubt Support</h4>
+          <p className="text-sm text-gray-600 mt-1">Get your questions answered directly by experts</p>
+        </div>
+      </div>
+      <div className="flex items-start">
+        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-800">Interactive Sessions</h4>
+          <p className="text-sm text-gray-600 mt-1">Engaging teaching methods for better understanding</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
             {/* Requirements */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
