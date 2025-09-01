@@ -83,13 +83,13 @@ export default function CoursesPage() {
     ?.filter((c) => (mode ? c?.mode === mode : true))
     // ?.filter((c) => (lang === "All" ? true : c?.language === lang))
     ?.filter((c) => {
-  if (lang === "All") return true;
-  // normalize both selected language & course languages
-  const courseLangs = (c?.language || "")
-    .split(",")                    // split by comma
-    .map((l) => l.trim().toLowerCase()); // clean + lowercase
-  return courseLangs.includes(lang.toLowerCase());
-})
+      if (lang === "All") return true;
+      // normalize both selected language & course languages
+      const courseLangs = (c?.language || "")
+        .split(",")                    // split by comma
+        .map((l) => l.trim().toLowerCase()); // clean + lowercase
+      return courseLangs.includes(lang.toLowerCase());
+    })
 
     ?.filter((c) => (freeOnly ? c?.isFree : true))
     ?.filter((c) =>
@@ -171,7 +171,7 @@ export default function CoursesPage() {
       )}
 
       {/* COURSES */}
-      <section id="courses" className="mx-auto max-w-7xl md:px-20  px-6 pt-4 pb-8">
+      <section id="courses" className="mx-auto max-w-7xl md:px-20 mb-5  px-6 pt-10 pb-8 bg-green-50 shadow-lg rounded-lg">
         {isLoading ? (
           <p className="text-center">Loading...</p>
         ) : pageItems?.length > 0 ? (
@@ -193,7 +193,7 @@ export default function CoursesPage() {
                     <h3 className="text-lg font-semibold mb-2">{c?.title || "Untitled Course"}</h3>
                     <p className="text-sm text-gray-500 mb-4">{c?.overview || ""}</p>
                     <div className="mt-auto">
-                      <div className="flex items-center gap-2 mb-3">
+                      {/* <div className="flex items-center gap-2 mb-3">
                         {c?.discount_price > 0 ? (
                           <>
                             <span className="text-lg font-bold text-green-600">
@@ -208,8 +208,11 @@ export default function CoursesPage() {
                             {formatINR(c?.price)}
                           </span>
                         )}
-                      </div>
-                      <button
+                      </div> */}
+
+
+                      {/* // Add to Cart button temporarily removed, as all courses are free now */}
+                      {/* <button
                         onClick={(e) => {
                           handleAdd(e, "course", c?._id);
                           openCart();
@@ -217,6 +220,13 @@ export default function CoursesPage() {
                         className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
                       >
                         Add to Cart
+                      </button> */}
+
+                      <button
+
+                        className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
+                      >
+                        Free Preview
                       </button>
 
                     </div>

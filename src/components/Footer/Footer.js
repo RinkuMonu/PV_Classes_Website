@@ -399,37 +399,37 @@ export default function Footer() {
 
             {/* Government Exam */}
             <div>
-              <h4 className="font-semibold mb-3">Government Exam</h4>
+              <h4 className="font-semibold mb-3">10 Classes Exam</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68ac31d0a5a435b640ada5dd">Utarpardesh State</Link></li>
-                <li><Link href="/courses?exam=68ac3177a5a435b640ada5d9">Punjab State</Link></li>
-                <li><Link href="/courses?exam=68ac30c4a5a435b640ada5d5">Hariyana State</Link></li>
-                <li><Link href="/courses?exam=68ac2d4d817fec5058627684">All India Exam</Link></li>
-                <li><Link href="/courses?exam=68ad4356255f962ce73719c2">Rajasthan State</Link></li>
+                <li><Link href="/courses?exam=68b2e224993aca7bb0ab9b7e">Math Exam</Link></li>
+                <li><Link href="/courses?exam=68b2e1f5993aca7bb0ab9b72">Science Exam</Link></li>
+                <li><Link href="/courses?exam=68b2e00d993aca7bb0ab9a86">English Exam</Link></li>
+                {/* <li><Link href="/courses?exam=68ac2d4d817fec5058627684">All India Exam</Link></li> */}
+                {/* <li><Link href="/courses?exam=68ad4356255f962ce73719c2">Rajasthan State</Link></li> */}
               </ul>
             </div>
 
             {/* Defence */}
             <div>
-              <h4 className="font-semibold mb-3">Defence</h4>
+              <h4 className="font-semibold mb-3">12 Classes</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68ac3c02a5a435b640ada61b">Territorial Army</Link></li>
-                <li><Link href="/courses?exam=68ac3b89a5a435b640ada615">Indian Coast Guard</Link></li>
-                <li><Link href="/courses?exam=68ac3affa5a435b640ada611">AFCAT</Link></li>
-                <li><Link href="/courses?exam=68ac3a65a5a435b640ada60d">CDS</Link></li>
-                <li><Link href="/courses?exam=68ac3959a5a435b640ada607">NDA</Link></li>
+                <li><Link href="/courses?exam=68b2deb3993aca7bb0ab9a41">Science</Link></li>
+                <li><Link href="/courses?exam=68b2de31993aca7bb0ab9a23">Math</Link></li>
+                {/* <li><Link href="/courses?exam=68ac3affa5a435b640ada611">AFCAT</Link></li> */}
+                {/* <li><Link href="/courses?exam=68ac3a65a5a435b640ada60d">CDS</Link></li> */}
+                {/* <li><Link href="/courses?exam=68ac3959a5a435b640ada607">NDA</Link></li> */}
               </ul>
             </div>
 
             {/* Nursing */}
             <div>
-              <h4 className="font-semibold mb-3">Banking</h4>
+              <h4 className="font-semibold mb-3">9th Classes</h4>
               <ul className="space-y-2">
-                <li><Link href="courses?exam=68ac372ea5a435b640ada605">Banking/Insurance Exams</Link></li>
-                <li><Link href="/courses?exam=68ac36f1a5a435b640ada601">NABARD Exams</Link></li>
-                <li><Link href="/courses?exam=68ac3686a5a435b640ada5fd">RBI Exams</Link></li>
-                <li><Link href="/courses?exam=68ac3634a5a435b640ada5f9">IBPS Exams</Link></li>
-                <li><Link href="/courses?exam=68ac35e5a5a435b640ada5f5">SBI Exams</Link></li>
+                <li><Link href="/courses?exam=68b2e23f993aca7bb0ab9ba0">Math Exams</Link></li>
+                <li><Link href="/courses?exam=68b2e073993aca7bb0ab9aca">Hindi Exams</Link></li>
+                <li><Link href="/courses?exam=68b2e02b993aca7bb0ab9aa0">Englsih Exams</Link></li>
+                {/* <li><Link href="/courses?exam=68ac3634a5a435b640ada5f9">IBPS Exams</Link></li> */}
+                {/* <li><Link href="/courses?exam=68ac35e5a5a435b640ada5f5">SBI Exams</Link></li> */}
               </ul>
             </div>
 
@@ -451,8 +451,8 @@ export default function Footer() {
               <h4 className="font-semibold mb-3">Rajasthan Exams</h4>
               <ul className="space-y-2">
                 <li><Link href="/courses?exam=68ad4356255f962ce73719c2">3rd Grade Exam</Link></li>
-                <li><Link href="/courses?exam=689dc5c896e7e5a6948099fa">Patwar Exam</Link></li>
-                <li><Link href="/courses?exam=689c8a951914a3c05b945988">REET Exam</Link></li>
+                <li><Link href="/courses?exam=689c8a951914a3c05b945988">2nd Grade Exam</Link></li>
+                <li><Link href="/courses?exam=689dc5c896e7e5a6948099fa">1st Grade Exam</Link></li>
               </ul>
             </div>
 
@@ -476,7 +476,7 @@ export default function Footer() {
             <Link href="/privacy-policy">Privacy Policy</Link>
             <Link href="/cancellation-and-refund-policy">Refund Policy</Link>
             <Link href="/terms-of-use">Terms & Conditions</Link>
-            <Link href="#">Finance</Link>
+            {/* <Link href="#">Finance</Link> */}
           </div>
           <p>© 2025 PV Classes . All rights reserved.</p>
         </div>

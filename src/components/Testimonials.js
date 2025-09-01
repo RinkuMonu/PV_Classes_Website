@@ -109,7 +109,7 @@ export default function Testimonials() {
               key={item?._id || index}
               className="bg-white rounded-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-[#616606] relative overflow-hidden group"
             >
-              <div className="absolute top-4 right-4 text-[#204972]/10 text-6xl font-serif">"</div>
+              <div className="absolute top-4 right-4 text-[#204972]/10 text-6xl font-serif"></div>
 
               <div className="flex gap-1 mb-4 text-[#616606]">
                 {[...Array(item?.rating || 0)].map((_, i) => (
