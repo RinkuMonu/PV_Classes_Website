@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Page() {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const [testSeriesData, setTestSeriesData] = useState([]);
 
   useEffect(() => {
@@ -32,33 +32,33 @@ export default function Page() {
 
   return (
     <>
-       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-             <div className="absolute inset-0 hidden sm:block">
-               <Image
-                 src="/Image/Banner/test-banner.webp"
-                 alt="Banner Desktop"
-                 fill
-                 className="object-cover object-center"
-                 priority
-               />
-             </div>
-             <div className="absolute inset-0 block sm:hidden">
-               <Image
-                 src="/Image/pv-mobile/test-banner-mob.webp"
-                 alt="Banner Mobile"
-                 fill
-                 className="object-cover object-center"
-                 priority
-               />
-             </div>
-           </section>
+      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
+        <div className="absolute inset-0 hidden sm:block">
+          <Image
+            src="/Image/Banner/test-banner.webp"
+            alt="Banner Desktop"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 block sm:hidden">
+          <Image
+            src="/Image/pv-mobile/test-banner-mob.webp"
+            alt="Banner Mobile"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      </section>
 
       <div className="px-3 md:px-20 py-8">
-        {testSeriesData?.map((examGroup) => (
-          <div key={examGroup?.exam_id} className="mb-10">
-            <h2 className="text-2xl font-bold mb-4">{examGroup?.exam_name}</h2>
+        {testSeriesData?.map((examGroup, index) => (
+          <div key={index} className="mb-12">
+            <h2 className="text-2xl text-[#204972] font-bold mb-6">{examGroup?.exam_name}</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-2 md:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {examGroup?.series?.map((series) => {
                 const discount =
                   Math.round(((series?.price - series?.discount_price) / series?.price) * 100) || 0;
@@ -72,72 +72,78 @@ export default function Page() {
                 return (
                   <div
                     key={series?._id}
-                    className="relative w-full max-w-sm rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                    className="relative w-full rounded-2xl shadow-md border border-gray-100 bg-white overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
                     <Link href={`/test-series/${series?._id}`} className="block">
-                      <div className="px-4 pt-4">
-                        <div className="flex justify-between items-start">
-                          <h2 className="text-lg font-bold leading-snug">{series?.title}</h2>
-                          {series?.title_tag && (
-                            <span className="bg-yellow-400 text-xs px-2 py-1 rounded-full font-semibold shadow-sm">
-                              {series?.title_tag}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="relative w-full h-56 px-0 mt-3">
-                          <div className="relative w-full h-full rounded-lg overflow-hidden">
-                            <Image
-                              src={imgSrc}
-                              alt={series?.title || "Test Series"}
-                              fill
-                              className="object-cover hover:scale-105 transition-transform duration-500"
-                            />
-                            {series?.total_tests > 0 && (
-                              <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
-                                {series?.total_tests} Tests
-                              </div>
-                            )}
+                      {/* Image Section */}
+                      <div className="relative w-full h-56">
+                        <Image
+                          src={imgSrc}
+                          alt={series?.title || "Test Series"}
+                          fill
+                          className="object-cover rounded-t-2xl hover:scale-105 transition-transform duration-500"
+                        />
+                        {series?.total_tests > 0 && (
+                          <div className="absolute top-3 right-3 bg-[#204972] text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                            {series?.total_tests} Tests
                           </div>
-                        </div>
+                        )}
+                        {series?.title_tag && (
+                          <div className="absolute top-10 right-3 bg-[#788406] text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                            {series?.title_tag}
+                          </div>
+                        )}
+                      </div>
 
-                        <p className="px-1 mt-3 font-medium text-sm">
-                          Validity for {series?.validity}
+                      {/* Details Section */}
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-800 leading-snug line-clamp-2">
+                          {series?.title}
+                        </h3>
+
+                        <p className="text-sm text-gray-500 mt-2">
+                          Validity: <span className="font-medium">{series?.validity}</span>
                         </p>
 
-                        <div className="px-1 pb-4 mt-2">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <span className="text-indigo-700 font-bold text-lg">
-                                ₹{series?.discount_price}
-                              </span>
-                              <span className="text-gray-400 line-through text-sm ml-1">
-                                ₹{series?.price}
-                              </span>
-                            </div>
-                            <div className="text-green-700 text-xs font-semibold bg-green-50 px-2 py-1 rounded-md">
-                              {discount}% OFF
-                            </div>
+                        <div className="flex justify-between items-center mt-4">
+                          <div>
+                            <span className="text-[#204972] font-bold text-lg">
+                              ₹{series?.discount_price}
+                            </span>
+                            <span className="text-gray-400 line-through text-sm ml-2">
+                              ₹{series?.price}
+                            </span>
                           </div>
+                          {discount > 0 && (
+                            <span className="text-green-700 text-xs font-semibold bg-green-50 px-2 py-1 rounded-md">
+                              {discount}% OFF
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>
 
-                    <button
-                      onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-                      disabled={loading}
-                      className="flex absolute bottom-2 right-2 bg-yellow-100 px-2 py-1 rounded-md text-[#616602] text-sm font-bold shadow cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      <span className="mt-1 me-2">
-                        <FaPlus />
-                      </span>
-                      {loading ? "ADDING..." : "ADD"}
-                    </button>
+                    {/* Action Section */}
+                    <div className="px-4 pb-4">
+                      <button
+                        onClick={(e) => {
+                          handleAdd(e, "testSeries", series?._id);
+                          openCart();
+                        }}
+                        disabled={loading}
+                        className="w-full flex items-center justify-center gap-2 bg-[#204972] text-white text-sm font-semibold py-2 rounded-lg shadow hover:bg-[#163452] transition-colors"
+                      >
+                        <FaPlus className="text-xs" />
+                        {loading ? "ADDING..." : "ADD"}
+                      </button>
+
+                    </div>
                   </div>
                 );
               })}
             </div>
           </div>
+
         ))}
       </div>
 

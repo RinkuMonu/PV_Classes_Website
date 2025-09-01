@@ -91,13 +91,10 @@ function AddressShipping() {
     pincode: "",
   });
   const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("No token found!");
-          return;
-        }
+    const token = localStorage.getItem("token");
+    if (token){
 
+      try {
         const { data } = await axiosInstance.get("/users/getUser", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,6 +115,7 @@ function AddressShipping() {
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
+    }  
   };
   const checkout = async () => {
     try {
@@ -390,16 +388,21 @@ function AddressShipping() {
   useEffect(() => {
     const fetchCoupons = async () => {
       const token = localStorage.getItem("token"); // token localStorage se nikal rahe ho
-      try {
-        const { data } = await axiosInstance.get("/coupon", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setCoupon(data.data || []);
-      } catch (error) {
-        console.error("Error fetching coupons:", error);
+      if(token){
+        try {
+          const { data } = await axiosInstance.get("/coupon", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setCoupon(data.data || []);
+        } catch (error) {
+          console.error("Error fetching coupons:", error);
+        }
+      }else{
+        setCoupon([]);
       }
+      
     };
     fetchCoupons();
   }, []);
@@ -465,6 +468,7 @@ function AddressShipping() {
     totalAmount: 0,
     paymentMethod: "cod",
   });
+  
   useEffect(() => {
   setTotalOrder({
     cart: cart,
@@ -473,7 +477,7 @@ function AddressShipping() {
     couponId: couponCode.couponId,
   });
 }, [cart, totalAmount,couponCode]);
-console.log("totalOrder = ", totalOrder);
+
   return (
     <> 
     {orderSuccess && (
@@ -581,11 +585,55 @@ console.log("totalOrder = ", totalOrder);
                         key={item?.itemId}
                         className="flex gap-4 justify-between border-b pb-3"
                       >
-                        <img
-                          src={item?.details?.full_image?.[0]}
-                          alt={item?.details?.title}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
+                        <div className="flex-shrink-0">
+                          {item?.itemType === "combo" ? (
+                        <div className="grid grid-cols-2 gap-3">
+                          {/* Books */}
+                          {item?.details?.pyqs?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.pyqs?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">PYQs</span>
+                            </div>
+                          )}
+                          {item?.details?.books?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <img
+                                src={item?.details?.books?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                alt={item?.details?.books?.[0]?.title}
+                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                              />
+                              <span className="text-xs text-[#204972]">books</span>
+                            </div>
+                          )}
+                          {item?.details?.testSeries?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <img
+                                src={item?.details?.testSeries?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                alt={item?.details?.testSeries?.[0]?.title}
+                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                              />
+                              <span className="text-xs text-[#204972]">test series</span>
+                            </div>
+                          )}
+                          {item?.details?.course?.length > 0 && (
+                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                              <span className="text-lg font-bold text-[#00316B]">
+                                {item?.details?.course?.length}
+                              </span>
+                              <span className="text-xs text-[#204972]">courses</span>
+                            </div>
+                          )}                          
+                        </div>
+                          ) : (
+                            <img
+                              src={item?.details?.full_image?.[0] || "/placeholder.svg"}
+                              alt={item?.details?.title}
+                              className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                            />
+                          )}
+                        </div>
                         <div className="flex-1 text-right">
                           <h4 className="font-medium text-[#14263F] text-sm">
                             {item?.details?.title}

@@ -26,7 +26,7 @@ export default function ProductPage() {
         };    
         fetchBooks();
     }, [id]);
-    console.log("book details = ",books); 
+    console.log("book details = ",books);
 
   const features = [
      {

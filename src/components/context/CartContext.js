@@ -12,6 +12,11 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const [cartCount, setCartCount] = useState(null);
   const [loading, setLoading] = useState(false);  
+
+    const [isOpen, setIsOpen] = useState(false);
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
   const fetchCart = async () => {
     try {
       setLoading(true);
@@ -210,7 +215,10 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         clearCart,
         cartCount,
-        setCartCount
+        setCartCount,
+           isOpen,
+        openCart,
+        closeCart,
       }}
     >
       {children}

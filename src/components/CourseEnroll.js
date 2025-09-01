@@ -15,8 +15,8 @@ export default function CourseEnroll() {
               Paayen Free Resources Current Affairs aur notes PDFs, Test Series, Video Lectures aur bhi bahut kuch...
             </p>
             <Link href="/courses" className="inline-block">
-              <button className="bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Enroll Now
+              <button className="bg-[#87b105] text-primary-foreground  md:px-6 md:py-2 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                Get Started
               </button>
             </Link>
           </div>

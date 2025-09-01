@@ -1,48 +1,57 @@
 "use client";
-import { FaFlask, FaGraduationCap, FaSchool, FaLandmark, FaBriefcase, FaShieldAlt } from "react-icons/fa";
-import Link from "next/link"
+import {
+  FaFlask,
+  FaGraduationCap,
+  FaSchool,
+  FaLandmark,
+  FaBriefcase,
+  FaShieldAlt,
+} from "react-icons/fa";
+import Link from "next/link";
 
 export default function ExamCategory() {
   const categories = [
     {
-      title: "3rd Grade",
-      tags: ["Level 1", "Level 2", "Level 3"],
-      icon: <FaFlask className="text-6xl text-pink-500" />,
-      bg: "bg-pink-50",
-link: "/courses",
+      title: "Defence Exams",
+      tags: ["NDA", "SSB"],
+      icon: <FaFlask className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
+
+      link: "/courses?exam=68ac3c02a5a435b640ada61b",
+
     },
     {
       title: "Current Affairs",
       tags: ["GK", "Indian Economy", "Geography"],
-      icon: <FaGraduationCap className="text-6xl text-yellow-500" />,
-      bg: "bg-yellow-50",
+      icon: <FaGraduationCap className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
       link: "/current-affairs",
     },
 
     {
-      title: "All India Exam",
-      tags: ["Central", "Politics"],
-      icon: <FaLandmark className="text-6xl text-indigo-500" />,
-      bg: "bg-indigo-50",
-      link: "/courses",
+      title: "Banking Exams",
+      tags: ["SBI", "IBPS", "RBI"],
+      icon: <FaLandmark className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
+      link: "/courses?exam=68ac35d6a5a435b640ada5f3",
     },
     {
-      title: "Govt Job Exams",
+      title: "Utarpardesh State Exams",
       tags: ["SSC", "Banking"],
-      icon: <FaBriefcase className="text-6xl text-green-500" />,
-      bg: "bg-green-50",
-      link: "/courses",
+      icon: <FaBriefcase className="text-6xl text-[#87b105]" />,
+      bg: "bg-[#87b105]/10",
+      link: "/courses?exam=68ac31d0a5a435b640ada5dd",
     },
-
   ];
 
   return (
-  <section className="px-6 md:px-16 py-16 bg-[#edf3f5]">
+    <section className="px-6 md:px-16 py-16 bg-[#edf3f5]">
       <h2 className="text-3xl md:text-4xl font-bold text-center mb-3 text-[#204972]">
         Exam Categories
       </h2>
       <p className="text-center text-gray-600 mb-12">
-        PV is preparing students for 35+ exam categories. Scroll down to find the one you are preparing for
+        PV is preparing students for 35+ exam categories. Scroll down to find
+        the one you are preparing for
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -51,7 +60,9 @@ link: "/courses",
             key={index}
             className="bg-white shadow-md rounded-xl p-6 relative overflow-hidden hover:shadow-lg transition-all md:px-10"
           >
-            <h3 className="text-xl text-[#204972] font-bold mb-4">{cat.title}</h3>
+            <h3 className="text-xl text-[#204972] font-bold mb-4">
+              {cat.title}
+            </h3>
             <div className="flex flex-wrap gap-2 mb-6">
               {cat.tags.map((tag, i) => (
                 <span
@@ -64,7 +75,10 @@ link: "/courses",
             </div>
 
             <div className="flex justify-between items-center">
-              <Link href={cat.link} className="text-[#204972] font-medium flex items-center gap-2">
+              <Link
+                href={cat.link}
+                className="text-[#204972] font-medium flex items-center gap-2"
+              >
                 Explore Category →
               </Link>
               <div

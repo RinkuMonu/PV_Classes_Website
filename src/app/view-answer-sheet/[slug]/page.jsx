@@ -16,9 +16,7 @@ export default function AnswerSheetPage() {
   const [date, setDate] = useState(new Date().toLocaleDateString());
 
   useEffect(() => {
-    if (testId) {
-      setActiveTestId(testId);
-    }
+    if (testId) setActiveTestId(testId);
   }, [testId]);
 
   useEffect(() => {
@@ -36,25 +34,23 @@ export default function AnswerSheetPage() {
         setTestSeriesData(response.data.data);
 
         const testsData = response.data.data.tests || [];
-        const attemptedTests = testsData.filter(test => test.attempt); // Only tests with attempts
+        const attemptedTests = testsData.filter((test) => test.attempt);
 
         if (attemptedTests.length > 0) {
-          let selectedTest;
-
-          if (testId) {
-            // ✅ if query param testId exists, pick that test (if it has attempt)
-            selectedTest = attemptedTests.find((t) => t._id === testId);
-          }
+          let selectedTest = testId
+            ? attemptedTests.find((t) => t._id === testId)
+            : null;
 
           if (!selectedTest) {
-            // ✅ otherwise fallback to the first attempted test
             selectedTest = attemptedTests[0];
           }
 
           setActiveTestId(selectedTest._id);
 
           if (selectedTest.attempt?.createdAt) {
-            setDate(new Date(selectedTest.attempt.createdAt).toLocaleDateString());
+            setDate(
+              new Date(selectedTest.attempt.createdAt).toLocaleDateString()
+            );
           }
         }
       } catch (error) {
@@ -69,35 +65,38 @@ export default function AnswerSheetPage() {
 
   const series = testSeriesData || {};
   const tests = series.tests || [];
-  const attemptedTests = tests.filter(test => test.attempt); // Only tests with attempts
-  const currentTest = attemptedTests.find(test => test._id === activeTestId) || {};
+  const attemptedTests = tests.filter((test) => test.attempt);
+  const currentTest =
+    attemptedTests.find((test) => test._id === activeTestId) || {};
+
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-gray-600">Loading answer sheet...</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <p className="text-lg text-gray-500 animate-pulse">
+          Loading answer sheet...
+        </p>
       </div>
     );
   }
 
   if (!testSeriesData || !id) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-red-600">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <p className="text-lg text-red-600 font-medium">
           Error loading answer sheet data or invalid ID.
         </p>
       </div>
     );
   }
 
-  // Show message if no tests have been attempted
   if (attemptedTests.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-4">No Attempted Tests Found</h2>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="bg-white p-10 rounded-2xl shadow-lg text-center max-w-md">
+          <h2 className="text-xl font-bold mb-3">No Attempted Tests Found</h2>
           <p className="text-gray-600">
-            You haven't attempted any tests in this series yet.
+            You haven&apos;t attempted any tests in this series yet.
           </p>
         </div>
       </div>
@@ -105,40 +104,31 @@ export default function AnswerSheetPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-        {/* Header Section */}
-        <div className="bg-blue-800 text-white p-6">
-          <h1 className="text-2xl font-bold mb-2">Answer Sheet</h1>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div>
-              <p className="font-semibold">Test Series</p>
-              <p>{series.title || "Not specified"}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Student</p>
-              <p>{studentName || "Not specified"}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Date</p>
-              <p>{date || new Date().toLocaleDateString()}</p>
-            </div>
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="mx-auto max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#204972] to-[#616602] text-white py-10 px-8 rounded-2xl shadow-xl">
+          <h1 className="text-3xl font-bold mb-4">📄 Answer Sheet</h1>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+            <InfoBox label="Test Series" value={series.title || "Not specified"} />
+            <InfoBox label="Student" value={studentName} />
+            <InfoBox label="Date" value={date} />
           </div>
         </div>
 
-        {/* Test Selection - Only show attempted tests */}
+        {/* Test Selection */}
         {attemptedTests.length > 0 && (
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-semibold mb-2">Select Test</h2>
-            <div className="flex flex-wrap gap-2">
+          <div className="p-6 border-b border-gray-300 flex justify-between">
+            <h2 className="text-lg font-semibold mb-3">Select Test</h2>
+            <div className="flex flex-wrap gap-3">
               {attemptedTests.map((test) => (
                 <button
                   key={test._id}
                   onClick={() => setActiveTestId(test._id)}
-                  className={`px-4 py-2 rounded-md cursor-pointer ${
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
                     activeTestId === test._id
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      ? "bg-[#00316B] text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {test.title}
@@ -148,43 +138,39 @@ export default function AnswerSheetPage() {
           </div>
         )}
 
-        {/* Test Overview - Only show if current test has attempt data */}
+        {/* Test Performance */}
         {currentTest.attempt && (
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-semibold mb-4">Test Performance</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-green-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-green-700">
-                  {currentTest.attempt.totalMarks || 0}
-                </p>
-                <p className="text-sm text-green-600">Total Marks</p>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-blue-700">
-                  {currentTest.attempt.correctCount || 0}
-                </p>
-                <p className="text-sm text-blue-600">Correct Answers</p>
-              </div>
-              <div className="bg-red-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-red-700">
-                  {currentTest.attempt.wrongCount || 0}
-                </p>
-                <p className="text-sm text-red-600">Wrong Answers</p>
-              </div>
-              <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-yellow-700">
-                  {currentTest.attempt.unattemptedCount || 0}
-                </p>
-                <p className="text-sm text-yellow-600">Unattempted</p>
-              </div>
+          <div className="p-8 border-b border-gray-300">
+            <h2 className="text-xl font-semibold mb-6">📊 Test Performance</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <StatCard
+                color="green"
+                value={currentTest.attempt.totalMarks || 0}
+                label="Total Marks"
+              />
+              <StatCard
+                color="blue"
+                value={currentTest.attempt.correctCount || 0}
+                label="Correct"
+              />
+              <StatCard
+                color="red"
+                value={currentTest.attempt.wrongCount || 0}
+                label="Wrong"
+              />
+              <StatCard
+                color="yellow"
+                value={currentTest.attempt.unattemptedCount || 0}
+                label="Unattempted"
+              />
             </div>
           </div>
         )}
 
-        {/* Questions List - Only show if current test has questions */}
+        {/* Questions */}
         {currentTest.questions && currentTest.questions.length > 0 && (
-          <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Questions Review</h2>
+          <div className="p-8">
+            <h2 className="text-xl font-semibold mb-6">📝 Questions Review</h2>
             <div className="space-y-6">
               {currentTest.questions.map((question, index) => (
                 <QuestionCard
@@ -201,8 +187,40 @@ export default function AnswerSheetPage() {
   );
 }
 
+// Info Box Component
+function InfoBox({ label, value }) {
+  return (
+    <div>
+      <p className="font-semibold text-gray-200">{label}</p>
+      <p className="text-white">{value}</p>
+    </div>
+  );
+}
+
+// Stat Card Component
+function StatCard({ color, value, label }) {
+  const colors = {
+    green: "bg-green-50 text-green-700 border-green-200",
+    blue: "bg-blue-50 text-blue-700 border-blue-200",
+    red: "bg-red-50 text-red-700 border-red-200",
+    yellow: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  };
+
+  return (
+    <div
+      className={`p-5 rounded-xl border text-center shadow-sm ${colors[color]}`}
+    >
+      <p className="text-3xl font-bold">{value}</p>
+      <p className="text-sm font-medium mt-2">{label}</p>
+    </div>
+  );
+}
+
+// Question Card (same logic, styled slightly better)
 function QuestionCard({ question, index }) {
-  const isAnswered = question.attemptResponse !== null && question.attemptResponse !== undefined;
+  const isAnswered =
+    question.attemptResponse !== null &&
+    question.attemptResponse !== undefined;
   const isCorrect = isAnswered && question.attemptResponse.isCorrect;
   const questionType = question.type || "mcq_single";
   const options = question.options || [];
@@ -211,7 +229,7 @@ function QuestionCard({ question, index }) {
 
   return (
     <div
-      className={`border rounded-lg p-4 ${
+      className={`rounded-xl p-6 shadow-sm border ${
         isAnswered
           ? isCorrect
             ? "bg-green-50 border-green-200"
@@ -219,9 +237,9 @@ function QuestionCard({ question, index }) {
           : "bg-gray-50 border-gray-200"
       }`}
     >
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold">
-          Q{index + 1}: {question.statement || "No question statement"}
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-lg font-semibold leading-snug">
+          Q{index + 1}. {question.statement || "No question statement"}
         </h3>
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -240,11 +258,11 @@ function QuestionCard({ question, index }) {
       {questionType === "mcq_single" && options.length > 0 && (
         <div className="mb-4">
           <p className="font-medium mb-2">Options:</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {options.map((option) => (
               <div
                 key={option.key}
-                className={`p-2 rounded border ${
+                className={`p-3 rounded-lg border transition ${
                   correctOptions.includes(option.key)
                     ? "bg-green-100 border-green-400"
                     : attemptResponse.selectedOptions?.includes(option.key)
@@ -254,57 +272,46 @@ function QuestionCard({ question, index }) {
               >
                 <span className="font-medium">{option.key}. </span>
                 {option.text}
-                {correctOptions.includes(option.key) && (
-                  <span className="ml-2 text-green-600">✓ Correct answer</span>
-                )}
-                {attemptResponse.selectedOptions?.includes(option.key) &&
-                  !correctOptions.includes(option.key) && (
-                    <span className="ml-2 text-red-600">✗ Your answer</span>
-                  )}
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Numeric answer */}
+      {/* Numeric Answer */}
       {questionType === "numeric" && (
-        <div className="mb-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-3 rounded border bg-green-100 border-green-400">
-              <p className="font-medium">Correct Answer:</p>
-              <p className="text-xl">{question.correctNumeric || "N/A"}</p>
-            </div>
-            {isAnswered && (
-              <div
-                className={`p-3 rounded border ${
-                  isCorrect
-                    ? "bg-green-100 border-green-400"
-                    : "bg-red-100 border-red-400"
-                }`}
-              >
-                <p className="font-medium">Your Answer:</p>
-                <p className="text-xl">
-                  {attemptResponse.numericAnswer || "N/A"}
-                </p>
-              </div>
-            )}
+        <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-3 rounded-lg border bg-green-100 border-green-400">
+            <p className="font-medium">Correct Answer:</p>
+            <p className="text-xl">{question.correctNumeric || "N/A"}</p>
           </div>
+          {isAnswered && (
+            <div
+              className={`p-3 rounded-lg border ${
+                isCorrect
+                  ? "bg-green-100 border-green-400"
+                  : "bg-red-100 border-red-400"
+              }`}
+            >
+              <p className="font-medium">Your Answer:</p>
+              <p className="text-xl">
+                {attemptResponse.numericAnswer || "N/A"}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
       {/* Attempt details */}
       {isAnswered && (
-        <div className="mt-4 pt-3 border-t border-gray-200">
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-            <div>
-              <span className="font-medium">Time Spent: </span>
-              {attemptResponse.timeSpentSec || 0} seconds
-            </div>
-            <div>
-              <span className="font-medium">Marks Awarded: </span>
-              {attemptResponse.marksAwarded || 0}/{question.marks || 0}
-            </div>
+        <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600 flex flex-wrap gap-6">
+          <div>
+            <span className="font-medium">Time Spent:</span>{" "}
+            {attemptResponse.timeSpentSec || 0} sec
+          </div>
+          <div>
+            <span className="font-medium">Marks Awarded:</span>{" "}
+            {attemptResponse.marksAwarded || 0}/{question.marks || 0}
           </div>
         </div>
       )}

@@ -324,8 +324,26 @@ export default function ProfilePage() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex justify-center items-center h-40 text-gray-500 text-sm font-medium">
-                                📚 No Books Found
+                             <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+                                <div className="mb-5">
+                                    <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Books Found</h3>
+                                <p className="text-gray-500 max-w-md mx-auto mb-6">
+                                    We couldn't find any Books matching your criteria.
+                                </p>
+                                <a
+                                    href="/book"
+                                    className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
+                                >
+                                    Explore Books
+                                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
                             </div>
                         )}
                     </>
@@ -347,7 +365,9 @@ export default function ProfilePage() {
                                         {/* Top Image */}
                                         <div className="relative w-full h-44 sm:h-52 overflow-hidden">
                                             <img
-                                                src={`${item?.imagesFullPath?.[0] || "/default-course.jpg"}`}
+                                                src={`${item?.full_image?.[0] || "/default-course.jpg"}`}
+                                                // src={`http://localhost:5000${item?.images?.[0]}`}
+
                                                 alt={item?.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
@@ -428,8 +448,28 @@ export default function ProfilePage() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex justify-center items-center h-40 text-gray-500 text-sm font-medium">
-                                🎓 No Courses Found
+                           
+
+                              <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+                                <div className="mb-5">
+                                    <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Courses Found</h3>
+                                <p className="text-gray-500 max-w-md mx-auto mb-6">
+                                    We couldn't find any Courses matching your criteria.
+                                </p>
+                                <a
+                                    href="/courses"
+                                    className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
+                                >
+                                    Explore Courses
+                                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
                             </div>
                         )}
                     </>
@@ -819,8 +859,26 @@ export default function ProfilePage() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-10 text-gray-500 font-medium">
-                                🚫 No Tests Found
+                            <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+                                <div className="mb-5">
+                                    <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Tests Found</h3>
+                                <p className="text-gray-500 max-w-md mx-auto mb-6">
+                                    We couldn't find any Tests your criteria.
+                                </p>
+                                <a
+                                    href="/test-series"
+                                    className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
+                                >
+                                    Explore Tests
+                                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
                             </div>
                         )}
                     </>
@@ -857,8 +915,26 @@ export default function ProfilePage() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-10 text-gray-500 font-medium">
-                                🚫 No PYQs Found
+                            <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+                                <div className="mb-5">
+                                    <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-700 mb-2">No PYQs Found</h3>
+                                <p className="text-gray-500 max-w-md mx-auto mb-6">
+                                    We couldn't find any Previous Year Questions matching your criteria.
+                                </p>
+                                <a
+                                    href="/previous-year-question"
+                                    className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
+                                >
+                                    Explore PYQs
+                                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
                             </div>
                         )}
                     </>

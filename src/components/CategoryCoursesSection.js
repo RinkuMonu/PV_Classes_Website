@@ -81,7 +81,7 @@
 //   return (
 //     <div className="mb-16">
 
-          
+
 
 //                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
 //                             <div>
@@ -192,50 +192,84 @@ export default function CategoryCoursesSection({ category }) {
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (!category?._id) return
-    const fetchExamTypes = async () => {
-      try {
-        const res = await axiosInstance.get(`/exam-types/category/${category?._id}`)
-        setExamTypes(res?.data || [])
-        if (res?.data?.length > 0) {
-          setSelectedExamType(res?.data?.[0] || null)
-        }
-      } catch (err) {
-        console.error("Error fetching exam types", err)
-      }
-    }
-    fetchExamTypes()
-  }, [category?._id])
+  // useEffect(() => {
+  //   if (!category?._id) return
+  //   const fetchExamTypes = async () => {
+  //     try {
+  //       const res = await axiosInstance.get(`/exam-types/category/${category?._id}`)
+  //       setExamTypes(res?.data || [])
+  //       if (res?.data?.length > 0) {
+  //         setSelectedExamType(res?.data?.[0] || null)
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching exam types", err)
+  //     }
+  //   }
+  //   fetchExamTypes()
+  // }, [category?._id])
+
 
   useEffect(() => {
-    if (!selectedExamType?._id) return
+  if (!category?._id) return;
 
-    const fetchExams = async () => {
-      try {
-        const res = await axiosInstance.get(`/exams/type/${selectedExamType?._id}`)
+  const fetchExamTypes = async () => {
+    try {
+      const res = await axiosInstance.get(`/exam-types/category/${category?._id}`);
 
-        if (Array.isArray(res?.data) && res?.data?.length > 0) {
-          setExams(res?.data || [])
-          setSelectedExam(res?.data?.[0] || null)
-        } else {
-          setExams([])
-          setSelectedExam(null)
-          setCourses([])
-        }
-      } catch (err) {
-        if (err?.response?.status === 404) {
-          setExams([])
-          setSelectedExam(null)
-          setCourses([])
-        } else {
-          console.error("Error fetching exams:", err?.response?.data || err?.message)
-        }
+      if (Array.isArray(res?.data) && res.data.length > 0) {
+        setExamTypes(res.data);
+        setSelectedExamType(res.data[0] || null);
+      } else {
+        setExamTypes([]);
+        setSelectedExamType(null);
+      }
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        // 404 => no exam types found
+        setExamTypes([]);
+        setSelectedExamType(null);
+      } else {
+        console.error("Error fetching exam types:", err?.response?.data || err?.message);
       }
     }
+  };
 
-    fetchExams()
-  }, [selectedExamType?._id])
+  fetchExamTypes();
+}, [category?._id]);
+
+
+
+
+  useEffect(() => {
+  if (!selectedExamType?._id) return;
+
+  const fetchExams = async () => {
+    try {
+      const res = await axiosInstance.get(`/exams/type/${selectedExamType?._id}`);
+
+      if (Array.isArray(res?.data) && res?.data?.length > 0) {
+        setExams(res.data);
+        setSelectedExam(res.data[0] || null);
+      } else {
+        setExams([]);
+        setSelectedExam(null);
+        setCourses([]);
+      }
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        // 404 ka matlab sirf data nahi mila
+        setExams([]);
+        setSelectedExam(null);
+        setCourses([]);
+      } else {
+        console.error("Error fetching exams:", err?.response?.data || err?.message);
+      }
+    }
+  };
+
+  fetchExams();
+}, [selectedExamType?._id]);
+
 
   useEffect(() => {
     if (!selectedExam?._id) return
@@ -255,7 +289,7 @@ export default function CategoryCoursesSection({ category }) {
   }, [selectedExam?._id])
 
   return (
-    <div className="mb-16">
+    <div className="mb-16 ">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 pb-4 border-b border-[#009FE3]/30">
         <div className="mb-4 md:mb-0">
@@ -274,7 +308,7 @@ export default function CategoryCoursesSection({ category }) {
           {/* Exam Types */}
           {examTypes?.length > 0 && (
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">Exam Types</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">Exam Types</h3>
               <div className="flex flex-wrap gap-2">
                 {examTypes?.map((type) => (
                   <button
@@ -296,7 +330,7 @@ export default function CategoryCoursesSection({ category }) {
           {/* Exams */}
           {exams?.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">Exams</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">Exams</h3>
               <div className="flex flex-wrap gap-2">
                 {exams?.map((exam) => (
                   <button
@@ -337,23 +371,23 @@ export default function CategoryCoursesSection({ category }) {
             ))}
           </div>
         ) : courses?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses?.map((course) => (
               <Link
                 href={`/courses/${course?._id}`}
                 key={course?._id}
-                className="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="group border border-gray-200 rounded-xl bg-white overflow-hidden shadow-xl transition-all duration-300 hover:-translate-y-2"
               >
-                {course?.imagesFullPath?.length > 0 ? (
+                {course?.full_image?.length > 0 ? (
                   <div className="overflow-hidden">
                     <img
-                      src={course?.imagesFullPath?.[0]}
+                      src={course?.full_image?.[0]}
                       alt={course?.title || "Course"}
                       className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-40 bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                  <div className="w-full h-40 bg-[#204972]/10 flex items-center justify-center">
                     <FaBook className="text-gray-400 text-3xl" />
                   </div>
                 )}
@@ -379,9 +413,9 @@ export default function CategoryCoursesSection({ category }) {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-blue-50 rounded-xl">
-            <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <FaBook className="text-blue-400 text-xl" />
+          <div className="text-center py-12 bg-[#204972]/10 rounded-xl">
+            <div className="w-16 h-16 mx-auto bg-[#204972]/20 rounded-full flex items-center justify-center mb-4">
+              <FaBook className="text-[#204972] text-xl" />
             </div>
             <h3 className="text-lg font-medium text-gray-700 mb-2">No courses available</h3>
             <p className="text-gray-500">Check back later for new courses in this category</p>

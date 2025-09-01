@@ -47,13 +47,44 @@ export default function TestSeriesUnified() {
   const timerRef = useRef(null);
 
   const [completedTests, setCompletedTests] = useState({});
- console.log(completedTests?._id)
+  console.log(completedTests?._id);
   const [hasAccess, setHasAccess] = useState(false);
- const viewTest = (e, testId) => {
+  const viewTest = (e, testId) => {
     e.preventDefault();
     // If you need to send both seriesId and testId, do something like this:
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
   };
+
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         setHasAccess(false);
+  //         return;
+  //       }
+
+  //       const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (res.data.message === "Access granted") {
+  //         setHasAccess(true);
+  //       } else {
+  //         setHasAccess(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("Access check failed:", err);
+  //       setHasAccess(false);
+  //     }
+  //   })();
+  // }, [seriesId]);
+
+  // ---------------- Fetch details ----------------
+
   useEffect(() => {
     (async () => {
       try {
@@ -67,9 +98,10 @@ export default function TestSeriesUnified() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          validateStatus: (status) => status < 500, // 4xx को error मत मानो
         });
 
-        if (res.data.message === "Access granted") {
+        if (res.status === 200 && res.data.message === "Access granted") {
           setHasAccess(true);
         } else {
           setHasAccess(false);
@@ -81,7 +113,7 @@ export default function TestSeriesUnified() {
     })();
   }, [seriesId]);
 
-  // ---------------- Fetch details ----------------
+
   console.log(series, "serise");
   const fetchSeries = async () => {
     try {
@@ -188,9 +220,9 @@ export default function TestSeriesUnified() {
       const payload =
         q.type === "numeric"
           ? {
-              numericAnswer:
-                numericAnswer === "" ? undefined : Number(numericAnswer),
-            }
+            numericAnswer:
+              numericAnswer === "" ? undefined : Number(numericAnswer),
+          }
           : { selectedOptions };
 
       const res = await axiosInstance.post(
@@ -266,7 +298,7 @@ export default function TestSeriesUnified() {
 
   const banner = (
     <div className="max-w-6xl mx-auto px-4 mb-10">
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-10 px-8 rounded-2xl shadow-xl">
+      <div className="bg-gradient-to-r from-[#204972] to-[#616602] text-white py-10 px-8 rounded-2xl shadow-xl">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 mb-3">
             {series.title_tag && (
@@ -310,8 +342,8 @@ export default function TestSeriesUnified() {
             {/* Overview */}
             <div className="bg-white p-6 rounded-2xl shadow-sm mb-8">
               <div className="flex items-center gap-3 mb-5">
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <BookOpen size={24} className="text-blue-600" />
+                <div className="bg-blue-50 p-2 rounded-lg">
+                  <BookOpen size={24} className="text-[#204972]" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">Overview</h2>
               </div>
@@ -324,8 +356,8 @@ export default function TestSeriesUnified() {
             {series.subjects?.length > 0 && (
               <div className="bg-white p-6 rounded-2xl shadow-sm mb-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="bg-green-100 p-2 rounded-lg">
-                    <FileText size={24} className="text-green-600" />
+                  <div className="bg-blue-50 p-2 rounded-lg">
+                    <FileText size={24} className="text-[#204972]" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-800">
                     Subjects & Tests
@@ -341,7 +373,7 @@ export default function TestSeriesUnified() {
                         <h4 className="font-semibold text-gray-800">
                           {subject.name}
                         </h4>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">
+                        <span className="bg-blue-50 text-[#204972] text-xs font-bold px-2.5 py-1 rounded-full">
                           {subject.test_count}{" "}
                           {subject.test_count > 1 ? "Tests" : "Test"}
                         </span>
@@ -355,10 +387,15 @@ export default function TestSeriesUnified() {
             {/* Embedded Tests */}
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold">Available Tests</h3>
-                <Link href={`/view-answer-sheet/${seriesId}`} className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer">
-                  View All Answer
-                </Link>
+                <h3 className="text-lg text-[#204972] font-semibold">Available Tests</h3>
+                {hasAccess && Object.keys(completedTests).length > 0 && (
+                  <Link
+                    href={`/view-answer-sheet/${seriesId}`}
+                    className="px-2 py-2 bg-[#00316B] text-white rounded-lg hover:bg-[#00316B]/80 transition cursor-pointer"
+                  >
+                    View All Answer
+                  </Link>
+                )}
               </div>
               <div className="space-y-3">
                 {(series.tests || []).map((test) => (
@@ -367,8 +404,8 @@ export default function TestSeriesUnified() {
                     className="border border-gray-100 p-4 rounded-xl flex flex-wrap gap-3 items-center justify-between hover:border-blue-200 hover:bg-blue-50 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <FileText size={20} className="text-blue-600" />
+                      <div className="bg-blue-50 p-2 rounded-lg">
+                        <FileText size={20} className="text-[#204972]" />
                       </div>
                       <div>
                         <div className="font-medium text-gray-800">
@@ -397,8 +434,8 @@ export default function TestSeriesUnified() {
                           >
                             Retake
                           </button>
-                          <button onClick={(e)=>viewTest(e,test?._id)} 
-
+                          <button
+                            onClick={(e) => viewTest(e, test?._id)}
                             className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
                           >
                             View Answer
@@ -434,8 +471,8 @@ export default function TestSeriesUnified() {
             {/* FAQs (static) */}
             <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-purple-100 p-2 rounded-lg">
-                  <HelpCircle size={24} className="text-purple-600" />
+                <div className="bg-blue-50 p-2 rounded-lg">
+                  <HelpCircle size={24} className="text-[#204972]" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">
                   Frequently Asked Questions
@@ -456,7 +493,11 @@ export default function TestSeriesUnified() {
           </div>
 
           {/* RIGHT */}
-          <div className="lg:mt-0 mt-6">{sidebar}</div>
+          {!hasAccess && (
+            <div className="lg:mt-0 mt-6">
+              <SidebarCard series={series} hasAccess={hasAccess} />
+            </div>
+          )}
         </div>
       </section>
     );
@@ -465,32 +506,42 @@ export default function TestSeriesUnified() {
   // ---------- Mode: ATTEMPT ----------
   if (mode === "attempt") {
     return (
-      <div className="max-w-3xl mx-auto p-6 space-y-4">
+      <div className="max-w-4xl mx-auto p-6 space-y-4 min-h-[50vh]">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">
             {selectedTest?.title} — Question {index + 1} / {total}
           </h2>
-          <div className="font-mono text-xl">
+          <div className="flex items-center justify-center p-3 rounded-full bg-[#00316B]/90 text-white text-xl font-bold shadow-md">
             {String(timeLeft).padStart(2, "0")}s
           </div>
+
         </div>
 
         {q ? (
-          <div className="p-4 border rounded-lg bg-white">
-            <div className="mb-3 text-gray-800">{q.statement}</div>
+          <div className="p-4 shadow-lg rounded-lg bg-white">
+            <div className="mb-3 text-gray-800 font-semibold">{q.statement}</div>
 
             {q.type?.includes("mcq") && (
               <div className="space-y-2">
                 {q.options?.map((op) => (
                   <label
                     key={op.key}
-                    className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                    className="flex items-center gap-2 p-3 border border-[#00316B] rounded-lg cursor-pointer hover:bg-gray-50"
                   >
                     <input
                       type={q.type === "mcq_single" ? "radio" : "checkbox"}
                       name="opt"
                       checked={selectedOptions.includes(op.key)}
                       onChange={() => toggleOption(op.key)}
+                      className="
+    h-5 w-5 
+    text-[#00316B] 
+    border-gray-300 
+    focus:ring-2 focus:ring-[#00316B] focus:ring-offset-1
+    rounded cursor-pointer
+    transition-all duration-200
+  "
+
                     />
                     <span className="font-medium">{op.key}.</span>
                     <span>{op.text}</span>
@@ -517,20 +568,20 @@ export default function TestSeriesUnified() {
 
         <div className="flex justify-between">
           <button
-            className="px-4 py-2 rounded-lg border"
+            className="px-4 py-2 rounded-lg bg-[#00316B] text-white"
             onClick={refreshCurrent}
           >
             Refresh
           </button>
           <div className="space-x-2">
             <button
-              className="px-4 py-2 rounded-lg border"
+              className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
               onClick={handleFinish}
             >
               Finish
             </button>
             <button
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+              className="px-4 py-2 rounded-lg bg-[#00316B] text-white"
               onClick={handleNext}
             >
               {index + 1 === total ? "Submit" : "Save & Next"}
@@ -544,36 +595,48 @@ export default function TestSeriesUnified() {
   // ---------- Mode: RESULT ----------
   if (mode === "result") {
     return (
-      <div className="max-w-3xl mx-auto p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Result — {selectedTest?.title}</h2>
+      <div className="max-w-3xl mx-auto p-6 space-y-6">
+        <h2 className="text-3xl font-extrabold text-gray-800">
+          Result — <span className="text-[#00316B]">{selectedTest?.title}</span>
+        </h2>
+
         {result ? (
           <>
+            {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Stat label="Total" value={result.totalQuestions} />
               <Stat label="Correct" value={result.correctCount} />
               <Stat label="Wrong" value={result.wrongCount} />
               <Stat label="Unattempted" value={result.unattemptedCount} />
             </div>
-            <div className="p-4 border rounded-lg">
-              <div className="text-lg">
+
+            {/* Marks Section */}
+            <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+              <div className="text-lg text-gray-700">
                 Total Marks:{" "}
-                <span className="font-bold">{result.totalMarks}</span>
+                <span className="font-bold text-[#00316B] text-xl">
+                  {result.totalMarks}
+                </span>
               </div>
             </div>
           </>
         ) : (
-          <div className="p-4 border rounded-lg">No result data.</div>
+          <div className="p-5 rounded-xl border border-gray-200 shadow-sm text-gray-500">
+            No result data.
+          </div>
         )}
 
-        <div className="flex gap-3">
+        {/* Actions */}
+        <div className="flex gap-3 pt-4 justify-end">
           <button
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg"
+            className="bg-[#00316B] hover:bg-[#00316B]/80 text-white px-5 py-3 rounded-xl font-medium shadow-md transition"
             onClick={backToDetails}
           >
             Back to Series
           </button>
         </div>
       </div>
+
     );
   }
 
@@ -582,7 +645,7 @@ export default function TestSeriesUnified() {
 
 /* ---------- Sidebar Card ---------- */
 function SidebarCard({ series, hasAccess }) {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
     const response = await addToCart({ itemType, itemId });
@@ -619,14 +682,14 @@ function SidebarCard({ series, hasAccess }) {
           className="object-cover"
           priority
         />
-        <span className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+        <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
           Test Series
         </span>
       </div>
       <div className="p-2">
         <h2 className="text-xl font-bold text-gray-800">{series?.title}</h2>
         <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
-          <Award size={16} className="text-indigo-600" />
+          <Award size={16} className="text-[#204972]" />
           {series?.exam_id?.name}
         </p>
         <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
@@ -646,7 +709,7 @@ function SidebarCard({ series, hasAccess }) {
               ₹{series?.price}
             </span>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-xl font-bold text-green-600">
+              <span className="text-xl font-bold text-[#204972]">
                 ₹{series?.discount_price}
               </span>
               <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
@@ -658,11 +721,15 @@ function SidebarCard({ series, hasAccess }) {
         </div>
         {!hasAccess && (
           <button
-            onClick={(e) => handleAdd(e, "testSeries", series?._id)}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-3.5 rounded-xl"
+            onClick={(e) => {
+              handleAdd(e, "testSeries", series?._id);
+              openCart();
+            }}
+            className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
           >
             Add to Library
           </button>
+
         )}
         <div
           onClick={handleShare}
@@ -678,10 +745,24 @@ function SidebarCard({ series, hasAccess }) {
 
 /* ---------- Small stat tile ---------- */
 function Stat({ label, value }) {
+  // Map labels to Tailwind color classes
+  const colors = {
+    Total: "text-[#00316B]",        // default blue
+    Correct: "text-green-700",
+    Wrong: "text-red-700",
+    Unattempted: "text-gray-700",
+  };
+
   return (
-    <div className="p-4 rounded-lg border bg-white">
-      <div className="text-sm text-gray-500">{label}</div>
-      <div className="text-2xl font-bold">{value}</div>
+    <div className="p-5 rounded-xl bg-white shadow hover:shadow-md transition-shadow">
+      <div className="text-sm font-medium text-gray-500">{label}</div>
+      <div
+        className={`text-3xl font-extrabold mt-1 ${colors[label] || "text-[#00316B]"
+          }`}
+      >
+        {value}
+      </div>
     </div>
   );
 }
+
