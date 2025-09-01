@@ -86,7 +86,7 @@ export default function Testimonials() {
         What Our <span className="text-[#616606]">Students</span> Say
       </h2>
       <p className="text-gray-600 mb-12 md:ml-8">
-        Hear from those who've transformed their exam preparation with our platform
+        Hear from those who have transformed their exam preparation with our platform
       </p>
 
       <div className="relative max-w-6xl mx-auto">
@@ -118,7 +118,7 @@ export default function Testimonials() {
               </div>
 
               <div className="text-gray-700 text-sm leading-relaxed mb-6">
-                {item?.comment && <p>"{item?.comment}"</p>}
+                {item?.comment && <p>{item?.comment}</p>}
                 {item?.reviewType === "course" && item?.course?.title && (
                   <p className="font-medium text-[#204972]">
                     Course: {item?.course?.title}

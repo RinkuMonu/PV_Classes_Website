@@ -40,7 +40,7 @@ Terms & Conditions
          Terms & Acceptance
         </h3>
         <p className="text-gray-700 mb-3">
-        Please read the following terms and conditions very carefully as your use of service is subject to your acceptance of and compliance with the following terms and conditions ("Terms").
+        Please read the following terms and conditions very carefully as your use of service is subject to your acceptance of and compliance with the following terms and conditions Terms.
          <br />
 
 By subscribing to or using any of our services you agree that you have read, understood and are bound by the Terms, regardless of how you subscribe to or use the services. If you do not want to be bound by the Terms, you must not subscribe to or use our services.
