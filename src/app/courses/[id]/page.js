@@ -1703,7 +1703,7 @@ export default function CourseDetailsPage() {
 
             {/* What You'll Learn */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">What you'll learn</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">What you will learn</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {course.topics?.map((topic, i) => (
                   <div key={i} className="flex items-start">

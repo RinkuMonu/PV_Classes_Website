@@ -105,7 +105,7 @@ export default function BookCategoryPage() {
           <h1 className="text-2xl text-[#204972] font-bold">
             {filteredBooks?.[0]?.book_category_id?.name}{" "}
             <span className="text-gray-500 text-sm">
-              (Showing "{filteredBooks.length}" items)
+              (Showing {filteredBooks.length} items)
             </span>
           </h1>
           <div className="flex justify-end">

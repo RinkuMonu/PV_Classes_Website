@@ -8,7 +8,7 @@ import { FaHandshakeSimple } from "react-icons/fa6";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { GrSecure } from "react-icons/gr";
 import { FiShoppingBag } from "react-icons/fi";
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../axios/axiosInstance";
 
 export default function ProductPage() {
     const params = useParams();
