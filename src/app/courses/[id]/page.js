@@ -424,8 +424,8 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* What You'll Learn */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
-              <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2">What you'll learn</h2>
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">What you will learn</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {course.topics?.map((topic, i) => (
                   <div key={i} className="flex items-start p-2 rounded-lg hover:bg-blue-50 transition-colors">
