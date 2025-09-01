@@ -534,11 +534,10 @@ export default function CurrentAffairsPage() {
                 <button
                   key={cat.slug}
                   onClick={() => setSelectedCategory(cat.slug)}
-                  className={`px-4 py-2 rounded-full text-base border transition font-bold cursor-pointer mt-10 ${
-                    selectedCategory === cat.slug
-                      ? "bg-[#00316B] text-white border-[#00316B]"
-                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                  }`}
+                  className={`px-4 py-2 rounded-full text-base border transition font-bold cursor-pointer mt-10 ${selectedCategory === cat.slug
+                    ? "bg-[#00316B] text-white border-[#00316B]"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
                 >
                   {cat.name}
                 </button>
@@ -571,7 +570,7 @@ export default function CurrentAffairsPage() {
               <Link
                 key={cat.slug}
                 href={`/current-affairs/category/${cat.slug}`}
-                className="px-4 py-2 bg-[#00316B] text-white rounded-lg text-sm font-medium border border-gray-200 hover:bg-[#00316B] hover:text-white transition-all shadow-sm"
+                className="px-4 py-2 bg-gradient-to-br from-[#616602] to-[#00316B] text-white rounded-lg text-sm font-medium border border-gray-200 hover:bg-[#00316B] hover:text-white transition-all shadow-sm"
               >
                 {cat.name}
               </Link>
@@ -579,60 +578,73 @@ export default function CurrentAffairsPage() {
           </div>
 
           {/* List */}
-        <div className="space-y-8">
-  {Object.entries(
-    paginatedAffairs.reduce((acc, item) => {
-      const category = item.category?.name || "Other";
-      if (!acc[category]) acc[category] = [];
-      acc[category].push(item);
-      return acc;
-    }, {})
-  ).map(([category, items]) => (
-    <div key={category}>
-      {/* Category Heading */}
-      <h2 className="text-lg font-bold mb-4">{category}</h2>
-
-      {/* Grid of cards inside this category */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <Link key={item._id} href={`/current-affairs/${item.slug}`}>
-            <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
-              <div className="relative">
-                <Image
-                  src={
-                    item.image.startsWith("http")
-                      ? item.image
-                      : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
-                  }
-                  alt={item.title}
-                  width={200}
-                  height={400}
-                  className="w-full h-44 object-cover rounded-t-xl"
-                />
-                <span className="absolute top-3 left-3 bg-yellow-200 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full shadow">
-                  {item.category?.name}
-                </span>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-                  <CalendarDays size={16} />
-                  {new Date(item.publishDate).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
+          <div className="space-y-8 ">
+            {Object.entries(
+              paginatedAffairs.reduce((acc, item) => {
+                const category = item.category?.name || "Other";
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(item);
+                return acc;
+              }, {})
+            ).map(([category, items]) => (
+              <div key={category} className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl shadow-lg">
+                {/* Category Heading */}
+                <div className="flex items-center mb-8">
+                  <div className="h-0.5 bg-gradient-to-r from-transparent to-gray-300 flex-grow mr-4"></div>
+                  <h2 className="text-2xl font-bold text-gray-800 whitespace-nowrap">{category}</h2>
+                  <div className="h-0.5 bg-gradient-to-l from-transparent to-gray-300 flex-grow ml-4"></div>
                 </div>
-                <h2 className="text-base font-semibold line-clamp-2 mb-2">
-                  {item.title}
-                </h2>
+
+                {/* Grid of cards inside this category */}
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {items.map((item) => (
+                    <Link key={item._id} href={`/current-affairs/${item.slug}`}>
+                      <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 bg-white group">
+                        <div className="relative overflow-hidden">
+                          <Image
+                            src={
+                              item.image.startsWith("http")
+                                ? item.image
+                                : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`
+                            }
+                            alt={item.title}
+                            width={200}
+                            height={400}
+                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="absolute top-4 left-4 bg-white/95 text-gray-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow-md backdrop-blur-sm">
+                            {item.category?.name}
+                          </span>
+                        </div>
+                        <div className="p-5">
+                          <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#616602]" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                            </svg>
+                            {new Date(item.publishDate).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </div>
+                          <h2 className="text-base font-semibold text-gray-800 line-clamp-2 mb-2 group-hover:text-[#616602] transition-colors duration-200 leading-tight">
+                            {item.title}
+                          </h2>
+                          <div className="flex items-center mt-4 text-sm text-[#616602] font-medium">
+                            <span>Read more</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  ))}
-</div>
+            ))}
+          </div>
 
 
           {/* Pagination */}
@@ -649,11 +661,10 @@ export default function CurrentAffairsPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                    currentPage === page
-                      ? "bg-[#00316B] text-white"
-                      : "bg-white border hover:bg-gray-50"
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${currentPage === page
+                    ? "bg-[#00316B] text-white"
+                    : "bg-white border hover:bg-gray-50"
+                    }`}
                 >
                   {page}
                 </button>
@@ -672,78 +683,75 @@ export default function CurrentAffairsPage() {
 
       {/* Sidebar Filters */}
       {filterOpen && (
-             <div className="fixed inset-0 z-50 flex" onClick={() => setFilterOpen(false)}>
-               <div className="flex-1 bg-black/50 transition-opacity duration-300"></div>
-               <div className="w-80 h-full bg-white shadow-xl p-6 overflow-y-auto animate-slide-in" onClick={(e) => e.stopPropagation()}>
-                 <div className="flex justify-between items-center mb-6">
-                   <h2 className="text-lg font-semibold">Filters</h2>
-                   <button onClick={() => setFilterOpen(false)}>
-                     <X className="text-gray-600 hover:text-black cursor-pointer" />
-                   </button>
-                 </div>
-    
-                 {/* Category Filter */}
-                 <div className="mb-6">
-                   <label className="block text-sm font-medium mb-2">Category</label>
-                   <div className="flex flex-wrap gap-2">
-                     {categories.map((cat) => (
-                       <button
-                         key={cat.slug}
-                         onClick={() => setSelectedCategory(cat.slug)}
-                         className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
-                           selectedCategory === cat.slug
-                             ? "bg-[#00316B] text-white border-[#00316B]"
-                             : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                         }`}
-                       >
-                         {cat.name}
-                       </button>
-                     ))}
-                   </div>
-                 </div>
-    
-                 {/* Date Filter */}
-                 <div className="mb-6">
-                   <label className="block text-sm font-medium mb-2">Date Range</label>
-                   <div className="flex gap-2">
-                     <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="flex-1 border rounded-md p-2 text-sm" />
-                     <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="flex-1 border rounded-md p-2 text-sm" />
-                   </div>
-                 </div>
-    
-                 {/* Tags Filter */}
-                 <div className="mb-6">
-                   <label className="block text-sm font-medium mb-2">Tags</label>
-                   <div className="flex flex-wrap gap-2">
-                     <button
-                       onClick={() => setSelectedTag("")}
-                       className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
-                         selectedTag === ""
-                           ? "bg-[#00316B] text-white border-[#00316B]"
-                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                       }`}
-                     >
-                       All
-                     </button>
-                     {tags.map((tag) => (
-                       <button
-                         key={tag}
-                         onClick={() => setSelectedTag(tag)}
-                         className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${
-                           selectedTag === tag
-                             ? "bg-[#00316B] text-white border-[#00316B]"
-                             : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                         }`}
-                       >
-                         {tag}
-                       </button>
-                     ))}
-                   </div>
-                 </div>
-               </div>
-             </div>
-           )}
-    
+        <div className="fixed inset-0 z-50 flex" onClick={() => setFilterOpen(false)}>
+          <div className="flex-1 bg-black/50 transition-opacity duration-300"></div>
+          <div className="w-80 h-full bg-white shadow-xl p-6 overflow-y-auto animate-slide-in" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <button onClick={() => setFilterOpen(false)}>
+                <X className="text-gray-600 hover:text-black cursor-pointer" />
+              </button>
+            </div>
+
+            {/* Category Filter */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Category</label>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.slug}
+                    onClick={() => setSelectedCategory(cat.slug)}
+                    className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedCategory === cat.slug
+                      ? "bg-[#00316B] text-white border-[#00316B]"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                      }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Date Filter */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Date Range</label>
+              <div className="flex gap-2">
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="flex-1 border rounded-md p-2 text-sm" />
+                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="flex-1 border rounded-md p-2 text-sm" />
+              </div>
+            </div>
+
+            {/* Tags Filter */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Tags</label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedTag("")}
+                  className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedTag === ""
+                    ? "bg-[#00316B] text-white border-[#00316B]"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
+                >
+                  All
+                </button>
+                {tags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag(tag)}
+                    className={`px-3 py-1 rounded-full text-sm border transition cursor-pointer ${selectedTag === tag
+                      ? "bg-[#00316B] text-white border-[#00316B]"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                      }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }

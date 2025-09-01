@@ -412,7 +412,7 @@ export default function CategoryAffairsPage() {
          </h1>
          <button
            onClick={() => setFilterOpen(true)}
-           className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full hover:bg-blue-800 transition cursor-pointer"
+           className="flex items-center gap-2 px-4 py-2 bg-[#00316B] text-white rounded-full transition cursor-pointer"
          >
            <Filter size={16} /> Filter
          </button>
@@ -427,7 +427,7 @@ export default function CategoryAffairsPage() {
              className={`px-4 py-2 rounded-lg text-sm font-medium border shadow-sm transition-all ${
                selectedCategory === cat.slug
                  ? "bg-[#00316B] text-white"
-                 : "bg-white text-gray-700 border-gray-200 hover:bg-[#00316B] hover:text-white"
+                 : "bg-gradient-to-br from-[#616602] to-[#00316B] text-white border-gray-200 hover:bg-[#00316B] hover:text-white"
              }`}
              onClick={() => setSelectedCategory(cat.slug)}
            >
@@ -517,39 +517,50 @@ export default function CategoryAffairsPage() {
          </div>
        ) : (
          <>
-           <div className="container mx-auto px-4 space-y-10">
-             <div className="grid gap-6 md:grid-cols-4">
-               {paginatedAffairs.map((item) => (
-                 <Link key={item._id} href={`/current-affairs/${item.slug}`}>
-                   <div className="rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white">
-                     <div className="relative">
-                       <Image
-                         src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
-                         alt={item.title}
-                         width={200}
-                         height={400}
-                         className="w-full h-44 object-cover rounded-t-xl"
-                       />
-                       <span className="absolute top-3 left-3 bg-yellow-200 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full shadow">
-                         {item.category?.name}
-                       </span>
-                     </div>
-                     <div className="p-4">
-                       <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-                         <CalendarDays size={16} />
-                         {new Date(item.publishDate).toLocaleDateString("en-GB", {
-                           day: "2-digit",
-                           month: "short",
-                           year: "numeric",
-                         })}
-                       </div>
-                       <h2 className="text-base font-semibold line-clamp-2 mb-2">{item.title}</h2>
-                     </div>
-                   </div>
-                 </Link>
-               ))}
-             </div>
-           </div>
+         <div className="container mx-auto px-4 space-y-10 bg-gray-100 p-6 rounded-lg shadow-2xl">
+  <div className="grid gap-6 md:grid-cols-4">
+    {paginatedAffairs.map((item) => (
+      <Link key={item._id} href={`/current-affairs/${item.slug}`}>
+        <div className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 bg-white group">
+          <div className="relative overflow-hidden">
+            <Image
+              src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+              alt={item.title}
+              width={200}
+              height={400}
+              className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <span className="absolute top-3 left-3 bg-yellow-200 text-gray-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+              {item.category?.name}
+            </span>
+          </div>
+          <div className="p-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+              </svg>
+              {new Date(item.publishDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </div>
+            <h2 className="text-base font-semibold text-gray-800 line-clamp-2 mb-2 group-hover:text-gray-900 transition-colors duration-200">
+              {item.title}
+            </h2>
+            <div className="flex items-center mt-3 text-xs text-gray-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span>Read article</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
 
            {/* Pagination */}
            <div className="flex justify-end mt-8 mb-14 gap-2">

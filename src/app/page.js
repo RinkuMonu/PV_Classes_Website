@@ -27,7 +27,7 @@ export default function Home() {
       <CourseEnroll />
       {/* <Rajexam /> */}
       <LearningResources />
-            <HomeCoursesSection />
+      <HomeCoursesSection />
 
       <FacultySlider />
       <TestSeriesHome />
