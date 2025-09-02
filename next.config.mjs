@@ -2,12 +2,13 @@
 const nextConfig = {
   images: {
     domains: ["localhost", "apps-s3-prod.utkarshapp.com"],
+    unoptimized: true,   // ✅ Static export ke liye disable optimization
   },
-  output: "export",   // ✅ Static export mode
-  distDir: "out",     // ✅ Build files out folder me jayenge (default .next hota hai)
+  // output: "export",
+  distDir: "out",
   experimental: {
-    // turbo: {}  // comment hi rehne do
+    // turbo: {}
   },
 };
 
-module.exports = nextConfig;  // ⚠️ Next.js me CommonJS export use hota hai, "export default" hata do
+export default nextConfig;   // (agar .mjs use kar rahe ho)

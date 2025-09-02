@@ -24,11 +24,14 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/components/WhatsAppButton.js", "src/app/courses/CoursesClient.js"  ],
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src/app/courses/CoursesClient.js",
+    "src/components/WhatsAppButton.js",
+    "out/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
