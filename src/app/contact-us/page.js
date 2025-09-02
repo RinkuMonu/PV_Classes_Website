@@ -514,8 +514,8 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-6">Get in Touch</h1>
           <p className="text-xl opacity-90 max-w-3xl mx-auto mb-8">
-            We'd love to hear from you. Send us a message and we'll respond as
-            soon as possible.
+           We would love to hear from you. Send us a message and we will respond as soon as possible.
+
           </p>
         </div>
       </section>

@@ -839,7 +839,7 @@ export default function BookCategoryPage() {
                     No books found
                   </h3>
                   <p className="text-[#083776]/70">
-                    Try adjusting your filters to find what you're looking for.
+                    Try adjusting your filters to find what you are looking for.
                   </p>
                 </div>
               ) : (

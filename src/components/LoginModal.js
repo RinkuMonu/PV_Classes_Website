@@ -260,7 +260,7 @@ export default function LoginModal({ onClose, onRegisterClick, onForgotPasswordC
           </button>
           
           <div className="text-center text-sm text-gray-600">
-            Don't have an account?{" "}
+            Do not have an account?{" "}
             <button
               type="button"
               onClick={onRegisterClick}
