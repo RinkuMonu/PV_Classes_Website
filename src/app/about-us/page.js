@@ -8,7 +8,6 @@ export default function AboutUs() {
         <title>About Us | Company Name</title>
         <meta name="description" content="Learn about our company mission, values, and team" />
       </Head>
-
       {/* Hero Section */}
       <section 
         className="relative py-20 bg-[#204972] text-white"
