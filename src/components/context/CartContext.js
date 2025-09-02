@@ -7,7 +7,6 @@ import axiosInstance from "../../app/axios/axiosInstance";
 
 
 const CartContext = createContext();
-
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const [cartCount, setCartCount] = useState(null);
