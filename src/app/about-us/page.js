@@ -22,7 +22,7 @@ export default function AboutUs() {
           </p>
         </div>
       </section>
-
+      
       {/* Mission Section */}
       <section className="py-16 px-6">
         <div className="container mx-auto max-w-5xl">
