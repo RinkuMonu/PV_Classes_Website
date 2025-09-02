@@ -8,7 +8,6 @@ import { useCart } from "../../components/context/CartContext";
 
 export default function BookCategoryPage() {
   const { addToCart} = useCart();
-
   // Book Data (You can fetch this from an API later)
   const books = [
     {
