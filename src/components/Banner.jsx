@@ -205,6 +205,8 @@ const Banner = () => {
 
   if (!banners || banners?.length === 0) return null
 
+  console.log("Rendering banners:", banners);
+
   return (
     <section className="relative w-full bg-gradient-to-br from-background via-muted/30 to-background">
       <div className="relative overflow-hidden rounded-2xl mx-4 my-6 shadow-2xl border border-border/20">
