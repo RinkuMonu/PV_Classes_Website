@@ -64,6 +64,12 @@
 //   const handleViewSolutions = (doubt) => {
 //     setSelectedDoubt(doubt);
 //     setShowSolutionModal(true);
+//     setShowDoubtModal(false); // FIX: Hide the doubt modal when solution modal opens
+//   };
+
+//   const handleCloseSolutionModal = () => {
+//     setShowSolutionModal(false);
+//     setShowDoubtModal(true); // FIX: Show the doubt modal back when closing solution modal
 //   };
 
 //   const getUnreadSolutionsCount = () => {
@@ -98,7 +104,7 @@
 //         <div className="fixed inset-0 bg-opacity-60 flex items-center justify-center z-50 p-4">
 //           <div className="bg-white rounded-xl w-full max-w-md overflow-hidden flex flex-col shadow-2xl">
 //             {/* Header */}
-//             <div className="bg-gradient-to-r from-[#00316B] to-[#204972] text-white text-white p-4 relative">
+//             <div className="bg-gradient-to-r from-[#00316B] to-[#204972] text-white p-4 relative">
 //               <h2 className="text-2xl font-bold text-center">Doubt Assistant</h2>
 //               <button
 //                 onClick={() => setShowDoubtModal(false)}
@@ -179,7 +185,7 @@
 //                   <button
 //                     type="submit"
 //                     disabled={loading}
-//                     className="w-full bg-gradient-to-r from-[#00316B] to-[#204972] text-white text-white py-3 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition-all duration-200 font-medium"
+//                     className="w-full bg-gradient-to-r from-[#00316B] to-[#204972] text-white py-3 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition-all duration-200 font-medium"
 //                   >
 //                     {loading ? "Submitting..." : "Submit Doubt"}
 //                   </button>
@@ -235,13 +241,13 @@
 
 //       {/* Solution Viewing Modal */}
 //       {showSolutionModal && selectedDoubt && (
-//         <div className="fixed inset-0  bg-opacity-60 flex items-center justify-center z-50 p-4">
+//         <div className="fixed inset-0 bg-opacity-60 flex items-center justify-center z-50 p-4">
 //           <div className="bg-white rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
 //             {/* Header */}
-//             <div className="bg-gradient-to-r from-[#00316B] to-[#204972] text-white text-white p-4 relative">
+//             <div className="bg-gradient-to-r from-[#00316B] to-[#204972] text-white p-4 relative">
 //               <h2 className="text-xl font-bold">Solution for Your Doubt</h2>
 //               <button
-//                 onClick={() => setShowSolutionModal(false)}
+//                 onClick={handleCloseSolutionModal} // FIX: Use new close function
 //                 className="absolute top-4 right-4 text-white hover:text-gray-200"
 //               >
 //                 <FaTimes size={20} />
@@ -282,6 +288,7 @@
 
 
 
+
 "use client";
 import { FaQuestionCircle, FaTimes, FaEye, FaHistory, FaPaperPlane } from "react-icons/fa";
 import { useState, useEffect } from "react";
@@ -298,9 +305,17 @@ const WhatsAppButton = () => {
   });
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("submit");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // ✅ new state
 
   useEffect(() => {
-    fetchDoubtsHistory();
+    // ✅ Check if token exists
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    setIsLoggedIn(!!token);
+
+    if (token) {
+      fetchDoubtsHistory();
+    }
   }, []);
 
   const fetchDoubtsHistory = async () => {
@@ -346,12 +361,12 @@ const WhatsAppButton = () => {
   const handleViewSolutions = (doubt) => {
     setSelectedDoubt(doubt);
     setShowSolutionModal(true);
-    setShowDoubtModal(false); // FIX: Hide the doubt modal when solution modal opens
+    setShowDoubtModal(false);
   };
 
   const handleCloseSolutionModal = () => {
     setShowSolutionModal(false);
-    setShowDoubtModal(true); // FIX: Show the doubt modal back when closing solution modal
+    setShowDoubtModal(true);
   };
 
   const getUnreadSolutionsCount = () => {
@@ -360,6 +375,9 @@ const WhatsAppButton = () => {
 
   const unreadCount = getUnreadSolutionsCount();
   const resolvedDoubts = doubts.filter((doubt) => doubt.status === "resolved");
+
+  // ✅ If not logged in → don't render anything
+  if (!isLoggedIn) return null;
 
   return (
     <>
@@ -529,7 +547,7 @@ const WhatsAppButton = () => {
             <div className="bg-gradient-to-r from-[#00316B] to-[#204972] text-white p-4 relative">
               <h2 className="text-xl font-bold">Solution for Your Doubt</h2>
               <button
-                onClick={handleCloseSolutionModal} // FIX: Use new close function
+                onClick={handleCloseSolutionModal}
                 className="absolute top-4 right-4 text-white hover:text-gray-200"
               >
                 <FaTimes size={20} />

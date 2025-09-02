@@ -400,7 +400,9 @@ export default function CategoryAffairsPage() {
      {/* Hero Banner */}
      <section className="relative w-full h-[60vh]">
        <div className="absolute inset-0">
-         <Image src="/Image/Banner/CurrentAffair-herobanner.jpg" alt="Banner" fill className="object-cover object-center" priority />
+         <Image 
+            src="/Image/Banner/current-banner.webp"
+          alt="Banner" fill className="object-cover object-center" priority />
          <div className="absolute inset-0" />
        </div>
      </section>

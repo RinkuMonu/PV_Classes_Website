@@ -1,4 +1,5 @@
 // app/courses/page.js
+"use client";
 import { Suspense } from "react";
 import CoursesClient from "./CoursesClient";
 
