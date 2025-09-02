@@ -406,7 +406,7 @@ export default function CurrentAffairsDetails() {
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-8">
         <div className="text-6xl mb-4">📰</div>
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Article Not Found</h1>
-        <p className="text-gray-600 mb-6">The article you're looking for doesn't exist or may have been moved.</p>
+        <p className="text-gray-600 mb-6">The article you are looking for does not exist or may have been moved.</p>
         <Link href="/current-affairs" className="px-6 py-3 bg-[#00316B] text-white rounded-lg hover:bg-blue-800 transition">
           Browse Current Affairs
         </Link>
