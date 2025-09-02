@@ -5,7 +5,8 @@ const axiosInstance = axios.create({
 
 
     // baseURL: 'http://192.168.1.39:5000/api',
-    baseURL: ' http://localhost:5000/api'
+    // baseURL: ' http://localhost:5000/api'
+    baseURL: ' https://api.pvclasses.in/api',
 
     // headers: {
     //     'Content-Type': 'application/json',

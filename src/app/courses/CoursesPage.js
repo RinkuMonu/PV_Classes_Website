@@ -1,3 +1,4 @@
+// app/courses/page.js
 "use client";
 
 import { useEffect, useState } from "react";
@@ -11,15 +12,15 @@ import { useCart } from "../../components/context/CartContext";
 const formatINR = (n) =>
   typeof n === "number"
     ? new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        maximumFractionDigits: 0,
-      }).format(n)
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(n)
     : "—";
 
 export default function CoursesPage() {
-  const { addToCart} = useCart();
-  
+  const { addToCart, isOpen, openCart, closeCart } = useCart();
+
   const searchParams = useSearchParams();
   const examId = searchParams?.get("exam");
 
@@ -81,12 +82,21 @@ export default function CoursesPage() {
 
   const filtered = courses
     ?.filter((c) => (mode ? c?.mode === mode : true))
-    ?.filter((c) => (lang === "All" ? true : c?.language === lang))
+    // ?.filter((c) => (lang === "All" ? true : c?.language === lang))
+    ?.filter((c) => {
+      if (lang === "All") return true;
+      // normalize both selected language & course languages
+      const courseLangs = (c?.language || "")
+        .split(",")                    // split by comma
+        .map((l) => l.trim().toLowerCase()); // clean + lowercase
+      return courseLangs.includes(lang.toLowerCase());
+    })
+
     ?.filter((c) => (freeOnly ? c?.isFree : true))
     ?.filter((c) =>
       q?.trim()
         ? c?.title?.toLowerCase()?.includes(q?.toLowerCase()) ||
-          (c?.shortTitle || "")?.toLowerCase()?.includes(q?.toLowerCase())
+        (c?.shortTitle || "")?.toLowerCase()?.includes(q?.toLowerCase())
         : true
     );
 
@@ -97,10 +107,20 @@ export default function CoursesPage() {
     if (page > pages) setPage(1);
   }, [pages, page]);
 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const el = document.getElementById("courses");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main className="min-h-screen bg-white">
       <CourseHero />
-
       <ExamToolbar
         categories={[]} // remove if not needed
         selected={cat}
@@ -152,7 +172,7 @@ export default function CoursesPage() {
       )}
 
       {/* COURSES */}
-      <section id="courses" className="mx-auto max-w-7xl md:px-20  px-6 pt-4 pb-8">
+      <section id="courses" className="mx-auto max-w-7xl md:px-20 mb-5  px-6 pt-10 pb-8 bg-green-50 shadow-lg rounded-lg">
         {isLoading ? (
           <p className="text-center">Loading...</p>
         ) : pageItems?.length > 0 ? (
@@ -165,7 +185,8 @@ export default function CoursesPage() {
                   className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
                   <img
-                    src={c?.imagesFullPath?.[0] || "/vercel.svg"}
+                    src={c?.full_image?.[0] || "/vercel.svg"}
+                    // src={`http://localhost:5000${c?.images?.[0]}`}
                     alt={c?.title || "Course"}
                     className="w-full h-48 object-cover rounded-t-lg"
                   />
@@ -173,7 +194,7 @@ export default function CoursesPage() {
                     <h3 className="text-lg font-semibold mb-2">{c?.title || "Untitled Course"}</h3>
                     <p className="text-sm text-gray-500 mb-4">{c?.overview || ""}</p>
                     <div className="mt-auto">
-                      <div className="flex items-center gap-2 mb-3">
+                      {/* <div className="flex items-center gap-2 mb-3">
                         {c?.discount_price > 0 ? (
                           <>
                             <span className="text-lg font-bold text-green-600">
@@ -188,30 +209,52 @@ export default function CoursesPage() {
                             {formatINR(c?.price)}
                           </span>
                         )}
-                      </div>
-                      <button
-                         onClick={(e) => handleAdd(e, "course",c?._id)}
+                      </div> */}
+
+
+                      {/* // Add to Cart button temporarily removed, as all courses are free now */}
+                      {/* <button
+                        onClick={(e) => {
+                          handleAdd(e, "course", c?._id);
+                          openCart();
+                        }}
                         className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
                       >
                         Add to Cart
+                      </button> */}
+
+                      <button
+
+                        className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
+                      >
+                        Free Preview
                       </button>
+
                     </div>
                   </div>
                 </a>
               ))}
             </div>
-            <div className="mt-6 flex justify-center">
-              {page < pages ? (
+            <div className="mt-6 flex justify-center gap-4">
+              {page > 1 && (
+                <button
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                >
+                  ◂ Previous
+                </button>
+              )}
+
+              {page < pages && (
                 <button
                   className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
                   onClick={() => setPage((p) => Math.min(p + 1, pages))}
                 >
-                  View more <span>▾</span>
+                  View more ▾
                 </button>
-              ) : (
-                <span className="text-sm text-neutral-500"></span>
               )}
             </div>
+
           </>
         ) : (
           <p className="text-center">No courses found.</p>
