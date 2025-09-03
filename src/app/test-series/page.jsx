@@ -56,8 +56,8 @@ export default function Page() {
       <div className="px-3 md:px-20 py-8 ">
         {testSeriesData?.map((examGroup, index) => (
           <div key={index} className="mb-12">
-            {/* <h2 className="text-2xl text-[#204972] font-bold mb-6">{examGroup?.exam_name}</h2> */}
-            <h2 className="text-2xl text-[#204972] font-bold mb-6"> Test Prep Series </h2>
+            <h2 className="text-2xl text-[#204972] font-bold mb-6">{examGroup?.exam_name}</h2>
+            {/* <h2 className="text-2xl text-[#204972] font-bold mb-6"> Test Prep Series </h2> */}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 bg-green-50 p-10 rounded-lg shadow-2xl">
               {examGroup?.series?.map((series) => {
@@ -65,9 +65,9 @@ export default function Page() {
                   Math.round(((series?.price - series?.discount_price) / series?.price) * 100) || 0;
 
                 const imgSrc =
-                  series?.image_urls?.[0] ||
-                  (series?.images?.[0]
-                    ? `http://localhost:5000/uploads/testSeries/${series?.images?.[0]}`
+                  series?.full_image?.[0] ||
+                  (series?.full_image?.[0]
+                    ? `${series?.full_image?.[0]}`
                     : "/placeholder-test.jpg");
 
                 return (
