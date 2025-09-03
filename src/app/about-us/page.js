@@ -15,7 +15,6 @@ export default function AboutUs() {
           backgroundImage: 'linear-gradient(to right, #0F437B, #13773E)',
         }}
       >
-        
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">About Our PV Classes</h1>
           <p className="text-xl max-w-3xl mx-auto">
