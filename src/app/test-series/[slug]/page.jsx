@@ -668,9 +668,9 @@ function SidebarCard({ series, hasAccess }) {
   };
 
   const img =
-    series?.image_urls?.[0] ||
+    `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}` ||
     (series?.images?.[0]
-      ? `http://localhost:5000/uploads/testSeries/${series.images[0]}`
+      ? `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}`
       : "/placeholder-test.jpg");
   return (
     <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
