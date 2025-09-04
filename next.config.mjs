@@ -1,14 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ["localhost", "apps-s3-prod.utkarshapp.com"],
-    unoptimized: true,   // ✅ Static export ke liye disable optimization
-  },
-  // output: "export",
-  distDir: "out",
-  experimental: {
-    // turbo: {}
-  },
+  output: 'export',            // ✅ static export ON
+  images: { unoptimized: true } // ✅ image optimizer off (static hosting)
+  // trailingSlash: true,       // (optional) enable if relative links break
+  // basePath: '/PvClasses_Website',   // ❗ONLY if site subfolder me host hai
+  // assetPrefix: '/PvClasses_Website/'// ❗ONLY if subfolder me host hai
 };
-
-export default nextConfig;   // (agar .mjs use kar rahe ho)
+module.exports = nextConfig;
