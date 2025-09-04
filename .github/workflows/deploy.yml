@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
           source: "out.tar.gz"
-          target: "/home/apipvcl/"
+          target: "/home/pvclasse/"
 
       - name: Unzip files on Server via SSH
         uses: appleboy/ssh-action@master
@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
           script: |
-            rm -rf /home/apipvcl/public_html/*
-            mkdir -p /home/apipvcl/public_html
-            tar -xzvf /home/apipvcl/out.tar.gz -C /home/apipvcl/public_html
-            rm /home/apipvcl/out.tar.gz
+            rm -rf /home/pvclasse/public_html/*
+            mkdir -p /home/pvclasse/public_html
+            tar -xzvf /home/pvclasse/out.tar.gz -C /home/pvclasse/public_html
+            rm /home/pvclasse/out.tar.gz
