@@ -4,6 +4,7 @@ import { useCart } from "../../../components/context/CartContext";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
+import ReviewSection from "../../../components/ReviewSection";
 import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
 
@@ -762,6 +763,10 @@ export default function CourseDetailsPage() {
                 <li>Notebook for practice questions</li>
               </ul>
             </div>
+
+            {/* Reviews Section component */}
+            <ReviewSection courseId={course._id} />
+
           </div>
 
           {/* Sidebar */}
