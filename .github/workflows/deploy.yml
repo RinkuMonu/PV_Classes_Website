@@ -1,16 +1,14 @@
-name: Deploy React App to CWP
+name: Deploy Next.js (static export) to CWP
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -18,16 +16,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Dependencies & Build
+      - name: Install & Build (export)
         run: |
-          npm install --legacy-peer-deps
-          npm run build
+          npm ci --legacy-peer-deps
+          npm run build    # runs: next build && next export (creates ./out)
 
-      - name: Zip build files
-        run: |
-          tar -czvf out.tar.gz -C out .
+      - name: Tar exported site
+        run: tar -czvf out.tar.gz -C out .
 
-      - name: Copy Zip to Server via SCP
+      - name: Upload to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -37,7 +34,7 @@ jobs:
           source: "out.tar.gz"
           target: "/home/pvclasse/"
 
-      - name: Unzip files on Server via SSH
+      - name: Unpack & publish
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -45,7 +42,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
           script: |
+            set -e
+            mkdir -p /home/pvclasse/_deploy_tmp
+            tar -xzvf /home/pvclasse/out.tar.gz -C /home/pvclasse/_deploy_tmp
             rm -rf /home/pvclasse/public_html/*
-            mkdir -p /home/pvclasse/public_html
-            tar -xzvf /home/pvclasse/out.tar.gz -C /home/pvclasse/public_html
+            mv /home/pvclasse/_deploy_tmp/* /home/pvclasse/public_html/
+            rmdir /home/pvclasse/_deploy_tmp
             rm /home/pvclasse/out.tar.gz
