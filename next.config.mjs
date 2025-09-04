@@ -1,9 +1,5 @@
-/** @type {import('next').NextConfig} */
+// next.config.js / .mjs
 const nextConfig = {
-  output: 'export',            // ✅ static export ON
-  images: { unoptimized: true } // ✅ image optimizer off (static hosting)
-  // trailingSlash: true,       // (optional) enable if relative links break
-  // basePath: '/PvClasses_Website',   // ❗ONLY if site subfolder me host hai
-  // assetPrefix: '/PvClasses_Website/'// ❗ONLY if subfolder me host hai
+  images: { unoptimized: true }, // optional
 };
-module.exports = nextConfig;
+export default nextConfig; // (ESM)  OR  module.exports = nextConfig; // (CJS)

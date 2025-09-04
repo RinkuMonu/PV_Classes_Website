@@ -1,41 +1,34 @@
-name: Deploy Next (Static Export) to CWP
+name: Deploy Next.js SSR App via PM2
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install & Build (static export)
-        run: |
-          npm ci --legacy-peer-deps
-          npm run build           # creates ./out (static)
-
-      - name: Tar exported site
-        run: tar -czvf out.tar.gz -C out .
-
-      - name: Upload to server
+      - name: 🚀 Upload Project Files to Server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          port: 22527
-          source: "out.tar.gz"
-          target: "/home/pvclasse/"
+          port: ${{ secrets.SSH_PORT }}
+          source: "."
+          target: "/home/pvclasse/public_html/PvClasses_Website"
 
-      - name: Unpack & publish
+      - name: 🔄 Build & Restart App via PM2 using ecosystem.config.js
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -43,12 +36,8 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
           script: |
-            set -e
-            mkdir -p /home/pvclasse/_deploy_tmp
-            tar -xzvf /home/pvclasse/out.tar.gz -C /home/pvclasse/_deploy_tmp
-            # Purane files clear (yahi se 404/CSS issues aate the)
-            rm -rf /home/pvclasse/public_html/*
-            # New build place
-            mv /home/pvclasse/_deploy_tmp/* /home/pvclasse/public_html/
-            rmdir /home/pvclasse/_deploy_tmp
-            rm /home/pvclasse/out.tar.gz
+            cd /home/pvclasse/public_html/PvClasses_Website
+            npm install
+            npm run build
+            pm2 delete next-dashboard-3002 || true
+            pm2 start ecosystem.config.js
