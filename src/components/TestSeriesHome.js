@@ -209,9 +209,9 @@ export default function TestSeriesHome() {
       ) || 0;
 
     const imgSrc =
-      series?.image_urls?.[0] ||
-      (series?.images?.[0]
-        ? `http://localhost:5000/uploads/testSeries/${series?.images?.[0]}`
+      series?.full_image?.[0] ||
+      (series?.full_image?.[0]
+        ? `${series?.full_image?.[0]}`
         : "/placeholder-test.jpg");
 
     return (

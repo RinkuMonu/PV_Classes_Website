@@ -12,12 +12,12 @@ import Link from "next/link";
 export default function ExamCategory() {
   const categories = [
     {
-      title: "Defence Exams",
-      tags: ["NDA", "SSB"],
+      title: "12 Classes Exams",
+      tags: ["science"],
       icon: <FaFlask className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
 
-      link: "/courses?exam=68ac3c02a5a435b640ada61b",
+      link: "/courses?exam=68b2deb3993aca7bb0ab9a41",
 
     },
     {
@@ -29,18 +29,18 @@ export default function ExamCategory() {
     },
 
     {
-      title: "Banking Exams",
-      tags: ["SBI", "IBPS", "RBI"],
+      title: "10 Class Exams",
+      tags: ["maths"],
       icon: <FaLandmark className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "/courses?exam=68ac35d6a5a435b640ada5f3",
+      link: "/courses?exam=68b2e224993aca7bb0ab9b7e",
     },
     {
-      title: "Utarpardesh State Exams",
-      tags: ["SSC", "Banking"],
+      title: "3rd Grade Exams",
+      tags: ["REET"],
       icon: <FaBriefcase className="text-6xl text-[#87b105]" />,
       bg: "bg-[#87b105]/10",
-      link: "/courses?exam=68ac31d0a5a435b640ada5dd",
+      link: "/courses?exam=68ad4356255f962ce73719c2",
     },
   ];
 
