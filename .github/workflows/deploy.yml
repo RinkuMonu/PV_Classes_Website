@@ -1,4 +1,4 @@
-name: Deploy React App to CWP
+name: Deploy Next.js SSR App via PM2
 
 on:
   push:
@@ -10,34 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install Dependencies & Build
-        run: |
-          npm install --legacy-peer-deps
-          npm run build
-
-      - name: Zip build files
-        run: |
-          tar -czvf out.tar.gz -C out .
-
-      - name: Copy Zip to Server via SCP
+      - name: 🚀 Upload Project Files to Server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
-          source: "out.tar.gz"
-          target: "/home/pvclasse/"
+          source: "."
+          target: "/home/pvclasse/public_html/PvClasses_Website"
 
-      - name: Unzip files on Server via SSH
+      - name: 🔄 Build & Restart App via PM2 using ecosystem.config.js
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -45,7 +36,8 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22527
           script: |
-            rm -rf /home/pvclasse/public_html/*
-            mkdir -p /home/pvclasse/public_html
-            tar -xzvf /home/pvclasse/out.tar.gz -C /home/pvclasse/public_html
-            rm /home/pvclasse/out.tar.gz
+            cd /home/pvclasse/public_html/PvClasses_Website
+            npm install
+            npm run build
+            pm2 delete next-dashboard-3002 || true
+            pm2 start ecosystem.config.js

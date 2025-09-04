@@ -1,14 +1,5 @@
-/** @type {import('next').NextConfig} */
+// next.config.js / .mjs
 const nextConfig = {
-  images: {
-    domains: ["localhost", "apps-s3-prod.utkarshapp.com"],
-    unoptimized: true,   // ✅ Static export ke liye disable optimization
-  },
-  // output: "export",
-  distDir: "out",
-  experimental: {
-    // turbo: {}
-  },
+  images: { unoptimized: true }, // optional
 };
-
-export default nextConfig;   // (agar .mjs use kar rahe ho)
+export default nextConfig; // (ESM)  OR  module.exports = nextConfig; // (CJS)
