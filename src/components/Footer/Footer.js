@@ -28,44 +28,7 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* ====== Top Info Section ====== */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-
-          {/* Left Section */}
-          <div>
-            <h2 className="text-2xl font-bold mb-3">Ready to learn?</h2>
-            <p className="mb-5 text-gray-200 text-sm leading-relaxed">
-              Take the first step toward achieving your educational goals.
-              Whether you’re preparing for exams or expanding your knowledge,
-              getting started is just a click away. Join us today and unlock
-              your full potential.
-            </p>
-
-            <Link href="/courses">
-              <button className="bg-white text-black px-6 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
-                Get Started →
-              </button>
-            </Link>
-          </div>
-
-          {/* Right Section */}
-          <div className="space-y-2 text-sm">
-            <p>
-              Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer, Jagatpura,
-              Jaipur Rajasthan, India, 302017
-            </p>
-            <p>
-              {/* <a href="mailto:Pvclasses01@gmail.com" className="hover:underline"> */}
-                Pvclasses01@gmail.com
-              {/* </a> */}
-            </p>
-            <p>
-              <a href="tel:01414511098" className="hover:underline">
-                0141-4511098
-              </a>
-            </p>
-          </div>
-        </div>
+   
 
         {/* ====== Quick Links + Support + Social ====== */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
@@ -82,13 +45,6 @@ export default function Footer() {
               more.
             </p>
 
-            <div className="flex gap-4 mt-4">
-              <Link href="https://www.facebook.com/PVCLASSES"><FaFacebook size={22} /></Link>
-              <Link href="https://www.instagram.com/PV_CLASSES"><FaInstagram size={22} /></Link>
-              <Link href="https://www.youtube.com/@pvclasses" target="_blank">
-                <FaYoutube size={22} />
-              </Link>
-            </div>
 
           </div>
 
@@ -132,6 +88,14 @@ export default function Footer() {
                 0141-4511098
               </a>
             </p>
+            
+            <div className="flex gap-4 mt-4">
+              <Link href="https://www.facebook.com/PVCLASSES"><FaFacebook size={22} /></Link>
+              <Link href="https://www.instagram.com/PV_CLASSES"><FaInstagram size={22} /></Link>
+              <Link href="https://www.youtube.com/@pvclasses" target="_blank">
+                <FaYoutube size={22} />
+              </Link>
+            </div>
           </div>
 
 
