@@ -723,12 +723,15 @@ export default function Contact() {
                 Contact support
               </h3>
               <p className="text-gray-600 mb-4">Speak to our friendly team.</p>
-              <a
-                href="mailto:info@7unique.in"
+              {/* <a
+                href="mailto:Pvclasses01@gmail.com"
                 className="text-gray-900 font-medium hover:underline"
-              >
-                info@7unique.in
-              </a>
+              > */}
+              <p>
+                 Pvclasses01@gmail.com
+
+              </p>
+              {/* </a> */}
             </div>
 
             <div className="text-center">

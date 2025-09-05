@@ -1116,7 +1116,7 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
-    if (token && userId) {
+    if (token) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -1306,8 +1306,15 @@ export default function Header() {
           </nav>
 
              <div className="flex items-center space-x-4">
+
           {/* Add the NotificationSystem component */}
-          <NotificationSystem />
+          {/* <NotificationSystem /> */}
+
+
+              {isLoggedIn && (
+                     <NotificationSystem />
+
+            )}
           
           {/* Other header items like user profile */}
         </div>
