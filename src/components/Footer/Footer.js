@@ -1,4 +1,3 @@
-
 // "use client";
 
 // import React from "react";
@@ -28,8 +27,6 @@
 //           ))}
 //         </div>
 
-   
-
 //         {/* ====== Quick Links + Support + Social ====== */}
 //         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
 
@@ -44,7 +41,6 @@
 //               for competitive exams like UPSC, SSC, Defence, NEET, JEE, and
 //               more.
 //             </p>
-
 
 //           </div>
 
@@ -69,8 +65,6 @@
 //             </ul>
 //           </div>
 
-
-
 //           <div>
 
 //               <div className="space-y-2 text-sm">
@@ -88,7 +82,7 @@
 //                 0141-4511098
 //               </a>
 //             </p>
-            
+
 //             <div className="flex gap-4 mt-4">
 //               <Link href="https://www.facebook.com/PVCLASSES"><FaFacebook size={22} /></Link>
 //               <Link href="https://www.instagram.com/PV_CLASSES"><FaInstagram size={22} /></Link>
@@ -98,8 +92,6 @@
 //             </div>
 //           </div>
 
-
-         
 //           </div>
 
 //         </div>
@@ -197,20 +189,24 @@
 //   );
 // }
 
-
-
-
 "use client";
 
 import React from "react";
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaYoutube, FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
+
+import {
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+} from "react-icons/fa";
 
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-[#616602] to-[#00316B] text-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
-
         {/* ====== Top Buttons ====== */}
         <div className="flex flex-wrap justify-center gap-4 mb-10">
           {[
@@ -220,9 +216,7 @@ export default function Footer() {
             { name: "Test Series", href: "/test-series" },
           ].map((item, i) => (
             <Link key={i} href={item.href}>
-              <button
-                className="px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-black transition"
-              >
+              <button className="px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-black transition">
                 {item.name}
               </button>
             </Link>
@@ -231,39 +225,63 @@ export default function Footer() {
 
         {/* ====== Quick Links + Support + Social ====== */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-
           <div>
             <img
-              src="/image/pv_footer_logo.png"
+              src="/pv_footer_logo.png"
               alt="PV Classes Logo"
+              // width={96}
+              // height={96}
               className="mb-4 w-24"
+              priority
             />
+
             <p className="text-sm text-gray-200 leading-relaxed">
-              PV Classes is dedicated to providing high quality education
-              for competitive exams like REET, 1st GRADE, 2nd GRADE, 3rd GRADE, 10th class, and
-              more.
+              PV Classes is dedicated to providing high quality education for
+              competitive exams like UPSC, SSC, Defence, NEET, JEE, and more.
             </p>
           </div>
 
           <div>
             <h3 className="font-bold mb-4">QUICK LINKS</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/courses">Courses</Link></li>
-              <li><Link href="/book">Books</Link></li>
-              <li><Link href="/previous-year-question">Previous Year Papers</Link></li>
-              <li><Link href="/test-series">Online Test Series</Link></li>
-              <li><Link href="/current-affairs">Current Affairs</Link></li>
+              <li>
+                <Link href="/courses">Courses</Link>
+              </li>
+              <li>
+                <Link href="/book">Books</Link>
+              </li>
+              <li>
+                <Link href="/previous-year-question">Previous Year Papers</Link>
+              </li>
+              <li>
+                <Link href="/test-series">Online Test Series</Link>
+              </li>
+              <li>
+                <Link href="/current-affairs">Current Affairs</Link>
+              </li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-bold mb-4">SUPPORT</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/about-us">About Us</Link></li>
-              <li><Link href="/contact-us">Contact Us</Link></li>
-              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-              <li><Link href="/terms-of-use">Terms of Use</Link></li>
-              <li><Link href="/cancellation-and-refund-policy">Cancellation & Refund Policy</Link></li>
+              <li>
+                <Link href="/about-us">About Us</Link>
+              </li>
+              <li>
+                <Link href="/contact-us">Contact Us</Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link href="/terms-of-use">Terms of Use</Link>
+              </li>
+              <li>
+                <Link href="/cancellation-and-refund-policy">
+                  Cancellation & Refund Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -276,24 +294,26 @@ export default function Footer() {
                   Jaipur Rajasthan, India, 302017
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <FaEnvelope />
-                <p>
-                  Pvclasses01@gmail.com
-                </p>
+                <p>Pvclasses01@gmail.com</p>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <FaPhone />
                 <a href="tel:01414511098" className="hover:underline">
                   0141-4511098
                 </a>
               </div>
-              
+
               <div className="flex gap-4 mt-4">
-                <Link href="https://www.facebook.com/PVCLASSES"><FaFacebook size={22} /></Link>
-                <Link href="https://www.instagram.com/PV_CLASSES"><FaInstagram size={22} /></Link>
+                <Link href="https://www.facebook.com/PVCLASSES">
+                  <FaFacebook size={22} />
+                </Link>
+                <Link href="https://www.instagram.com/PV_CLASSES">
+                  <FaInstagram size={22} />
+                </Link>
                 <Link href="https://www.youtube.com/@pvclasses" target="_blank">
                   <FaYoutube size={22} />
                 </Link>
@@ -306,14 +326,25 @@ export default function Footer() {
         <div className="border-t border-gray-400 pt-10">
           <h3 className="font-bold text-lg mb-6">Learning Resources</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 text-sm">
-
             {/* Government Exam */}
             <div>
               <h4 className="font-semibold mb-3">10th Class </h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68b2e224993aca7bb0ab9b7e">Math Exam</Link></li>
-                <li><Link href="/courses?exam=68b2e1f5993aca7bb0ab9b72">Science Exam</Link></li>
-                <li><Link href="/courses?exam=68b2e00d993aca7bb0ab9a86">English Exam</Link></li>
+                <li>
+                  <Link href="/courses?exam=68b2e224993aca7bb0ab9b7e">
+                    Math Exam
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=68b2e1f5993aca7bb0ab9b72">
+                    Science Exam
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=68b2e00d993aca7bb0ab9a86">
+                    English Exam
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -321,8 +352,16 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">12th Class</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68b2deb3993aca7bb0ab9a41">Science Exam</Link></li>
-                <li><Link href="/courses?exam=68b2de31993aca7bb0ab9a23">Math Exam</Link></li>
+                <li>
+                  <Link href="/courses?exam=68b2deb3993aca7bb0ab9a41">
+                    Science Exam
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=68b2de31993aca7bb0ab9a23">
+                    Math Exam
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -330,9 +369,21 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">9th Class</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68b2e23f993aca7bb0ab9ba0">Math Exams</Link></li>
-                <li><Link href="/courses?exam=68b2e073993aca7bb0ab9aca">Hindi Exams</Link></li>
-                <li><Link href="/courses?exam=68b2e02b993aca7bb0ab9aa0">Englsih Exams</Link></li>
+                <li>
+                  <Link href="/courses?exam=68b2e23f993aca7bb0ab9ba0">
+                    Math Exams
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=68b2e073993aca7bb0ab9aca">
+                    Hindi Exams
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=68b2e02b993aca7bb0ab9aa0">
+                    Englsih Exams
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -340,7 +391,11 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">REET</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68ad4356255f962ce73719c2">3rd Grade Teacher Exam</Link></li>
+                <li>
+                  <Link href="/courses?exam=68ad4356255f962ce73719c2">
+                    3rd Grade Teacher Exam
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -348,9 +403,21 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">Rajasthan Exams</h4>
               <ul className="space-y-2">
-                <li><Link href="/courses?exam=68ad4356255f962ce73719c2">3rd Grade Exam</Link></li>
-                <li><Link href="/courses?exam=689c8a951914a3c05b945988">2nd Grade Exam</Link></li>
-                <li><Link href="/courses?exam=689dc5c896e7e5a6948099fa">1st Grade Exam</Link></li>
+                <li>
+                  <Link href="/courses?exam=68ad4356255f962ce73719c2">
+                    3rd Grade Exam
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=689c8a951914a3c05b945988">
+                    2nd Grade Exam
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/courses?exam=689dc5c896e7e5a6948099fa">
+                    1st Grade Exam
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -358,10 +425,18 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">Others Resources</h4>
               <ul className="space-y-2">
-                <li><Link href="courses">All Exams</Link></li>
-                <li><Link href="/previous-year-question">Download PDFs</Link></li>
-                <li><Link href="/current-affairs">Current Affairs</Link></li>
-                <li><Link href="/test-series">Test-Series</Link></li>
+                <li>
+                  <Link href="courses">All Exams</Link>
+                </li>
+                <li>
+                  <Link href="/previous-year-question">Download PDFs</Link>
+                </li>
+                <li>
+                  <Link href="/current-affairs">Current Affairs</Link>
+                </li>
+                <li>
+                  <Link href="/test-series">Test-Series</Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -369,8 +444,7 @@ export default function Footer() {
 
         {/* ====== Bottom ====== */}
         <div className="border-t border-gray-500 mt-10 pt-6 text-center text-sm">
-          <div className="flex flex-wrap justify-center gap-4 mb-3">
-          </div>
+          <div className="flex flex-wrap justify-center gap-4 mb-3"></div>
           <p>© 2025 PV Classes . All rights reserved.</p>
         </div>
       </div>
