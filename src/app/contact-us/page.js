@@ -475,35 +475,35 @@ export default function Contact() {
 
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSuccessMessage("");
-  setErrorMessage("");
+    e.preventDefault();
+    setSuccessMessage("");
+    setErrorMessage("");
 
-  if (validate()) {
-    try {
-      setLoading(true);
+    if (validate()) {
+      try {
+        setLoading(true);
 
-      const res = await axiosInstance.post("/contacts", formData);
+        const res = await axiosInstance.post("/contacts", formData);
 
-      if (res.data) {
-        setSuccessMessage("Your message has been sent successfully!");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          message: "",
-        });
+        if (res.data) {
+          setSuccessMessage("Your message has been sent successfully!");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            message: "",
+          });
+        }
+      } catch (error) {
+        setErrorMessage(
+          error?.response?.data?.message || "Something went wrong. Please try again."
+        );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      setErrorMessage(
-        error?.response?.data?.message || "Something went wrong. Please try again."
-      );
-    } finally {
-      setLoading(false);
     }
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -514,7 +514,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-6">Get in Touch</h1>
           <p className="text-xl opacity-90 max-w-3xl mx-auto mb-8">
-           We would love to hear from you. Send us a message and we will respond as soon as possible.
+            We would love to hear from you. Send us a message and we will respond as soon as possible.
 
           </p>
         </div>
@@ -549,9 +549,8 @@ export default function Contact() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${
-                        errors.firstName ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${errors.firstName ? "border-red-500" : "border-gray-300"
+                        }`}
                       placeholder="First name"
                     />
                     {errors.firstName && (
@@ -574,9 +573,8 @@ export default function Contact() {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${
-                        errors.lastName ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${errors.lastName ? "border-red-500" : "border-gray-300"
+                        }`}
                       placeholder="Last name"
                     />
                     {errors.lastName && (
@@ -601,9 +599,8 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${
-                      errors.email ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${errors.email ? "border-red-500" : "border-gray-300"
+                      }`}
                     placeholder="you@example.com"
                   />
                   {errors.email && (
@@ -612,7 +609,7 @@ export default function Contact() {
                 </div>
 
                 {/* Phone */}
-                <div>
+                {/* <div>
                   <label
                     htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-1"
@@ -634,7 +631,41 @@ export default function Contact() {
                   {errors.phone && (
                     <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
                   )}
+                </div> */}
+
+                {/* Phone */}
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Phone number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // sirf digits allow karo
+                      if (/^\d*$/.test(value)) {
+                        // agar pehla digit 6-9 hai ya field abhi khali hai, to update karo
+                        if (value === "" || /^[6-9]\d{0,9}$/.test(value)) {
+                          setFormData({ ...formData, phone: value });
+                        }
+                      }
+                    }}
+                    maxLength={10}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${errors.phone ? "border-red-500" : "border-gray-300"
+                      }`}
+                    placeholder="+91-9876543210"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
+
 
                 {/* Message */}
                 <div>
@@ -650,9 +681,8 @@ export default function Contact() {
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors resize-vertical ${
-                      errors.message ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors resize-vertical ${errors.message ? "border-red-500" : "border-gray-300"
+                      }`}
                     placeholder="Leave us a message..."
                   />
                   {errors.message && (
@@ -728,7 +758,7 @@ export default function Contact() {
                 className="text-gray-900 font-medium hover:underline"
               > */}
               <p>
-                 Pvclasses01@gmail.com
+                Pvclasses01@gmail.com
 
               </p>
               {/* </a> */}
