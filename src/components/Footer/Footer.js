@@ -240,7 +240,7 @@ export default function Footer() {
             />
             <p className="text-sm text-gray-200 leading-relaxed">
               PV Classes is dedicated to providing high quality education
-              for competitive exams like UPSC, SSC, Defence, NEET, JEE, and
+              for competitive exams like REET, 1st GRADE, 2nd GRADE, 3rd GRADE, 10th class, and
               more.
             </p>
           </div>
