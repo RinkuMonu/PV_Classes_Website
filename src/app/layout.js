@@ -20,7 +20,7 @@ export const metadata = {
   title: "PV Classes - Best Online Learning Platform for Competitive Exams",
   description: "PV Classes is a leading online learning platform offering comprehensive courses, study materials, and expert guidance for competitive exams like SSC, Banking, Railways, and more. Join us to achieve your career goals with ease.",
   icons: {
-    icon: "/faviconPV.png", 
+    icon: "/faviconPV.png",
   },
 };
 
