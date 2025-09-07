@@ -658,33 +658,60 @@ export default function CourseDetailsPage() {
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
 
                     return (
-                      <div key={facultyMember._id} className={`flex flex-col sm:flex-row items-start p-5 bg-gradient-to-r ${gradientClass} rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100`}>
-                        <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-5 mx-auto sm:mx-0">
-                          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md">
-                            <img
-                              src={facultyPhoto}
-                              alt={facultyMember.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
-                              }}
-                            />
+                      <div key={facultyMember._id} className={`flex flex-col p-5 bg-gradient-to-r ${gradientClass} rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100`}>
+                        <div className="flex items-start mb-4">
+                          <div className="flex-shrink-0 mr-4">
+                            <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md">
+                              <img
+                                src={facultyPhoto}
+                                alt={facultyMember.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-800 text-lg">{facultyMember.name}</h3>
+                            {facultyMember.experience && (
+                              <p className="text-sm text-gray-700 mb-2">
+                                <span className="font-medium">Experience: </span>
+                                {facultyMember.experience}
+                              </p>
+                            )}
+                            {facultyMember.specialization && (
+                              <div className={`${bgColorClass} px-3 py-1 rounded-full text-xs inline-block mb-3`}>
+                                {facultyMember.specialization}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="flex-1 text-center sm:text-left">
-                          <h3 className="font-semibold text-gray-800 text-lg">{facultyMember.name}</h3>
-                          {facultyMember.experience && (
-                            <p className="text-sm text-gray-700 mb-3">
-                              <span className="font-medium">Experience: </span>
-                              {facultyMember.experience}
-                            </p>
-                          )}
-                          {facultyMember.specialization && (
-                            <div className={`${bgColorClass} px-3 py-1 rounded-full text-xs inline-block`}>
-                              {facultyMember.specialization}
+
+                        {/* Demo Video Section */}
+                        {facultyMember.demoVideo && (
+                          <div className="mt-4 pt-4 border-t border-gray-200">
+                            <h4 className="font-medium text-gray-800 mb-3 flex items-center">
+                              <svg className="w-4 h-4 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path>
+                              </svg>
+                              Watch Demo Class
+                            </h4>
+                            <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                              <iframe
+                                src={facultyMember.demoVideo.replace("watch?v=", "embed/")}
+                                className="w-full h-full"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title={`${facultyMember.name} Demo Class`}
+                              ></iframe>
                             </div>
-                          )}
-                        </div>
+                            <p className="text-xs text-gray-500 mt-2 text-center">
+                              Preview of teaching style and methodology
+                            </p>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -753,6 +780,61 @@ export default function CourseDetailsPage() {
                 </div>
               </div>
             </div>
+
+            {/* FAQs Section */}
+            {course.faqs && course.faqs.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
+                <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2 flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-[#204972]" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10A8 8 0 112 10a8 8 0 0116 0zm-8-3a1 1 0 100-2 1 1 0 000 2zm-1 2a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  Frequently Asked Questions
+                </h2>
+                <div className="space-y-4">
+                  {course.faqs.map((faq, index) => {
+                    // Color sets for variety
+                    const iconColors = ["text-blue-600", "text-green-600", "text-purple-600", "text-amber-600"];
+                    const bgColors = ["bg-blue-50", "bg-green-50", "bg-purple-50", "bg-amber-50"];
+                    const colorIndex = index % 4;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`flex items-start p-4 rounded-lg ${bgColors[colorIndex]} border border-gray-100 hover:shadow-sm transition-all duration-200`}
+                      >
+                        <div className="flex-shrink-0 mr-4">
+                          <div
+                            className={`h-10 w-10 rounded-full flex items-center justify-center ${iconColors[colorIndex]} bg-white shadow-sm`}
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M8 9h8M8 13h5m-1 8a9 9 0 100-18 9 9 0 000 18z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-800">{faq.question}</h4>
+                          <p className="text-gray-700 mt-1">{faq.answer}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Requirements */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">

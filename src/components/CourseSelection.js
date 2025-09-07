@@ -180,26 +180,23 @@ export default function CoursesSection() {
   const displayedCourses = searchTerm ? filteredCourses : courses;
 
 
+
+  // set 2 category as default on load if exists
+useEffect(() => {
+  if (categories?.length > 1) {
+    // select the second category by default (moved to first)
+    const defaultCat = categories[1];
+    setActiveCategory(defaultCat);
+    setCurrentStep(2);
+  } else if (categories?.length === 1) {
+    // if only one category, select that
+    setActiveCategory(categories[0]);
+    setCurrentStep(2);
+  }
+}, [categories]);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative bg-blue-50/30 border-b border-border">
-        {/* <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-[#204972]/10 text-[#204972] px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <FaGraduationCap className="text-lg" />
-              <span>Educational Excellence</span>
-            </div>
-            <h1 className="text-5xl font-bold text-foreground mb-6 leading-tight">
-              Find Your Perfect Learning Path
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Discover expertly crafted courses designed to help you achieve
-              your academic and professional goals through our comprehensive
-              learning platform.
-            </p>
-          </div>
-        </div> */}
-      </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -215,7 +212,7 @@ export default function CoursesSection() {
               </div>
 
               {/* Categories Section */}
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
                     <FaBook className="text-[#204972] text-sm" />
@@ -236,8 +233,8 @@ export default function CoursesSection() {
                         setCurrentStep(2);
                       }}
                       className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${activeCategory?._id === cat?._id
-                          ? "bg-[#204972] text-white shadow-sm"
-                          : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
+                        ? "bg-[#204972] text-white shadow-sm"
+                        : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
                         }`}
                     >
                       <div className="font-medium text-sm cursor-pointer">
@@ -246,7 +243,54 @@ export default function CoursesSection() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
+
+              {/* Categories Section */}
+<div className="mb-8">
+  <div className="flex items-center gap-3 mb-4">
+    <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+      <FaBook className="text-[#204972] text-sm" />
+    </div>
+    <h3 className="font-semibold text-card-foreground text-lg">
+      Categories
+    </h3>
+    <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
+      {categories?.length}
+    </span>
+  </div>
+
+  <div className="space-y-2 max-h-64 overflow-y-auto">
+    {(() => {
+      // Reorder: bring 2nd category to first
+      let reordered = [...(categories || [])];
+      if (reordered.length > 1) {
+        const second = reordered[1];
+        reordered.splice(1, 1);   // remove 2nd
+        reordered.unshift(second); // move it to first
+      }
+      return reordered.map((cat) => (
+        <button
+          key={cat?._id}
+          onClick={() => {
+            setActiveCategory(cat);
+            setCurrentStep(2);
+          }}
+          className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${
+            activeCategory?._id === cat?._id
+              ? "bg-[#204972] text-white shadow-sm"
+              : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <div className="font-medium text-sm cursor-pointer">
+            {cat?.name}
+          </div>
+        </button>
+      ));
+    })()}
+  </div>
+</div>
+
+
 
               {/* Exam Types Section */}
               {activeCategory && examTypes?.length > 0 && (
@@ -269,8 +313,8 @@ export default function CoursesSection() {
                           setCurrentStep(3);
                         }}
                         className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${activeExamType?._id === type?._id
-                            ? "bg-[#204972] text-secondary-foreground shadow-sm"
-                            : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
+                          ? "bg-[#204972] text-secondary-foreground shadow-sm"
+                          : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
                           }`}
                       >
                         <div className="font-medium text-sm">{type?.name}</div>
@@ -337,6 +381,38 @@ export default function CoursesSection() {
               </div>
             </div>
 
+            {activeCategory && examTypes?.length > 0 && (
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                    <FaGraduationCap className="text-[#204972] text-sm" />
+                  </div>
+                  <h3 className="font-semibold text-lg">Exam Types</h3>
+                  <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
+                    {examTypes?.length}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto scrollbar-hide pr-1">
+                  {examTypes?.map((type) => (
+                    <button
+                      key={type?._id}
+                      onClick={() => {
+                        setActiveExamType(type);
+                        setCurrentStep(3);
+                      }}
+                      className={`p-3 rounded-lg transition-all duration-200 ${activeExamType?._id === type?._id
+                          ? "bg-[#204972] text-secondary-foreground shadow-sm"
+                          : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
+                        }`}
+                    >
+                      <div className="font-medium text-sm">{type?.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+
             {/* Exams Grid */}
             {activeExamType && filteredExams?.length > 0 && (
               <div className="bg-blue-50/30 border border-border rounded-lg p-6 mb-6">
@@ -360,8 +436,8 @@ export default function CoursesSection() {
                       key={exam?._id}
                       onClick={() => setActiveExam(exam)}
                       className={`p-4 rounded-lg border transition-all duration-200 text-left ${activeExam?._id === exam?._id
-                          ? "border-primary bg-[#204972]/5 shadow-sm"
-                          : "border-border hover:border-primary/50 hover:shadow-sm bg-background"
+                        ? "border-primary bg-[#204972]/5 shadow-sm"
+                        : "border-border hover:border-primary/50 hover:shadow-sm bg-background"
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -427,8 +503,8 @@ export default function CoursesSection() {
                         <div className="flex justify-between items-start mb-4">
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${course?.isFree
-                                ? "bg-secondary/10 text-secondary"
-                                : "bg-[#204972]/10 text-[#204972]"
+                              ? "bg-secondary/10 text-secondary"
+                              : "bg-[#204972]/10 text-[#204972]"
                               }`}
                           >
                             {course?.isFree ? "FREE COURSE" : "PREMIUM"}
