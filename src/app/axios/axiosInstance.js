@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
     // baseURL: 'http://192.168.1.39:5000/api',
     // baseURL: ' http://localhost:5000/api'
     baseURL: ' https://api.pvclasses.in/api',
+    // baseURL: 'http://localhost:5006/api',
 
     // headers: {
     //     'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ axiosInstance.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             // console.error('Unauthorized! Redirecting to login...');
             // You can redirect user or remove token here
-                  return Promise.reject({ silent: true }); // custom reject
+            return Promise.reject({ silent: true }); // custom reject
         }
         return Promise.reject(error);
     }
