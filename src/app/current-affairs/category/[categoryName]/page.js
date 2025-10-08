@@ -402,7 +402,7 @@ export default function CategoryAffairsPage() {
        <div className="absolute inset-0">
          <Image 
             src="/Image/Banner/current-banner.webp"
-          alt="Banner" fill className="object-cover object-center" priority />
+          alt="Banner" fill className="object-cover object-center"  />
          <div className="absolute inset-0" />
        </div>
      </section>
