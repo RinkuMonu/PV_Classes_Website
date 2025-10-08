@@ -142,7 +142,7 @@ export default function Home() {
               alt="Banner"
               fill
               className="rounded-md object-cover"
-              priority
+              // priority
               sizes="100vw"
             />
           </div>

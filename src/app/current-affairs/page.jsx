@@ -95,7 +95,7 @@
 //             alt="Banner Desktop"
 //             fill
 //             className="object-cover object-center"
-//             priority
+//             // priority
 //           />
 //         </div>
 //         <div className="absolute inset-0 block sm:hidden">
@@ -104,7 +104,7 @@
 //             alt="Banner Mobile"
 //             fill
 //             className="object-cover object-center"
-//             priority
+//             // priority
 //           />
 //         </div>
 //         <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
@@ -515,7 +515,7 @@ export default function CurrentAffairsPage() {
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
-            priority
+            // priority
           />
         </div>
         <div className="absolute inset-0 block sm:hidden">
@@ -524,7 +524,7 @@ export default function CurrentAffairsPage() {
             alt="Banner Mobile"
             fill
             className="object-cover object-center"
-            priority
+            // priority
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">

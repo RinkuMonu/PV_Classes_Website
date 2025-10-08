@@ -291,7 +291,7 @@ export default function CourseDetailsPage() {
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
-            priority
+            // priority
           />
         </div>
         <div className="absolute inset-0 block sm:hidden">
@@ -300,7 +300,7 @@ export default function CourseDetailsPage() {
             alt="Banner Mobile"
             fill
             className="object-cover object-center"
-            priority
+            // priority
           />
         </div>
         {/* <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
