@@ -64,7 +64,7 @@ export default function Book() {
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
-            // priority
+            priority
           />
         </div>
         <div className="absolute inset-0 block sm:hidden">
@@ -73,7 +73,7 @@ export default function Book() {
             alt="Banner Mobile"
             fill
             className="object-cover object-center"
-            // priority
+            priority
           />
         </div>
       </section>

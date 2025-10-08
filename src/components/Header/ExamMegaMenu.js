@@ -117,11 +117,11 @@ export default function ExamMegaMenu() {
   }, [activeExamType?._id])
 
 
-  // // priority exam ko top pe lana
-  const // priority_ID = "68ad4356255f962ce73719c2";
-  const // priorityExam = exams?.find(e => e._id === // priority_ID);
-  const otherExams = exams?.filter(e => e._id !== // priority_ID);
-  const finalExams = // priorityExam ? [// priorityExam, ...otherExams] : exams;
+  // priority exam ko top pe lana
+  const priority_ID = "68ad4356255f962ce73719c2";
+  const priorityExam = exams?.find(e => e._id === priority_ID);
+  const otherExams = exams?.filter(e => e._id !== priority_ID);
+  const finalExams = priorityExam ? [priorityExam, ...otherExams] : exams;
 
 
   return (

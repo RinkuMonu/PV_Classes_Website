@@ -680,7 +680,7 @@ function SidebarCard({ series, hasAccess }) {
           alt={series?.title}
           fill
           className="object-cover"
-          // priority
+          priority
         />
         <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
           Test Series

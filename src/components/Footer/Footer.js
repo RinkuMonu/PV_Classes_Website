@@ -233,7 +233,7 @@ export default function Footer() {
               width={96}
               height={96}
               className="mb-4 w-24"
-              // // priority
+              // priority
             />
 
             <p className="text-sm text-gray-200 leading-relaxed">

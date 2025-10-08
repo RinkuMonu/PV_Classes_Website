@@ -67,7 +67,7 @@ export default function FacultySlider() {
                   src={src || "/placeholder.svg"}
                   alt={`Faculty Banner ${index + 1}`}
                   fill
-                  // priority
+                  priority
                   className="object-cover lg:object-contain md:object-cover transition-transform duration-500 hover:scale-105"
                 />
                 <div className="absolute top-4 right-4 w-12 h-12 bg-gradient-to-br from-[#87B105] to-[#ABC129] rounded-full opacity-80 z-20"></div>

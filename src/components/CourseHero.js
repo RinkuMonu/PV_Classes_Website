@@ -8,7 +8,7 @@ export default function CourseHero({ bannerSrc = "/Image/Banner/courses-banner.w
                 alt="Hero banner"
                 width={920}
                 height={520}
-                // priority
+                priority
                 className=" z-[1] mx-auto w-full object-cover md:ml-auto" style={{height:"60vh"}}
             />
  <div className="absolute inset-0 block sm:hidden">
@@ -17,7 +17,7 @@ export default function CourseHero({ bannerSrc = "/Image/Banner/courses-banner.w
             alt="Banner Mobile"
             fill
             className="object-cover object-center"
-            // priority
+            priority
           />
         </div>
         </section>

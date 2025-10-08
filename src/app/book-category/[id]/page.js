@@ -74,7 +74,7 @@
 //       alt="Banner Desktop"
 //       fill
 //       className="object-cover object-center"
-//       // priority
+//       priority
 //     />
 //   </div>
 //   {/* Mobile Banner */}
@@ -84,7 +84,7 @@
 //       alt="Banner Mobile"
 //       fill
 //       className="object-cover object-center"
-//       // priority
+//       priority
 //     />
 //   </div>
 // </section>
@@ -474,7 +474,7 @@ export default function BookCategoryPage() {
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
-            // priority
+            priority
           />
         </div>
         {/* Mobile Banner */}
@@ -484,7 +484,7 @@ export default function BookCategoryPage() {
             alt="Banner Mobile"
             fill
             className="object-cover object-center"
-            // priority
+            priority
           />
         </div>
       </section>

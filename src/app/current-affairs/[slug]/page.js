@@ -106,7 +106,7 @@
 //               alt={article.title}
 //               fill
 //               className="rounded-md object-cover"
-//               // priority
+//               priority
 //               sizes="100vw"
 //             />
 //           </div>
@@ -471,7 +471,7 @@ export default function CurrentAffairsDetails() {
                   alt={article.title}
                   fill
                   className="object-cover"
-                  // priority
+                  priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
