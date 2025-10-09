@@ -767,6 +767,7 @@
 
 
 
+// uper vala code locked test seris ka hai jisme test series ko lock karne ka option hai and sab kuch sahi hai esme 
 
 //=============================================================================================================================
 
@@ -775,13 +776,6 @@
 
 
 
-
-
-
-/* =========================================================
-   SINGLE COMPONENT: Details + Start Test + Attempt + Result
-   FILE: app/test-series/[id]/page.jsx
-   ========================================================= */
 "use client";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../../components/context/CartContext";
@@ -905,7 +899,7 @@ export default function TestSeriesUnified() {
       const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Please login to start the test");
-        router.push("/login");
+        // router.push("/login");
         return;
       }
 
