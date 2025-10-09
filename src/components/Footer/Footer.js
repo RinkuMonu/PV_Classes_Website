@@ -202,6 +202,7 @@ import {
   FaPhone,
   FaEnvelope,
 } from "react-icons/fa";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -226,13 +227,13 @@ export default function Footer() {
         {/* ====== Quick Links + Support + Social ====== */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <img
+            <Image
               src="/pv_footer_logo.png"
               alt="PV Classes Logo"
-              // width={96}
-              // height={96}
+              width={96}
+              height={96}
               className="mb-4 w-24"
-              priority
+              // priority
             />
 
             <p className="text-sm text-gray-200 leading-relaxed">

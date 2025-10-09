@@ -23,7 +23,7 @@ export default function ExamMegaMenu() {
         const res = await axiosInstance.get("/categories")
         setCategories(res?.data || [])
         if (res?.data?.length > 0) {
-          setActiveCategory(res?.data?.[0] || null)
+          setActiveCategory(res?.data?.[1] || null)
         }
       } catch (err) {
         console.error("Error fetching categories", err)
@@ -68,7 +68,7 @@ export default function ExamMegaMenu() {
 
         if (Array.isArray(res?.data) && res.data.length > 0) {
           setExamTypes(res.data);
-          setActiveExamType(res.data[0] || null);
+          setActiveExamType(res.data[1] || null);
         } else {
           setExamTypes([]);
           setActiveExamType(null);
@@ -118,9 +118,9 @@ export default function ExamMegaMenu() {
 
 
   // priority exam ko top pe lana
-  const PRIORITY_ID = "68ad4356255f962ce73719c2";
-  const priorityExam = exams?.find(e => e._id === PRIORITY_ID);
-  const otherExams = exams?.filter(e => e._id !== PRIORITY_ID);
+  const priority_ID = "68ad4356255f962ce73719c2";
+  const priorityExam = exams?.find(e => e._id === priority_ID);
+  const otherExams = exams?.filter(e => e._id !== priority_ID);
   const finalExams = priorityExam ? [priorityExam, ...otherExams] : exams;
 
 
@@ -136,7 +136,7 @@ export default function ExamMegaMenu() {
           <div className="w-12 h-1 bg-gradient-to-r from-[#009FE3] to-[#87B105] rounded-full mt-2"></div>
         </div>
 
-        <div className="p-2">
+        {/* <div className="p-2">
           {categories?.map((cat) => (
             <button
               key={cat?._id}
@@ -150,7 +150,29 @@ export default function ExamMegaMenu() {
               <span className="relative z-10 font-semibold">{cat?.name || "Unnamed"}</span>
             </button>
           ))}
+        </div> */}
+
+        <div className="p-2">
+          {[categories?.[1], categories?.[0], ...categories?.slice(2)]?.map(
+            (cat) =>
+              cat && (
+                <button
+                  key={cat?._id}
+                  className={`w-full text-left px-4 py-4 mb-2 rounded-xl transition-all duration-300 relative overflow-hidden group ${activeCategory?._id === cat?._id
+                    ? "bg-gradient-to-r from-[#00316B] to-[#204972] text-white shadow-lg transform scale-105 border-l-4 border-[#87B105]"
+                    : "hover:bg-gradient-to-r hover:from-[#009FE3]/10 hover:to-[#87B105]/10 text-[#00316B] hover:shadow-md hover:transform hover:scale-102"
+                    }`}
+                  onMouseEnter={() => setActiveCategory(cat)}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#009FE3]/20 to-[#87B105]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10 font-semibold">
+                    {cat?.name || "Unnamed"}
+                  </span>
+                </button>
+              )
+          )}
         </div>
+
       </div>
 
       {/* Right Content */}
@@ -161,13 +183,13 @@ export default function ExamMegaMenu() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b-2 border-[#009FE3]/20 mb-6 overflow-x-auto scrollbar-thin scrollbar-thumb-[#87B105]/50 pb-2">
+        {/* <div className="flex gap-8 border-b-2 border-[#009FE3]/20 mb-6 overflow-x-auto scrollbar-thin scrollbar-thumb-[#87B105]/50 pb-2">
           {examTypes?.map((type) => (
             <button
               key={type?._id}
               className={`pb-3 px-2 transition-all duration-300 whitespace-nowrap relative ${activeExamType?._id === type?._id
-                  ? "border-b-3 border-[#87B105] text-[#00316B] font-bold transform scale-105"
-                  : "text-[#204972] hover:text-[#00316B] hover:border-b-2 hover:border-[#009FE3]/50"
+                ? "border-b-3 border-[#87B105] text-[#00316B] font-bold transform scale-105"
+                : "text-[#204972] hover:text-[#00316B] hover:border-b-2 hover:border-[#009FE3]/50"
                 }`}
               onMouseEnter={() => setActiveExamType(type)}
             >
@@ -177,7 +199,32 @@ export default function ExamMegaMenu() {
               <span className="font-semibold">{type?.name || "Unnamed"}</span>
             </button>
           ))}
+        </div> */}
+
+        {/* Tabs */}
+        <div className="flex gap-8 border-b-2 border-[#009FE3]/20 mb-6 overflow-x-auto scrollbar-thin scrollbar-thumb-[#87B105]/50 pb-2">
+          {[examTypes?.[1], examTypes?.[0], ...examTypes?.slice(2)]?.map(
+            (type) =>
+              type && (
+                <button
+                  key={type?._id}
+                  className={`pb-3 px-2 transition-all duration-300 whitespace-nowrap relative ${activeExamType?._id === type?._id
+                    ? "border-b-3 border-[#87B105] text-[#00316B] font-bold transform scale-105"
+                    : "text-[#204972] hover:text-[#00316B] hover:border-b-2 hover:border-[#009FE3]/50"
+                    }`}
+                  onMouseEnter={() => setActiveExamType(type)}
+                >
+                  {activeExamType?._id === type?._id && (
+                    <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#87B105] to-[#ABC129] rounded-full"></div>
+                  )}
+                  <span className="font-semibold">{type?.name || "Unnamed"}</span>
+                </button>
+              )
+          )}
         </div>
+
+
+
 
         {/* Exam Cards */}
         {/* <div className="grid grid-cols-3 gap-6">

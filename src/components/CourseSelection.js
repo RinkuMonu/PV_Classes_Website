@@ -39,10 +39,10 @@ export default function CoursesSection() {
           setCurrentStep(1);
         }
       } catch (err) {
-        console.error(
-          "Error fetching categories",
-          err?.response?.data || err?.message
-        );
+        // console.error(
+        //   "Error fetching categories",
+        //   err?.response?.data || err?.message
+        // );
         setCategories([]);
       } finally {
         setIsLoading(false);

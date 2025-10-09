@@ -22,6 +22,9 @@ export default function CourseDetailsPage() {
   const [cartMode, setCartMode] = useState("course"); // 'course', 'combo', or 'both'
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const [openSubject, setOpenSubject] = useState(null); // <--- add this
+
+
   useEffect(() => {
     if (!id) return;
 
@@ -523,7 +526,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Course Content */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 border border-gray-100">
+            {/* <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 border border-gray-100">
               <div className="border-b p-6 bg-gray-50">
                 <h2 className="text-xl font-bold text-[#204972]">Course content</h2>
                 <p className="text-gray-600 mt-1 flex items-center gap-2">
@@ -587,7 +590,6 @@ export default function CourseDetailsPage() {
                         )}
                       </div>
 
-                      {/* Video description + embed (only if free and opened) */}
                       {!isLocked && openVideo === i && (
                         <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm space-y-3">
                           {video.longDescription && <p>{video.longDescription}</p>}
@@ -613,7 +615,128 @@ export default function CourseDetailsPage() {
                   );
                 })}
               </div>
+            </div> */}
+
+            {/* Course Content */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 border border-gray-100">
+              <div className="border-b p-6 bg-gray-50">
+                <h2 className="text-xl font-bold text-[#204972]">Course content</h2>
+                <p className="text-gray-600 mt-1 flex items-center gap-2">
+                  <span>{course?.subjects?.length || 0} subjects</span>
+                  <span>•</span>
+                  <span>{course?.validity || "N/A"} validity</span>
+                </p>
+              </div>
+
+              <div className="divide-y">
+                {course.subjects?.map((subject, sIndex) => (
+                  <div key={subject._id}>
+                    {/* Subject Header */}
+                    <div
+                      className="p-4 cursor-pointer hover:bg-blue-50 transition-colors"
+                      onClick={() => setOpenSubject(openSubject === sIndex ? null : sIndex)}
+                    >
+                      <h3 className="text-lg font-semibold text-gray-900">{subject.title}</h3>
+                      <p className="text-sm text-gray-500">{subject.description}</p>
+                    </div>
+
+                    {/* Videos under subject */}
+                    {openSubject === sIndex &&
+                      subject.videos.map((video, i) => {
+                        let embedUrl = null;
+                        if (video.url.includes("youtu.be/")) {
+                          embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]}`;
+                        } else if (video.url.includes("watch?v=")) {
+                          embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]}`;
+                        } else if (video.url.includes("youtube.com/live/")) {
+                          embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]}`;
+                        }
+
+                        const isLocked = !course.isFree && !video.isFree && !hasPurchased;
+
+                        return (
+                          <div key={video._id || i} className="p-4 ml-4 hover:bg-blue-50 transition-colors">
+                            <div
+                              className="flex justify-between items-center cursor-pointer"
+                              onClick={() => {
+                                if (isLocked) {
+                                  setShowModal(true);
+                                } else {
+                                  setOpenVideo(openVideo === i ? null : i);
+                                }
+                              }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`rounded-md p-2 ${isLocked ? "bg-gray-100" : "bg-[#204972] bg-opacity-10"}`}>
+                                  {isLocked ? <FiLock className="text-gray-400" /> : <FiPlay className="text-[#204972]" />}
+                                </div>
+                                <div>
+                                  <h4 className="font-medium text-gray-900">{video.title}</h4>
+                                  <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                                    <span>{i + 1} lecture</span>
+                                    <span>•</span>
+                                    <span>{Math.floor(video.duration / 60)} min</span>
+                                  </p>
+                                </div>
+                              </div>
+                              {!isLocked ? (
+                                <span className="text-[#204972] text-sm font-medium">Play</span>
+                              ) : (
+                                <span className="text-gray-400 text-sm font-medium flex items-center">
+                                  <FiLock className="mr-1" /> Locked
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Video embed + notes */}
+                            {!isLocked && openVideo === i && (
+                              <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm space-y-3">
+                                {video.longDescription && <p>{video.longDescription}</p>}
+                                {embedUrl ? (
+                                  <div className="aspect-video">
+                                    <iframe
+                                      width="100%"
+                                      height="315"
+                                      src={embedUrl}
+                                      title={video.title}
+                                      frameBorder="0"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allowFullScreen
+                                    ></iframe>
+                                  </div>
+                                ) : (
+                                  <p className="text-red-500 text-xs">Invalid or unsupported video URL</p>
+                                )}
+
+
+                                {/* Notes */}
+                                {video.notes?.length > 0 && (
+                                  <div className="mt-2 space-y-1">
+                                    <h5 className="font-medium text-gray-700">Notes:</h5>
+                                    {video.notes.map((note, nIndex) => (
+                                      <a
+                                        key={nIndex}
+                                        // href={`http://localhost:5006${note}`} // prepend backend URL
+                                        href={`https://api.pvclasses.in${note}`} // prepend backend URL
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 underline text-sm block"
+                                      >
+                                        Note {nIndex + 1}
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                ))}
+              </div>
             </div>
+
 
             {/* Faculty Section */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
@@ -627,18 +750,11 @@ export default function CourseDetailsPage() {
               {course.faculty && course.faculty.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {course.faculty.map((facultyMember, index) => {
-                    // Generate a gradient color based on index
                     const gradientColors = [
                       "from-blue-50 to-indigo-50",
                       "from-green-50 to-teal-50",
                       "from-purple-50 to-pink-50",
                       "from-orange-50 to-red-50"
-                    ];
-                    const textColors = [
-                      "text-blue-600",
-                      "text-green-600",
-                      "text-purple-600",
-                      "text-red-600"
                     ];
                     const bgColors = [
                       "bg-blue-100 text-blue-700",
@@ -649,13 +765,20 @@ export default function CourseDetailsPage() {
 
                     const colorIndex = index % 4;
                     const gradientClass = gradientColors[colorIndex];
-                    const textColorClass = textColors[colorIndex];
                     const bgColorClass = bgColors[colorIndex];
 
-                    // Get faculty photo URL
                     const facultyPhoto = facultyMember.photo
                       ? `http://localhost:5000${facultyMember.photo}`
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
+
+                    // Function to normalize YouTube URLs to embed
+                    const getEmbedUrl = (url) => {
+                      if (!url) return null;
+                      if (url.includes("youtu.be/")) return `https://www.youtube.com/embed/${url.split("youtu.be/")[1].split("?")[0]}`;
+                      if (url.includes("watch?v=")) return `https://www.youtube.com/embed/${url.split("watch?v=")[1].split("&")[0]}`;
+                      if (url.includes("youtube.com/live/")) return `https://www.youtube.com/embed/${url.split("youtube.com/live/")[1].split("?")[0]}`;
+                      return url; // fallback
+                    };
 
                     return (
                       <div key={facultyMember._id} className={`flex flex-col p-5 bg-gradient-to-r ${gradientClass} rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100`}>
@@ -699,7 +822,7 @@ export default function CourseDetailsPage() {
                             </h4>
                             <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
                               <iframe
-                                src={facultyMember.demoVideo.replace("watch?v=", "embed/")}
+                                src={getEmbedUrl(facultyMember.demoVideo)}
                                 className="w-full h-full"
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
