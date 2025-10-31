@@ -813,7 +813,7 @@ export default function TestSeriesUnified() {
   const [result, setResult] = useState(null);
 
   const [ranking, setRanking] = useState(null);
-  
+
 
 
   const timerRef = useRef(null);
@@ -869,7 +869,7 @@ export default function TestSeriesUnified() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          validateStatus: (status) => status < 500, // 4xx को error मत मानो
+          validateStatus: (status) => status < 500,
         });
 
         if (res.status === 200 && res.data.message === "Access granted") {
