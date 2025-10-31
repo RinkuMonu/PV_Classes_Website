@@ -18,43 +18,48 @@ jobs:
         with:
           node-version: '20'
 
-      # 1. Install deps & build prod bundle on GitHub runner
-      - name: 📦 Install & Build Next.js
+      - name: 📦 Install deps & Build Next.js
+      # yahan hum build karenge aur ek clean snapshot banaenge
         run: |
           npm install --legacy-peer-deps
           npm run build
 
-          # we only need runtime files on server, not git history etc
-          tar --exclude='.git' \
-              --exclude='.github' \
-              --exclude='node_modules' \
-              -czvf pvclasses_site_code.tar.gz .
+          # snapshot folder banao
+          mkdir release
 
-      # 2. make a tar just for node_modules too (so server doesn't re-run npm i)
-      - name: 📦 Pack node_modules after build
-        run: |
-          tar -czvf node_modules.tar.gz node_modules
+          # runtime files copy karo
+          cp -r .next release/.next
+          cp -r node_modules release/node_modules
+          cp -r public release/public
+          cp -r src release/src
 
-      # 3. Write SSH key from secret to file (only used internally by action if needed)
+          # root level configs jo prod me chahiye
+          cp package.json release/package.json
+          cp package-lock.json release/package-lock.json
+          cp next.config.mjs release/next.config.mjs
+          cp ecosystem.config.js release/ecosystem.config.js || true
+          cp jsconfig.json release/jsconfig.json || true
+          cp tsconfig.json release/tsconfig.json || true
+
+          # NOTE: .env intentionally NOT copied (server pe rahega)
+          # ab pura release ko tar karo
+          tar -czvf pvclasses_site_release.tar.gz -C release .
+
       - name: 🔑 Prepare SSH Key file
         run: |
           echo "${{ secrets.NEXT4_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      # 4. Upload both tarballs to server
-      - name: 🚀 Upload build artifacts to EC2
+      - name: 🚀 Upload snapshot to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.NEXT4_SSH_HOST }}
           username: ${{ secrets.NEXT4_SSH_USER }}
           port: ${{ secrets.NEXT4_SSH_PORT }}
           key: ${{ secrets.NEXT4_SSH_KEY }}
-          source: |
-            pvclasses_site_code.tar.gz
-            node_modules.tar.gz
-          target: /home/pvclasses.in/
+          source: "pvclasses_site_release.tar.gz"
+          target: "/home/pvclasses.in/"
 
-      # 5. SSH into server: backup, deploy, restore .env, restart PM2
       - name: 🔄 Deploy on EC2 & restart PM2
         uses: appleboy/ssh-action@master
         with:
@@ -66,62 +71,49 @@ jobs:
             set -e
 
             APP_DIR="/home/pvclasses.in/PV_Classes_Website-main"
-            TMP_CODE_TAR="/home/pvclasses.in/pvclasses_site_code.tar.gz"
-            TMP_NODE_TAR="/home/pvclasses.in/node_modules.tar.gz"
+            TAR_PATH="/home/pvclasses.in/pvclasses_site_release.tar.gz"
             BACKUP_BASE="/home/pvclasses.in/deploy_backups"
             TS=$(date +%Y%m%d_%H%M%S)
 
-            echo "📁 Making sure backup dir exists"
+            echo "📁 Ensure backup dir"
             mkdir -p $BACKUP_BASE
 
-            echo "🔐 If .env exists, back it up temporarily"
+            echo "🔐 Backup .env if present"
             if [ -f "$APP_DIR/.env" ]; then
               cp "$APP_DIR/.env" "/home/pvclasses.in/.env_pvclasses_site_backup"
             fi
 
-            echo "💾 Taking snapshot backup of current code"
+            echo "💾 Snapshot old code"
             cp -r "$APP_DIR" "$BACKUP_BASE/PV_Classes_Website-main_$TS" || true
 
-            echo "🧼 Cleaning old app code (but keeping folder itself)"
+            echo "🧼 Clean old deploy contents in APP_DIR"
             find "$APP_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
-            echo "📦 Extracting new code tar into app dir"
-            tar -xzvf "$TMP_CODE_TAR" -C "$APP_DIR"
+            echo "📦 Extract new release bundle"
+            tar -xzvf "$TAR_PATH" -C "$APP_DIR"
 
-            echo "📦 Extracting node_modules into app dir"
-            tar -xzvf "$TMP_NODE_TAR" -C "$APP_DIR"
+            echo "🗑 Remove uploaded tar"
+            rm -f "$TAR_PATH"
 
-            echo "🗑 Removing temp tars"
-            rm -f "$TMP_CODE_TAR" "$TMP_NODE_TAR"
-
-            echo "♻ Restoring .env if we had backed it up"
+            echo "♻ Restore .env"
             if [ -f "/home/pvclasses.in/.env_pvclasses_site_backup" ]; then
               mv "/home/pvclasses.in/.env_pvclasses_site_backup" "$APP_DIR/.env"
             fi
 
-            echo "📂 cd into app dir"
+            echo "📂 cd into app"
             cd "$APP_DIR"
 
-            echo "🔁 Building production .next on server if missing"
-            # if .next did not come from tar (we sent .next inside code tar because we ran npm run build before tar),
-            # this is normally not needed. but safe fallback:
-            if [ ! -d ".next" ]; then
-              echo "⚠ .next not found, running build on server as fallback"
-              npm install --legacy-peer-deps
-              npm run build
-            fi
-
-            echo "🚀 Restart PM2 for pvclasses.in site"
+            echo "🚀 Restart PM2 for pvclasses.in-site"
             pm2 delete pvclasses.in-site || true
+
             if [ -f ecosystem.config.js ]; then
-              # prefer ecosystem (if it's already configured properly)
+              # preferred path: ecosystem
               pm2 start ecosystem.config.js --only pvclasses.in || pm2 start ecosystem.config.js
             else
-              # fallback: run next manually on port 3006
+              # fallback direct start on port 3006
               pm2 start node_modules/next/dist/bin/next --name pvclasses.in -- start -p 3006
             fi
 
-            echo "💾 Save PM2 boot config"
             pm2 save
 
-            echo "✅ Deployment finished for pvclasses.in-site"
+            echo "✅ Deployment done for pvclasses.in-site"
