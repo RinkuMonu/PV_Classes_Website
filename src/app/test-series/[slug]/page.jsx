@@ -1,7 +1,4 @@
-// /* =========================================================
-//    SINGLE COMPONENT: Details + Start Test + Attempt + Result
-//    FILE: app/test-series/[id]/page.jsx
-//    ========================================================= */
+
 // "use client";
 // import { useRouter } from "next/navigation";
 // import { useCart } from "../../../components/context/CartContext";
@@ -768,6 +765,14 @@
 
 
 
+
+
+// uper vala code locked test seris ka hai jisme test series ko lock karne ka option hai and sab kuch sahi hai esme 
+
+//=============================================================================================================================
+
+
+
 "use client";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../../components/context/CartContext";
@@ -792,14 +797,10 @@ export default function TestSeriesUnified() {
   const params = useParams();
   const seriesParam = params?.id ?? params?.slug;
   const seriesId = Array.isArray(seriesParam) ? seriesParam[0] : seriesParam;
-  // ---------- Details state ----------
-  const [series, setSeries] = useState(null);
-  // ---------- View mode ----------
-  // 'details' | 'attempt' | 'result'
-  const [mode, setMode] = useState("details");
 
-  // ---------- Attempt state ----------
-  const [selectedTest, setSelectedTest] = useState(null); // currently chosen embedded test
+  const [series, setSeries] = useState(null);
+  const [mode, setMode] = useState("details");
+  const [selectedTest, setSelectedTest] = useState(null);
   const [attemptId, setAttemptId] = useState(null);
   const [q, setQ] = useState(null);
   const [index, setIndex] = useState(0);
@@ -810,23 +811,148 @@ export default function TestSeriesUnified() {
   const [numericAnswer, setNumericAnswer] = useState("");
   const [result, setResult] = useState(null);
 
-  const timerRef = useRef(null);
+  const [ranking, setRanking] = useState(null);
 
+
+  const timerRef = useRef(null);
   const [completedTests, setCompletedTests] = useState({});
-  console.log(completedTests?._id);
-  const [hasAccess, setHasAccess] = useState(true); // Set to true for free access
+  const [hasAccess, setHasAccess] = useState(true);
+
+  // ✅ FIXED: Timer function with proper state checks
+  const startTimer = (sec) => {
+    console.log("🕒 Starting timer with:", sec, "seconds");
+
+    // Stop any existing timer first
+    stopTimer();
+
+    setTimeLeft(sec);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        // if (t <= 1) {
+        //   console.log("⏰ Time's up! Auto-submitting...");
+        //   clearInterval(timerRef.current);
+        //   timerRef.current = null;
+        //   handleAutoSubmit();
+        //   return 0;
+        // }
+        if (t <= 1) {
+  console.log("⏰ Time's up! Auto-submitting...");
+  clearInterval(timerRef.current);
+  timerRef.current = null;
+
+  // ✅ FIX — React warning se bachne ke liye defer karo
+  setTimeout(() => {
+    handleAutoSubmit();
+  }, 0);
+
+  return 0;
+}
+
+        return t - 1;
+      });
+    }, 1000);
+
+    console.log("✅ Timer started successfully");
+  };
+
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      console.log("🛑 Timer stopped");
+    }
+  };
+
+  // ✅ FIXED: Auto-submit function
+  const handleAutoSubmit = async () => {
+    console.log("🔄 Auto-submit triggered");
+    console.log("📊 Current state - attemptId:", attemptId, "question:", q?._id);
+
+    if (!attemptId || !q) {
+      // console.error("❌ Cannot auto-submit - missing data");
+      // toast.error("Cannot auto-submit question");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login again");
+        return;
+      }
+
+      // Prepare empty payload for auto-submit
+      let payload = {};
+      if (q.type === "numeric") {
+        payload = { numericAnswer: undefined };
+      } else {
+        payload = { selectedOptions: [] };
+      }
+
+      console.log("📤 Sending auto-submit request...");
+
+      const res = await axiosInstance.post(
+        `/test-series/${seriesId}/attempts/${attemptId}/answer`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("✅ Auto-submit response received");
+
+      if (res.data.done) {
+        // Test completed
+        setResult(res.data.result);
+        setMode("result");
+        toast("Time's up! Test completed.");
+        return;
+      }
+
+      // Update state with new question data
+      setQ(res.data.question);
+      setIndex(res.data.currentIndex);
+      setSelectedOptions([]);
+      setNumericAnswer("");
+      setPerQTime(res.data.perQuestionTimeSec || perQTime);
+
+      // Start timer for the new question
+      console.log("🔄 Starting timer for next question...");
+      startTimer(res.data.perQuestionTimeSec || perQTime);
+
+      toast("Time's up! Moving to next question.");
+
+    } catch (error) {
+      console.error("❌ Auto-submit error:", error);
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        router.push("/login");
+      } else {
+        toast.error("Failed to auto-submit question.");
+      }
+    }
+  };
+
+  // Timer cleanup
+  useEffect(() => {
+    return () => {
+      stopTimer();
+    };
+  }, []);
 
   const viewTest = (e, testId) => {
     e.preventDefault();
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
   };
 
-  // Set access to true for all users
   useEffect(() => {
     setHasAccess(true);
   }, []);
 
-  console.log(series, "serise");
   const fetchSeries = async () => {
     try {
       const res = await axiosInstance.get(`/test-series/${seriesId}`);
@@ -837,7 +963,6 @@ export default function TestSeriesUnified() {
     }
   };
 
-  // ✅ Call it on mount / when seriesId changes
   useEffect(() => {
     fetchSeries();
   }, [seriesId]);
@@ -845,57 +970,26 @@ export default function TestSeriesUnified() {
   useEffect(() => {
     if (series?.attempts) {
       const completed = {};
-      // Count attempts per test
-      const attemptCounts = {};
-
       series.attempts.forEach((attempt) => {
-        if (!attemptCounts[attempt.test_id]) {
-          attemptCounts[attempt.test_id] = 0;
-        }
-        attemptCounts[attempt.test_id]++;
-
-        // Mark as completed if it's submitted (not just ongoing)
         if (attempt.status === "submitted") {
           completed[attempt.test_id] = true;
         }
       });
-
       setCompletedTests(completed);
     }
   }, [series]);
 
-  // ---------------- Timer helpers ----------------
-  const startTimer = (sec) => {
-    stopTimer();
-    setTimeLeft(sec);
-    timerRef.current = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) {
-          stopTimer();
-          handleNext(true); // auto-submit on timeout
-          return 0;
-        }
-        return t - 1;
-      });
-    }, 1000);
-  };
-  const stopTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = null;
-  };
-
   // ---------------- Start Test ----------------
   const handleStart = async (test) => {
     try {
-      // Check if user is authenticated
       const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Please login to start the test");
-        // router.push("/login");
         return;
       }
 
-      setSelectedTest(test);
+      console.log("🚀 Starting test...");
+
       const res = await axiosInstance.post(
         `/test-series/${seriesId}/tests/${test._id}/start`,
         {},
@@ -907,6 +1001,10 @@ export default function TestSeriesUnified() {
       );
 
       if (res.data.success) {
+        console.log("✅ Test started successfully, setting state...");
+
+        // ✅ Set all state first
+        setSelectedTest(test);
         setAttemptId(res.data.attempt_id);
         setPerQTime(res.data.perQuestionTimeSec || 30);
         setIndex(res.data.currentIndex);
@@ -915,7 +1013,14 @@ export default function TestSeriesUnified() {
         setSelectedOptions([]);
         setNumericAnswer("");
         setMode("attempt");
-        startTimer(res.data.perQuestionTimeSec || 30);
+
+        // ✅ Use useEffect to start timer after state is definitely updated
+        // This ensures all state is set before timer starts
+        setTimeout(() => {
+          console.log("🕒 Starting timer after state update...");
+          startTimer(res.data.perQuestionTimeSec || 30);
+        }, 50);
+
         toast.success("Test started successfully!");
       } else {
         toast.error(res.data.message || "Failed to start test");
@@ -950,12 +1055,18 @@ export default function TestSeriesUnified() {
           },
         }
       );
+
       setQ(res.data.question);
       setIndex(res.data.currentIndex);
       setPerQTime(res.data.perQuestionTimeSec || 30);
       setSelectedOptions([]);
       setNumericAnswer("");
-      startTimer(res.data.perQuestionTimeSec || 30);
+
+      // Start timer after state update
+      setTimeout(() => {
+        startTimer(res.data.perQuestionTimeSec || 30);
+      }, 50);
+
     } catch (e) {
       toast.error("Failed to refresh.");
     }
@@ -964,7 +1075,9 @@ export default function TestSeriesUnified() {
   // ---------------- Submit & Next ----------------
   const handleNext = async () => {
     if (!attemptId || !q) return;
+
     stopTimer();
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -993,6 +1106,10 @@ export default function TestSeriesUnified() {
       if (res.data.done) {
         setResult(res.data.result);
         setMode("result");
+             // ✅ YAHAN fetchRanking CALL KARO
+      console.log("🔄 Test completed, fetching ranking...");
+      fetchRanking(seriesId, selectedTest._id, attemptId);
+        toast.success("Test completed!");
         return;
       }
 
@@ -1001,7 +1118,12 @@ export default function TestSeriesUnified() {
       setSelectedOptions([]);
       setNumericAnswer("");
       setPerQTime(res.data.perQuestionTimeSec || perQTime);
-      startTimer(res.data.perQuestionTimeSec || perQTime);
+
+      // Start timer for next question
+      setTimeout(() => {
+        startTimer(res.data.perQuestionTimeSec || perQTime);
+      }, 50);
+
     } catch (e) {
       console.error(e);
       if (e.response?.status === 401) {
@@ -1015,39 +1137,144 @@ export default function TestSeriesUnified() {
   };
 
   // ---------------- Finish (submit all) ----------------
-  const handleFinish = async () => {
-    if (!attemptId) return;
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login again");
-        return;
-      }
+  // const handleFinish = async () => {
+  //   if (!attemptId) return;
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) {
+  //       toast.error("Please login again");
+  //       return;
+  //     }
 
-      const res = await axiosInstance.post(
-        `/test-series/${seriesId}/attempts/${attemptId}/finish`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setResult(res.data.result);
-      stopTimer();
-      setMode("result");
-      toast.success("Test submitted successfully!");
-    } catch (e) {
-      console.error(e);
-      if (e.response?.status === 401) {
-        toast.error("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        router.push("/login");
-      } else {
-        toast.error(e?.response?.data?.message || "Failed to finish.");
-      }
+  //     const res = await axiosInstance.post(
+  //       `/test-series/${seriesId}/attempts/${attemptId}/finish`,
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setResult(res.data.result);
+  //     stopTimer();
+
+
+  
+  //     setMode("result");
+  //     fetchRanking(seriesId, selectedTest._id, attemptId);
+  //     toast.success("Test submitted successfully!");
+
+
+
+  //     toast.success("Test submitted successfully!");
+  //   } catch (e) {
+  //     console.error(e);
+  //     if (e.response?.status === 401) {
+  //       toast.error("Session expired. Please login again.");
+  //       localStorage.removeItem("token");
+  //       router.push("/login");
+  //     } else {
+  //       toast.error(e?.response?.data?.message || "Failed to finish.");
+  //     }
+  //   }
+  // };
+
+  const handleFinish = async () => {
+  if (!attemptId) return;
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login again");
+      return;
     }
-  };
+
+    const res = await axiosInstance.post(
+      `/test-series/${seriesId}/attempts/${attemptId}/finish`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setResult(res.data.result);
+    stopTimer();
+
+    setMode("result");
+    
+    // ✅ FIXED: Pass correct parameters to fetchRanking
+    fetchRanking(seriesId, selectedTest._id, attemptId);
+    
+    toast.success("Test submitted successfully!");
+  } catch (e) {
+    console.error(e);
+    if (e.response?.status === 401) {
+      toast.error("Session expired. Please login again.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    } else {
+      toast.error(e?.response?.data?.message || "Failed to finish.");
+    }
+  }
+};
+
+
+  // fetch ranking after test submission
+  // const fetchRanking = async (seriesId, testId, attemptId) => {
+  //     console.log("FFFFFFFFFFFFFFFFFFFFFFFFetchRanking Triggered with:", seriesId, testId, attemptId);
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) return;
+
+  //     const res = await axiosInstance.get(
+  //       `/test-series/ranking/${seriesId}/${testId}/${attemptId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     console.log("📊 Ranking response:", res.data);
+
+  //     if (res.data.success) {
+  //       setRanking(res.data);
+  //       console.log("🏆 Ranking fetched:", res.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("❌ Failed to fetch ranking:", error);
+  //   }
+  // };
+
+  const fetchRanking = async (seriesId, testId, attemptId) => {
+  console.log("🔄 fetchRanking Triggered with:", seriesId, testId, attemptId);
+
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const res = await axiosInstance.get(
+      `/test-series/ranking/${seriesId}/${testId}/${attemptId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("📊 Ranking response:", res.data);
+
+    if (res.data.success) {
+      setRanking(res.data);
+      console.log("🏆 Ranking fetched:", res.data);
+    }
+  } catch (error) {
+    console.error("❌ Failed to fetch ranking:", error);
+  }
+};
+
+
 
   // ---------------- Option toggles ----------------
   const toggleOption = (key) => {
@@ -1076,8 +1303,6 @@ export default function TestSeriesUnified() {
   };
 
   // =================== RENDER ===================
-
-  // if (loading) return <div className="p-6">Loading...</div>;
 
   if (!series) return <div className="p-6">Test series not found.</div>;
 
@@ -1277,10 +1502,15 @@ export default function TestSeriesUnified() {
           <h2 className="text-xl font-semibold">
             {selectedTest?.title} — Question {index + 1} / {total}
           </h2>
-          <div className="flex items-center justify-center p-3 rounded-full bg-[#00316B]/90 text-white text-xl font-bold shadow-md">
-            {String(timeLeft).padStart(2, "0")}s
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600">
+              Time per question: {perQTime}s
+            </div>
+            <div className={`flex items-center justify-center p-3 rounded-full text-white text-xl font-bold shadow-md ${timeLeft <= 5 ? 'bg-red-600 animate-pulse' : 'bg-[#00316B]/90'
+              }`}>
+              {String(timeLeft).padStart(2, "0")}s
+            </div>
           </div>
-
         </div>
 
         {q ? (
@@ -1307,7 +1537,6 @@ export default function TestSeriesUnified() {
     rounded cursor-pointer
     transition-all duration-200
   "
-
                     />
                     <span className="font-medium">{op.key}.</span>
                     <span>{op.text}</span>
@@ -1377,14 +1606,61 @@ export default function TestSeriesUnified() {
             </div>
 
             {/* Marks Section */}
-            <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+            {/* <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
               <div className="text-lg text-gray-700">
                 Total Marks:{" "}
                 <span className="font-bold text-[#00316B] text-xl">
                   {result.totalMarks}
                 </span>
               </div>
-            </div>
+            </div> */}
+
+            {/* Marks & Ranking Section */}
+<div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50 space-y-2">
+  <div className="text-lg text-gray-700">
+    Total Marks:{" "}
+    <span className="font-bold text-[#00316B] text-xl">
+      {result.totalMarks}
+    </span>
+  </div>
+
+  {ranking && (
+    <div className="mt-3 border-t pt-3">
+      <div className="text-gray-700">
+        <span className="font-semibold text-[#00316B]">Your Rank:</span>{" "}
+        {ranking.currentRank} / {ranking.totalParticipants}
+      </div>
+      <div className="text-sm text-gray-500 mt-1">
+        Total Participants: {ranking.totalParticipants}
+      </div>
+
+      {/* Top 3 leaderboard */}
+      {ranking.ranking?.length > 0 && (
+        <div className="mt-4">
+          <h4 className="text-sm font-semibold text-gray-700 mb-2">
+            🏅 Top Performers
+          </h4>
+          <ul className="space-y-1 text-sm">
+            {ranking.ranking.slice(0, 3).map((r) => (
+              <li
+                key={r.attemptId}
+                className={`flex justify-between p-2 rounded-lg ${
+                  r.rank === ranking.currentRank
+                    ? "bg-blue-50 font-semibold text-[#00316B]"
+                    : "bg-gray-50"
+                }`}
+              >
+                <span>Rank {r.rank}</span>
+                <span>{r.marks} Marks</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
           </>
         ) : (
           <div className="p-5 rounded-xl border border-gray-200 shadow-sm text-gray-500">
@@ -1402,18 +1678,15 @@ export default function TestSeriesUnified() {
           </button>
         </div>
       </div>
-
     );
   }
 
   return null;
 }
 
-/* ---------- Small stat tile ---------- */
 function Stat({ label, value }) {
-  // Map labels to Tailwind color classes
   const colors = {
-    Total: "text-[#00316B]",        // default blue
+    Total: "text-[#00316B]",
     Correct: "text-green-700",
     Wrong: "text-red-700",
     Unattempted: "text-gray-700",
@@ -1426,9 +1699,9 @@ function Stat({ label, value }) {
         className={`text-3xl font-extrabold mt-1 ${colors[label] || "text-[#00316B]"
           }`}
       >
+        
         {value}
       </div>
     </div>
   );
 }
-
