@@ -318,14 +318,33 @@ const WhatsAppButton = () => {
     }
   }, []);
 
+  // const fetchDoubtsHistory = async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/doubt/his");
+  //     setDoubts(response.data.history || []);
+  //   } catch (error) {
+  //     console.error("Error fetching doubts:", error);
+  //   }
+  // };
+
   const fetchDoubtsHistory = async () => {
-    try {
-      const response = await axiosInstance.get("/doubt/his");
-      setDoubts(response.data.history || []);
-    } catch (error) {
+  try {
+    const response = await axiosInstance.get("/doubt/his");
+    setDoubts(response.data.history || []);
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.status === 404 &&
+      error.response.data?.message === "No doubt history found"
+    ) {
+      // Empty history, not an actual error
+      setDoubts([]);
+    } else {
       console.error("Error fetching doubts:", error);
     }
-  };
+  }
+};
+
 
   const handleSubmitDoubt = async (e) => {
     e.preventDefault();

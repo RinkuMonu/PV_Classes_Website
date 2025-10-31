@@ -119,12 +119,18 @@ export default function Page() {
 
                         <div className="flex justify-between items-center mt-5">
                           <div className="flex flex-col">
-                            <span className="text-[#204972] font-bold text-xl">
-                              ₹{series?.discount_price}
-                            </span>
-                            <span className="text-gray-400 line-through text-sm">
-                              ₹{series?.price}
-                            </span>
+                            {series?.discount_price > 0 && (
+                              <span className="text-[#204972] font-bold text-xl">
+                                ₹{series.discount_price}
+                              </span>
+                            )}
+
+                            {series?.price > 0 && (
+                              <span className="text-gray-400 line-through text-sm">
+                                ₹{series.price}
+                              </span>
+                            )}
+
                           </div>
                           {discount > 0 && (
                             <span className="text-green-700 text-xs font-bold bg-green-100 px-2.5 py-1.5 rounded-full">

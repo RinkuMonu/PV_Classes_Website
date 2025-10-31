@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
           <Footer />
           <Toaster position="top-right" />
         </CartProvider>
-      <WhatsAppButton /> 
+      <WhatsAppButton />
       </body>
     </html>
   );
