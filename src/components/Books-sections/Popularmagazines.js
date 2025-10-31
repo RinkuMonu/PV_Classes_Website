@@ -10,6 +10,7 @@ const books = [
     discount: "5% OFF",
     img: "/image/book3.webp",
   },
+  
   {
     title: "Rajasthan Current Affairs Monthly (August) Magazine 2025",
     price: 190,
