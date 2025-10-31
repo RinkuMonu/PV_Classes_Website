@@ -817,143 +817,74 @@ export default function TestSeriesUnified() {
 
   const timerRef = useRef(null);
   const [completedTests, setCompletedTests] = useState({});
-  const [hasAccess, setHasAccess] = useState(true);
-
-  // ✅ FIXED: Timer function with proper state checks
-  const startTimer = (sec) => {
-    console.log("🕒 Starting timer with:", sec, "seconds");
-
-    // Stop any existing timer first
-    stopTimer();
-
-    setTimeLeft(sec);
-
-    timerRef.current = setInterval(() => {
-      setTimeLeft((t) => {
-        // if (t <= 1) {
-        //   console.log("⏰ Time's up! Auto-submitting...");
-        //   clearInterval(timerRef.current);
-        //   timerRef.current = null;
-        //   handleAutoSubmit();
-        //   return 0;
-        // }
-        if (t <= 1) {
-  console.log("⏰ Time's up! Auto-submitting...");
-  clearInterval(timerRef.current);
-  timerRef.current = null;
-
-  // ✅ FIX — React warning se bachne ke liye defer karo
-  setTimeout(() => {
-    handleAutoSubmit();
-  }, 0);
-
-  return 0;
-}
-
-        return t - 1;
-      });
-    }, 1000);
-
-    console.log("✅ Timer started successfully");
-  };
-
-  const stopTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-      console.log("🛑 Timer stopped");
-    }
-  };
-
-  // ✅ FIXED: Auto-submit function
-  const handleAutoSubmit = async () => {
-    console.log("🔄 Auto-submit triggered");
-    console.log("📊 Current state - attemptId:", attemptId, "question:", q?._id);
-
-    if (!attemptId || !q) {
-      // console.error("❌ Cannot auto-submit - missing data");
-      // toast.error("Cannot auto-submit question");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login again");
-        return;
-      }
-
-      // Prepare empty payload for auto-submit
-      let payload = {};
-      if (q.type === "numeric") {
-        payload = { numericAnswer: undefined };
-      } else {
-        payload = { selectedOptions: [] };
-      }
-
-      console.log("📤 Sending auto-submit request...");
-
-      const res = await axiosInstance.post(
-        `/test-series/${seriesId}/attempts/${attemptId}/answer`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log("✅ Auto-submit response received");
-
-      if (res.data.done) {
-        // Test completed
-        setResult(res.data.result);
-        setMode("result");
-        toast("Time's up! Test completed.");
-        return;
-      }
-
-      // Update state with new question data
-      setQ(res.data.question);
-      setIndex(res.data.currentIndex);
-      setSelectedOptions([]);
-      setNumericAnswer("");
-      setPerQTime(res.data.perQuestionTimeSec || perQTime);
-
-      // Start timer for the new question
-      console.log("🔄 Starting timer for next question...");
-      startTimer(res.data.perQuestionTimeSec || perQTime);
-
-      toast("Time's up! Moving to next question.");
-
-    } catch (error) {
-      console.error("❌ Auto-submit error:", error);
-      if (error.response?.status === 401) {
-        toast.error("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        router.push("/login");
-      } else {
-        toast.error("Failed to auto-submit question.");
-      }
-    }
-  };
-
-  // Timer cleanup
-  useEffect(() => {
-    return () => {
-      stopTimer();
-    };
-  }, []);
-
+  console.log(completedTests?._id);
+  const [hasAccess, setHasAccess] = useState(false);
   const viewTest = (e, testId) => {
     e.preventDefault();
+    // If you need to send both seriesId and testId, do something like this:
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
   };
 
-  useEffect(() => {
-    setHasAccess(true);
-  }, []);
 
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         setHasAccess(false);
+  //         return;
+  //       }
+
+  //       const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (res.data.message === "Access granted") {
+  //         setHasAccess(true);
+  //       } else {
+  //         setHasAccess(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("Access check failed:", err);
+  //       setHasAccess(false);
+  //     }
+  //   })();
+  // }, [seriesId]);
+
+  // ---------------- Fetch details ----------------
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setHasAccess(false);
+          return;
+        }
+
+        const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          validateStatus: (status) => status < 500, // 4xx को error मत मानो
+        });
+
+        if (res.status === 200 && res.data.message === "Access granted") {
+          setHasAccess(true);
+        } else {
+          setHasAccess(false);
+        }
+      } catch (err) {
+        console.error("Access check failed:", err);
+        setHasAccess(false);
+      }
+    })();
+  }, [seriesId]);
+
+
+  console.log(series, "serise");
   const fetchSeries = async () => {
     try {
       const res = await axiosInstance.get(`/test-series/${seriesId}`);
@@ -983,49 +914,19 @@ export default function TestSeriesUnified() {
   // ---------------- Start Test ----------------
   const handleStart = async (test) => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login to start the test");
-        return;
-      }
-
-      console.log("🚀 Starting test...");
-
+      setSelectedTest(test);
       const res = await axiosInstance.post(
-        `/test-series/${seriesId}/tests/${test._id}/start`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `/test-series/${seriesId}/tests/${test._id}/start`
       );
-
-      if (res.data.success) {
-        console.log("✅ Test started successfully, setting state...");
-
-        // ✅ Set all state first
-        setSelectedTest(test);
-        setAttemptId(res.data.attempt_id);
-        setPerQTime(res.data.perQuestionTimeSec || 30);
-        setIndex(res.data.currentIndex);
-        setTotal(res.data.total);
-        setQ(res.data.question);
-        setSelectedOptions([]);
-        setNumericAnswer("");
-        setMode("attempt");
-
-        // ✅ Use useEffect to start timer after state is definitely updated
-        // This ensures all state is set before timer starts
-        setTimeout(() => {
-          console.log("🕒 Starting timer after state update...");
-          startTimer(res.data.perQuestionTimeSec || 30);
-        }, 50);
-
-        toast.success("Test started successfully!");
-      } else {
-        toast.error(res.data.message || "Failed to start test");
-      }
+      setAttemptId(res.data.attempt_id);
+      setPerQTime(res.data.perQuestionTimeSec || 30);
+      setIndex(res.data.currentIndex);
+      setTotal(res.data.total);
+      setQ(res.data.question);
+      setSelectedOptions([]);
+      setNumericAnswer("");
+      setMode("attempt");
+      startTimer(res.data.perQuestionTimeSec || 30);
     } catch (e) {
       console.error(e);
       if (e.response?.status === 401) {
@@ -1181,39 +1082,16 @@ export default function TestSeriesUnified() {
   // };
 
   const handleFinish = async () => {
-  if (!attemptId) return;
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Please login again");
-      return;
-    }
-
-    const res = await axiosInstance.post(
-      `/test-series/${seriesId}/attempts/${attemptId}/finish`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    setResult(res.data.result);
-    stopTimer();
-
-    setMode("result");
-    
-    // ✅ FIXED: Pass correct parameters to fetchRanking
-    fetchRanking(seriesId, selectedTest._id, attemptId);
-    
-    toast.success("Test submitted successfully!");
-  } catch (e) {
-    console.error(e);
-    if (e.response?.status === 401) {
-      toast.error("Session expired. Please login again.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    } else {
+    if (!attemptId) return;
+    try {
+      const res = await axiosInstance.post(
+        `/test-series/${seriesId}/attempts/${attemptId}/finish`
+      );
+      setResult(res.data.result);
+      stopTimer();
+      setMode("result");
+    } catch (e) {
+      console.error(e);
       toast.error(e?.response?.data?.message || "Failed to finish.");
     }
   }
@@ -1685,6 +1563,107 @@ export default function TestSeriesUnified() {
   return null;
 }
 
+/* ---------- Sidebar Card ---------- */
+function SidebarCard({ series, hasAccess }) {
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();
+    const response = await addToCart({ itemType, itemId });
+    if (response?.success) toast.success(response.message);
+    else toast.error(response?.message || "Failed to add");
+  };
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: series?.title,
+          text: "Check out this test series!",
+          url: window.location.href,
+        })
+        .catch((err) => console.error("Share failed:", err));
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
+  const img =
+    `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}` ||
+    (series?.images?.[0]
+      ? `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}`
+      : "/placeholder-test.jpg");
+  return (
+    <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
+      <div className="relative h-64 rounded-xl overflow-hidden mb-5">
+        <Image
+          src={img}
+          alt={series?.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+          Test Series
+        </span>
+      </div>
+      <div className="p-2">
+        <h2 className="text-xl font-bold text-gray-800">{series?.title}</h2>
+        <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+          <Award size={16} className="text-[#204972]" />
+          {series?.exam_id?.name}
+        </p>
+        <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
+          <span className="flex items-center gap-1">
+            <Clock size={16} className="text-blue-500" />
+            {series?.validity}
+          </span>
+          <span className="flex items-center gap-1">
+            <FileText size={16} className="text-green-500" />
+            {series?.total_tests} Tests
+          </span>
+        </div>
+        <hr className="my-5 border-gray-100" />
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <span className="text-xs text-gray-500 line-through">
+              ₹{series?.price}
+            </span>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-xl font-bold text-[#204972]">
+                ₹{series?.discount_price}
+              </span>
+              <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                {Math.round((1 - series?.discount_price / series?.price) * 100)}
+                % OFF
+              </span>
+            </div>
+          </div>
+        </div>
+        {!hasAccess && (
+          <button
+            onClick={(e) => {
+              handleAdd(e, "testSeries", series?._id);
+              openCart();
+            }}
+            className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
+          >
+            Add to Library
+          </button>
+
+        )}
+        <div
+          onClick={handleShare}
+          className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer"
+        >
+          <Share2 size={18} className="text-blue-500" />
+          <span className="text-sm font-medium">Share</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Small stat tile ---------- */
 function Stat({ label, value }) {
   const colors = {
     Total: "text-[#00316B]",
