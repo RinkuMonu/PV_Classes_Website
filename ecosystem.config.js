@@ -1,12 +1,13 @@
-// ecosystem.config.js
-export const apps = [
-  {
-    name: "next-dashboard-3002",
-    script: "npm",
-    args: "start",
-    env: {
-      PORT: 3002,
-      NODE_ENV: "production"
+module.exports = {
+  apps: [
+    {
+      name: "pvclasses.in",
+      script: "node_modules/next/dist/bin/next",
+      args: "start -p 3006",
+      cwd: "/home/pvclasses.in/PV_Classes_Website-main",
+      env: {
+        NODE_ENV: "production"
+      }
     }
-  }
-];
+  ]
+}
