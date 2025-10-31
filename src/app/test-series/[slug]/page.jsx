@@ -1699,10 +1699,9 @@ function Stat({ label, value }) {
         className={`text-3xl font-extrabold mt-1 ${colors[label] || "text-[#00316B]"
           }`}
       >
+        
         {value}
       </div>
     </div>
   );
-  
-  
 }
