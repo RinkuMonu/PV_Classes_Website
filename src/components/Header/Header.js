@@ -1259,6 +1259,7 @@ export default function Header() {
               Home
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
+            
             <div
               className="relative group"
               onMouseEnter={() => setCoursesMenu(true)}
