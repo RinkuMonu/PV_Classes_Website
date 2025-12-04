@@ -1270,7 +1270,7 @@ export default function Header() {
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
               </button>
               {coursesMenu && (
-                <div className="absolute -left-75 top-full w-[1200px] z-50">
+                <div className="absolute -left-50 top-full w-[1050px] z-50">
                   <ExamMegaMenu />
                 </div>
               )}

@@ -77,12 +77,12 @@ export default function Page() {
                   >
                     <Link href={`/test-series/${series?._id}`} className="block">
                       {/* Image Section with Gradient Overlay */}
-                      <div className="relative w-full h-56 overflow-hidden">
+                      <div className="relative w-full h-56 my-2 overflow-hidden">
                         <Image
                           src={imgSrc}
                           alt={series?.title || "Test Series"}
                           fill
-                          className="object-cover rounded-t-2xl group-hover:scale-110 transition-transform duration-700"
+                          className="object-contain rounded-t-2xl"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70 group-hover:opacity-80 transition-opacity"></div>
 

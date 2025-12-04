@@ -250,7 +250,7 @@ export default function TestSeriesHome() {
                             src={imgSrc}
                             alt={series?.title || "Test Series"}
                             fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="object-contain"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
