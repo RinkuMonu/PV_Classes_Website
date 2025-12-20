@@ -8,6 +8,7 @@ import CourseHero from "../../components/CourseHero";
 import FilterDrawer from "../../components/FilterDrawer";
 import ExamToolbar from "../../components/ExamToolbar";
 import { useCart } from "../../components/context/CartContext";
+import Image from "next/image";
 
 const formatINR = (n) =>
   typeof n === "number"
@@ -184,7 +185,9 @@ export default function CoursesPage() {
                   href={`/courses/${c?._id}`}
                   className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
-                  <img
+                  <Image
+                  width={200}
+                  height={200}
                     src={c?.full_image?.[0] || "/vercel.svg"}
                     // src={`http://localhost:5000${c?.images?.[0]}`}
                     alt={c?.title || "Course"}

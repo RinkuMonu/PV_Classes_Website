@@ -1,4 +1,5 @@
 // components/CourseCard.jsx
+import Image from "next/image";
 import Link from "next/link";
 
 function slugify(str = "") {
@@ -26,7 +27,9 @@ export default function CourseCard({ course, formatINR }) {
     >
       <article>
         <div className="aspect-[4/5] w-full overflow-hidden rounded-b-none">
-          <img
+          <Image
+width ={200}
+height ={200}
             src={thumbnail}
             alt={`${shortTitle || title} thumbnail`}
             className="h-full w-full object-cover"

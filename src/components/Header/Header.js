@@ -1104,7 +1104,7 @@ export default function Header() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false)
   const lastScrollRef = useRef(0)
-  
+
   const toggleCategory = (category) => {
     setActiveCategory(activeCategory === category ? null : category)
   }
@@ -1259,7 +1259,7 @@ export default function Header() {
               Home
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
-            
+
             <div
               className="relative group"
               onMouseEnter={() => setCoursesMenu(true)}
@@ -1306,19 +1306,19 @@ export default function Header() {
             </Link>
           </nav>
 
-             <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
 
-          {/* Add the NotificationSystem component */}
-          {/* <NotificationSystem /> */}
+            {/* Add the NotificationSystem component */}
+            {/* <NotificationSystem /> */}
 
 
-              {isLoggedIn && (
-                     <NotificationSystem />
+            {isLoggedIn && (
+              <NotificationSystem />
 
             )}
-          
-          {/* Other header items like user profile */}
-        </div>
+
+            {/* Other header items like user profile */}
+          </div>
 
           <div className="flex items-center">
             <Link href="/contact-us">
@@ -1395,7 +1395,9 @@ export default function Header() {
                         >
                           {/* Product Image */}
                           <div className="flex-shrink-0">
-                            <img
+                            <Image
+                              width={100}
+                              height={100}
                               src={item?.details?.full_image?.[0]}
                               alt={item?.details?.title}
                               className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
@@ -1573,7 +1575,9 @@ export default function Header() {
                           )}
                           {item?.details?.books?.length > 0 && (
                             <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <img
+                              <Image
+                                width={100}
+                                height={100}
                                 src={item?.details?.books?.[0]?.full_image?.[0] || "/placeholder.svg"}
                                 alt={item?.details?.books?.[0]?.title}
                                 className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
@@ -1583,7 +1587,9 @@ export default function Header() {
                           )}
                           {item?.details?.testSeries?.length > 0 && (
                             <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <img
+                              <Image
+                                width={100}
+                                height={100}
                                 src={item?.details?.testSeries?.[0]?.full_image?.[0] || "/placeholder.svg"}
                                 alt={item?.details?.testSeries?.[0]?.title}
                                 className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
@@ -1601,7 +1607,9 @@ export default function Header() {
                           )}
                         </div>
                       ) : (
-                        <img
+                        <Image
+                          width={100}
+                          height={100}
                           src={item?.details?.full_image?.[0] || "/placeholder.svg"}
                           alt={item?.details?.title}
                           className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
@@ -1872,11 +1880,11 @@ export default function Header() {
           }}
         ></div>
       )}
-      
+
       {/* Modals */}
       {isLoginModalOpen && (
-        <LoginModal 
-          onClose={() => setIsLoginModalOpen(false)} 
+        <LoginModal
+          onClose={() => setIsLoginModalOpen(false)}
           onRegisterClick={() => {
             setIsLoginModalOpen(false);
             setIsRegisterModalOpen(true);
@@ -1891,10 +1899,10 @@ export default function Header() {
           }}
         />
       )}
-      
+
       {isRegisterModalOpen && (
-        <RegisterModal 
-          onClose={() => setIsRegisterModalOpen(false)} 
+        <RegisterModal
+          onClose={() => setIsRegisterModalOpen(false)}
           onLoginClick={() => {
             setIsRegisterModalOpen(false);
             setIsLoginModalOpen(true);
@@ -1905,10 +1913,10 @@ export default function Header() {
           }}
         />
       )}
-      
+
       {isForgotPasswordModalOpen && (
-        <ForgotPasswordModal 
-          onClose={() => setIsForgotPasswordModalOpen(false)} 
+        <ForgotPasswordModal
+          onClose={() => setIsForgotPasswordModalOpen(false)}
           onLoginClick={() => {
             setIsForgotPasswordModalOpen(false);
             setIsLoginModalOpen(true);

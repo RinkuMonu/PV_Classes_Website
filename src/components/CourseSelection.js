@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import axiosInstance from "../app/axios/axiosInstance";
+import Image from "next/image";
 
 export default function CoursesSection() {
   // State for categories, exam types, exams, and courses
@@ -485,7 +486,9 @@ useEffect(() => {
                       {/* Course Image */}
                       {course?.full_image?.length > 0 ? (
                         <div className="w-full h-48 overflow-hidden">
-                          <img
+                          <Image
+width ={200}
+height ={200}
                             src={course?.full_image?.[0]}
                             alt={course?.title || "Course Image"}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
