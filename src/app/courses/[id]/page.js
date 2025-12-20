@@ -240,7 +240,9 @@ export default function CourseDetailsPage() {
       >
         <div className="flex items-start gap-3">
           {imageUrl ? (
-            <img
+            <Image
+width ={100}
+height ={100}
               src={imageUrl}
               alt={title}
               className="w-32 h-32 object-contain rounded-lg border"
@@ -318,7 +320,9 @@ export default function CourseDetailsPage() {
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
               <div className="flex flex-col md:flex-row gap-6">
                 {course?.images?.[0] && (
-                  <img
+                  <Image
+width ={100}
+height ={100}
                     src={course.full_image[0]}
                     // src={`http://localhost:5000${course?.images?.[0]}`}
                     alt={course.title}
@@ -785,7 +789,9 @@ export default function CourseDetailsPage() {
                         <div className="flex items-start mb-4">
                           <div className="flex-shrink-0 mr-4">
                             <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md">
-                              <img
+                              <Image
+width ={100}
+height ={100}
                                 src={facultyPhoto}
                                 alt={facultyMember.name}
                                 className="w-full h-full object-cover"

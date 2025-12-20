@@ -181,6 +181,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { FaBook, FaArrowRight, FaChevronRight } from "react-icons/fa"
 import axiosInstance from "../app/axios/axiosInstance"
+import Image from "next/image"
 
 export default function CategoryCoursesSection({ category }) {
   const [examTypes, setExamTypes] = useState([])
@@ -385,7 +386,9 @@ export default function CategoryCoursesSection({ category }) {
 
                 {course?.full_image?.length > 0 ? (
                   <div className="overflow-hidden relative">
-                    <img
+                    <Image
+width ={100}
+height ={100}
                       src={course?.full_image?.[0]}
                       alt={course?.title || "Course"}
                       className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-500"

@@ -1,7 +1,7 @@
 
 
 // components/ReviewSection.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../app/axios/axiosInstance';
 import toast from 'react-hot-toast';
 
@@ -13,31 +13,32 @@ const ReviewSection = ({ courseId }) => {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+   const fetchReviews = useCallback(async () => {
+  try {
+    const response = await axiosInstance.get("/reviews");
+
+    // Filter reviews for this specific course and approved ones
+    const courseReviews = response.data.filter((review) => {
+      const isApproved = review.approved;
+      const isForThisCourse =
+        review.course && review.course._id === courseId;
+
+      return isApproved && isForThisCourse;
+    });
+
+    setReviews(courseReviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    toast.error("Failed to load reviews");
+  } finally {
+    setLoading(false);
+  }
+}, [courseId]);
   useEffect(() => {
     fetchReviews();
-  }, [courseId]);
+  }, [ fetchReviews]);
 
-  const fetchReviews = async () => {
-    try {
-      const response = await axiosInstance.get('/reviews');
-      
-      // Filter reviews for this specific course and approved ones
-      const courseReviews = response.data.filter(review => {
-        // Check if review is approved and belongs to this course
-        const isApproved = review.approved;
-        const isForThisCourse = review.course && review.course._id === courseId;
-        
-        return isApproved && isForThisCourse;
-      });
-      
-      setReviews(courseReviews);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-      toast.error('Failed to load reviews');
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const submitReview = async (e) => {
     e.preventDefault();

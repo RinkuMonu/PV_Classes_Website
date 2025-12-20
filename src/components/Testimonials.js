@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../app/axios/axiosInstance";
 
 export default function Testimonials() {
@@ -9,6 +9,14 @@ export default function Testimonials() {
   const [isHovering, setIsHovering] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3); // default: 3 for desktop
+
+  const nextSlide = useCallback(() => {
+  if (testimonials?.length > 0) {
+    setCurrentIndex(
+      (prevIndex) => (prevIndex + 1) % testimonials.length
+    );
+  }
+}, [testimonials.length]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -23,14 +31,16 @@ export default function Testimonials() {
   }, []);
 
   // ✅ handle auto sliding
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isHovering && testimonials?.length > 0) {
-        nextSlide();
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isHovering, currentIndex, testimonials]);
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (!isHovering && testimonials?.length > 0) {
+      nextSlide();
+    }
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [isHovering, testimonials, nextSlide]);
+
 
   // ✅ detect screen size (1 card on mobile, 3 on desktop)
   useEffect(() => {
@@ -48,13 +58,7 @@ export default function Testimonials() {
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
-  const nextSlide = () => {
-    if (testimonials?.length > 0) {
-      setCurrentIndex(
-        (prevIndex) => (prevIndex + 1) % testimonials?.length
-      );
-    }
-  };
+
 
   const prevSlide = () => {
     if (testimonials?.length > 0) {

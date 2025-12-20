@@ -1,7 +1,7 @@
 "use client"
 import toast from "react-hot-toast";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CheckoutSuccessPopup from "../../components/CheckoutSuccessPopup";
 // import QRCode from "react-qr-code"
 import { ChevronLeft, Wallet, Check, CreditCard, Clock, Shield } from "lucide-react"
@@ -11,6 +11,7 @@ import axios from "axios"
 import Link from "next/link"
 import { useCart } from "../../components/context/CartContext";
 import axiosInstance from "../axios/axiosInstance";
+import Image from "next/image";
 
 // import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 // import LoginModal from "../components/loginModal/loginModal";
@@ -21,9 +22,9 @@ import axiosInstance from "../axios/axiosInstance";
 function AddressShipping() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [oldTotalPrice, setOldTotalPrice] = useState(0);
-  const [disabled,setDisabled] = useState(false);
-  const { cart,clearCart,setCartCount } = useCart();
-  const [couponCode, setCouponCode] = useState({ code: "", discount: "",couponId: "" });
+  const [disabled, setDisabled] = useState(false);
+  const { cart, clearCart, setCartCount } = useCart();
+  const [couponCode, setCouponCode] = useState({ code: "", discount: "", couponId: "" });
   useEffect(() => {
     setDisabled(!(cart && cart.length > 0));
   }, [cart]);
@@ -57,7 +58,7 @@ function AddressShipping() {
   const [city, setCity] = useState("")
   const [errors, setErrors] = useState({})
   const [touchedFields, setTouchedFields] = useState({});
-  const [coupon,setCoupon] = useState([]);
+  const [coupon, setCoupon] = useState([]);
   const token = "zsdfgyxchh"
   const [totalAmount, setTotalAmount] = useState(0);
   let total = 0;
@@ -79,9 +80,9 @@ function AddressShipping() {
     setOldTotalPrice(total);
   }, [cart]);
 
-  console.log("total amount = ",totalAmount);
+  console.log("total amount = ", totalAmount);
   const [userdata, setUserData] = useState({
-    id:"",
+    id: "",
     name: "",
     email: "",
     phone: "",
@@ -92,7 +93,7 @@ function AddressShipping() {
   });
   const fetchUserData = async () => {
     const token = localStorage.getItem("token");
-    if (token){
+    if (token) {
 
       try {
         const { data } = await axiosInstance.get("/users/getUser", {
@@ -115,7 +116,7 @@ function AddressShipping() {
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
-    }  
+    }
   };
   const checkout = async () => {
     try {
@@ -142,7 +143,7 @@ function AddressShipping() {
           }
         );
       }
-      
+
       // fetchCoupons();
       if (data.message == 'Checkout successful, order created, access granted!') {
         setOrderSuccess(true);
@@ -247,7 +248,7 @@ function AddressShipping() {
     const isUserLoggedIn = !!localStorage.getItem("token");
 
     if (!isUserLoggedIn) {
-  
+
       return;
     }
     if (!validateForm()) {
@@ -302,11 +303,11 @@ function AddressShipping() {
       }
       if (!selectedPayment) {
         Swal.fire({
-        title: 'Failed!',
-        text: 'Please select a payment method.',
-        icon: 'error',
-        confirmButtonText: 'Retry',
-      });
+          title: 'Failed!',
+          text: 'Please select a payment method.',
+          icon: 'error',
+          confirmButtonText: 'Retry',
+        });
         setIsLoading(false)
         return
       }
@@ -388,7 +389,7 @@ function AddressShipping() {
   useEffect(() => {
     const fetchCoupons = async () => {
       const token = localStorage.getItem("token"); // token localStorage se nikal rahe ho
-      if(token){
+      if (token) {
         try {
           const { data } = await axiosInstance.get("/coupon", {
             headers: {
@@ -399,54 +400,69 @@ function AddressShipping() {
         } catch (error) {
           console.error("Error fetching coupons:", error);
         }
-      }else{
+      } else {
         setCoupon([]);
       }
-      
+
     };
     fetchCoupons();
   }, []);
 
-  let totalTime = 0
-  useEffect(() => {
-    if (!reference) return
-    const maxDuration = 4 * 60 * 1000
-    const intervalTime = 15000
-    const interval = setInterval(async () => {
-      totalTime += intervalTime
-      try {
-        setIsLoading(true)
-        const response = await axios.get(
-          `https://api.worldpayme.com/api/v1.1/payinTransactionCheckStatus/${reference}`,
-          {
-            headers: {
-              Authorization: `Bearer ${selectedPayment === "upi1"
+const totalTimeRef = useRef(0);
+
+useEffect(() => {
+  if (!reference) return;
+
+  const maxDuration = 4 * 60 * 1000;
+  const intervalTime = 15000;
+
+  totalTimeRef.current = 0;
+
+  const interval = setInterval(async () => {
+    totalTimeRef.current += intervalTime;
+
+    try {
+      setIsLoading(true);
+
+      const response = await axios.get(
+        `https://api.worldpayme.com/api/v1.1/payinTransactionCheckStatus/${reference}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              selectedPayment === "upi1"
                 ? token
-                : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4IiwianRpIjoiNzE1ZDJlODJiZTYxYzdiYjk1YzZhNDA0ZTdlYTNiZDRjOTNkYWRmNWEzYmJiYmExYmFhNTI2ZGIxNzVkNjhhNmI1YmZjZWU3N2ZmMTgwMDkiLCJpYXQiOjE3NDg1MTgwNTYuMjcyNDQyLCJuYmYiOjE3NDg1MTgwNTYuMjcyNDQ0LCJleHAiOjE3ODAwNTQwNTYuMjY5OTk3LCJzdWIiOiIzMDMiLCJzY29wZXMiOltdfQ.ElJzC40DRfPxMCJn8hKPJwOQqinyzK2yRONmLIky4IElGAeDJzghUbiBQg6uVIe0qMnQZCTY66trEbVh25TJZYpWv_rEyP4LYMhFNtyHOyEothKg-RAWt99y4baqf10wp5Mfl1YdUI3lQaYHKYF1B0y8gJFtLghvj8nxsWdi5a_V7TfkzcGGWy5HtqZnaYyDWxJCSIjm41E2mfJVoDrGz5_DMHCQq50JHN8rJwlx4R6pH4uD-D-xoYZsTgdg94ogkuuyWRpNpHTPx6ku9D6AVqO4gz8pGysphatUaIUeAHciNDNVW_hU3ReHMXUc6GsySmPjoogmRZJqtrtv432N4dhVZYZM8uPH8LmI437xsiT8Pwh8eigfJeiizElf0_sMgeNL7wwfkfsIkjWiNQlai9l0tgXpkSh_B4WHwbGMlhjN-xebvWE3NmiUu8Ut9m-aHyL-TCLX_hbkGepgEBilGiyqPzbpP9oNPXO7t3Js4MxAaFQjP4M2hHyHfxMPUUCbUEboS2cdL9uQpag_X9Z7w9cQMTaC6bFjv-RuAJhwGvSMHvs3paOZqdZxRd4bwybXUyCIisqdG1FHoFgPoz5tA5bYZ8CpILbYGuxPHeCpN51c0_QhOfGcEUT5st7PUadqwiQG1WJBOQ6XHquUNAt9ZySDpB9DjLtQ4jxjQbyer6I"
-                }`,
-              "Content-Type": "application/json",
-            },
+                : "HARDCODED_TOKEN"
+            }`,
+            "Content-Type": "application/json",
           },
-        )
-        console.log("responseeeeeeeeee", response.data)
-        const { data } = response.data
-        const txnStatus = data?.status || "Unknown"
-        if (txnStatus === "Success" || txnStatus === "Failed") {
-          clearInterval(interval)
-          navigate(`/resultPage?status=${txnStatus}&txnId=${data.transactionNo}`)
-        } else if (totalTime >= maxDuration) {
-          clearInterval(interval)
-          navigate(`/resultPage?status=timeout&txnId=${reference}`)
         }
-      } catch (error) {
-        console.error("Error fetching payout status:", error)
-        clearInterval(interval)
-      } finally {
-        setIsLoading(false)
+      );
+
+      const { data } = response.data;
+      const txnStatus = data?.status || "Unknown";
+
+      if (txnStatus === "Success" || txnStatus === "Failed") {
+        clearInterval(interval);
+        navigate(
+          `/resultPage?status=${txnStatus}&txnId=${data.transactionNo}`
+        );
+      } else if (totalTimeRef.current >= maxDuration) {
+        clearInterval(interval);
+        navigate(
+          `/resultPage?status=timeout&txnId=${reference}`
+        );
       }
-    }, intervalTime)
-    return () => clearInterval(interval)
-  }, [reference])
+    } catch (error) {
+      console.error("Error fetching payout status:", error);
+      clearInterval(interval);
+    } finally {
+      setIsLoading(false);
+    }
+  }, intervalTime);
+
+  return () => clearInterval(interval);
+}, [reference, selectedPayment, token]);
+
 
   useEffect(() => {
     if (!startTimer || timeLeft <= 0) return
@@ -468,21 +484,21 @@ function AddressShipping() {
     totalAmount: 0,
     paymentMethod: "cod",
   });
-  
+
   useEffect(() => {
-  setTotalOrder({
-    cart: cart,
-    totalAmount: totalAmount,
-    paymentMethod: "cod",
-    couponId: couponCode.couponId,
-  });
-}, [cart, totalAmount,couponCode]);
+    setTotalOrder({
+      cart: cart,
+      totalAmount: totalAmount,
+      paymentMethod: "cod",
+      couponId: couponCode.couponId,
+    });
+  }, [cart, totalAmount, couponCode]);
 
   return (
-    <> 
-    {orderSuccess && (
-      <CheckoutSuccessPopup message="Your order has been placed successfully. You'll receive updates soon 🚚" />
-    )}
+    <>
+      {orderSuccess && (
+        <CheckoutSuccessPopup message="Your order has been placed successfully. You'll receive updates soon 🚚" />
+      )}
       <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
           {/* Header Section */}
@@ -497,7 +513,7 @@ function AddressShipping() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Order Details */}
             <div className="lg:col-span-2 px-4">
-              <div className="bg-white rounded-lg shadow-sm border-2 border-gray-100 p-6 mb-6">               
+              <div className="bg-white rounded-lg shadow-sm border-2 border-gray-100 p-6 mb-6">
 
                 {/* Shipping Information */}
                 {/* <div className="mb-8">
@@ -552,7 +568,7 @@ function AddressShipping() {
                         <div className="ml-3">
                           <span className="block font-medium text-gray-900">Cash on delivery</span>
                         </div>
-                      </label>                      
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -567,8 +583,8 @@ function AddressShipping() {
                     rows={4}
                     placeholder="Notes about your order, e.g. special instructions for delivery"
                   />
-                </div>                
-              </div>             
+                </div>
+              </div>
             </div>
             {/* Right Column - Order Summary */}
             <div className="lg:col-span-1">
@@ -587,47 +603,53 @@ function AddressShipping() {
                       >
                         <div className="flex-shrink-0">
                           {item?.itemType === "combo" ? (
-                        <div className="grid grid-cols-2 gap-3">
-                          {/* Books */}
-                          {item?.details?.pyqs?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <span className="text-lg font-bold text-[#00316B]">
-                                {item?.details?.pyqs?.length}
-                              </span>
-                              <span className="text-xs text-[#204972]">PYQs</span>
+                            <div className="grid grid-cols-2 gap-3">
+                              {/* Books */}
+                              {item?.details?.pyqs?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.pyqs?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">PYQs</span>
+                                </div>
+                              )}
+                              {item?.details?.books?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <Image
+                                    width={100}
+                                    height={100}
+                                    src={item?.details?.books?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                    alt={item?.details?.books?.[0]?.title}
+                                    className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                                  />
+                                  <span className="text-xs text-[#204972]">books</span>
+                                </div>
+                              )}
+                              {item?.details?.testSeries?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <Image
+                                    width={100}
+                                    height={100}
+                                    src={item?.details?.testSeries?.[0]?.full_image?.[0] || "/placeholder.svg"}
+                                    alt={item?.details?.testSeries?.[0]?.title}
+                                    className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
+                                  />
+                                  <span className="text-xs text-[#204972]">test series</span>
+                                </div>
+                              )}
+                              {item?.details?.course?.length > 0 && (
+                                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
+                                  <span className="text-lg font-bold text-[#00316B]">
+                                    {item?.details?.course?.length}
+                                  </span>
+                                  <span className="text-xs text-[#204972]">courses</span>
+                                </div>
+                              )}
                             </div>
-                          )}
-                          {item?.details?.books?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <img
-                                src={item?.details?.books?.[0]?.full_image?.[0] || "/placeholder.svg"}
-                                alt={item?.details?.books?.[0]?.title}
-                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
-                              />
-                              <span className="text-xs text-[#204972]">books</span>
-                            </div>
-                          )}
-                          {item?.details?.testSeries?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <img
-                                src={item?.details?.testSeries?.[0]?.full_image?.[0] || "/placeholder.svg"}
-                                alt={item?.details?.testSeries?.[0]?.title}
-                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
-                              />
-                              <span className="text-xs text-[#204972]">test series</span>
-                            </div>
-                          )}
-                          {item?.details?.course?.length > 0 && (
-                            <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow border border-[#009FE3]/20">
-                              <span className="text-lg font-bold text-[#00316B]">
-                                {item?.details?.course?.length}
-                              </span>
-                              <span className="text-xs text-[#204972]">courses</span>
-                            </div>
-                          )}                          
-                        </div>
                           ) : (
-                            <img
+                            <Image
+                              width={100}
+                              height={100}
                               src={item?.details?.full_image?.[0] || "/placeholder.svg"}
                               alt={item?.details?.title}
                               className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
@@ -658,10 +680,10 @@ function AddressShipping() {
                   )}
                   {/* Coupon Section */}
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-[#2A4172]">Available Coupons</h3>                    
+                    <h3 className="text-sm font-semibold text-[#2A4172]">Available Coupons</h3>
                     <div className="space-y-4">
                       {/* Coupon List */}
-                     {coupon?.length > 0 ? (
+                      {coupon?.length > 0 ? (
                         coupon.map((c) => (
                           <div
                             key={c?._id}
@@ -698,28 +720,27 @@ function AddressShipping() {
 
 
                       {/* Input + Apply Button */}
-                     <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={couponCode.code}
-                        onChange={(e) =>
-                          setCouponCode((prev) => ({ ...prev, code: e.target.value }))
-                        }
-                        placeholder="Enter or paste coupon code"
-                        className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#384D89]"
-                      />
-                      <button
-                        onClick={() => handleApplyCoupon(couponCode.discount)}
-                        disabled={disabled}
-                        className={`text-sm px-4 py-2 rounded-lg transition ${
-                          !couponCode.code?.trim()
-                            ? "bg-gray-400 cursor-not-allowed"
-                            : "bg-green-600 text-white hover:bg-green-700"
-                        }`}
-                      >
-                        Apply
-                      </button>
-                    </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={couponCode.code}
+                          onChange={(e) =>
+                            setCouponCode((prev) => ({ ...prev, code: e.target.value }))
+                          }
+                          placeholder="Enter or paste coupon code"
+                          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#384D89]"
+                        />
+                        <button
+                          onClick={() => handleApplyCoupon(couponCode.discount)}
+                          disabled={disabled}
+                          className={`text-sm px-4 py-2 rounded-lg transition ${!couponCode.code?.trim()
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-green-600 text-white hover:bg-green-700"
+                            }`}
+                        >
+                          Apply
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -762,11 +783,10 @@ function AddressShipping() {
                     <button
                       onClick={checkout}
                       disabled={disabled}
-                      className={`block w-full py-4 px-6 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl cursor-pointer ${
-                        cart?.length === 0
+                      className={`block w-full py-4 px-6 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-xl cursor-pointer ${cart?.length === 0
                           ? "bg-gray-400 cursor-not-allowed"
                           : "bg-[#384D89] hover:shadow-2xl transform hover:-translate-y-0.5"
-                      }`}
+                        }`}
                     >
                       Proceed to Checkout
                     </button>
@@ -790,7 +810,7 @@ function AddressShipping() {
             </div>
           </div>
         </div>
-      </div>     
+      </div>
     </>
   )
 }
