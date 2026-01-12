@@ -10,15 +10,15 @@ export default function AboutUs() {
         <title>About PV Classes | Best Coaching Institute</title>
         <meta name="description" content="Learn about PV Classes - our mission, values, and dedicated team of educators" />
       </Head>
-      
+
       {/* Enhanced Hero Section with Education Theme */}
-      <section 
+      <section
         className="relative py-20 bg-gradient-to-r from-[#0F437B] via-[#1a5a9c] to-[#13773E] text-white overflow-hidden"
       >
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-32 h-32 bg-[#5C6417] opacity-20 rounded-full -translate-x-16 -translate-y-16"></div>
         <div className="absolute bottom-0 right-0 w-40 h-40 bg-[#13773E] opacity-15 rounded-full translate-x-20 translate-y-20"></div>
-        
+
         <div className="container relative mx-auto px-6 text-center">
           <div className="inline-block p-3 bg-white/10 rounded-full backdrop-blur-sm mb-6">
             <FaBookOpen className="text-3xl" />
@@ -45,7 +45,7 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
-      
+
       {/* Mission Section with Image */}
       <section className="py-16 px-6">
         <div className="container mx-auto max-w-5xl">
@@ -109,7 +109,7 @@ export default function AboutUs() {
             <h2 className="text-3xl font-bold text-[#204972] mb-4">Our Core Values</h2>
             <p className="text-gray-600">The principles that guide our teaching methodology and student engagement</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               {
@@ -143,181 +143,181 @@ export default function AboutUs() {
         </div>
       </section>
 
-    {/* Enhanced Team Section with Teacher Profiles */}
-<section className="py-16 px-6 bg-gray-50">
-  <div className="container mx-auto max-w-6xl">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold text-[#204972] mb-4">Meet Our Expert Faculty</h2>
-      <p className="text-gray-600 max-w-2xl mx-auto">Our team of experienced educators is dedicated to guiding students towards academic success with personalized attention.</p>
-    </div>
-    
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      {/* Teacher 1: Pankaj Sir */}
-      <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-cyan-50">
-        <div className="p-6">
-          {/* Teacher Image - Replace with actual image */}
-          <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
-            <Image 
-              src="/Image/pankajSir.png"
-              alt="Pankaj Sir - Maths & Chemistry Teacher"
-              width={128}
-              height={128}
-              className="w-full h-full object-cover"
-            />
+      {/* Enhanced Team Section with Teacher Profiles */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[#204972] mb-4">Meet Our Expert Faculty</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Our team of experienced educators is dedicated to guiding students towards academic success with personalized attention.</p>
           </div>
-          
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-1">Pankaj Sir</h3>
-            <p className="text-[#214B7D] font-semibold mb-2">Mathematics & Chemistry</p>
-            
-            <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
-              12+ Years Experience
-            </div>
-            
-            <p className="text-gray-600 text-sm mb-4">IIT-JEE, NEET Foundation Specialist</p>
-            
-            <div className="flex justify-center space-x-2">
-              {[1,2,3,4,5].map((star) => (
-                <FaStar key={star} className="text-yellow-400" />
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
-          <div className="flex items-center justify-center text-sm">
-            <FaUsers className="text-[#214B7D] mr-2" />
-            <span className="text-gray-700">300+ Students Taught</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Teacher 2: Vijay Sir */}
-      <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-green-50 to-emerald-50">
-        <div className="p-6">
-          <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
-            <Image 
-              src="/Image/vijaySir.png"
-              alt="Vijay Sir - Geography Teacher"
-              width={128}
-              height={128}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-1">Vijay Sir</h3>
-            <p className="text-[#214B7D] font-semibold mb-2">Geography Expert</p>
-            
-            <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
-              15+ Years Experience
-            </div>
-            
-            <p className="text-gray-600 text-sm mb-4">Rajasthan, India & World Geography</p>
-            
-            <div className="flex justify-center space-x-2">
-              {[1,2,3,4,5].map((star) => (
-                <FaStar key={star} className="text-yellow-400" />
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
-          <div className="flex items-center justify-center text-sm">
-            <FaUsers className="text-[#214B7D] mr-2" />
-            <span className="text-gray-700">350+ Students Taught</span>
-          </div>
-        </div>
-      </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Teacher 1: Pankaj Sir */}
+            <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-cyan-50">
+              <div className="p-6">
+                {/* Teacher Image - Replace with actual image */}
+                <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
+                  <Image
+                    src="/Image/pankajSir.png"
+                    alt="Pankaj Sir - Maths & Chemistry Teacher"
+                    width={128}
+                    height={128}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-      {/* Teacher 3: Akash Sir */}
-      <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-amber-50 to-yellow-50">
-        <div className="p-6">
-          <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
-            <Image 
-              src="/Image/aakashSir.png"
-              alt="Akash Sir - Polity Teacher"
-              width={128}
-              height={128}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-1">Akash Sir</h3>
-            <p className="text-[#214B7D] font-semibold mb-2">Polity Specialist</p>
-            
-            <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
-              10+ Years Experience
-            </div>
-            
-            <p className="text-gray-600 text-sm mb-4">State Policy & Indian Polity</p>
-            
-            <div className="flex justify-center space-x-2">
-              {[1,2,3,4,5].map((star) => (
-                <FaStar key={star} className="text-yellow-400" />
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
-          <div className="flex items-center justify-center text-sm">
-            <FaUsers className="text-[#214B7D] mr-2" />
-            <span className="text-gray-700">280+ Students Taught</span>
-          </div>
-        </div>
-      </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">Pankaj Sir</h3>
+                  <p className="text-[#214B7D] font-semibold mb-2">Mathematics & Chemistry</p>
 
-      {/* Teacher 4: Uma Ma'am */}
-      <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-pink-50">
-        <div className="p-6">
-          <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
-            <Image 
-              src="/Image/umaMam.png"
-              alt="Uma Ma'am - History Teacher"
-              width={128}
-              height={128}
-              className=" object-cover"
-            />
-          </div>
-          
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-1">Uma Ma'am</h3>
-            <p className="text-[#214B7D] font-semibold mb-2">History & Culture</p>
-            
-            <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
-              8+ Years Experience
+                  <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+                    12+ Years Experience
+                  </div>
+
+                  <p className="text-gray-600 text-sm mb-4">IIT-JEE, NEET Foundation Specialist</p>
+
+                  <div className="flex justify-center space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar key={star} className="text-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
+                <div className="flex items-center justify-center text-sm">
+                  <FaUsers className="text-[#214B7D] mr-2" />
+                  <span className="text-gray-700">300+ Students Taught</span>
+                </div>
+              </div>
             </div>
-            
-            <p className="text-gray-600 text-sm mb-4">Rajasthan Culture & History</p>
-            
-            <div className="flex justify-center space-x-2">
-              {[1,2,3,4,5].map((star) => (
-                <FaStar key={star} className="text-yellow-400" />
-              ))}
+
+            {/* Teacher 2: Vijay Sir */}
+            <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-green-50 to-emerald-50">
+              <div className="p-6">
+                <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
+                  <Image
+                    src="/Image/vijaySir.png"
+                    alt="Vijay Sir - Geography Teacher"
+                    width={128}
+                    height={128}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">Vijay Sir</h3>
+                  <p className="text-[#214B7D] font-semibold mb-2">Geography Expert</p>
+
+                  <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+                    15+ Years Experience
+                  </div>
+
+                  <p className="text-gray-600 text-sm mb-4">Rajasthan, India & World Geography</p>
+
+                  <div className="flex justify-center space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar key={star} className="text-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
+                <div className="flex items-center justify-center text-sm">
+                  <FaUsers className="text-[#214B7D] mr-2" />
+                  <span className="text-gray-700">350+ Students Taught</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Teacher 3: Akash Sir */}
+            <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-amber-50 to-yellow-50">
+              <div className="p-6">
+                <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
+                  <Image
+                    src="/Image/aakashSir.png"
+                    alt="Akash Sir - Polity Teacher"
+                    width={128}
+                    height={128}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">Akash Sir</h3>
+                  <p className="text-[#214B7D] font-semibold mb-2">Polity Specialist</p>
+
+                  <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+                    10+ Years Experience
+                  </div>
+
+                  <p className="text-gray-600 text-sm mb-4">State Policy & Indian Polity</p>
+
+                  <div className="flex justify-center space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar key={star} className="text-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
+                <div className="flex items-center justify-center text-sm">
+                  <FaUsers className="text-[#214B7D] mr-2 " />
+                  <span className="text-gray-700">280+ Students Taught</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Teacher 4: Uma Ma'am */}
+            <div className="rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-pink-50">
+              <div className="p-6">
+                <div className="w-32 h-42 mx-auto overflow-hidden border-4 border-white shadow-lg mb-6">
+                  <Image
+                    src="/Image/umaMam.png"
+                    alt="Uma Ma'am - History Teacher"
+                    width={128}
+                    height={128}
+                    className=" object-cover"
+                  />
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">Uma Ma&apos;am</h3>
+                  <p className="text-[#214B7D] font-semibold mb-2">History & Culture</p>
+
+                  <div className="inline-block bg-gradient-to-r from-[#214B7D] to-[#5C6417] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+                    8+ Years Experience
+                  </div>
+
+                  <p className="text-gray-600 text-sm mb-4">Rajasthan Culture & History</p>
+
+                  <div className="flex justify-center space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar key={star} className="text-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
+                <div className="flex items-center justify-center text-sm">
+                  <FaUsers className="text-[#214B7D] mr-2" />
+                  <span className="text-gray-700">250+ Students Taught</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-[#214B7D]/10 to-[#5C6417]/10 px-6 py-3 border-t border-gray-200">
-          <div className="flex items-center justify-center text-sm">
-            <FaUsers className="text-[#214B7D] mr-2" />
-            <span className="text-gray-700">250+ Students Taught</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    {/* Teaching Methodology Section (same as before) */}
-       {/* Teaching Methodology */}
+
+          {/* Teaching Methodology Section (same as before) */}
+          {/* Teaching Methodology */}
           <div className="mt-16 bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-[#204972] mb-3">Our Teaching Methodology</h3>
               <p className="text-gray-600">A structured approach to ensure comprehensive learning</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[
                 { step: "01", title: "Concept Building", desc: "Strong foundation of basic concepts" },
@@ -335,8 +335,8 @@ export default function AboutUs() {
               ))}
             </div>
           </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* Enhanced CTA Section */}
       <section className="py-16 bg-gradient-to-r from-[#0F437B] via-[#214B7D] to-[#13773E] text-white">
@@ -346,22 +346,22 @@ export default function AboutUs() {
             <p className="text-xl mb-8 opacity-90">
               Join hundreds of successful students who have achieved their academic goals with PV Classes.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/contact-us" 
+              <Link
+                href="/contact-us"
                 className="bg-white text-[#204972] px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center"
               >
                 Contact for Admission
               </Link>
-              <Link 
-                href="/courses" 
+              <Link
+                href="/courses"
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-all duration-300 inline-flex items-center justify-center"
               >
                 View Our Courses
               </Link>
             </div>
-            
+
             <div className="mt-12 pt-8 border-t border-white/20">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[

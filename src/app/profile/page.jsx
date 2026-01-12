@@ -903,7 +903,8 @@ export default function ProfilePage() {
                                             </p>
                                         </div>
                                         <a
-                                            href={`http://localhost:5000/${pyq.pdfUrl}`}
+                                            // href={`http://localhost:5000/${pyq.pdfUrl}`}
+                                            href={`https://api.pvclasses.in/${pyq.pdfUrl}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-2 text-[#204972] hover:underline text-sm font-medium"
