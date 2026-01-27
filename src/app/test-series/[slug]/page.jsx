@@ -813,6 +813,11 @@ export default function TestSeriesUnified() {
 
   const [ranking, setRanking] = useState(null);
 
+  const [questionHistory, setQuestionHistory] = useState([]);
+  const [answerHistory, setAnswerHistory] = useState({});
+
+
+
 
   const timerRef = useRef(null);
   const [completedTests, setCompletedTests] = useState({});
@@ -837,17 +842,17 @@ export default function TestSeriesUnified() {
         //   return 0;
         // }
         if (t <= 1) {
-  console.log("⏰ Time's up! Auto-submitting...");
-  clearInterval(timerRef.current);
-  timerRef.current = null;
+          console.log("⏰ Time's up! Auto-submitting...");
+          clearInterval(timerRef.current);
+          timerRef.current = null;
 
-  // ✅ FIX — React warning se bachne ke liye defer karo
-  setTimeout(() => {
-    handleAutoSubmit();
-  }, 0);
+          // ✅ FIX — React warning se bachne ke liye defer karo
+          setTimeout(() => {
+            handleAutoSubmit();
+          }, 0);
 
-  return 0;
-}
+          return 0;
+        }
 
         return t - 1;
       });
@@ -1010,6 +1015,10 @@ export default function TestSeriesUnified() {
         setIndex(res.data.currentIndex);
         setTotal(res.data.total);
         setQ(res.data.question);
+        setQuestionHistory([res.data.question]);
+        setAnswerHistory({});
+
+
         setSelectedOptions([]);
         setNumericAnswer("");
         setMode("attempt");
@@ -1072,69 +1081,227 @@ export default function TestSeriesUnified() {
     }
   };
 
+
+const goToPrevious = () => {
+  if (index === 0) return;
+
+  const prevIndex = index - 1;
+  const prevQuestion = questionHistory[prevIndex];
+
+  if (prevQuestion) {
+    stopTimer();
+    setQ(prevQuestion);
+    setIndex(prevIndex);
+
+    const savedAnswer = answerHistory[prevQuestion._id];
+
+    if (savedAnswer) {
+      if (prevQuestion.type === "numeric") {
+        setNumericAnswer(savedAnswer.numericAnswer || "");
+        setSelectedOptions([]);
+      } else {
+        setSelectedOptions(savedAnswer.selectedOptions || []);
+        setNumericAnswer("");
+      }
+    } else {
+      setSelectedOptions([]);
+      setNumericAnswer("");
+    }
+
+    setTimeout(() => {
+      startTimer(perQTime);
+    }, 50);
+  }
+};
+
+
+  
+
+
   // ---------------- Submit & Next ----------------
-  const handleNext = async () => {
-    if (!attemptId || !q) return;
+//   const handleNext = async () => {
+//     if (!attemptId || !q) return;
+
+//     setAnswerHistory((prev) => ({
+//   ...prev,
+//   [q._id]: q.type === "numeric"
+//     ? { numericAnswer }
+//     : { selectedOptions },
+// }));
+
+
+//     stopTimer();
+
+//     try {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         toast.error("Please login again");
+//         return;
+//       }
+
+//       const payload =
+//         q.type === "numeric"
+//           ? {
+//             numericAnswer:
+//               numericAnswer === "" ? undefined : Number(numericAnswer),
+//           }
+//           : { selectedOptions };
+
+//       const res = await axiosInstance.post(
+//         `/test-series/${seriesId}/attempts/${attemptId}/answer`,
+//         payload,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       if (res.data.done) {
+//         setResult(res.data.result);
+//         setMode("result");
+//         // ✅ YAHAN fetchRanking CALL KARO
+//         console.log("🔄 Test completed, fetching ranking...");
+//         fetchRanking(seriesId, selectedTest._id, attemptId);
+//         toast.success("Test completed!");
+//         return;
+//       }
+
+//       setQ(res.data.question);
+//       setIndex(res.data.currentIndex);
+//       setSelectedOptions([]);
+//       setNumericAnswer("");
+
+      
+//       setPerQTime(res.data.perQuestionTimeSec || perQTime);
+
+//       setQuestionHistory((prev) => [...prev, res.data.question]);
+
+
+//       // Start timer for next question
+//       setTimeout(() => {
+//         startTimer(res.data.perQuestionTimeSec || perQTime);
+//       }, 50);
+
+//     } catch (e) {
+//       console.error(e);
+//       if (e.response?.status === 401) {
+//         toast.error("Session expired. Please login again.");
+//         localStorage.removeItem("token");
+//         router.push("/login");
+//       } else {
+//         toast.error(e?.response?.data?.message || "Failed to submit answer.");
+//       }
+//     }
+//   };
+
+
+const handleNext = async () => {
+  if (!attemptId || !q) return;
+
+  // 🔥 Agar history me next question already hai, sirf navigate karo (API mat call karo)
+  if (questionHistory[index + 1]) {
+    const nextQ = questionHistory[index + 1];
 
     stopTimer();
+    setQ(nextQ);
+    setIndex(index + 1);
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login again");
-        return;
+    const saved = answerHistory[nextQ._id];
+    if (saved) {
+      if (nextQ.type === "numeric") {
+        setNumericAnswer(saved.numericAnswer || "");
+        setSelectedOptions([]);
+      } else {
+        setSelectedOptions(saved.selectedOptions || []);
+        setNumericAnswer("");
       }
+    } else {
+      setSelectedOptions([]);
+      setNumericAnswer("");
+    }
 
-      const payload =
-        q.type === "numeric"
-          ? {
+    setTimeout(() => startTimer(perQTime), 50);
+    return; // ⛔ Yahin ruk jao, server ko kuch mat bhejo
+  }
+
+  // 🔽 Neeche ka code sirf tab chale jab naya question submit ho raha ho
+
+  setAnswerHistory((prev) => ({
+    ...prev,
+    [q._id]: q.type === "numeric"
+      ? { numericAnswer }
+      : { selectedOptions },
+  }));
+
+  stopTimer();
+
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login again");
+      return;
+    }
+
+    const payload =
+      q.type === "numeric"
+        ? {
             numericAnswer:
               numericAnswer === "" ? undefined : Number(numericAnswer),
           }
-          : { selectedOptions };
+        : { selectedOptions };
 
-      const res = await axiosInstance.post(
-        `/test-series/${seriesId}/attempts/${attemptId}/answer`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const res = await axiosInstance.post(
+      `/test-series/${seriesId}/attempts/${attemptId}/answer`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      if (res.data.done) {
-        setResult(res.data.result);
-        setMode("result");
-             // ✅ YAHAN fetchRanking CALL KARO
+    if (res.data.done) {
+      setResult(res.data.result);
+      setMode("result");
       console.log("🔄 Test completed, fetching ranking...");
       fetchRanking(seriesId, selectedTest._id, attemptId);
-        toast.success("Test completed!");
-        return;
-      }
-
-      setQ(res.data.question);
-      setIndex(res.data.currentIndex);
-      setSelectedOptions([]);
-      setNumericAnswer("");
-      setPerQTime(res.data.perQuestionTimeSec || perQTime);
-
-      // Start timer for next question
-      setTimeout(() => {
-        startTimer(res.data.perQuestionTimeSec || perQTime);
-      }, 50);
-
-    } catch (e) {
-      console.error(e);
-      if (e.response?.status === 401) {
-        toast.error("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        router.push("/login");
-      } else {
-        toast.error(e?.response?.data?.message || "Failed to submit answer.");
-      }
+      toast.success("Test completed!");
+      return;
     }
-  };
+
+    const nextQ = res.data.question;
+    const nextIndex = res.data.currentIndex;
+
+    setQ(nextQ);
+    setIndex(nextIndex);
+    setSelectedOptions([]);
+    setNumericAnswer("");
+
+    setPerQTime(res.data.perQuestionTimeSec || perQTime);
+
+    setQuestionHistory((prev) => {
+      if (prev[nextIndex]) return prev;
+      return [...prev, nextQ];
+    });
+
+    setTimeout(() => {
+      startTimer(res.data.perQuestionTimeSec || perQTime);
+    }, 50);
+
+  } catch (e) {
+    console.error(e);
+    if (e.response?.status === 401) {
+      toast.error("Session expired. Please login again.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    } else {
+      toast.error(e?.response?.data?.message || "Failed to submit answer.");
+    }
+  }
+};
+
+
 
   // ---------------- Finish (submit all) ----------------
   // const handleFinish = async () => {
@@ -1159,7 +1326,7 @@ export default function TestSeriesUnified() {
   //     stopTimer();
 
 
-  
+
   //     setMode("result");
   //     fetchRanking(seriesId, selectedTest._id, attemptId);
   //     toast.success("Test submitted successfully!");
@@ -1180,43 +1347,43 @@ export default function TestSeriesUnified() {
   // };
 
   const handleFinish = async () => {
-  if (!attemptId) return;
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Please login again");
-      return;
-    }
-
-    const res = await axiosInstance.post(
-      `/test-series/${seriesId}/attempts/${attemptId}/finish`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    if (!attemptId) return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login again");
+        return;
       }
-    );
-    setResult(res.data.result);
-    stopTimer();
 
-    setMode("result");
-    
-    // ✅ FIXED: Pass correct parameters to fetchRanking
-    fetchRanking(seriesId, selectedTest._id, attemptId);
-    
-    toast.success("Test submitted successfully!");
-  } catch (e) {
-    console.error(e);
-    if (e.response?.status === 401) {
-      toast.error("Session expired. Please login again.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    } else {
-      toast.error(e?.response?.data?.message || "Failed to finish.");
+      const res = await axiosInstance.post(
+        `/test-series/${seriesId}/attempts/${attemptId}/finish`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setResult(res.data.result);
+      stopTimer();
+
+      setMode("result");
+
+      // ✅ FIXED: Pass correct parameters to fetchRanking
+      fetchRanking(seriesId, selectedTest._id, attemptId);
+
+      toast.success("Test submitted successfully!");
+    } catch (e) {
+      console.error(e);
+      if (e.response?.status === 401) {
+        toast.error("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        router.push("/login");
+      } else {
+        toast.error(e?.response?.data?.message || "Failed to finish.");
+      }
     }
-  }
-};
+  };
 
 
   // fetch ranking after test submission
@@ -1248,31 +1415,31 @@ export default function TestSeriesUnified() {
   // };
 
   const fetchRanking = async (seriesId, testId, attemptId) => {
-  console.log("🔄 fetchRanking Triggered with:", seriesId, testId, attemptId);
+    console.log("🔄 fetchRanking Triggered with:", seriesId, testId, attemptId);
 
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
-    const res = await axiosInstance.get(
-      `/test-series/ranking/${seriesId}/${testId}/${attemptId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await axiosInstance.get(
+        `/test-series/ranking/${seriesId}/${testId}/${attemptId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("📊 Ranking response:", res.data);
+
+      if (res.data.success) {
+        setRanking(res.data);
+        console.log("🏆 Ranking fetched:", res.data);
       }
-    );
-
-    console.log("📊 Ranking response:", res.data);
-
-    if (res.data.success) {
-      setRanking(res.data);
-      console.log("🏆 Ranking fetched:", res.data);
+    } catch (error) {
+      console.error("❌ Failed to fetch ranking:", error);
     }
-  } catch (error) {
-    console.error("❌ Failed to fetch ranking:", error);
-  }
-};
+  };
 
 
 
@@ -1562,12 +1729,21 @@ export default function TestSeriesUnified() {
         )}
 
         <div className="flex justify-between">
-          <button
+          {/* <button
             className="px-4 py-2 rounded-lg bg-[#00316B] text-white"
             onClick={refreshCurrent}
           >
             Refresh
-          </button>
+          </button> */}
+
+          <button
+  disabled={index === 0}
+  className="px-4 py-2 rounded-lg bg-gray-200 text-[#00316B] font-semibold disabled:opacity-50"
+  onClick={goToPrevious}
+>
+  ⬅ Previous
+</button>
+
           <div className="space-x-2">
             <button
               className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
@@ -1616,50 +1792,49 @@ export default function TestSeriesUnified() {
             </div> */}
 
             {/* Marks & Ranking Section */}
-<div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50 space-y-2">
-  <div className="text-lg text-gray-700">
-    Total Marks:{" "}
-    <span className="font-bold text-[#00316B] text-xl">
-      {result.totalMarks}
-    </span>
-  </div>
+            <div className="p-5 rounded-xl border border-gray-200 shadow-sm bg-gray-50 space-y-2">
+              <div className="text-lg text-gray-700">
+                Total Marks:{" "}
+                <span className="font-bold text-[#00316B] text-xl">
+                  {result.totalMarks}
+                </span>
+              </div>
 
-  {ranking && (
-    <div className="mt-3 border-t pt-3">
-      <div className="text-gray-700">
-        <span className="font-semibold text-[#00316B]">Your Rank:</span>{" "}
-        {ranking.currentRank} / {ranking.totalParticipants}
-      </div>
-      <div className="text-sm text-gray-500 mt-1">
-        Total Participants: {ranking.totalParticipants}
-      </div>
+              {ranking && (
+                <div className="mt-3 border-t pt-3">
+                  <div className="text-gray-700">
+                    <span className="font-semibold text-[#00316B]">Your Rank:</span>{" "}
+                    {ranking.currentRank} / {ranking.totalParticipants}
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">
+                    Total Participants: {ranking.totalParticipants}
+                  </div>
 
-      {/* Top 3 leaderboard */}
-      {ranking.ranking?.length > 0 && (
-        <div className="mt-4">
-          <h4 className="text-sm font-semibold text-gray-700 mb-2">
-            🏅 Top Performers
-          </h4>
-          <ul className="space-y-1 text-sm">
-            {ranking.ranking.slice(0, 3).map((r) => (
-              <li
-                key={r.attemptId}
-                className={`flex justify-between p-2 rounded-lg ${
-                  r.rank === ranking.currentRank
-                    ? "bg-blue-50 font-semibold text-[#00316B]"
-                    : "bg-gray-50"
-                }`}
-              >
-                <span>Rank {r.rank}</span>
-                <span>{r.marks} Marks</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  )}
-</div>
+                  {/* Top 3 leaderboard */}
+                  {ranking.ranking?.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                        🏅 Top Performers
+                      </h4>
+                      <ul className="space-y-1 text-sm">
+                        {ranking.ranking.slice(0, 3).map((r) => (
+                          <li
+                            key={r.attemptId}
+                            className={`flex justify-between p-2 rounded-lg ${r.rank === ranking.currentRank
+                                ? "bg-blue-50 font-semibold text-[#00316B]"
+                                : "bg-gray-50"
+                              }`}
+                          >
+                            <span>Rank {r.rank}</span>
+                            <span>{r.marks} Marks</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
           </>
         ) : (
@@ -1699,7 +1874,7 @@ function Stat({ label, value }) {
         className={`text-3xl font-extrabold mt-1 ${colors[label] || "text-[#00316B]"
           }`}
       >
-        
+
         {value}
       </div>
     </div>
