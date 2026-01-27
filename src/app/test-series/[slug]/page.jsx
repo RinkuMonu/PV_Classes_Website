@@ -815,6 +815,8 @@ export default function TestSeriesUnified() {
 
   const [questionHistory, setQuestionHistory] = useState([]);
   const [answerHistory, setAnswerHistory] = useState({});
+  const [showConfirm, setShowConfirm] = useState(false);
+
 
 
 
@@ -1082,224 +1084,224 @@ export default function TestSeriesUnified() {
   };
 
 
-const goToPrevious = () => {
-  if (index === 0) return;
+  const goToPrevious = () => {
+    if (index === 0) return;
 
-  const prevIndex = index - 1;
-  const prevQuestion = questionHistory[prevIndex];
+    const prevIndex = index - 1;
+    const prevQuestion = questionHistory[prevIndex];
 
-  if (prevQuestion) {
-    stopTimer();
-    setQ(prevQuestion);
-    setIndex(prevIndex);
+    if (prevQuestion) {
+      stopTimer();
+      setQ(prevQuestion);
+      setIndex(prevIndex);
 
-    const savedAnswer = answerHistory[prevQuestion._id];
+      const savedAnswer = answerHistory[prevQuestion._id];
 
-    if (savedAnswer) {
-      if (prevQuestion.type === "numeric") {
-        setNumericAnswer(savedAnswer.numericAnswer || "");
-        setSelectedOptions([]);
+      if (savedAnswer) {
+        if (prevQuestion.type === "numeric") {
+          setNumericAnswer(savedAnswer.numericAnswer || "");
+          setSelectedOptions([]);
+        } else {
+          setSelectedOptions(savedAnswer.selectedOptions || []);
+          setNumericAnswer("");
+        }
       } else {
-        setSelectedOptions(savedAnswer.selectedOptions || []);
+        setSelectedOptions([]);
         setNumericAnswer("");
       }
-    } else {
-      setSelectedOptions([]);
-      setNumericAnswer("");
+
+      setTimeout(() => {
+        startTimer(perQTime);
+      }, 50);
     }
-
-    setTimeout(() => {
-      startTimer(perQTime);
-    }, 50);
-  }
-};
+  };
 
 
-  
+
 
 
   // ---------------- Submit & Next ----------------
-//   const handleNext = async () => {
-//     if (!attemptId || !q) return;
+  //   const handleNext = async () => {
+  //     if (!attemptId || !q) return;
 
-//     setAnswerHistory((prev) => ({
-//   ...prev,
-//   [q._id]: q.type === "numeric"
-//     ? { numericAnswer }
-//     : { selectedOptions },
-// }));
-
-
-//     stopTimer();
-
-//     try {
-//       const token = localStorage.getItem("token");
-//       if (!token) {
-//         toast.error("Please login again");
-//         return;
-//       }
-
-//       const payload =
-//         q.type === "numeric"
-//           ? {
-//             numericAnswer:
-//               numericAnswer === "" ? undefined : Number(numericAnswer),
-//           }
-//           : { selectedOptions };
-
-//       const res = await axiosInstance.post(
-//         `/test-series/${seriesId}/attempts/${attemptId}/answer`,
-//         payload,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-
-//       if (res.data.done) {
-//         setResult(res.data.result);
-//         setMode("result");
-//         // ✅ YAHAN fetchRanking CALL KARO
-//         console.log("🔄 Test completed, fetching ranking...");
-//         fetchRanking(seriesId, selectedTest._id, attemptId);
-//         toast.success("Test completed!");
-//         return;
-//       }
-
-//       setQ(res.data.question);
-//       setIndex(res.data.currentIndex);
-//       setSelectedOptions([]);
-//       setNumericAnswer("");
-
-      
-//       setPerQTime(res.data.perQuestionTimeSec || perQTime);
-
-//       setQuestionHistory((prev) => [...prev, res.data.question]);
+  //     setAnswerHistory((prev) => ({
+  //   ...prev,
+  //   [q._id]: q.type === "numeric"
+  //     ? { numericAnswer }
+  //     : { selectedOptions },
+  // }));
 
 
-//       // Start timer for next question
-//       setTimeout(() => {
-//         startTimer(res.data.perQuestionTimeSec || perQTime);
-//       }, 50);
+  //     stopTimer();
 
-//     } catch (e) {
-//       console.error(e);
-//       if (e.response?.status === 401) {
-//         toast.error("Session expired. Please login again.");
-//         localStorage.removeItem("token");
-//         router.push("/login");
-//       } else {
-//         toast.error(e?.response?.data?.message || "Failed to submit answer.");
-//       }
-//     }
-//   };
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         toast.error("Please login again");
+  //         return;
+  //       }
+
+  //       const payload =
+  //         q.type === "numeric"
+  //           ? {
+  //             numericAnswer:
+  //               numericAnswer === "" ? undefined : Number(numericAnswer),
+  //           }
+  //           : { selectedOptions };
+
+  //       const res = await axiosInstance.post(
+  //         `/test-series/${seriesId}/attempts/${attemptId}/answer`,
+  //         payload,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (res.data.done) {
+  //         setResult(res.data.result);
+  //         setMode("result");
+  //         // ✅ YAHAN fetchRanking CALL KARO
+  //         console.log("🔄 Test completed, fetching ranking...");
+  //         fetchRanking(seriesId, selectedTest._id, attemptId);
+  //         toast.success("Test completed!");
+  //         return;
+  //       }
+
+  //       setQ(res.data.question);
+  //       setIndex(res.data.currentIndex);
+  //       setSelectedOptions([]);
+  //       setNumericAnswer("");
 
 
-const handleNext = async () => {
-  if (!attemptId || !q) return;
+  //       setPerQTime(res.data.perQuestionTimeSec || perQTime);
 
-  // 🔥 Agar history me next question already hai, sirf navigate karo (API mat call karo)
-  if (questionHistory[index + 1]) {
-    const nextQ = questionHistory[index + 1];
+  //       setQuestionHistory((prev) => [...prev, res.data.question]);
 
-    stopTimer();
-    setQ(nextQ);
-    setIndex(index + 1);
 
-    const saved = answerHistory[nextQ._id];
-    if (saved) {
-      if (nextQ.type === "numeric") {
-        setNumericAnswer(saved.numericAnswer || "");
-        setSelectedOptions([]);
+  //       // Start timer for next question
+  //       setTimeout(() => {
+  //         startTimer(res.data.perQuestionTimeSec || perQTime);
+  //       }, 50);
+
+  //     } catch (e) {
+  //       console.error(e);
+  //       if (e.response?.status === 401) {
+  //         toast.error("Session expired. Please login again.");
+  //         localStorage.removeItem("token");
+  //         router.push("/login");
+  //       } else {
+  //         toast.error(e?.response?.data?.message || "Failed to submit answer.");
+  //       }
+  //     }
+  //   };
+
+
+  const handleNext = async () => {
+    if (!attemptId || !q) return;
+
+    // 🔥 Agar history me next question already hai, sirf navigate karo (API mat call karo)
+    if (questionHistory[index + 1]) {
+      const nextQ = questionHistory[index + 1];
+
+      stopTimer();
+      setQ(nextQ);
+      setIndex(index + 1);
+
+      const saved = answerHistory[nextQ._id];
+      if (saved) {
+        if (nextQ.type === "numeric") {
+          setNumericAnswer(saved.numericAnswer || "");
+          setSelectedOptions([]);
+        } else {
+          setSelectedOptions(saved.selectedOptions || []);
+          setNumericAnswer("");
+        }
       } else {
-        setSelectedOptions(saved.selectedOptions || []);
+        setSelectedOptions([]);
         setNumericAnswer("");
       }
-    } else {
-      setSelectedOptions([]);
-      setNumericAnswer("");
+
+      setTimeout(() => startTimer(perQTime), 50);
+      return; // ⛔ Yahin ruk jao, server ko kuch mat bhejo
     }
 
-    setTimeout(() => startTimer(perQTime), 50);
-    return; // ⛔ Yahin ruk jao, server ko kuch mat bhejo
-  }
+    // 🔽 Neeche ka code sirf tab chale jab naya question submit ho raha ho
 
-  // 🔽 Neeche ka code sirf tab chale jab naya question submit ho raha ho
+    setAnswerHistory((prev) => ({
+      ...prev,
+      [q._id]: q.type === "numeric"
+        ? { numericAnswer }
+        : { selectedOptions },
+    }));
 
-  setAnswerHistory((prev) => ({
-    ...prev,
-    [q._id]: q.type === "numeric"
-      ? { numericAnswer }
-      : { selectedOptions },
-  }));
+    stopTimer();
 
-  stopTimer();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login again");
+        return;
+      }
 
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Please login again");
-      return;
-    }
-
-    const payload =
-      q.type === "numeric"
-        ? {
+      const payload =
+        q.type === "numeric"
+          ? {
             numericAnswer:
               numericAnswer === "" ? undefined : Number(numericAnswer),
           }
-        : { selectedOptions };
+          : { selectedOptions };
 
-    const res = await axiosInstance.post(
-      `/test-series/${seriesId}/attempts/${attemptId}/answer`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await axiosInstance.post(
+        `/test-series/${seriesId}/attempts/${attemptId}/answer`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.done) {
+        setResult(res.data.result);
+        setMode("result");
+        console.log("🔄 Test completed, fetching ranking...");
+        fetchRanking(seriesId, selectedTest._id, attemptId);
+        toast.success("Test completed!");
+        return;
       }
-    );
 
-    if (res.data.done) {
-      setResult(res.data.result);
-      setMode("result");
-      console.log("🔄 Test completed, fetching ranking...");
-      fetchRanking(seriesId, selectedTest._id, attemptId);
-      toast.success("Test completed!");
-      return;
+      const nextQ = res.data.question;
+      const nextIndex = res.data.currentIndex;
+
+      setQ(nextQ);
+      setIndex(nextIndex);
+      setSelectedOptions([]);
+      setNumericAnswer("");
+
+      setPerQTime(res.data.perQuestionTimeSec || perQTime);
+
+      setQuestionHistory((prev) => {
+        if (prev[nextIndex]) return prev;
+        return [...prev, nextQ];
+      });
+
+      setTimeout(() => {
+        startTimer(res.data.perQuestionTimeSec || perQTime);
+      }, 50);
+
+    } catch (e) {
+      console.error(e);
+      if (e.response?.status === 401) {
+        toast.error("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        router.push("/login");
+      } else {
+        toast.error(e?.response?.data?.message || "Failed to submit answer.");
+      }
     }
-
-    const nextQ = res.data.question;
-    const nextIndex = res.data.currentIndex;
-
-    setQ(nextQ);
-    setIndex(nextIndex);
-    setSelectedOptions([]);
-    setNumericAnswer("");
-
-    setPerQTime(res.data.perQuestionTimeSec || perQTime);
-
-    setQuestionHistory((prev) => {
-      if (prev[nextIndex]) return prev;
-      return [...prev, nextQ];
-    });
-
-    setTimeout(() => {
-      startTimer(res.data.perQuestionTimeSec || perQTime);
-    }, 50);
-
-  } catch (e) {
-    console.error(e);
-    if (e.response?.status === 401) {
-      toast.error("Session expired. Please login again.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    } else {
-      toast.error(e?.response?.data?.message || "Failed to submit answer.");
-    }
-  }
-};
+  };
 
 
 
@@ -1737,17 +1739,26 @@ const handleNext = async () => {
           </button> */}
 
           <button
-  disabled={index === 0}
-  className="px-4 py-2 rounded-lg bg-gray-200 text-[#00316B] font-semibold disabled:opacity-50"
-  onClick={goToPrevious}
->
-  ⬅ Previous
-</button>
+            disabled={index === 0}
+            className="px-4 py-2 rounded-lg bg-gray-200 text-[#00316B] font-semibold disabled:opacity-50"
+            onClick={goToPrevious}
+          >
+            ⬅ Previous
+          </button>
 
           <div className="space-x-2">
             <button
               className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
-              onClick={handleFinish}
+              // onClick={handleFinish}
+              onClick={() => {
+                const attempted = Object.keys(answerHistory).length;
+                if (attempted < total) {
+                  setShowConfirm(true); // modal open
+                } else {
+                  handleFinish(); // direct submit
+                }
+              }}
+
             >
               Finish
             </button>
@@ -1759,6 +1770,52 @@ const handleNext = async () => {
             </button>
           </div>
         </div>
+
+
+        {showConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl w-[90%] max-w-md p-6 shadow-2xl animate-scaleIn">
+
+              {/* Header */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-100 text-red-600">
+                  ⚠️
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">
+                  Confirm Submission
+                </h3>
+              </div>
+
+              {/* Message */}
+              <p className="text-gray-600 text-sm leading-relaxed mb-5">
+                You have not attempted all questions yet.
+                If you finish now, unattempted questions will be marked as <b>wrong / skipped</b>.
+                Are you sure you want to submit the test?
+              </p>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3">
+                <button
+                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Continue Test
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition shadow-md"
+                  onClick={() => {
+                    setShowConfirm(false);
+                    handleFinish();
+                  }}
+                >
+                  Yes, Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
       </div>
     );
   }
@@ -1821,8 +1878,8 @@ const handleNext = async () => {
                           <li
                             key={r.attemptId}
                             className={`flex justify-between p-2 rounded-lg ${r.rank === ranking.currentRank
-                                ? "bg-blue-50 font-semibold text-[#00316B]"
-                                : "bg-gray-50"
+                              ? "bg-blue-50 font-semibold text-[#00316B]"
+                              : "bg-gray-50"
                               }`}
                           >
                             <span>Rank {r.rank}</span>
