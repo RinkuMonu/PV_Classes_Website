@@ -1,574 +1,488 @@
+
+
 // "use client";
 // import toast from "react-hot-toast";
-// import { useState, useEffect, useRef } from "react";
+// import { useState, useEffect } from "react";
 // import Image from "next/image";
-// import { 
-//   FaDownload, 
-//   FaShareAlt, 
-//   FaWhatsapp, 
-//   FaFacebook
+// import {
+//   FaDownload,
+//   FaShareAlt,
+//   FaWhatsapp,
+//   FaFacebook,
+//   FaSearch,
+//   FaFilter,
+//   FaTimes,
+//   FaChevronRight,
+//   FaChevronDown
 // } from "react-icons/fa";
 // import axiosInstance from "../axios/axiosInstance";
 
-// export default function notes() {
-//   const [pyqs, setPyqs] = useState([]);
-//   const [search, setSearch] = useState("");
-//   const [openId, setOpenId] = useState(null);
+// export default function Notes() {
+//   const [groupedNotes, setGroupedNotes] = useState({});
+//   const [courses, setCourses] = useState([]);
+//   const [selectedCourse, setSelectedCourse] = useState(null);
+//   const [expandedGroup, setExpandedGroup] = useState(null);
 //   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
 
-//   const dropdownRef = useRef(null);
+//   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-//   // Fetch Notes from backend
+//   // ================= FETCH ALL NOTES =================
 //   useEffect(() => {
-//     const fetchPyqs = async () => {
+//     const fetchNotes = async () => {
 //       try {
-//         const response = await axiosInstance.get("/notes");
-//         setPyqs(response.data);
+//         const res = await axiosInstance.get("/notes");
+//         setGroupedNotes(res.data);
+//         setCourses(Object.keys(res.data));
 //       } catch (err) {
-//         setError(err.message);
+//         toast.error("Failed to load notes");
 //       } finally {
 //         setLoading(false);
 //       }
 //     };
-//     fetchPyqs();
+//     fetchNotes();
 //   }, []);
 
-//   // Close dropdown if clicked outside
-//   useEffect(() => {
-//     function handleClickOutside(event) {
-//       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-//         setOpenId(null);
-//       }
-//     }
-//     if (openId) {
-//       document.addEventListener("mousedown", handleClickOutside);
-//     } else {
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     }
-//     return () => {
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     };
-//   }, [openId]);
-
-//   const toggleDropdown = (id) => {
-//     setOpenId(openId === id ? null : id);
+//   const toggleGroup = (groupName) => {
+//     setExpandedGroup(expandedGroup === groupName ? null : groupName);
 //   };
 
-//   // Generate shareable links
-//   const getShareLinks = (pyq) => {
-//     const pdfUrl = `${window.location.origin}/${pyq.pdfUrl}`;
-//     const text = encodeURIComponent(`Check out ${pyq.title}: ${pdfUrl}`);
+//   const getShareLinks = (note) => {
+//     const pdfUrl = `${BACKEND_URL}/${note.pdfUrl}`;
+//     const text = encodeURIComponent(`Check out ${note.title}: ${pdfUrl}`);
 //     return {
 //       whatsapp: `https://wa.me/?text=${text}`,
 //       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pdfUrl)}`
 //     };
 //   };
 
-//   // Filter Notes based on search
-//   const filteredPyqs = pyqs.filter(pyq =>
-//     pyq.title.toLowerCase().includes(search.toLowerCase())
-//   );
-
 //   return (
-//     <>
-//       {/* Banner */}
-//       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-//         <div className="absolute inset-0 hidden sm:block">
-//           <Image
-//             src="/Image/Banner/pyq-banner.webp"
-//             alt="Banner Desktop"
-//             fill
-//             className="object-cover object-center"
-//             priority
-//           />
-//         </div>
-//         <div className="absolute inset-0 block sm:hidden">
-//           <Image
-//             src="/Image/pv-mobile/pyq-banner-mob.webp"
-//             alt="Banner Mobile"
-//             fill
-//             className="object-cover object-center"
-//             priority
-//           />
-//         </div>
+//     <div className="min-h-screen bg-gray-50">
+      
+//       {/* ===== Banner (unchanged) ===== */}
+//       <section className="relative w-full h-[60vh] text-white mb-8">
+//         <Image
+//           src="/Image/Banner/pyq-banner.webp"
+//           alt="Banner"
+//           fill
+//           className="object-cover object-center"
+//           priority
+//         />
 //       </section>
 
-//       {/* Table Section */}
-//       <div className="py-6 px-3 md:px-20 mx-auto">
-//         <div className="flex justify-between items-center mb-6">
-//           <h1 className="text-2xl font-bold">Notes</h1>
+//       <div className="px-4 md:px-20 pb-16 max-w-7xl mx-auto">
 
-//           {/* Search */}
-//           <div className="relative w-full sm:w-1/3">
-//             <input
-//               type="text"
-//               placeholder="Search by title..."
-//               className="w-full pl-10 pr-3 py-2 border border-[#00316B] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
-//               value={search}
-//               onChange={(e) => setSearch(e.target.value)}
-//             />
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-5 w-5 text-[#00316B] absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 strokeWidth={2}
-//                 d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110 4.5a7.5 7.5 0 016.65 12.15z"
-//               />
-//             </svg>
-//           </div>
-//         </div>
+//         <h1 className="text-3xl font-bold text-[#00316B] mb-10">
+//           Study Notes
+//         </h1>
 
 //         {loading ? (
-//           <div className="text-center py-10">
-//             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00316B] mx-auto"></div>
-//             <p className="mt-3">Loading Notes...</p>
-//           </div>
-//         ) : error ? (
-//           <div className="bg-red-50 border-l-4 border-red-500 p-4">
-//             <p className="text-red-700">Error: {error}</p>
+//           <div className="text-center py-16">
+//             <div className="animate-spin h-12 w-12 border-b-2 border-[#00316B] mx-auto rounded-full"></div>
 //           </div>
 //         ) : (
-//           <div className="overflow-x-auto rounded-lg border border-[#00316B] shadow-md">
-//             <table className="w-full text-sm border-collapse">
-//               <thead>
-//                 <tr className="bg-[#00316B] text-white">
-//                   <th className="p-3 font-medium text-left">Sr. No.</th>
-//                   <th className="p-3 font-medium text-left">Title</th>
-//                   <th className="p-3 font-medium text-left">Description</th>
-//                   <th className="p-3 font-medium text-center">Action</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {filteredPyqs.length > 0 ? (
-//                   filteredPyqs.map((pyq, idx) => {
-//                     const shareLinks = getShareLinks(pyq);
-//                     return (
-//                       <tr
-//                         key={pyq._id}
-//                         className="transition hover:bg-blue-50 border-b border-gray-300 relative"
-//                       >
-//                         <td className="p-3">{idx + 1}</td>
-//                         <td className="p-3 font-medium">{pyq.title}</td>
-//                         <td className="p-3">{pyq.description}</td>
-//                         <td className="p-3 flex justify-center gap-2 relative">
-//                           {/* Share Button */}
-//                           <button
-//                             onClick={() => toggleDropdown(pyq._id)}
-//                             className="p-2 inline-flex hover:bg-blue-100 rounded transition text-[#00316B] cursor-pointer"
-//                           >
-//                             <FaShareAlt className="mt-1 me-1" /> Share
-//                           </button>
-//                           {openId === pyq._id && (
-//                             <div 
-//                               ref={dropdownRef}
-//                               className="absolute top-13 right-30 bg-white shadow-xl rounded-xl border w-48 z-50 overflow-hidden animate-fadeIn"
-//                             >
-//                               <a
-//                                 href={shareLinks.whatsapp}
-//                                 target="_blank"
-//                                 rel="noopener noreferrer"
-//                                 className="flex items-center gap-3 p-3 hover:bg-green-50 transition-colors"
-//                               >
-//                                 <span className="p-2 bg-green-100 rounded-full">
-//                                   <FaWhatsapp className="text-green-600" />
-//                                 </span>
-//                                 <span className="text-sm font-medium text-gray-700">WhatsApp</span>
-//                               </a>
-//                               <a
-//                                 href={shareLinks.facebook}
-//                                 target="_blank"
-//                                 rel="noopener noreferrer"
-//                                 className="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors"
-//                               >
-//                                 <span className="p-2 bg-blue-100 rounded-full">
-//                                   <FaFacebook className="text-blue-600" />
-//                                 </span>
-//                                 <span className="text-sm font-medium text-gray-700">Facebook</span>
-//                               </a>
-//                             </div>
-//                           )}
+//           <>
+//             {/* ================= COURSE LIST ================= */}
+//             {!selectedCourse && (
+//               <div className="grid md:grid-cols-3 gap-6">
+//                 {courses.map((course) => (
+//                   <div
+//                     key={course}
+//                     onClick={() => setSelectedCourse(course)}
+//                     className="cursor-pointer bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition"
+//                   >
+//                     <h2 className="text-xl font-semibold text-[#00316B]">
+//                       📘 {course}
+//                     </h2>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
 
-//                           {/* Download Button */}
-//                           <a
-//                             href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
-//                             target="blank"
-//                             download
-//                             className="p-2 inline-flex bg-[#00316B] text-white rounded hover:bg-blue-900 transition"
-//                           >
-//                             <FaDownload className="mt-1 me-1" /> Download
-//                           </a>
-//                         </td>
-//                       </tr>
-//                     );
-//                   })
-//                 ) : (
-//                   <tr>
-//                     <td colSpan="4" className="p-6 text-center">
-//                       No matching notes found.
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
+//             {/* ================= NOTES INSIDE COURSE ================= */}
+//             {selectedCourse && (
+//               <>
+//                 <button
+//                   onClick={() => {
+//                     setSelectedCourse(null);
+//                     setExpandedGroup(null);
+//                   }}
+//                   className="mb-6 text-sm text-[#00316B] underline"
+//                 >
+//                   ← Back to Courses
+//                 </button>
+
+//                 <h2 className="text-2xl font-bold text-[#00316B] mb-6">
+//                   {selectedCourse}
+//                 </h2>
+
+//                 {Object.keys(groupedNotes[selectedCourse]).map((group) => (
+//                   <div key={group} className="mb-6 bg-white rounded-xl shadow">
+
+//                     {/* ===== Group Header ===== */}
+//                     <div
+//                       onClick={() => toggleGroup(group)}
+//                       className="flex justify-between items-center p-4 cursor-pointer border-b"
+//                     >
+//                       <h3 className="font-semibold text-[#00316B]">
+//                         📂 {group}
+//                       </h3>
+//                       {expandedGroup === group ? (
+//                         <FaChevronDown />
+//                       ) : (
+//                         <FaChevronRight />
+//                       )}
+//                     </div>
+
+//                     {/* ===== Notes List ===== */}
+//                     {expandedGroup === group && (
+//                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+//                         {groupedNotes[selectedCourse][group].map((note) => {
+//                           const shareLinks = getShareLinks(note);
+
+//                           return (
+//                             <div
+//                               key={note._id}
+//                               className="border rounded-xl p-5 hover:shadow-lg transition"
+//                             >
+//                               <h4 className="font-bold text-[#00316B] mb-2">
+//                                 {note.title}
+//                               </h4>
+//                               <p className="text-sm text-gray-600 mb-4">
+//                                 {note.description}
+//                               </p>
+
+//                               <div className="flex justify-between items-center">
+
+//                                 {/* Share */}
+//                                 <div className="flex gap-3">
+//                                   <a
+//                                     href={shareLinks.whatsapp}
+//                                     target="_blank"
+//                                     rel="noopener noreferrer"
+//                                     className="text-green-600"
+//                                   >
+//                                     <FaWhatsapp />
+//                                   </a>
+//                                   <a
+//                                     href={shareLinks.facebook}
+//                                     target="_blank"
+//                                     rel="noopener noreferrer"
+//                                     className="text-blue-600"
+//                                   >
+//                                     <FaFacebook />
+//                                   </a>
+//                                 </div>
+
+//                                 {/* Download */}
+//                                 <a
+//                                   href={`${BACKEND_URL}/${note.pdfUrl}`}
+//                                   target="_blank"
+//                                   rel="noopener noreferrer"
+//                                   className="bg-[#00316B] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#009FE3] transition"
+//                                 >
+//                                   <FaDownload className="inline mr-2" />
+//                                   Download
+//                                 </a>
+//                               </div>
+//                             </div>
+//                           );
+//                         })}
+//                       </div>
+//                     )}
+//                   </div>
+//                 ))}
+//               </>
+//             )}
+//           </>
 //         )}
 //       </div>
-//     </>
+//     </div>
 //   );
 // }
 
 
 
-
 "use client";
 import toast from "react-hot-toast";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { 
-  FaDownload, 
-  FaShareAlt, 
-  FaWhatsapp, 
+import {
+  FaDownload,
+  FaShareAlt,
+  FaWhatsapp,
   FaFacebook,
   FaSearch,
   FaFilter,
   FaTimes,
+  FaChevronRight,
+  FaChevronDown,
   FaBook,
-  FaClock
+  FaFolder,
+  FaFile,
+  FaGraduationCap,
+  FaArrowLeft
 } from "react-icons/fa";
 import axiosInstance from "../axios/axiosInstance";
 
 export default function Notes() {
-  const [pyqs, setPyqs] = useState([]);
-  const [search, setSearch] = useState("");
-  const [openId, setOpenId] = useState(null);
+  const [groupedNotes, setGroupedNotes] = useState({});
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [expandedGroup, setExpandedGroup] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState("All");
-  const [subjects, setSubjects] = useState([]);
 
-  const dropdownRef = useRef(null);
-  const filterRef = useRef(null);
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  // Enhanced gradient colors with more variations
-  const gradientColors = [
-    "linear-gradient(135deg, #00316B 0%, #009FE3 100%)",
-    "linear-gradient(135deg, #204972 0%, #0281AD 100%)",
-    "linear-gradient(135deg, #788406 0%, #87B105 100%)",
-    "linear-gradient(135deg, #616602 0%, #ABC129 100%)",
-    "linear-gradient(135deg, #00316B 0%, #788406 100%)",
-    "linear-gradient(135deg, #009FE3 0%, #ABC129 100%)",
-    "linear-gradient(135deg, #0281AD 0%, #87B105 100%)",
-    "linear-gradient(135deg, #204972 0%, #ABC129 100%)",
-  ];
-
-  // Fetch Notes from backend
+  // ================= FETCH ALL NOTES =================
   useEffect(() => {
-    const fetchPyqs = async () => {
+    const fetchNotes = async () => {
       try {
-        const response = await axiosInstance.get("/notes");
-        setPyqs(response.data);
-        
-        // Extract unique subjects from notes
-        const uniqueSubjects = [...new Set(response.data.map(pyq => pyq.subject || "General"))];
-        setSubjects(["All", ...uniqueSubjects]);
+        const res = await axiosInstance.get("/notes");
+        setGroupedNotes(res.data);
+        setCourses(Object.keys(res.data));
       } catch (err) {
-        setError(err.message);
         toast.error("Failed to load notes");
       } finally {
         setLoading(false);
       }
     };
-    fetchPyqs();
+    fetchNotes();
   }, []);
 
-  // Close dropdowns if clicked outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenId(null);
-      }
-      if (filterRef.current && !filterRef.current.contains(event.target) && filterOpen) {
-        setFilterOpen(false);
-      }
-    }
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openId, filterOpen]);
-
-  const toggleDropdown = (id) => {
-    setOpenId(openId === id ? null : id);
+  const toggleGroup = (groupName) => {
+    setExpandedGroup(expandedGroup === groupName ? null : groupName);
   };
 
-  // Generate shareable links
-  const getShareLinks = (pyq) => {
-    const pdfUrl = `${window.location.origin}/${pyq.pdfUrl}`;
-    const text = encodeURIComponent(`Check out ${pyq.title}: ${pdfUrl}`);
+  const getShareLinks = (note) => {
+    const pdfUrl = `${BACKEND_URL}/${note.pdfUrl}`;
+    const text = encodeURIComponent(`Check out ${note.title}: ${pdfUrl}`);
     return {
       whatsapp: `https://wa.me/?text=${text}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pdfUrl)}`
     };
   };
 
-  // Filter Notes based on search and subject
-  const filteredPyqs = pyqs.filter(pyq => {
-    const matchesSearch = pyq.title.toLowerCase().includes(search.toLowerCase()) ||
-                         (pyq.description && pyq.description.toLowerCase().includes(search.toLowerCase()));
-    const matchesSubject = selectedSubject === "All" || pyq.subject === selectedSubject;
-    return matchesSearch && matchesSubject;
-  });
-
-  // Function to generate a random file size (for demo purposes)
-  const getRandomFileSize = () => {
-    const sizes = ["2.5 MB", "3.1 MB", "1.8 MB", "4.2 MB", "2.9 MB"];
-    return sizes[Math.floor(Math.random() * sizes.length)];
-  };
-
-  // Function to generate a random date (for demo purposes)
-  const getRandomDate = () => {
-    const dates = ["Oct 12, 2023", "Sep 5, 2023", "Nov 20, 2023", "Aug 15, 2023"];
-    return dates[Math.floor(Math.random() * dates.length)];
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Banner - Kept exactly as original */}
-      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
-        <div className="absolute inset-0 hidden sm:block">
-          <Image
-            src="/Image/Banner/pyq-banner.webp"
-            alt="Banner Desktop"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 block sm:hidden">
-          <Image
-            src="/Image/pv-mobile/pyq-banner-mob.webp"
-            alt="Banner Mobile"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
+      
+      {/* ===== Banner (unchanged) ===== */}
+      <section className="relative w-full h-[60vh] text-white mb-8">
+        <Image
+          src="/Image/Banner/pyq-banner.webp"
+          alt="Banner"
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </section>
 
-      {/* Main Content */}
-      <div className="py-6 px-3 md:px-20 mx-auto max-w-7xl">
-        {/* Header with Title and Search */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-[#00316B] mb-2">Study Notes</h1>
-            <p className="text-gray-600">Access comprehensive study materials for your exam preparation</p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-2/3 mt-4 md:mt-0">
-            {/* Search */}
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-5 w-5 text-[#00316B]" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search notes by title or description..."
-                className="w-full pl-10 pr-4 py-3 border border-[#00316B]/30 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#00316B] shadow-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
+      <div className="px-4 md:px-20 pb-16 max-w-7xl mx-auto">
 
-            {/* Filter Button for Mobile */}
-            <div className="block md:hidden">
-              <button
-                onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 w-full justify-center px-4 py-3 bg-[#00316B] text-white rounded-full shadow-md hover:bg-[#009FE3] transition-colors"
-              >
-                <FaFilter className="text-sm" />
-                <span>Filter</span>
-              </button>
-            </div>
-          </div>
+        {/* Header with gradient */}
+        <div className="mb-10">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00316B] to-[#009FE3] mb-4">
+            Study Notes
+          </h1>
+          <p className="text-gray-600 text-lg">Access and download study materials for all your courses</p>
         </div>
 
-      
-
-
-        {/* Notes Grid */}
         {loading ? (
-          <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00316B] mx-auto"></div>
-            <p className="mt-3 text-[#00316B]">Loading Notes...</p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin h-16 w-16 border-4 border-[#00316B] border-t-transparent rounded-full"></div>
+            <p className="mt-4 text-gray-600">Loading notes...</p>
           </div>
-        ) : error ? (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-            <p className="text-red-700">Error: {error}</p>
-          </div>
-        ) : filteredPyqs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPyqs.map((pyq, idx) => {
-              const shareLinks = getShareLinks(pyq);
-              const gradientStyle = gradientColors[idx % gradientColors.length];
-              const fileSize = getRandomFileSize();
-              const dateAdded = getRandomDate();
-              
-              return (
-                <div key={pyq._id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 border border-gray-100">
-                  {/* Card header with gradient */}
-                  <div 
-                    className="h-3"
-                    style={{ background: gradientStyle }}
-                  ></div>
-                  
-                  <div className="p-5">
-                    <div className="flex justify-between items-start mb-4">
-                      <span 
-                        className="px-3 py-1.5 text-white text-xs font-medium rounded-full shadow-sm"
-                        style={{ background: gradientStyle }}
+        ) : (
+          <>
+            {/* ================= COURSE LIST ================= */}
+            {!selectedCourse && (
+              <>
+                <div className="flex items-center gap-3 mb-6">
+                  <FaGraduationCap className="text-3xl text-[#00316B]" />
+                  <h2 className="text-2xl font-semibold text-gray-800">Select Your Course</h2>
+                  <span className="bg-[#00316B] text-white px-3 py-1 rounded-full text-sm">
+                    {courses.length} Courses
+                  </span>
+                </div>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {courses.map((course) => {
+                    // Calculate total notes in this course
+                    const totalNotes = Object.values(groupedNotes[course] || {}).reduce(
+                      (acc, notes) => acc + notes.length, 0
+                    );
+                    
+                    return (
+                      <div
+                        key={course}
+                        onClick={() => setSelectedCourse(course)}
+                        className="group cursor-pointer bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100"
                       >
-                        {pyq.subject || "General"}
-                      </span>
-                      <span className="text-gray-400 text-xs flex items-center">
-                        <FaClock className="mr-1 text-xs" /> {dateAdded}
-                      </span>
-                    </div>
-                    
-                    <h3 className="font-bold text-lg mb-3 text-[#00316B] line-clamp-2 leading-tight">{pyq.title}</h3>
-                    <p className="text-gray-600 text-sm mb-5 line-clamp-3 leading-relaxed">{pyq.description}</p>
-                    
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="text-xs text-gray-500 flex items-center">
-                        <FaDownload className="mr-1" /> {fileSize}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        PDF Format
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-                      <div className="relative" ref={dropdownRef}>
-                        <button
-                          onClick={() => toggleDropdown(pyq._id)}
-                          className="flex items-center gap-1.5 text-[#00316B] hover:text-[#009FE3] transition-colors p-2 rounded-full text-sm"
-                        >
-                          <FaShareAlt className="text-sm" />
-                          <span className="font-medium">Share</span>
-                        </button>
-                        
-                        {openId === pyq._id && (
-                          <div className="absolute left-0 bottom-full mb-2 bg-white shadow-xl rounded-xl border border-gray-200 w-44 z-10 overflow-hidden">
-                            <a
-                              href={shareLinks.whatsapp}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-3 p-3 hover:bg-green-50 transition-colors text-gray-700 border-b border-gray-100"
-                            >
-                              <span className="p-2 bg-green-100 rounded-full">
-                                <FaWhatsapp className="text-green-600 text-sm" />
-                              </span>
-                              <span className="text-sm font-medium">WhatsApp</span>
-                            </a>
-                            <a
-                              href={shareLinks.facebook}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-gray-700"
-                            >
-                              <span className="p-2 bg-blue-100 rounded-full">
-                                <FaFacebook className="text-blue-600 text-sm" />
-                              </span>
-                              <span className="text-sm font-medium">Facebook</span>
-                            </a>
+                        <div className="bg-gradient-to-r from-[#00316B] to-[#009FE3] h-2"></div>
+                        <div className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <FaBook className="text-3xl text-[#00316B] group-hover:scale-110 transition" />
+                            <span className="bg-blue-100 text-[#00316B] px-3 py-1 rounded-full text-sm font-medium">
+                              {totalNotes} {totalNotes === 1 ? 'Note' : 'Notes'}
+                            </span>
                           </div>
-                        )}
+                          <h2 className="text-xl font-bold text-gray-800 group-hover:text-[#00316B] transition">
+                            {course}
+                          </h2>
+                          <p className="text-gray-500 text-sm mt-2">
+                            Click to view notes and study materials
+                          </p>
+                        </div>
                       </div>
-                      
-                      <a
-                        href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${pyq.pdfUrl}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-gradient-to-r from-[#00316B] to-[#009FE3] hover:from-[#009FE3] hover:to-[#00316B] text-white px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-medium"
-                      >
-                        <FaDownload className="text-xs" />
-                        <span>Download</span>
-                      </a>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {/* ================= NOTES INSIDE COURSE ================= */}
+            {selectedCourse && (
+              <>
+                <button
+                  onClick={() => {
+                    setSelectedCourse(null);
+                    setExpandedGroup(null);
+                  }}
+                  className="group mb-6 flex items-center gap-2 text-[#00316B] hover:text-[#009FE3] transition font-medium"
+                >
+                  <FaArrowLeft className="group-hover:-translate-x-1 transition" />
+                  Back to Courses
+                </button>
+
+                <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-gradient-to-r from-[#00316B] to-[#009FE3] p-4 rounded-xl">
+                      <FaBook className="text-white text-3xl" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-bold text-gray-800">{selectedCourse}</h2>
+                      <p className="text-gray-500 mt-1">
+                        {Object.keys(groupedNotes[selectedCourse]).length} chapters available
+                      </p>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-16 bg-white rounded-xl border border-gray-200 shadow-sm">
-            <div className="mb-4">
-              <svg className="mx-auto h-16 w-16 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-medium text-[#00316B] mb-2">No notes found</h3>
-            <p className="text-gray-500 max-w-md mx-auto">
-              {search || selectedSubject !== "All" 
-                ? "Try adjusting your search or filter to find what you're looking for." 
-                : "It looks like there are no notes available at the moment."}
-            </p>
-            {(search || selectedSubject !== "All") && (
-              <button 
-                onClick={() => {
-                  setSearch("");
-                  setSelectedSubject("All");
-                }}
-                className="mt-4 px-4 py-2 bg-[#00316B] text-white rounded-full text-sm font-medium hover:bg-[#009FE3] transition-colors"
-              >
-                Clear Filters
-              </button>
+
+                {Object.keys(groupedNotes[selectedCourse]).map((group, index) => (
+                  <div 
+                    key={group} 
+                    className="mb-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                  >
+                    {/* ===== Group Header ===== */}
+                    <div
+                      onClick={() => toggleGroup(group)}
+                      className="flex justify-between items-center p-5 cursor-pointer bg-gradient-to-r from-gray-50 to-white hover:from-blue-50 transition"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FaFolder className="text-[#00316B] text-xl" />
+                        <h3 className="font-semibold text-gray-800 text-lg">
+                          {group}
+                        </h3>
+                        <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
+                          {groupedNotes[selectedCourse][group].length} notes
+                        </span>
+                      </div>
+                      <div className="text-[#00316B]">
+                        {expandedGroup === group ? (
+                          <FaChevronDown className="text-xl" />
+                        ) : (
+                          <FaChevronRight className="text-xl" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* ===== Notes List ===== */}
+                    {expandedGroup === group && (
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-gray-50">
+                        {groupedNotes[selectedCourse][group].map((note) => {
+                          const shareLinks = getShareLinks(note);
+
+                          return (
+                            <div
+                              key={note._id}
+                              className="group bg-white rounded-xl p-5 hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-[#00316B] hover:scale-105"
+                            >
+                              <div className="flex items-start justify-between mb-3">
+                                <h4 className="font-bold text-gray-800 group-hover:text-[#00316B] transition">
+                                  {note.title}
+                                </h4>
+                                <FaFile className="text-gray-400 group-hover:text-[#00316B] transition" />
+                              </div>
+                              
+                              <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                                {note.description}
+                              </p>
+
+                              <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                                {/* Share Icons */}
+                                <div className="flex gap-3">
+                                  <a
+                                    href={shareLinks.whatsapp}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-600 hover:text-green-700 transition p-2 hover:bg-green-50 rounded-full"
+                                    title="Share on WhatsApp"
+                                  >
+                                    <FaWhatsapp size={18} />
+                                  </a>
+                                  <a
+                                    href={shareLinks.facebook}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:text-blue-700 transition p-2 hover:bg-blue-50 rounded-full"
+                                    title="Share on Facebook"
+                                  >
+                                    <FaFacebook size={18} />
+                                  </a>
+                                </div>
+
+                                {/* Download Button */}
+                                <a
+                                  href={`${BACKEND_URL}/${note.pdfUrl}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="bg-gradient-to-r from-[#00316B] to-[#009FE3] text-white px-4 py-2 rounded-lg text-sm hover:shadow-lg transition-all duration-300 flex items-center gap-2 group/download"
+                                >
+                                  <FaDownload className="group-hover/download:translate-y-0.5 transition" />
+                                  Download
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Empty state if no groups */}
+                {Object.keys(groupedNotes[selectedCourse]).length === 0 && (
+                  <div className="text-center py-16 bg-white rounded-xl shadow-md">
+                    <FaBook className="text-6xl text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-lg">No notes available for this course yet.</p>
+                  </div>
+                )}
+              </>
             )}
-          </div>
+          </>
         )}
       </div>
 
-      {/* Mobile Filter Panel */}
-      {filterOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-          <div ref={filterRef} className="absolute right-0 top-0 h-full w-3/4 bg-white p-5 shadow-xl">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-bold text-[#00316B]">Filter Notes</h2>
-              <button onClick={() => setFilterOpen(false)} className="p-2 rounded-full hover:bg-gray-100">
-                <FaTimes className="text-[#00316B]" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="font-medium text-[#00316B]">By Subject</h3>
-              {subjects.map((subject) => (
-                <button
-                  key={subject}
-                  onClick={() => {
-                    setSelectedSubject(subject);
-                    setFilterOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-3 rounded-xl transition-all ${
-                    selectedSubject === subject
-                      ? "bg-gradient-to-r from-[#00316B] to-[#009FE3] text-white shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {subject}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Add custom animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }

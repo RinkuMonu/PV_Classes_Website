@@ -5,8 +5,8 @@ const axiosInstance = axios.create({
 
 
     // baseURL: 'http://192.168.1.39:5000/api',
-    // baseURL: ' http://localhost:5000/api'
-    baseURL: ' https://api.pvclasses.in/api',
+    // baseURL: 'http://localhost:5000/api'
+    baseURL: 'https://api.pvclasses.in/api',
     // baseURL: 'http://localhost:5006/api',
 
     // headers: {
@@ -27,6 +27,7 @@ axiosInstance.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+
 
 // ✅ Response Interceptor
 axiosInstance.interceptors.response.use(

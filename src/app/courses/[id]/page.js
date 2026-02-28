@@ -241,8 +241,8 @@ export default function CourseDetailsPage() {
         <div className="flex items-start gap-3">
           {imageUrl ? (
             <Image
-width ={100}
-height ={100}
+              width={100}
+              height={100}
               src={imageUrl}
               alt={title}
               className="w-32 h-32 object-contain rounded-lg border"
@@ -321,8 +321,8 @@ height ={100}
               <div className="flex flex-col md:flex-row gap-6">
                 {course?.images?.[0] && (
                   <Image
-width ={100}
-height ={100}
+                    width={100}
+                    height={100}
                     src={course.full_image[0]}
                     // src={`http://localhost:5000${course?.images?.[0]}`}
                     alt={course.title}
@@ -529,97 +529,6 @@ height ={100}
               </div>
             </div>
 
-            {/* Course Content */}
-            {/* <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 border border-gray-100">
-              <div className="border-b p-6 bg-gray-50">
-                <h2 className="text-xl font-bold text-[#204972]">Course content</h2>
-                <p className="text-gray-600 mt-1 flex items-center gap-2">
-                  <span>{course?.videos?.length || 0} lectures</span>
-                  <span>•</span>
-                  <span>{course?.validity || "N/A"} validity</span>
-                </p>
-              </div>
-
-              <div className="divide-y">
-                {course.videos?.map((video, i) => {
-                  let embedUrl = null;
-
-                  if (video.url.includes("youtu.be/")) {
-                    embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]}`;
-                  } else if (video.url.includes("watch?v=")) {
-                    embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]}`;
-                  } else if (video.url.includes("youtube.com/live/")) {
-                    embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]}`;
-                  }
-
-
-                  const isLocked = !course.isFree && !video.isFree && !hasPurchased;
-
-                  return (
-                    <div key={i} className="p-4 hover:bg-blue-50 transition-colors">
-                      <div
-                        className="flex justify-between items-center cursor-pointer"
-                        onClick={() => {
-                          if (isLocked) {
-                            setShowModal(true);
-                          } else {
-                            setOpenVideo(openVideo === i ? null : i);
-                          }
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`rounded-md p-2 ${isLocked ? "bg-gray-100" : "bg-[#204972] bg-opacity-10"}`}>
-                            {isLocked ? (
-                              <FiLock className="text-gray-400" />
-                            ) : (
-                              <FiPlay className="text-[#204972]" />
-                            )}
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-gray-900">{video.title}</h3>
-                            <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                              <span>{i + 1} lecture</span>
-                              <span>•</span>
-                              <span>{Math.floor(video.duration / 60)} min</span>
-                            </p>
-                          </div>
-                        </div>
-
-                        {!isLocked ? (
-                          <span className="text-[#204972] text-sm font-medium">Play</span>
-                        ) : (
-                          <span className="text-gray-400 text-sm font-medium flex items-center">
-                            <FiLock className="mr-1" /> Locked
-                          </span>
-                        )}
-                      </div>
-
-                      {!isLocked && openVideo === i && (
-                        <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm space-y-3">
-                          {video.longDescription && <p>{video.longDescription}</p>}
-                          {embedUrl ? (
-                            <div className="aspect-video">
-                              <iframe
-                                width="100%"
-                                height="315"
-                                src={embedUrl}
-                                title={video.title}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
-                            </div>
-                          ) : (
-                            <p className="text-red-500 text-xs">Invalid or unsupported video URL</p>
-                          )}
-                        </div>
-                      )}
-
-                    </div>
-                  );
-                })}
-              </div>
-            </div> */}
 
             {/* Course Content */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 border border-gray-100">
@@ -638,53 +547,99 @@ height ={100}
                     {/* Subject Header */}
                     <div
                       className="p-4 cursor-pointer hover:bg-blue-50 transition-colors"
-                      onClick={() => setOpenSubject(openSubject === sIndex ? null : sIndex)}
+                      onClick={() =>
+                        setOpenSubject(openSubject === sIndex ? null : sIndex)
+                      }
                     >
-                      <h3 className="text-lg font-semibold text-gray-900">{subject.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {subject.title}
+                      </h3>
                       <p className="text-sm text-gray-500">{subject.description}</p>
                     </div>
 
-                    {/* Videos under subject */}
+                    {/* Videos */}
                     {openSubject === sIndex &&
                       subject.videos.map((video, i) => {
+                        const BACKEND_URL =
+                          process.env.NEXT_PUBLIC_BACKEND_URL;
+
                         let embedUrl = null;
-                        if (video.url.includes("youtu.be/")) {
-                          embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]}`;
-                        } else if (video.url.includes("watch?v=")) {
-                          embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]}`;
-                        } else if (video.url.includes("youtube.com/live/")) {
-                          embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]}`;
+                        let videoSrc = null;
+
+                        // YouTube
+                        if (
+                          video.url?.includes("youtube") ||
+                          video.url?.includes("youtu.be")
+                        ) {
+                          if (video.url.includes("youtu.be/")) {
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]
+                              }`;
+                          } else if (video.url.includes("watch?v=")) {
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]
+                              }`;
+                          } else if (video.url.includes("youtube.com/live/")) {
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]
+                              }`;
+                          }
                         }
 
-                        const isLocked = !course.isFree && !video.isFree && !hasPurchased;
+                        // Local video
+                        else if (video.url?.startsWith("/uploads")) {
+                          videoSrc = `${BACKEND_URL}${video.url}`;
+                        }
+
+                        // Lock logic
+                        const isLocked =
+                          !video.isFree && !hasPurchased;
 
                         return (
-                          <div key={video._id || i} className="p-4 ml-4 hover:bg-blue-50 transition-colors">
+                          <div
+                            key={video._id || i}
+                            className="p-4 ml-4 hover:bg-blue-50 transition-colors"
+                          >
                             <div
                               className="flex justify-between items-center cursor-pointer"
                               onClick={() => {
                                 if (isLocked) {
                                   setShowModal(true);
                                 } else {
-                                  setOpenVideo(openVideo === i ? null : i);
+                                  setOpenVideo(
+                                    openVideo === i ? null : i
+                                  );
                                 }
                               }}
                             >
                               <div className="flex items-center gap-3">
-                                <div className={`rounded-md p-2 ${isLocked ? "bg-gray-100" : "bg-[#204972] bg-opacity-10"}`}>
-                                  {isLocked ? <FiLock className="text-gray-400" /> : <FiPlay className="text-[#204972]" />}
+                                <div
+                                  className={`rounded-md p-2 ${isLocked
+                                    ? "bg-gray-100"
+                                    : "bg-[#204972] bg-opacity-10"
+                                    }`}
+                                >
+                                  {isLocked ? (
+                                    <FiLock className="text-gray-400" />
+                                  ) : (
+                                    <FiPlay className="text-[#204972]" />
+                                  )}
                                 </div>
                                 <div>
-                                  <h4 className="font-medium text-gray-900">{video.title}</h4>
+                                  <h4 className="font-medium text-gray-900">
+                                    {video.title}
+                                  </h4>
                                   <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                                     <span>{i + 1} lecture</span>
                                     <span>•</span>
-                                    <span>{Math.floor(video.duration / 60)} min</span>
+                                    <span>
+                                      {video.duration} min
+                                    </span>
                                   </p>
                                 </div>
                               </div>
+
                               {!isLocked ? (
-                                <span className="text-[#204972] text-sm font-medium">Play</span>
+                                <span className="text-[#204972] text-sm font-medium">
+                                  Play
+                                </span>
                               ) : (
                                 <span className="text-gray-400 text-sm font-medium flex items-center">
                                   <FiLock className="mr-1" /> Locked
@@ -692,10 +647,14 @@ height ={100}
                               )}
                             </div>
 
-                            {/* Video embed + notes */}
+                            {/* Video + Notes */}
                             {!isLocked && openVideo === i && (
                               <div className="mt-3 ml-12 p-3 bg-gray-50 rounded text-gray-700 text-sm space-y-3">
-                                {video.longDescription && <p>{video.longDescription}</p>}
+                                {video.longDescription && (
+                                  <p>{video.longDescription}</p>
+                                )}
+
+                                {/* YouTube */}
                                 {embedUrl ? (
                                   <div className="aspect-video">
                                     <iframe
@@ -708,27 +667,48 @@ height ={100}
                                       allowFullScreen
                                     ></iframe>
                                   </div>
+                                ) : videoSrc ? (
+                                  /* Local Video */
+                                  <div className="aspect-video">
+                                    <video
+                                      width="100%"
+                                      controls
+                                      controlsList="nodownload"
+                                      className="rounded"
+                                    >
+                                      <source
+                                        src={videoSrc}
+                                        type="video/mp4"
+                                      />
+                                      Your browser does not support
+                                      the video tag.
+                                    </video>
+                                  </div>
                                 ) : (
-                                  <p className="text-red-500 text-xs">Invalid or unsupported video URL</p>
+                                  <p className="text-red-500 text-xs">
+                                    Invalid or unsupported video URL
+                                  </p>
                                 )}
-
 
                                 {/* Notes */}
                                 {video.notes?.length > 0 && (
                                   <div className="mt-2 space-y-1">
-                                    <h5 className="font-medium text-gray-700">Notes:</h5>
-                                    {video.notes.map((note, nIndex) => (
-                                      <a
-                                        key={nIndex}
-                                        // href={`http://localhost:5006${note}`} // prepend backend URL
-                                        href={`https://api.pvclasses.in${note}`} // prepend backend URL
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 underline text-sm block"
-                                      >
-                                        Note {nIndex + 1}
-                                      </a>
-                                    ))}
+                                    <h5 className="font-medium text-gray-700">
+                                      Notes:
+                                    </h5>
+                                    {video.notes.map(
+                                      (note, nIndex) => (
+                                        <a
+                                          key={nIndex}
+                                          href={`${BACKEND_URL}${note}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 underline text-sm block"
+                                        >
+                                          Note {nIndex + 1}
+                                        </a>
+                                      )
+                                    )}
                                   </div>
                                 )}
                               </div>
@@ -790,8 +770,8 @@ height ={100}
                           <div className="flex-shrink-0 mr-4">
                             <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md">
                               <Image
-width ={100}
-height ={100}
+                                width={100}
+                                height={100}
                                 src={facultyPhoto}
                                 alt={facultyMember.name}
                                 className="w-full h-full object-cover"
@@ -981,24 +961,26 @@ height ={100}
           </div>
 
           {/* Sidebar */}
-          <div className="w-full md:w-96 space-y-6">
-            {/* Pricing Card */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-20">
-              <div className="p-6 bg-[#204972] text-white">
-                <div className="flex flex-col gap-2 mb-4">
-                  <div className="flex items-end gap-2">
-                    <span className="text-3xl font-bold text-white">₹{totalPrice}</span>
-                    {cartMode === "both" && course.price !== totalPrice && (
-                      <span className="text-white line-through">₹{course.price + (course.comboId?.price || 0)}</span>
-                    )}
+          {!hasPurchased && (
+
+            <div className="w-full md:w-96 space-y-6">
+              {/* Pricing Card */}
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-20">
+                <div className="p-6 bg-[#204972] text-white">
+                  <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex items-end gap-2">
+                      <span className="text-3xl font-bold text-white">₹{totalPrice}</span>
+                      {cartMode === "both" && course.price !== totalPrice && (
+                        <span className="text-white line-through">₹{course.price + (course.comboId?.price || 0)}</span>
+                      )}
+                    </div>
+
+                    <div className="text-sm text-white capitalize">
+                      {cartMode}
+                    </div>
                   </div>
 
-                  <div className="text-sm text-white capitalize">
-                    {cartMode}
-                  </div>
-                </div>
-
-                <button
+                  {/* <button
                   onClick={(e) => {
                     handleAdd(e, selectedOption.type, selectedOption.id);
                     openCart();
@@ -1007,81 +989,102 @@ height ={100}
                 >
                   <FiShoppingCart />
                   Add to cart
-                </button>
+                </button> */}
+
+                  <button
+                    disabled={!totalPrice || totalPrice <= 0}
+                    onClick={(e) => {
+                      if (totalPrice > 0) {
+                        handleAdd(e, selectedOption.type, selectedOption.id);
+                        openCart();
+                      }
+                    }}
+                    className={`w-full font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2
+    ${totalPrice > 0
+                        ? "bg-[#788406] hover:bg-[#16385d] text-white"
+                        : "bg-gray-400 cursor-not-allowed text-white"
+                      }
+  `}
+                  >
+                    <FiShoppingCart />
+                    Add to cart
+                  </button>
 
 
-                <p className="text-center text-hite text-sm mt-4 flex items-center justify-center">
-                  <FiAward className="mr-1 text-amber-500" />
-                  30-Day Money-Back Guarantee
-                </p>
-              </div>
+                  <p className="text-center text-hite text-sm mt-4 flex items-center justify-center">
+                    <FiAward className="mr-1 text-amber-500" />
+                    30-Day Money-Back Guarantee
+                  </p>
+                </div>
 
-              <div className="border-t p-6">
-                <h3 className="font-bold text-lg text-[#204972] mb-3">This includes:</h3>
-                <ul className="space-y-3">
-                  {(cartMode === "course" || cartMode === "both") && (
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FiClock className="text-[#204972]" />
-                      <span>{course.videos?.reduce((sum, v) => sum + v.duration, 0)} minutes of video</span>
-                    </li>
-                  )}
-
-                  {(cartMode === "combo" || cartMode === "both") && (
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FiBook className="text-[#204972]" />
-                      <span>{selectAll ? "Complete combo" : `${selectedComboItems.length} combo items`}</span>
-                    </li>
-                  )}
-
-                  <li className="flex items-center gap-2 text-gray-700">
-                    <FiAward className="text-[#204972]" />
-                    <span>Certificate of completion</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="border-t p-6">
-                <h3 className="font-bold text-lg text-[#204972] mb-3">Selected Items:</h3>
-                <ul className="space-y-2 max-h-64 overflow-y-auto">
-                  {(cartMode === "course" || cartMode === "both") && (
-                    <li className="text-gray-700 text-sm flex justify-between items-center py-1">
-                      <span>Course: {course.title}</span>
-                      <span className="font-medium">₹{baseCoursePrice}</span>
-                    </li>
-                  )}
-
-                  {(cartMode === "combo" || cartMode === "both") && (
-                    selectAll && course.comboId ? (
-                      <li className="text-gray-700 text-sm flex justify-between items-center py-1">
-                        <span>Complete Combo: {course.comboId.title}</span>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[#616602] font-medium">₹{course.comboId.discount_price}</span>
-                          <span className="text-gray-500 text-xs line-through">₹{course.comboId.price}</span>
-                        </div>
+                <div className="border-t p-6">
+                  <h3 className="font-bold text-lg text-[#204972] mb-3">This includes:</h3>
+                  <ul className="space-y-3">
+                    {(cartMode === "course" || cartMode === "both") && (
+                      <li className="flex items-center gap-2 text-gray-700">
+                        <FiClock className="text-[#204972]" />
+                        <span>{course.videos?.reduce((sum, v) => sum + v.duration, 0)} minutes of video</span>
                       </li>
-                    ) : (
-                      selectedComboItems.map(index => {
-                        const item = course.comboItems[index];
-                        const title = item.itemId?.book_title || item.itemId?.title || item.itemId?.exam;
-                        return (
-                          <li key={index} className="text-gray-700 text-sm flex justify-between items-center py-1">
-                            <span className="truncate max-w-[200px]">{item.type}: {title}</span>
-                            <span className="font-medium">₹{item.price}</span>
-                          </li>
-                        );
-                      })
-                    )
-                  )}
+                    )}
 
-                  <li className="text-gray-900 font-bold flex justify-between mt-2 pt-2 border-t">
-                    <span>Total:</span>
-                    <span className="text-[#616602]">₹{totalPrice}</span>
-                  </li>
-                </ul>
+                    {(cartMode === "combo" || cartMode === "both") && (
+                      <li className="flex items-center gap-2 text-gray-700">
+                        <FiBook className="text-[#204972]" />
+                        <span>{selectAll ? "Complete combo" : `${selectedComboItems.length} combo items`}</span>
+                      </li>
+                    )}
+
+                    <li className="flex items-center gap-2 text-gray-700">
+                      <FiAward className="text-[#204972]" />
+                      <span>Certificate of completion</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="border-t p-6">
+                  <h3 className="font-bold text-lg text-[#204972] mb-3">Selected Items:</h3>
+                  <ul className="space-y-2 max-h-64 overflow-y-auto">
+                    {(cartMode === "course" || cartMode === "both") && (
+                      <li className="text-gray-700 text-sm flex justify-between items-center py-1">
+                        <span>Course: {course.title}</span>
+                        <span className="font-medium">₹{baseCoursePrice}</span>
+                      </li>
+                    )}
+
+                    {(cartMode === "combo" || cartMode === "both") && (
+                      selectAll && course.comboId ? (
+                        <li className="text-gray-700 text-sm flex justify-between items-center py-1">
+                          <span>Complete Combo: {course.comboId.title}</span>
+                          <div className="flex flex-col items-end">
+                            <span className="text-[#616602] font-medium">₹{course.comboId.discount_price}</span>
+                            <span className="text-gray-500 text-xs line-through">₹{course.comboId.price}</span>
+                          </div>
+                        </li>
+                      ) : (
+                        selectedComboItems.map(index => {
+                          const item = course.comboItems[index];
+                          const title = item.itemId?.book_title || item.itemId?.title || item.itemId?.exam;
+                          return (
+                            <li key={index} className="text-gray-700 text-sm flex justify-between items-center py-1">
+                              <span className="truncate max-w-[200px]">{item.type}: {title}</span>
+                              <span className="font-medium">₹{item.price}</span>
+                            </li>
+                          );
+                        })
+                      )
+                    )}
+
+                    <li className="text-gray-900 font-bold flex justify-between mt-2 pt-2 border-t">
+                      <span>Total:</span>
+                      <span className="text-[#616602]">₹{totalPrice}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
+
             </div>
 
-          </div>
+          )}
         </div>
       </section>
 
@@ -1092,10 +1095,16 @@ height ={100}
             <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
               <FiLock className="text-2xl text-red-500" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">Course Locked</h2>
+
+            <h2 className="text-xl font-bold text-gray-900 mb-3">
+              Course Locked
+            </h2>
+
             <p className="text-gray-600 mb-6">
-              To watch this video, you need to purchase the course
+              This course is locked. To access this video, please add the course
+              to your cart from the sidebar and complete the purchase.
             </p>
+
             <div className="flex gap-3 justify-center">
               <button
                 className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
@@ -1103,15 +1112,20 @@ height ={100}
               >
                 Cancel
               </button>
+
               <button
                 className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
-                onClick={() => {
+                onClick={(e) => {
                   setSelectedOption({ type: "course", id: course._id });
                   setCartMode("course");
+
+                  handleAdd(e, "course", course._id);
+                  openCart();
+
                   setShowModal(false);
                 }}
               >
-                Purchase Now
+                Add to Cart
               </button>
             </div>
           </div>

@@ -1750,6 +1750,7 @@ export default function TestSeriesUnified() {
             <button
               className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
               // onClick={handleFinish}
+              
               onClick={() => {
                 const attempted = Object.keys(answerHistory).length;
                 if (attempted < total) {
