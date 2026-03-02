@@ -65,7 +65,7 @@ export default function CoursesSection() {
 
         if (Array.isArray(res?.data) && res.data.length > 0) {
           setExamTypes(res.data);
-          setActiveExamType(res.data[0]);
+          setActiveExamType(res.data[1]);
           setCurrentStep(2);
         } else {
           setExamTypes([]);
@@ -183,18 +183,18 @@ export default function CoursesSection() {
 
 
   // set 2 category as default on load if exists
-useEffect(() => {
-  if (categories?.length > 1) {
-    // select the second category by default (moved to first)
-    const defaultCat = categories[1];
-    setActiveCategory(defaultCat);
-    setCurrentStep(2);
-  } else if (categories?.length === 1) {
-    // if only one category, select that
-    setActiveCategory(categories[0]);
-    setCurrentStep(2);
-  }
-}, [categories]);
+  useEffect(() => {
+    if (categories?.length > 1) {
+      // select the second category by default (moved to first)
+      const defaultCat = categories[1];
+      setActiveCategory(defaultCat);
+      setCurrentStep(2);
+    } else if (categories?.length === 1) {
+      // if only one category, select that
+      setActiveCategory(categories[0]);
+      setCurrentStep(2);
+    }
+  }, [categories]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -247,49 +247,48 @@ useEffect(() => {
               </div> */}
 
               {/* Categories Section */}
-<div className="mb-8">
-  <div className="flex items-center gap-3 mb-4">
-    <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
-      <FaBook className="text-[#204972] text-sm" />
-    </div>
-    <h3 className="font-semibold text-card-foreground text-lg">
-      Categories
-    </h3>
-    <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
-      {categories?.length}
-    </span>
-  </div>
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-[#204972]/10 rounded-lg flex items-center justify-center">
+                    <FaBook className="text-[#204972] text-sm" />
+                  </div>
+                  <h3 className="font-semibold text-card-foreground text-lg">
+                    Categories
+                  </h3>
+                  <span className="bg-[#204972]/10 text-xs font-medium px-2 py-1 rounded-full">
+                    {categories?.length}
+                  </span>
+                </div>
 
-  <div className="space-y-2 max-h-64 overflow-y-auto">
-    {(() => {
-      // Reorder: bring 2nd category to first
-      let reordered = [...(categories || [])];
-      if (reordered.length > 1) {
-        const second = reordered[1];
-        reordered.splice(1, 1);   // remove 2nd
-        reordered.unshift(second); // move it to first
-      }
-      return reordered.map((cat) => (
-        <button
-          key={cat?._id}
-          onClick={() => {
-            setActiveCategory(cat);
-            setCurrentStep(2);
-          }}
-          className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${
-            activeCategory?._id === cat?._id
-              ? "bg-[#204972] text-white shadow-sm"
-              : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <div className="font-medium text-sm cursor-pointer">
-            {cat?.name}
-          </div>
-        </button>
-      ));
-    })()}
-  </div>
-</div>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {(() => {
+                    // Reorder: bring 2nd category to first
+                    let reordered = [...(categories || [])];
+                    if (reordered.length > 1) {
+                      const second = reordered[1];
+                      reordered.splice(1, 1);   // remove 2nd
+                      reordered.unshift(second); // move it to first
+                    }
+                    return reordered.map((cat) => (
+                      <button
+                        key={cat?._id}
+                        onClick={() => {
+                          setActiveCategory(cat);
+                          setCurrentStep(2);
+                        }}
+                        className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${activeCategory?._id === cat?._id
+                            ? "bg-[#204972] text-white shadow-sm"
+                            : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
+                          }`}
+                      >
+                        <div className="font-medium text-sm cursor-pointer">
+                          {cat?.name}
+                        </div>
+                      </button>
+                    ));
+                  })()}
+                </div>
+              </div>
 
 
 
@@ -306,7 +305,8 @@ useEffect(() => {
                     </span>
                   </div>
                   <div className="space-y-2 max-h-48 overflow-y-auto scrollbar-hide pr-1">
-                    {examTypes?.map((type) => (
+                    {/* {examTypes?.map((type) => ( */}
+                    {examTypes?.slice().reverse().map((type) => (
                       <button
                         key={type?._id}
                         onClick={() => {
@@ -394,7 +394,8 @@ useEffect(() => {
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto scrollbar-hide pr-1">
-                  {examTypes?.map((type) => (
+                  {/* {examTypes?.map((type) => ( */}
+                  {examTypes?.slice().reverse().map((type) => (
                     <button
                       key={type?._id}
                       onClick={() => {
@@ -402,8 +403,8 @@ useEffect(() => {
                         setCurrentStep(3);
                       }}
                       className={`p-3 rounded-lg transition-all duration-200 ${activeExamType?._id === type?._id
-                          ? "bg-[#204972] text-secondary-foreground shadow-sm"
-                          : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
+                        ? "bg-[#204972] text-secondary-foreground shadow-sm"
+                        : "bg-[#204972]/10 hover:bg-[#204972]/60 text-muted-foreground hover:text-white"
                         }`}
                     >
                       <div className="font-medium text-sm">{type?.name}</div>
@@ -487,8 +488,8 @@ useEffect(() => {
                       {course?.full_image?.length > 0 ? (
                         <div className="w-full h-48 overflow-hidden">
                           <Image
-width ={200}
-height ={200}
+                            width={200}
+                            height={200}
                             src={course?.full_image?.[0]}
                             alt={course?.title || "Course Image"}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
