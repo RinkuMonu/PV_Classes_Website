@@ -825,6 +825,14 @@ export default function TestSeriesUnified() {
   const [completedTests, setCompletedTests] = useState({});
   const [hasAccess, setHasAccess] = useState(true);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+
   // ✅ FIXED: Timer function with proper state checks
   const startTimer = (sec) => {
     console.log("🕒 Starting timer with:", sec, "seconds");
@@ -1608,12 +1616,14 @@ export default function TestSeriesUnified() {
                         >
                           Retake
                         </button>
-                        <button
-                          onClick={(e) => viewTest(e, test?._id)}
-                          className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
-                        >
-                          View Answer
-                        </button>
+                        {isLoggedIn && (
+                          <button
+                            onClick={(e) => viewTest(e, test?._id)}
+                            className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
+                          >
+                            View Answer
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <button
@@ -1750,7 +1760,7 @@ export default function TestSeriesUnified() {
             <button
               className="px-4 py-2 rounded-lg text-[#00316B] font-semibold border border-[#00316B]"
               // onClick={handleFinish}
-              
+
               onClick={() => {
                 const attempted = Object.keys(answerHistory).length;
                 if (attempted < total) {

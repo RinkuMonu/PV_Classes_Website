@@ -10,6 +10,8 @@ import ExamToolbar from "../../components/ExamToolbar";
 import { useCart } from "../../components/context/CartContext";
 import Image from "next/image";
 
+
+
 const formatINR = (n) =>
   typeof n === "number"
     ? new Intl.NumberFormat("en-IN", {
@@ -22,7 +24,11 @@ const formatINR = (n) =>
 export default function CoursesPage() {
   const { addToCart, isOpen, openCart, closeCart } = useCart();
 
+  
   const searchParams = useSearchParams();
+
+  const searchQuery = searchParams?.get("q");
+
   const examId = searchParams?.get("exam");
 
   const [courses, setCourses] = useState([]);
@@ -46,7 +52,16 @@ export default function CoursesPage() {
       setIsLoading(true);
       try {
         // ✅ agar examId hai to filter karke laao warna sabhi courses
-        const url = examId ? `/courses?exam=${examId}` : `/courses`;
+        // const url = examId ? `/courses?exam=${examId}` : `/courses`;
+
+        let url = "/courses";
+
+        if (searchQuery) {
+          url = `/courses/search?q=${searchQuery}`;
+        } else if (examId) {
+          url = `/courses?exam=${examId}`;
+        }
+
         const res = await axiosInstance.get(url);
         let data = res?.data || [];
 
@@ -67,7 +82,7 @@ export default function CoursesPage() {
       }
     };
     fetchCourses();
-  }, [examId]);
+  }, [examId, searchQuery]);
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
     const response = await addToCart({
@@ -186,8 +201,8 @@ export default function CoursesPage() {
                   className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
                 >
                   <Image
-                  width={200}
-                  height={200}
+                    width={200}
+                    height={200}
                     src={c?.full_image?.[0] || "/vercel.svg"}
                     // src={`http://localhost:5000${c?.images?.[0]}`}
                     alt={c?.title || "Course"}
