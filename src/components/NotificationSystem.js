@@ -168,7 +168,7 @@ const NotificationSystem = () => {
                                             {/* Extra details only when expanded */}
                                             {isExpanded && (
                                                 <>
-                                                    <p className="text-xs text-gray-600 mt-1 truncate">{notification.description}</p>
+                                                    <p className="text-xs text-gray-600 mt-1 ">{notification.description}</p>
                                                     <div className="flex items-center justify-between mt-2">
                                                         <span className="text-xs text-gray-400">
                                                             {new Date(notification.createdAt).toLocaleDateString()}
