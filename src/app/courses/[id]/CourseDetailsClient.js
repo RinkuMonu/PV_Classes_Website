@@ -7,7 +7,7 @@ import axiosInstance from "../../axios/axiosInstance";
 import ReviewSection from "../../../components/ReviewSection";
 import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
-import { FaArrowRight, FaFilePdf } from "react-icons/fa";
+import { FaArrowRight, FaChevronDown, FaChevronRight, FaFilePdf } from "react-icons/fa";
 import Link from "next/link";
 
 export default function CourseDetailsPage() {
@@ -29,6 +29,9 @@ export default function CourseDetailsPage() {
 
   const [courseNotes, setCourseNotes] = useState([]);
   const [loadingNotes, setLoadingNotes] = useState(true);
+
+  const [groupedCourseNotes, setGroupedCourseNotes] = useState({});
+  const [expandedNoteGroup, setExpandedNoteGroup] = useState(null);
 
 
   useEffect(() => {
@@ -97,8 +100,25 @@ export default function CourseDetailsPage() {
 
         // 🔥 Fetch Course Notes
         try {
+          // const notesRes = await axiosInstance.get(`/notes/course/${id}`);
+          // setCourseNotes(notesRes.data);
+
           const notesRes = await axiosInstance.get(`/notes/course/${id}`);
-          setCourseNotes(notesRes.data);
+          const notesArray = notesRes.data;
+
+          const transformed = {};
+
+          notesArray.forEach((note) => {
+            const groupName = note.noteTitle || "General";
+
+            if (!transformed[groupName]) {
+              transformed[groupName] = [];
+            }
+
+            transformed[groupName].push(note);
+          });
+
+          setGroupedCourseNotes(transformed);
         } catch (err) {
           console.log("No notes found");
           setCourseNotes([]);
@@ -119,6 +139,12 @@ export default function CourseDetailsPage() {
 
     fetchCourse();
   }, [id]);
+
+
+  const toggleNoteGroup = (group) => {
+    setExpandedNoteGroup(expandedNoteGroup === group ? null : group);
+  };
+
 
   const checkCourseAccess = async (courseId) => {
     try {
@@ -705,7 +731,7 @@ export default function CourseDetailsPage() {
 
 
             {/* Course Notes Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 mt-6">
+            {/* <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 mt-6">
               <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2">
                 Course Notes
               </h2>
@@ -756,6 +782,79 @@ export default function CourseDetailsPage() {
                     );
                   })}
                 </div>
+              )}
+            </div> */}
+
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 mt-6">
+              <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2">
+                Course Notes
+              </h2>
+
+              {loadingNotes ? (
+                <p>Loading notes...</p>
+              ) : Object.keys(groupedCourseNotes).length === 0 ? (
+                <p className="text-gray-500">No notes available for this course.</p>
+              ) : (
+                Object.keys(groupedCourseNotes).map((group) => (
+                  <div key={group} className="mb-4 border rounded-lg overflow-hidden">
+
+                    {/* Group Header */}
+                    <div
+                      onClick={() => toggleNoteGroup(group)}
+                      className="flex justify-between items-center p-4 bg-gray-50 cursor-pointer hover:bg-blue-50 transition"
+                    >
+                      <h3 className="font-semibold text-gray-800">
+                        {group}
+                      </h3>
+                      {expandedNoteGroup === group ? <FaChevronDown /> : <FaChevronRight />}
+                    </div>
+
+                    {/* Notes List */}
+                    {expandedNoteGroup === group && (
+                      <div className="p-4 space-y-3">
+                        {groupedCourseNotes[group].map((note) => {
+                          const isLocked = !note.isFree && !hasPurchased;
+
+                          return (
+                            <div
+                              key={note._id}
+                              className="flex justify-between items-center p-3 border rounded-md hover:bg-blue-50 transition"
+                            >
+                              <div>
+                                <h4 className="font-medium text-gray-800">
+                                  {note.title}
+                                </h4>
+                                <p className="text-sm text-gray-500">
+                                  {note.description}
+                                </p>
+                              </div>
+
+                              {isLocked ? (
+                                <button
+                                  onClick={() => setShowModal(true)}
+                                  className="flex items-center gap-2 text-gray-400"
+                                >
+                                  <FiLock />
+                                  Locked
+                                </button>
+                              ) : (
+                                <a
+                                  href={note.full_pdf}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 text-[#204972] font-medium"
+                                >
+                                  <FaFilePdf />
+                                  Download
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))
               )}
             </div>
 
