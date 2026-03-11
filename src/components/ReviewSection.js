@@ -4,6 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../app/axios/axiosInstance';
 import toast from 'react-hot-toast';
+import Swal from "sweetalert2";
 
 const ReviewSection = ({ courseId }) => {
   const [reviews, setReviews] = useState([]);
@@ -13,42 +14,42 @@ const ReviewSection = ({ courseId }) => {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-   const fetchReviews = useCallback(async () => {
-  try {
-    const response = await axiosInstance.get("/reviews");
+  const fetchReviews = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("/reviews");
 
-    // Filter reviews for this specific course and approved ones
-    const courseReviews = response.data.filter((review) => {
-      const isApproved = review.approved;
-      const isForThisCourse =
-        review.course && review.course._id === courseId;
+      // Filter reviews for this specific course and approved ones
+      const courseReviews = response.data.filter((review) => {
+        const isApproved = review.approved;
+        const isForThisCourse =
+          review.course && review.course._id === courseId;
 
-      return isApproved && isForThisCourse;
-    });
+        return isApproved && isForThisCourse;
+      });
 
-    setReviews(courseReviews);
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    toast.error("Failed to load reviews");
-  } finally {
-    setLoading(false);
-  }
-}, [courseId]);
+      setReviews(courseReviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      toast.error("Failed to load reviews");
+    } finally {
+      setLoading(false);
+    }
+  }, [courseId]);
   useEffect(() => {
     fetchReviews();
-  }, [ fetchReviews]);
+  }, [fetchReviews]);
 
 
 
   const submitReview = async (e) => {
     e.preventDefault();
-    
+
     // Validate input
     if (!comment.trim()) {
       toast.error('Please write a comment');
       return;
     }
-    
+
     setSubmitting(true);
 
     try {
@@ -69,11 +70,20 @@ const ReviewSection = ({ courseId }) => {
         fetchReviews();
       }
     } catch (error) {
-    //   console.error('Error submitting review:', error);
+      // console.error('Error submitting review:', error);
+
       if (error.response?.status === 401) {
-        toast.error('Please login to submit a review');
+        Swal.fire({
+          icon: "error",
+          title: "Login Required",
+          text: "Please login to submit a review"
+        });
       } else {
-        toast.error('Failed to submit review Please login');
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to submit review. Please Login."
+        });
       }
     } finally {
       setSubmitting(false);
@@ -85,7 +95,7 @@ const ReviewSection = ({ courseId }) => {
   };
 
   // Calculate average rating
-  const averageRating = reviews.length > 0 
+  const averageRating = reviews.length > 0
     ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
     : 0;
 
@@ -122,19 +132,19 @@ const ReviewSection = ({ courseId }) => {
             {reviews.length} review{reviews.length !== 1 ? 's' : ''}
           </div>
         </div>
-        
+
         <div className="flex-1">
           {[5, 4, 3, 2, 1].map((star) => {
             const count = reviews.filter(r => r.rating === star).length;
             const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
-            
+
             return (
               <div key={star} className="flex items-center mb-1">
                 <span className="text-sm text-gray-600 w-4">{star}</span>
                 <span className="text-amber-500 ml-1">★</span>
                 <div className="ml-2 bg-gray-200 rounded-full h-2 flex-1">
-                  <div 
-                    className="bg-amber-500 h-2 rounded-full" 
+                  <div
+                    className="bg-amber-500 h-2 rounded-full"
                     style={{ width: `${percentage}%` }}
                   ></div>
                 </div>
@@ -161,7 +171,7 @@ const ReviewSection = ({ courseId }) => {
       {showReviewForm && (
         <form onSubmit={submitReview} className="bg-gray-50 p-4 rounded-lg mb-6">
           <h3 className="font-semibold text-[#204972] mb-3">Write Your Review</h3>
-          
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Rating
@@ -172,9 +182,8 @@ const ReviewSection = ({ courseId }) => {
                   key={star}
                   type="button"
                   onClick={() => setRating(star)}
-                  className={`text-2xl ${
-                    star <= rating ? 'text-amber-500' : 'text-gray-300'
-                  } hover:text-amber-400 transition-colors`}
+                  className={`text-2xl ${star <= rating ? 'text-amber-500' : 'text-gray-300'
+                    } hover:text-amber-400 transition-colors`}
                 >
                   {star <= rating ? '★' : '☆'}
                 </button>

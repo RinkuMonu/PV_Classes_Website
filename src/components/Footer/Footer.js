@@ -303,8 +303,8 @@ export default function Footer() {
 
               <div className="flex items-center gap-3">
                 <FaPhone />
-                <a href="tel:01414511098" className="hover:underline">
-                  0141-4511098
+                <a href="tel:9251582692" className="hover:underline">
+                  9251582692
                 </a>
               </div>
 
