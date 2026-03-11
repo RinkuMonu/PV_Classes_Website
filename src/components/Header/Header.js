@@ -174,6 +174,7 @@ export default function Header() {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     setIsLoggedIn(false);
+    window.location.href = "/";
   };
 
   const toggleTab = (category, tab) => {
@@ -449,8 +450,8 @@ export default function Header() {
                             <Image
                               width={100}
                               height={100}
-                              src={item?.details?.full_image?.[0]}
-                              alt={item?.details?.title}
+                              src={item?.details?.full_image?.[0] || "/no-image.png" }
+                              alt={item?.details?.title || "no iamge"}
                               className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
                             />
                           </div>
@@ -662,7 +663,7 @@ export default function Header() {
                           width={100}
                           height={100}
                           src={item?.details?.full_image?.[0] || "/placeholder.svg"}
-                          alt={item?.details?.title}
+                          alt={item?.details?.title || "no images" }
                           className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
                         />
                       )}

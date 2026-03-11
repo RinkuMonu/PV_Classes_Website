@@ -6,6 +6,69 @@ import Image from "next/image";
 import Link from "next/link";
 import axiosInstance from "../axios/axiosInstance";
 
+
+const OrderTracking = ({ status }) => {
+
+  const steps = ["confirmed", "packed", "shipped", "completed"];
+
+  const labels = {
+    confirmed: "Confirmed",
+    packed: "Packed",
+    shipped: "Shipped",
+    completed: "Delivered"
+  };
+
+  // normalize backend status
+  const normalizedStatus = status?.toLowerCase();
+
+  const currentStep = steps.indexOf(normalizedStatus);
+
+  return (
+    <div className="mt-4 px-2">
+
+      <div className="flex items-center justify-between relative">
+
+        {steps.map((step, index) => {
+
+          const active = index <= currentStep;
+
+          return (
+            <div key={step} className="flex flex-col items-center flex-1 relative">
+
+              {/* Circle */}
+              <div
+                className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold z-10
+                ${active ? "bg-green-500 text-white" : "bg-gray-300 text-white"}`}
+              >
+                ✓
+              </div>
+
+              {/* Line */}
+              {index < steps.length - 1 && (
+                <div
+                  className={`absolute top-3 left-1/2 w-full h-[2px]
+                  ${index < currentStep ? "bg-green-500" : "bg-gray-300"}`}
+                />
+              )}
+
+              {/* Label */}
+              <span
+                className={`mt-2 text-xs font-medium
+                ${active ? "text-green-600" : "text-gray-400"}`}
+              >
+                {labels[step]}
+              </span>
+
+            </div>
+          );
+        })}
+
+      </div>
+
+    </div>
+  );
+};
+
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState("detail");
     const [search, setSearch] = useState("");
@@ -114,13 +177,16 @@ export default function ProfilePage() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+
+                console.log("users dataa : ", res);
                 setUserDetails({
                     name: res?.data?.data?.name || "",
                     email: res?.data?.data?.email || "",
                     phone: res?.data?.data?.phone || "",
                     address: res?.data?.data?.address || "",
                     state: res?.data?.data?.state || "",
-                    city: res?.data?.data?.city || "",
+                    // city: res?.data?.data?.city || "",
+                    district: res?.data?.data?.district || "",
                     pincode: res?.data?.data?.pincode || "",
                     profile_image_url: res?.data?.data?.profile_image_url || null,
                 });
@@ -138,7 +204,8 @@ export default function ProfilePage() {
         phone: "",
         profile_image: null,
         state: "",
-        city: "",
+        // city: "",
+        district: "",
         pincode: "",
         address: "",
     });
@@ -153,7 +220,8 @@ export default function ProfilePage() {
             formData.append("email", userDetails.email);
             formData.append("phone", userDetails.phone);
             formData.append("state", userDetails.state);
-            formData.append("city", userDetails.city);
+            // formData.append("city", userDetails.city);
+            formData.append("district", userDetails.district);
             formData.append("pincode", userDetails.pincode);
             formData.append("address", userDetails.address);
             if (userDetails.profile_image) {
@@ -258,7 +326,6 @@ export default function ProfilePage() {
                         </button>
                     ))}
                 </div>
-
             </div>
 
 
@@ -267,64 +334,47 @@ export default function ProfilePage() {
 
                 {/* Books */}
 
-                {/* {activeTab === "books" && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        {books?.map((book) => (
-                            <div
-                                key={book._id}
-                                className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
-                            >
-                                <Link href={book._id ? `/book-detail/${book._id}` : "/"}>
-                                    <div className="relative w-full h-48 sm:h-64">
-                                        <Image
-                                            src={`${book?.full_image?.[0] || `/uploads/book/${book.images?.[0]}` || "/default-book.jpg"}`}
-                                            alt={book.title || "Book image"}
-                                            fill
-                                            className="object-cover p-2"
-                                        />
-                                    </div>
-                                    <div className="p-3">
-                                        <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                                            {book.title}
-                                        </p>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                )} */}
                 {activeTab === "books" && (
                     <>
                         {books?.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                            // <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                            <div
+                                className={`grid gap-4 sm:gap-6
+                                    ${books.length === 1
+                                        ? "grid-cols-2"
+                                        : books.length === 2
+                                            ? "grid-cols-1 sm:grid-cols-2"
+                                            : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                                    }`}
+                            >
                                 {books.map((book) => (
-                                    <div
-                                        key={book._id}
-                                        className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
-                                    >
-                                        <Link href={book._id ? `/book-detail/${book._id}` : "/"}>
-                                            <div className="relative w-full h-48 sm:h-64">
+                                    <div key={book._id} className="bg-white rounded-xl shadow hover:shadow-md transition p-3 w-full">
+
+                                        <Link href={`/book-detail/${book._id}`}>
+
+                                            <div className="relative w-full h-52">
                                                 <Image
-                                                    src={`${book?.full_image?.[0] ||
-                                                        `/uploads/book/${book.images?.[0]}` ||
-                                                        "/default-book.jpg"
-                                                        }`}
-                                                    alt={book.title || "Book image"}
+                                                    src={book?.full_image?.[0]}
+                                                    alt={book.title}
                                                     fill
-                                                    className="object-cover p-2"
+                                                    className="object-contain"
                                                 />
                                             </div>
-                                            <div className="p-3">
-                                                <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                                                    {book.title}
-                                                </p>
-                                            </div>
+
+                                            <h3 className="text-sm font-semibold text-gray-800 mt-3 line-clamp-2">
+                                                {book.title}
+                                            </h3>
+
                                         </Link>
+
+                                        {/* Tracking UI */}
+                                        <OrderTracking status={book.orderStatus} />
+
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                             <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+                            <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
                                 <div className="mb-5">
                                     <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -448,9 +498,9 @@ export default function ProfilePage() {
                                 ))}
                             </div>
                         ) : (
-                           
 
-                              <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
+
+                            <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-blue-100">
                                 <div className="mb-5">
                                     <svg className="mx-auto h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -669,21 +719,21 @@ export default function ProfilePage() {
                                         </div>
                                     )}
                                 </div>
-                                {/* City */}
+                                {/* district */}
                                 <div className="animate-fadeIn">
-                                    <label className="block text-sm font-medium text-gray-600 mb-1.5">City</label>
+                                    <label className="block text-sm font-medium text-gray-600 mb-1.5">district</label>
                                     {isEditing ? (
                                         <div className="relative">
                                             <input
                                                 type="text"
-                                                value={userDetails.city}
+                                                value={userDetails.district}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
                                                     if (/^[A-Za-z\s]*$/.test(value)) {
-                                                        setUserDetails({ ...userDetails, city: value });
+                                                        setUserDetails({ ...userDetails, district: value });
                                                     }
                                                 }}
-                                                placeholder="Your City"
+                                                placeholder="Your district"
                                                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 
                                             focus:ring-2 focus:ring-[#204972] focus:border-transparent 
                                             focus:outline-none transition-all duration-200"
@@ -703,7 +753,7 @@ export default function ProfilePage() {
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0-1.104.896-2 2-2s2 .896 2 2-.896 2-2 2-2-.896-2-2zm0 9c-4.418 0-8-3.582-8-8h2c0 3.309 2.691 6 6 6s6-2.691 6-6h2c0 4.418-3.582 8-8 8z" />
                                             </svg>
-                                            {userDetails.city || <span className="text-gray-400">Not provided</span>}
+                                            {userDetails.district || <span className="text-gray-400">Not provided</span>}
                                         </div>
                                     )}
                                 </div>
