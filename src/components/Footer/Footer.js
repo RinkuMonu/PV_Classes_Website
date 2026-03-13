@@ -446,7 +446,7 @@ export default function Footer() {
         {/* ====== Bottom ====== */}
         <div className="border-t border-gray-500 mt-10 pt-6 text-center text-sm">
           <div className="flex flex-wrap justify-center gap-4 mb-3"></div>
-          <p>© 2026 PV Classes . All rights reserved.</p>
+          <p>© {new Date().getFullYear()} PV Classes. All rights reserved.</p>
         </div>
       </div>
     </footer>

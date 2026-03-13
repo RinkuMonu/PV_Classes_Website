@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Swal from "sweetalert2";
+
 
 const axiosInstance = axios.create({
     // baseURL: 'https://api.7uniqueverfiy.com/api',
@@ -28,18 +30,48 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+let isSessionAlertShown = false;
 
 // ✅ Response Interceptor
 axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            // console.error('Unauthorized! Redirecting to login...');
-            // You can redirect user or remove token here
-            return Promise.reject({ silent: true }); // custom reject
+  (response) => response,
+
+  async (error) => {
+
+    if (error.response) {
+
+      const message = error.response.data?.message;
+
+      if (
+        error.response.status === 401 &&
+        message === "Your account is logged in on another device"
+      ) {
+
+        // ✅ Prevent multiple alerts
+        if (!isSessionAlertShown) {
+
+          isSessionAlertShown = true;
+
+          await Swal.fire({
+            icon: "warning",
+            title: "Session Expired",
+            text: "Your account is logged in on another device",
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          });
+
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+          }
+
         }
-        return Promise.reject(error);
+      }
     }
+
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;
