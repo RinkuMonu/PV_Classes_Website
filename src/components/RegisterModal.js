@@ -14,12 +14,32 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
     password: "",
     confirmPassword: "",
     state: "",
-    district: ""
+    district: "",
+    exam: ""
+
   })
   const [isLoading, setIsLoading] = useState(false)
 
   const [states, setStates] = useState([])
   const [districts, setDistricts] = useState([])
+  const [exams, setExams] = useState([])
+
+  useEffect(() => {
+
+    const fetchExams = async () => {
+      try {
+
+        const res = await axiosInstance.get("/exams")
+        setExams(res.data)
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchExams()
+
+  }, [])
 
 
   useEffect(() => {
@@ -108,7 +128,9 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
         phone: formData.phone,
         password: formData.password,
         state: formData.state,
-        district: formData.district
+        district: formData.district,
+        exam: formData.exam
+
       })
 
       toast.success(data.message || "Registration successful!")
@@ -230,6 +252,23 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
                 {d}
               </option>
             ))}
+          </select>
+
+          <select
+            name="exam"
+            value={formData.exam}
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          >
+            <option value="">Select Exam</option>
+
+            {exams.map((exam) => (
+              <option key={exam._id} value={exam._id}>
+                {exam.name}
+              </option>
+            ))}
+
           </select>
 
           <button

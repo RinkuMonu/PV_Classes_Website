@@ -13,9 +13,39 @@ import { BsStars } from "react-icons/bs";
 import { HiShoppingCart } from "react-icons/hi";
 import axiosInstance from "../../axios/axiosInstance";
 import { useCart } from "../../../components/context/CartContext";
+import { FaFilePdf } from "react-icons/fa";
 
 export default function ProductPage() {
   const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
+
+
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
+
+  const checkBookAccess = async (bookId) => {
+    try {
+      const response = await axiosInstance.get(`/access/check/${bookId}`);
+
+    console.log("HElllooooooooooo Access API:", response.data); // 👈 check this
+
+
+      if (response?.data?.message?.includes("granted")) {
+        setHasPurchased(true);
+      } else {
+        setHasPurchased(false);
+      }
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        return null;
+      } else if (error?.response?.status === 403) {
+        setHasPurchased(false);
+      }
+    } finally {
+      setCheckingAccess(false);
+    }
+  };
+
+
   const handleAdd = async (e, itemType, itemId) => {
     e.stopPropagation();
     const response = await addToCart({
@@ -38,6 +68,9 @@ export default function ProductPage() {
       try {
         const res = await axiosInstance.get(`/books/${id}`);
         setBooks(res.data.data);
+
+        checkBookAccess(id);
+
       } catch (error) {
         console.error(error);
       }
@@ -168,7 +201,62 @@ export default function ProductPage() {
               {books?.book_description}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+
+            {/* PDF Section */}
+            <div className="mt-6 space-y-3">
+
+              {/* Free PDF */}
+              {books?.free_pdf_url && (
+                <a
+                  href={books?.free_pdf_url}
+                  target="_blank"
+                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <FaFilePdf className="text-red-500 text-xl" />
+                    <span className="font-medium">Free Sample PDF</span>
+                  </div>
+
+                  <span className="text-sm text-green-600 font-semibold">
+                    Download
+                  </span>
+                </a>
+              )}
+
+              {/* Paid PDF */}
+              {books?.paid_pdf_url && (
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+
+                  <div className="flex items-center gap-3">
+                    <FaFilePdf className="text-red-500 text-xl" />
+                    <span className="font-medium">Full Book PDF</span>
+                  </div>
+
+                  {hasPurchased ? (
+                    <a
+                      href={books?.paid_pdf_url}
+                      target="_blank"
+                      className="text-green-600 font-semibold"
+                    >
+                      Download
+                    </a>
+                  ) : (
+                    <span 
+                    
+                      onClick={(e) => {
+                  handleAdd(e, "book", books?._id);
+                  openCart();
+                }}
+                    className="flex items-center gap-1 text-gray-500 cursor-pointer">
+                      🔒 Locked
+                    </span>
+                  )}
+                </div>
+              )}
+
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 mt-4">
               <button
                 onClick={(e) => {
                   handleAdd(e, "book", books?._id);

@@ -6,10 +6,10 @@ import { FaArrowRight } from "react-icons/fa6";
 export default function LearningResources() {
   const resources = [
     {
-      title: "Reference Notes",
+      title: "Reference Books/Notes",
       description:
         "Our experts have created thorough study materials that break down complicated concepts into easily understandable content",
-      img: "/Image/boooks.webp",
+      img: "/Image/pic3.jpeg",
       bg: "bg-[#87b105]/20 hover:bg-[#87b105]/30",
       link: "/notes",
       button: true,
@@ -18,7 +18,7 @@ export default function LearningResources() {
       title: "PYQs with Solutions",
       description:
         "Unlock academic excellence with PV Classes which provides you step-by-step solutions",
-      img: "/Image/pyqs-img.webp",
+      img: "/Image/pic1.jpeg",
       bg: "bg-[#87b105]/20 hover:bg-[#87b105]/30",
       link: "/previous-year-question",
       button: false,
@@ -27,7 +27,7 @@ export default function LearningResources() {
       title: "Test Series",
       description:
         "Use PV Classes detailed study materials that simplify complex ideas into easily understandable language",
-      img: "/Image/boooks.webp",
+      img: "/Image/pic2.jpeg",
       bg: "bg-[#87b105]/20 hover:bg-[#87b105]/30",
       link: "/test-series",
       button: false,
