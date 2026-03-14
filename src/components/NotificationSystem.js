@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import axiosInstance from '../app/axios/axiosInstance';
+import { Bell } from 'lucide-react';
 
 const NotificationSystem = () => {
     const [categories, setCategories] = useState([]);
@@ -107,7 +108,8 @@ const NotificationSystem = () => {
                 onClick={handleNotificationClick}
                 className="notification-button relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
-                Notifications
+                    <Bell className="w-5 h-5" />
+
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
 
                 {/* Notification Badge */}
