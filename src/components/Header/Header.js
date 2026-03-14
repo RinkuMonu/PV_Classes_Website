@@ -240,9 +240,9 @@ export default function Header() {
               </div>
               <span className="font-medium">PV Classes, Jaipur Rajasthan, India, 302017</span>
 
-              
+
             </div>
-              <HeaderSearch />
+            <HeaderSearch />
           </div>
           {/* Right */}
           <div className="flex items-center">
@@ -306,7 +306,7 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#204972]">
             <Link
               href="/"
-              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Home
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
@@ -317,7 +317,7 @@ export default function Header() {
               onMouseEnter={() => setCoursesMenu(true)}
               onMouseLeave={() => setCoursesMenu(false)}
             >
-              <button className="flex items-center gap-1 py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold relative">
+              <button className="flex items-center gap-1 py-1 px-2 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold relative">
                 All Exams
                 <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
@@ -330,51 +330,47 @@ export default function Header() {
             </div>
             <Link
               href="/previous-year-question"
-              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               PYQs
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
             <Link
               href="/test-series"
-              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Test Series
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
+              <Link
+              href="/book"
+              className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+            >
+              Books
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
+            </Link>
             <Link
               href="/current-affairs"
-              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1  hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Current Affairs
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
             <Link
               href="/notes"
-              className="relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1  hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Notes
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
+
+          
           </nav>
 
-          <div className="flex items-center space-x-4">
-
-            {/* Add the NotificationSystem component */}
-            {/* <NotificationSystem /> */}
-
-
-            {isLoggedIn && (
-              <NotificationSystem />
-
-            )}
-
-            {/* Other header items like user profile */}
-          </div>
 
           <div className="flex items-center">
             <Link href="/contact-us">
-              <button className="flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition">
+              <button className="hidden md:flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition ">
                 <FaPhone size={16} />
                 <span>Contact Us</span>
               </button>
@@ -389,6 +385,11 @@ export default function Header() {
                 {cartCount}
               </span>
             </button>
+
+            {isLoggedIn && (
+              <NotificationSystem />
+
+            )}
 
             {isOpen && (
               <div
@@ -450,7 +451,7 @@ export default function Header() {
                             <Image
                               width={100}
                               height={100}
-                              src={item?.details?.full_image?.[0] || "/no-image.png" }
+                              src={item?.details?.full_image?.[0] || "/no-image.png"}
                               alt={item?.details?.title || "no iamge"}
                               className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border"
                             />
@@ -663,7 +664,7 @@ export default function Header() {
                           width={100}
                           height={100}
                           src={item?.details?.full_image?.[0] || "/placeholder.svg"}
-                          alt={item?.details?.title || "no images" }
+                          alt={item?.details?.title || "no images"}
                           className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border-2 border-[#009FE3]/20"
                         />
                       )}
@@ -918,6 +919,14 @@ export default function Header() {
             className="hover:bg-gradient-to-r hover:from-[#00316B] hover:to-[#204972] hover:text-white px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3"
           >
             Notes
+          </Link>
+
+          <Link
+            href="/book"
+            onClick={() => setMobileMenuOpen(false)}
+            className="hover:bg-gradient-to-r hover:from-[#00316B] hover:to-[#204972] hover:text-white px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3"
+          >
+            Books
           </Link>
         </nav>
       </div>

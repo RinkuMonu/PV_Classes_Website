@@ -1183,8 +1183,8 @@ export default function CourseDetailsPage() {
 
 
                   <p className="text-center text-hite text-sm mt-4 flex items-center justify-center">
-                    <FiAward className="mr-1 text-amber-500" />
-                    30-Day Money-Back Guarantee
+                    {/* <FiAward className="mr-1 text-amber-500" /> */}
+                    please add to cart
                   </p>
                 </div>
 
@@ -1194,7 +1194,7 @@ export default function CourseDetailsPage() {
                     {(cartMode === "course" || cartMode === "both") && (
                       <li className="flex items-center gap-2 text-gray-700">
                         <FiClock className="text-[#204972]" />
-                        <span>{course.videos?.reduce((sum, v) => sum + v.duration, 0)} minutes of video</span>
+                        <span>Doubt solving sessions</span>
                       </li>
                     )}
 
@@ -1207,7 +1207,7 @@ export default function CourseDetailsPage() {
 
                     <li className="flex items-center gap-2 text-gray-700">
                       <FiAward className="text-[#204972]" />
-                      <span>Certificate of completion</span>
+                      <span>PDF notes in Hindi & English</span>
                     </li>
                   </ul>
                 </div>
