@@ -823,7 +823,7 @@ export default function TestSeriesUnified() {
 
   const timerRef = useRef(null);
   const [completedTests, setCompletedTests] = useState({});
-  const [hasAccess, setHasAccess] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -831,6 +831,36 @@ export default function TestSeriesUnified() {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          setHasAccess(false);
+          return;
+        }
+
+        const res = await axiosInstance.get(`/access/check/${seriesId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          validateStatus: (status) => status < 500,
+        });
+
+        if (res.status === 200 && res.data.message === "Access granted") {
+          setHasAccess(true);
+        } else {
+          setHasAccess(false);
+        }
+
+      } catch (err) {
+        console.error("Access check failed:", err);
+        setHasAccess(false);
+      }
+    })();
+  }, [seriesId]);
 
 
   // ✅ FIXED: Timer function with proper state checks
@@ -964,9 +994,6 @@ export default function TestSeriesUnified() {
     router.push(`/view-answer-sheet/${seriesId}?testId=${testId}`);
   };
 
-  useEffect(() => {
-    setHasAccess(true);
-  }, []);
 
   const fetchSeries = async () => {
     try {
@@ -1514,16 +1541,25 @@ export default function TestSeriesUnified() {
     </div>
   );
 
+
+
+
+
   // ---------- Mode: DETAILS ----------
   if (mode === "details") {
     return (
       <section className="relative pt-6 md:pt-8 pb-16">
         {banner}
         <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+
+
           {/* LEFT */}
           <div>
             {/* Overview */}
             <div className="bg-white p-6 rounded-2xl shadow-sm mb-8">
+
+
+
               <div className="flex items-center gap-3 mb-5">
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <BookOpen size={24} className="text-[#204972]" />
@@ -1571,7 +1607,8 @@ export default function TestSeriesUnified() {
             <div className="bg-white p-6 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg text-[#204972] font-semibold">Available Tests</h3>
-                {Object.keys(completedTests).length > 0 && (
+
+                {hasAccess && Object.keys(completedTests).length > 0 && (
                   <Link
                     href={`/view-answer-sheet/${seriesId}`}
                     className="px-2 py-2 bg-[#00316B] text-white rounded-lg hover:bg-[#00316B]/80 transition cursor-pointer"
@@ -1602,37 +1639,49 @@ export default function TestSeriesUnified() {
                       </div>
                     </div>
 
-                    {completedTests[test._id] ? (
-                      <div className="flex gap-2">
-                        <button
-                          disabled
-                          className="px-3 py-2 rounded-lg bg-green-100 text-green-700 font-semibold flex items-center gap-2 text-sm"
-                        >
-                          <CheckCircle size={14} /> Completed
-                        </button>
+                    {/* {completedTests[test._id] ? ( */}
+                    {hasAccess ? (
+                      completedTests[test._id] ? (
+                        <div className="flex gap-2">
+                          <button
+                            disabled
+                            className="px-3 py-2 rounded-lg bg-green-100 text-green-700 font-semibold flex items-center gap-2 text-sm"
+                          >
+                            <CheckCircle size={14} /> Completed
+                          </button>
+                          <button
+                            onClick={() => handleStart(test)}
+                            className="px-3 py-2 rounded-lg cursor-pointer bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 text-sm"
+                          >
+                            Retake
+                          </button>
+                          {isLoggedIn && (
+                            <button
+                              onClick={(e) => viewTest(e, test?._id)}
+                              className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
+                            >
+                              View Answer
+                            </button>
+                          )}
+                        </div>
+                      ) : (
                         <button
                           onClick={() => handleStart(test)}
-                          className="px-3 py-2 rounded-lg cursor-pointer bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 text-sm"
+                          className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
                         >
-                          Retake
+                          Start
                         </button>
-                        {isLoggedIn && (
-                          <button
-                            onClick={(e) => viewTest(e, test?._id)}
-                            className="px-3 py-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 text-sm"
-                          >
-                            View Answer
-                          </button>
-                        )}
-                      </div>
+                      )
+
                     ) : (
                       <button
-                        onClick={() => handleStart(test)}
-                        className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
+                        disabled
+                        className="px-4 py-2 rounded-lg bg-gray-300 text-gray-600 font-semibold cursor-not-allowed flex items-center gap-2"
                       >
-                        Start
+                        🔒 Locked
                       </button>
                     )}
+
                   </div>
                 ))}
 
@@ -1667,7 +1716,11 @@ export default function TestSeriesUnified() {
             </div>
           </div>
 
-          {/* RIGHT - Removed sidebar since tests are free */}
+          {!hasAccess && (
+            <div className="lg:mt-0 mt-6">
+              <SidebarCard series={series} hasAccess={hasAccess} />
+            </div>
+          )}
         </div>
       </section>
     );
@@ -1944,6 +1997,107 @@ function Stat({ label, value }) {
       >
 
         {value}
+      </div>
+    </div>
+  );
+}
+
+
+// /* ---------- Sidebar Card ---------- */
+function SidebarCard({ series, hasAccess }) {
+  const { addToCart, loading, isOpen, openCart, closeCart } = useCart();
+  const handleAdd = async (e, itemType, itemId) => {
+    e.stopPropagation();
+    const response = await addToCart({ itemType, itemId });
+    if (response?.success) toast.success(response.message);
+    else toast.error(response?.message || "Failed to add");
+  };
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: series?.title,
+          text: "Check out this test series!",
+          url: window.location.href,
+        })
+        .catch((err) => console.error("Share failed:", err));
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
+  const img =
+    `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}` ||
+    (series?.images?.[0]
+      ? `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}`
+      : "/placeholder-test.jpg");
+  return (
+    <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
+      <div className="relative h-64 rounded-xl overflow-hidden mb-5">
+        <Image
+          src={img}
+          alt={series?.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+          Test Series
+        </span>
+      </div>
+      <div className="p-2">
+        <h2 className="text-xl font-bold text-gray-800">{series?.title}</h2>
+        <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+          <Award size={16} className="text-[#204972]" />
+          {series?.exam_id?.name}
+        </p>
+        <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
+          <span className="flex items-center gap-1">
+            <Clock size={16} className="text-blue-500" />
+            {series?.validity}
+          </span>
+          <span className="flex items-center gap-1">
+            <FileText size={16} className="text-green-500" />
+            {series?.total_tests} Tests
+          </span>
+        </div>
+        <hr className="my-5 border-gray-100" />
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <span className="text-xs text-gray-500 line-through">
+              ₹{series?.price}
+            </span>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-xl font-bold text-[#204972]">
+                ₹{series?.discount_price}
+              </span>
+              <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                {Math.round((1 - series?.discount_price / series?.price) * 100)}
+                % OFF
+              </span>
+            </div>
+          </div>
+        </div>
+        {!hasAccess && (
+          <button
+            onClick={(e) => {
+              handleAdd(e, "testSeries", series?._id);
+              openCart();
+            }}
+            className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
+          >
+            Add to Library
+          </button>
+
+        )}
+        <div
+          onClick={handleShare}
+          className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer"
+        >
+          <Share2 size={18} className="text-blue-500" />
+          <span className="text-sm font-medium">Share</span>
+        </div>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ export default function ProductPage() {
     try {
       const response = await axiosInstance.get(`/access/check/${bookId}`);
 
-    console.log("HElllooooooooooo Access API:", response.data); // 👈 check this
+    console.log("HElllooooooooooo Access API:", response); // 👈 check this
 
 
       if (response?.data?.message?.includes("granted")) {
@@ -68,9 +68,7 @@ export default function ProductPage() {
       try {
         const res = await axiosInstance.get(`/books/${id}`);
         setBooks(res.data.data);
-
         checkBookAccess(id);
-
       } catch (error) {
         console.error(error);
       }

@@ -340,16 +340,16 @@ function AddressShipping() {
 
             {/* Pay Button */}
             <button
-              // onClick={handleCheckoutAndPay}
-              onClick={() => {
-                const hasBook = cart?.some(item => item.itemType === "book");
+              onClick={handleCheckoutAndPay}
+              // onClick={() => {
+              //   const hasBook = cart?.some(item => item.itemType === "book");
 
-                if (hasBook) {
-                  setShowAddressModal(true);
-                } else {
-                  handleCheckoutAndPay();
-                }
-              }}
+              //   if (hasBook) {
+              //     setShowAddressModal(true);
+              //   } else {
+              //     handleCheckoutAndPay();
+              //   }
+              // }}
               disabled={loading}
               className="w-full mt-4 bg-[#384D89] hover:bg-[#2A4172] text-white py-4 rounded-xl font-semibold transition duration-300 shadow-lg"
             >

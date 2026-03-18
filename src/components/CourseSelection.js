@@ -35,10 +35,10 @@ export default function CoursesSection() {
       try {
         const res = await axiosInstance.get("/categories");
         setCategories(res?.data || []);
-        if (res?.data?.length > 0) {
-          setActiveCategory(res?.data?.[0]);
-          setCurrentStep(1);
-        }
+        // if (res?.data?.length > 0) {
+        //    setActiveCategory(res?.data?.[0]);
+        //    setCurrentStep(1);
+        // }
       } catch (err) {
         // console.error(
         //   "Error fetching categories",
@@ -183,18 +183,25 @@ export default function CoursesSection() {
 
 
   // set 2 category as default on load if exists
-  useEffect(() => {
-    if (categories?.length > 1) {
-      // select the second category by default (moved to first)
-      const defaultCat = categories[1];
-      setActiveCategory(defaultCat);
-      setCurrentStep(2);
-    } else if (categories?.length === 1) {
-      // if only one category, select that
-      setActiveCategory(categories[0]);
-      setCurrentStep(2);
-    }
-  }, [categories]);
+useEffect(() => {
+  if (!categories?.length) return;
+
+  let defaultCat;
+
+  if (categories.length > 1) {
+    defaultCat = categories[1]; // School first
+  } else {
+    defaultCat = categories[0];
+  }
+
+  setActiveCategory(defaultCat);
+  setActiveExamType(null);
+  setActiveExam(null);
+  setExams([]);
+  setCourses([]);
+  setCurrentStep(2);
+
+}, [categories]);
 
   return (
     <div className="min-h-screen bg-background">

@@ -9,64 +9,64 @@ import axiosInstance from "../axios/axiosInstance";
 
 const OrderTracking = ({ status }) => {
 
-  const steps = ["confirmed", "packed", "shipped", "completed"];
+    const steps = ["confirmed", "packed", "shipped", "completed"];
 
-  const labels = {
-    confirmed: "Confirmed",
-    packed: "Packed",
-    shipped: "Shipped",
-    completed: "Delivered"
-  };
+    const labels = {
+        confirmed: "Confirmed",
+        packed: "Packed",
+        shipped: "Shipped",
+        completed: "Delivered"
+    };
 
-  // normalize backend status
-  const normalizedStatus = status?.toLowerCase();
+    // normalize backend status
+    const normalizedStatus = status?.toLowerCase();
 
-  const currentStep = steps.indexOf(normalizedStatus);
+    const currentStep = steps.indexOf(normalizedStatus);
 
-  return (
-    <div className="mt-4 px-2">
+    return (
+        <div className="mt-4 px-2">
 
-      <div className="flex items-center justify-between relative">
+            <div className="flex items-center justify-between relative">
 
-        {steps.map((step, index) => {
+                {steps.map((step, index) => {
 
-          const active = index <= currentStep;
+                    const active = index <= currentStep;
 
-          return (
-            <div key={step} className="flex flex-col items-center flex-1 relative">
+                    return (
+                        <div key={step} className="flex flex-col items-center flex-1 relative">
 
-              {/* Circle */}
-              <div
-                className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold z-10
+                            {/* Circle */}
+                            <div
+                                className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold z-10
                 ${active ? "bg-green-500 text-white" : "bg-gray-300 text-white"}`}
-              >
-                ✓
-              </div>
+                            >
+                                ✓
+                            </div>
 
-              {/* Line */}
-              {index < steps.length - 1 && (
-                <div
-                  className={`absolute top-3 left-1/2 w-full h-[2px]
+                            {/* Line */}
+                            {index < steps.length - 1 && (
+                                <div
+                                    className={`absolute top-3 left-1/2 w-full h-[2px]
                   ${index < currentStep ? "bg-green-500" : "bg-gray-300"}`}
-                />
-              )}
+                                />
+                            )}
 
-              {/* Label */}
-              <span
-                className={`mt-2 text-xs font-medium
+                            {/* Label */}
+                            <span
+                                className={`mt-2 text-xs font-medium
                 ${active ? "text-green-600" : "text-gray-400"}`}
-              >
-                {labels[step]}
-              </span>
+                            >
+                                {labels[step]}
+                            </span>
+
+                        </div>
+                    );
+                })}
 
             </div>
-          );
-        })}
 
-      </div>
-
-    </div>
-  );
+        </div>
+    );
 };
 
 export default function ProfilePage() {
@@ -339,13 +339,7 @@ export default function ProfilePage() {
                         {books?.length > 0 ? (
                             // <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                             <div
-                                className={`grid gap-4 sm:gap-6
-                                    ${books.length === 1
-                                        ? "grid-cols-2"
-                                        : books.length === 2
-                                            ? "grid-cols-1 sm:grid-cols-2"
-                                            : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-                                    }`}
+                                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
                             >
                                 {books.map((book) => (
                                     <div key={book._id} className="bg-white rounded-xl shadow hover:shadow-md transition p-3 w-full">
@@ -368,7 +362,7 @@ export default function ProfilePage() {
                                         </Link>
 
                                         {/* Tracking UI */}
-                                        <OrderTracking status={book.orderStatus} />
+                                        {/* <OrderTracking status={book.orderStatus} /> */}
 
                                     </div>
                                 ))}
@@ -874,38 +868,41 @@ export default function ProfilePage() {
                         {myTests?.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                                 {myTests.map((series) => (
-                                    <div
-                                        key={series?._id}
-                                        className="w-full rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                                    >
-                                        <div className="px-4 pt-4">
-                                            <h2 className="text-base sm:text-lg font-bold leading-snug">
-                                                {series?.title}
-                                            </h2>
-                                        </div>
 
-                                        <div className="relative w-full h-44 sm:h-56 px-4 mt-3">
-                                            <div className="relative w-full h-full rounded-lg overflow-hidden">
-                                                <Image
-                                                    src={`${series?.full_image?.[0] || `/uploads/testSeries/${series.images?.[0]}` || "/default-test.jpg"}`}
-                                                    alt={series?.title}
-                                                    fill
-                                                    className="object-cover hover:scale-105 transition-transform duration-500"
-                                                />
-                                                {series?.total_tests > 0 && (
-                                                    <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
-                                                        {series?.total_tests} Tests
-                                                    </div>
-                                                )}
+                                    <Link href={`/test-series/${series?._id}`} key={series?._id}>
+                                        <div
+                                            key={series?._id}
+                                            className="w-full rounded-xl shadow-md border border-gray-200 overflow-hidden bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                                        >
+                                            <div className="px-4 pt-4">
+                                                <h2 className="text-base sm:text-lg font-bold leading-snug">
+                                                    {series?.title}
+                                                </h2>
+                                            </div>
+
+                                            <div className="relative w-full h-44 sm:h-56 px-4 mt-3">
+                                                <div className="relative w-full h-full rounded-lg overflow-hidden">
+                                                    <Image
+                                                        src={`${series?.full_image?.[0] || `/uploads/testSeries/${series.images?.[0]}` || "/default-test.jpg"}`}
+                                                        alt={series?.title}
+                                                        fill
+                                                        className="object-cover hover:scale-105 transition-transform duration-500"
+                                                    />
+                                                    {series?.total_tests > 0 && (
+                                                        <div className="absolute bottom-2 left-3 bg-yellow-400 text-black px-3 py-1 text-xs font-bold rounded-full shadow-md">
+                                                            {series?.total_tests} Tests
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="px-4 mb-4">
+                                                <p className="my-3 font-medium text-xs sm:text-sm">
+                                                    Validity for {series?.validity}
+                                                </p>
                                             </div>
                                         </div>
-
-                                        <div className="px-4 mb-4">
-                                            <p className="my-3 font-medium text-xs sm:text-sm">
-                                                Validity for {series?.validity}
-                                            </p>
-                                        </div>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         ) : (
