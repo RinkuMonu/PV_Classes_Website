@@ -8,19 +8,23 @@ import Swal from "sweetalert2"
 import axiosInstance from "../axios/axiosInstance"
 import Image from "next/image"
 
-export default function OfflineInterviewRegisterPage() {
+export default function OfflineEventRegisterPage() {
     const router = useRouter()
 
     // State for form data
     const [formData, setFormData] = useState({
         name: "",
+        fatherName: "",
+        motherName: "",
         email: "",
         mobile: "",
         exam: "",
         rollNumber: "",
         qualification: "",
         city: "",
-        state: ""
+        state: "",
+        teachingSubjects: [],
+        disabilitySpecialization: ""
     })
 
     // UI states
@@ -119,6 +123,32 @@ export default function OfflineInterviewRegisterPage() {
             }
         }
 
+        // Subject selection (max 2)
+        if (name === "teachingSubjects") {
+
+            const value = e.target.value
+
+            let updatedSubjects = [...formData.teachingSubjects]
+
+            if (updatedSubjects.includes(value)) {
+                updatedSubjects = updatedSubjects.filter(sub => sub !== value)
+            } else {
+                if (updatedSubjects.length < 2) {
+                    updatedSubjects.push(value)
+                } else {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Only 2 subjects allowed",
+                        confirmButtonColor: "#00316B"
+                    })
+                    return
+                }
+            }
+
+            setFormData(prev => ({ ...prev, teachingSubjects: updatedSubjects }))
+            return
+        }
+
         setFormData(prev => ({ ...prev, [name]: newValue }))
 
         // Clear specific field error when user types
@@ -148,6 +178,14 @@ export default function OfflineInterviewRegisterPage() {
         if (!formData.city.trim()) newErrors.city = "City is required"
         if (!formData.state) newErrors.state = "Please select a state"
 
+        if (formData.teachingSubjects.length === 0) {
+            newErrors.teachingSubjects = "Please select at least 1 subject"
+        }
+
+        if (!formData.disabilitySpecialization) {
+            newErrors.disabilitySpecialization = "Please select disability specialization"
+        }
+
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }
@@ -155,6 +193,20 @@ export default function OfflineInterviewRegisterPage() {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            Swal.fire({
+                icon: "warning",
+                title: "Login Required",
+                text: "Please login to continue",
+                confirmButtonText: "OKay",
+                showCancelButton: true,
+            });
+
+            return;
+        }
 
         if (!validateForm()) {
             // Scroll to first error
@@ -167,38 +219,49 @@ export default function OfflineInterviewRegisterPage() {
         setIsLoading(true)
 
         try {
+            // const response = await axiosInstance.post("/offline-interview/register", {
+            //     name: formData.name,
+            //     fatherName: formData.fatherName,
+            //     motherName: formData.motherName,
+            //     email: formData.email,
+            //     mobile: formData.mobile,
+            //     exam: formData.exam,
+            //     type: "test", // default type
+            //     rollNumber: formData.rollNumber,
+            //     qualification: formData.qualification,
+            //     city: formData.city,
+            //     state: formData.state,
+            //     teachingSubjects: formData.teachingSubjects,
+            //     disabilitySpecialization: formData.disabilitySpecialization
+            // })
+
             const response = await axiosInstance.post("/offline-interview/register", {
-                name: formData.name,
-                email: formData.email,
-                mobile: formData.mobile,
-                exam: formData.exam,
-                type: "test", // default type
-                rollNumber: formData.rollNumber,
-                qualification: formData.qualification,
-                city: formData.city,
-                state: formData.state
-            })
+                ...formData,
+                type: "test"
+            });
 
-            await Swal.fire({
-                icon: "success",
-                title: "Registration Successful!",
-                text: response.data.message || "Your offline Test form has been submitted.",
-                confirmButtonColor: "#00316B",
-                background: "#fff",
-                iconColor: "#009FE3"
-            })
+            const orderId = response.data.orderId;
 
-            router.push("/")
+
+            // 2️⃣ Direct PayIn call
+            const payinRes = await axiosInstance.post("/payment/payin", {
+                orderId
+            });
+
+            const redirectUrl =
+                payinRes?.data?.paymentData?.data?.redirectEx;
+
+            if (!redirectUrl) {
+                throw new Error("Payment URL not received");
+            }
+
+            // 3️⃣ Redirect to payment page
+            window.location.href = redirectUrl;
+
 
         } catch (error) {
             console.error("Registration error:", error)
 
-            let errorMessage = "An error occurred during registration. Please try again."
-            if (error.response?.data?.message) {
-                errorMessage = error.response.data.message
-            } else if (error.message) {
-                errorMessage = error.message
-            }
 
             Swal.fire({
                 icon: "error",
@@ -223,15 +286,16 @@ export default function OfflineInterviewRegisterPage() {
             <section className="relative w-full h-[250px] sm:h-[300px] lg:h-[350px] overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
-                        src="/Image/Banner/offline.jpeg"
+                        // src="/Image/Banner/offline.jpeg"
+                        // src="/Image/Banner/offlineTest.jpeg"
+                        src="/Image/Banner/offlineTestBanner.jpeg"
                         alt="Offline Test Banner Desktop"
                         fill
                         className="object-cover object-center"
                         priority
                     />
                 </div>
-            
-             
+
             </section>
 
             {/* Form Section */}
@@ -367,6 +431,37 @@ export default function OfflineInterviewRegisterPage() {
                                     {errors.qualification && <p className="text-red-500 text-xs mt-1">{errors.qualification}</p>}
                                 </div>
 
+
+                                {/* Father Name */}
+                                <div className="space-y-1">
+                                    <label className="text-sm font-semibold text-gray-700">
+                                        Father Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="fatherName"
+                                        value={formData.fatherName}
+                                        onChange={handleChange}
+                                        placeholder="Enter father name"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg"
+                                    />
+                                </div>
+
+                                {/* Mother Name */}
+                                <div className="space-y-1">
+                                    <label className="text-sm font-semibold text-gray-700">
+                                        Mother Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="motherName"
+                                        value={formData.motherName}
+                                        onChange={handleChange}
+                                        placeholder="Enter mother name"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg"
+                                    />
+                                </div>
+
                                 {/* State */}
                                 <div className="space-y-1">
                                     <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -424,6 +519,63 @@ export default function OfflineInterviewRegisterPage() {
                                     )}
                                     {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
                                 </div>
+
+                                {/* Teaching Subjects */}
+                                <div className="md:col-span-2 space-y-2">
+                                    <label className="text-sm font-semibold text-gray-700">
+                                        Teaching Subjects (Select max 2)
+                                    </label>
+
+                                    <div className="flex flex-wrap gap-4">
+
+                                        {["maths", "sst", "hindi", "english", "science"].map((sub) => (
+                                            <label key={sub} className="flex items-center gap-2">
+
+                                                <input
+                                                    type="checkbox"
+                                                    value={sub}
+                                                    checked={formData.teachingSubjects.includes(sub)}
+                                                    onChange={handleChange}
+                                                    name="teachingSubjects"
+                                                />
+
+                                                <span className="capitalize">{sub}</span>
+
+                                            </label>
+                                        ))}
+
+                                    </div>
+
+                                    {errors.teachingSubjects && (
+                                        <p className="text-red-500 text-xs">{errors.teachingSubjects}</p>
+                                    )}
+                                </div>
+
+                                {/* Disability Specialization */}
+                                <div className="md:col-span-2 space-y-1">
+
+                                    <label className="text-sm font-semibold text-gray-700">
+                                        Disability Specialization
+                                    </label>
+
+                                    <select
+                                        name="disabilitySpecialization"
+                                        value={formData.disabilitySpecialization}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg"
+                                    >
+
+                                        <option value="">-- Select Specialization --</option>
+                                        <option value="Intellectual-Disability">Intellectual Disability (ID)</option>
+
+                                    </select>
+
+                                    {errors.disabilitySpecialization && (
+                                        <p className="text-red-500 text-xs">{errors.disabilitySpecialization}</p>
+                                    )}
+
+                                </div>
+
                             </div>
 
                             {/* Submit Button */}
@@ -445,6 +597,13 @@ export default function OfflineInterviewRegisterPage() {
                                         "Register for Offline Test"
                                     )}
                                 </button>
+                            </div>
+
+                            {/* Offline Test Location */}
+                            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                                <p className="text-sm sm:text-base font-semibold text-[#00316B]">
+                                    Offline Test Location :- <span className="text-[#009FE3]">Jagatpura, Jaipur</span>
+                                </p>
                             </div>
 
                             {/* Note */}

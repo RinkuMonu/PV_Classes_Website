@@ -234,14 +234,29 @@ export default function Header() {
               </div>
               <span className="font-medium">Pvclasses01@gmail.com</span>
             </div>
-            <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
+            {/* <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
               <div className="p-1 bg-white/10 rounded-full">
                 <MapPin size={14} />
               </div>
               <span className="font-medium">PV Classes, Jaipur Rajasthan, India, 302017</span>
 
 
-            </div>
+            </div> */}
+
+<a
+  href="/offline-event"
+  className="flex items-center overflow-hidden rounded-md border border-white/30 hover:border-[#009FE3] transition-all"
+>
+  {/* Breaking Label */}
+  <span className="bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white text-xs font-bold px-2 py-2 tracking-wide">
+    NEW
+  </span>
+
+  {/* Text */}
+  <span className="px-3 py-1 text-sm font-medium hover:text-[#009FE3] whitespace-nowrap">
+    Offline Test Registration
+  </span>
+</a>
             <HeaderSearch />
           </div>
           {/* Right */}
