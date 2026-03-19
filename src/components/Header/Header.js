@@ -164,20 +164,36 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // ✅ Check localStorage on mount
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setTimeout(() => {
-        setIsRegisterModalOpen(true);
-      }, 3000);
-    }
-    const serId = localStorage.getItem("userId");
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [pathname]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     setTimeout(() => {
+  //       setIsRegisterModalOpen(true);
+  //     }, 3000);
+  //   }
+  //   const serId = localStorage.getItem("userId");
+  //   if (token) {
+  //     setIsLoggedIn(true);
+  //   } else {
+  //     setIsLoggedIn(false);
+  //   }
+  // }, []);
+
+    useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  // login state
+  setIsLoggedIn(!!token);
+
+  // only home page popup
+  if (!token && pathname === "/") {
+    const timer = setTimeout(() => {
+      setIsRegisterModalOpen(true);
+    }, 3000);
+
+    return () => clearTimeout(timer); // ✅ cleanup
+  }
+}, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
