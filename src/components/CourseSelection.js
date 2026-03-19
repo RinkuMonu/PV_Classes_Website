@@ -181,27 +181,52 @@ export default function CoursesSection() {
   const displayedCourses = searchTerm ? filteredCourses : courses;
 
 
+  const getDisplayCourses = () => {
+    const minCards = 6; // yaha 6 rakh sakte ho (3 column grid ke liye perfect)
+
+    if (displayedCourses.length < minCards) {
+      const remaining = minCards - displayedCourses.length;
+
+      const comingSoonCourses = Array(remaining).fill(null).map((_, i) => ({
+        _id: `coming-soon-${i}`,
+        title: "Coming Soon",
+        overview: "New course will be available soon.",
+        isFree: true,
+        price: 0,
+        full_image: ["/Image/cominig-soon-courses.jpeg"],
+        isComingSoon: true
+      }));
+
+      return [...displayedCourses, ...comingSoonCourses];
+    }
+
+    return displayedCourses;
+  };
+
+  const finalCourses = getDisplayCourses();
+
+
 
   // set 2 category as default on load if exists
-useEffect(() => {
-  if (!categories?.length) return;
+  useEffect(() => {
+    if (!categories?.length) return;
 
-  let defaultCat;
+    let defaultCat;
 
-  if (categories.length > 1) {
-    defaultCat = categories[1]; // School first
-  } else {
-    defaultCat = categories[0];
-  }
+    if (categories.length > 1) {
+      defaultCat = categories[1]; // School first
+    } else {
+      defaultCat = categories[0];
+    }
 
-  setActiveCategory(defaultCat);
-  setActiveExamType(null);
-  setActiveExam(null);
-  setExams([]);
-  setCourses([]);
-  setCurrentStep(2);
+    setActiveCategory(defaultCat);
+    setActiveExamType(null);
+    setActiveExam(null);
+    setExams([]);
+    setCourses([]);
+    setCurrentStep(2);
 
-}, [categories]);
+  }, [categories]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -284,8 +309,8 @@ useEffect(() => {
                           setCurrentStep(2);
                         }}
                         className={`w-full text-left p-3 rounded-lg transition-all duration-200 cur ${activeCategory?._id === cat?._id
-                            ? "bg-[#204972] text-white shadow-sm"
-                            : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
+                          ? "bg-[#204972] text-white shadow-sm"
+                          : "bg-[#204972]/10 text-muted-foreground hover:text-foreground"
                           }`}
                       >
                         <div className="font-medium text-sm cursor-pointer">
@@ -485,9 +510,11 @@ useEffect(() => {
 
               {displayedCourses?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {displayedCourses?.map((course) => (
+                  {/* {displayedCourses?.map((course) => ( */}
+                  {finalCourses?.slice(0, 6).map((course, index) => (
                     <Link
-                      href={`/courses/${course?._id}`}
+                      // href={`/courses/${course?._id}`}
+                      href={course?.isComingSoon ? "/" : `/courses/${course?._id}`}
                       key={course?._id}
                       className="group bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300"
                     >
@@ -518,7 +545,12 @@ useEffect(() => {
                               : "bg-[#204972]/10 text-[#204972]"
                               }`}
                           >
-                            {course?.isFree ? "FREE COURSE" : "PREMIUM"}
+                            {/* {course?.isFree ? "FREE COURSE" : "PREMIUM"} */}
+                            {course?.isComingSoon
+                              ? "COMING SOON"
+                              : course?.isFree
+                                ? "FREE COURSE"
+                                : "PREMIUM"}
                           </span>
                         </div>
 
@@ -531,7 +563,12 @@ useEffect(() => {
 
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-xl text-foreground">
-                            {course?.isFree ? "Free Access" : `₹${course?.price}`}
+                            {/* {course?.isFree ? "Free Access" : `₹${course?.price}`} */}
+                            {course?.isComingSoon
+                              ? "Coming Soon"
+                              : course?.isFree
+                                ? "Free Access"
+                                : `₹${course?.price}`}
                           </span>
                           <div className="flex items-center gap-2 text-[#204972] font-medium group-hover:gap-3 transition-all">
                             <span className="text-sm">View Course</span>
@@ -543,21 +580,14 @@ useEffect(() => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-16">
-                  <div className="w-24 h-24 bg-[#204972]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <FaBook className="text-muted-foreground text-2xl" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground mb-3">
-                    {!activeExam
-                      ? "Select an exam to view courses"
-                      : "No courses available"}
-                  </h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">
-                    {!activeExam
-                      ? "Choose a category, exam type, and exam from the navigator to discover relevant courses."
-                      : "We couldn't find any courses for the selected exam. Try selecting a different exam or check back later."}
-                  </p>
-                </div>
+                // coming soon ka banner
+                <Image
+                  src="/Image/coming-soon-banner.jpeg"
+                  alt="No courses"
+                  width={1600}
+                  height={342}
+                  className="object-contain"
+                />
               )}
 
             </div>
