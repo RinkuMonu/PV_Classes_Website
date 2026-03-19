@@ -34,6 +34,10 @@ export default function OfflineEventRegisterPage() {
     const [citiesList, setCitiesList] = useState([])
     const [isFetchingCities, setIsFetchingCities] = useState(false)
 
+    const [emailStatus, setEmailStatus] = useState(null); // null | "checking" | "valid" | "invalid"
+
+    const [emailMessage, setEmailMessage] = useState("");
+
     // Validation errors
     const [errors, setErrors] = useState({})
 
@@ -194,6 +198,15 @@ export default function OfflineEventRegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (emailStatus !== "valid") {
+            Swal.fire({
+                icon: "warning",
+                title: "Email Not Verified",
+                text: "Please verify your email before submitting",
+            });
+            return;
+        }
+
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -280,6 +293,32 @@ export default function OfflineEventRegisterPage() {
         router.back()
     }
 
+    // email varify ke liye
+    const handleVerifyEmail = async () => {
+        if (!formData.email) return;
+
+        setEmailStatus("checking");
+
+        try {
+            const res = await axiosInstance.post("/verify-email", {
+                email: formData.email
+            });
+
+            if (res.data.emailvalid) {
+                setEmailStatus("valid");
+            } else {
+                setEmailStatus("invalid");
+            }
+
+            setEmailMessage(res.data.message);
+
+        } catch (error) {
+            console.error(error);
+            setEmailStatus("invalid");
+            setEmailMessage("Email verification failed");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Banner Section */}
@@ -346,14 +385,48 @@ export default function OfflineEventRegisterPage() {
                                         <Mail size={16} className="text-[#009FE3]" />
                                         Email Address <span className="text-red-500">*</span>
                                     </label>
-                                    <input
+                                    {/* <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         placeholder="you@example.com"
                                         className={`w-full px-4 py-2.5 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent transition-all bg-gray-50/80 hover:bg-white`}
-                                    />
+                                    /> */}
+                                    <div className="relative">
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                                setEmailStatus(null); // reset when typing
+                                            }}
+                                            placeholder="you@example.com"
+                                            className={`w-full px-4 py-2.5 border ${errors.email ? "border-red-500" : "border-gray-300"
+                                                } rounded-lg focus:ring-2 focus:ring-[#009FE3]`}
+                                        />
+
+                                        {/* Verify Button */}
+                                        {formData.email && emailStatus !== "valid" && (
+                                            <button
+                                                type="button"
+                                                onClick={handleVerifyEmail}
+                                                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs bg-[#00316B] text-white px-3 py-1 rounded"
+                                            >
+                                                {emailStatus === "checking" ? "Checking..." : "Verify"}
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Status Message */}
+                                    {emailStatus === "valid" && (
+                                        <p className="text-green-600 text-xs mt-1">✅ Email Verified</p>
+                                    )}
+
+                                    {emailStatus === "invalid" && (
+                                        <p className="text-red-500 text-xs mt-1">{emailMessage}</p>
+                                    )}
                                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                 </div>
 
