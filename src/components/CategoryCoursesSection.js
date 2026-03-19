@@ -1,178 +1,3 @@
-// "use client"
-
-// import { useState, useEffect } from "react"
-// import Link from "next/link"
-// import { FaBook, FaArrowRight } from "react-icons/fa"
-// import axiosInstance from "../app/axios/axiosInstance"
-
-// export default function CategoryCoursesSection({ category }) {
-//   const [examTypes, setExamTypes] = useState([])
-//   const [selectedExamType, setSelectedExamType] = useState(null)
-
-//   const [exams, setExams] = useState([])
-//   const [selectedExam, setSelectedExam] = useState(null)
-
-//   const [courses, setCourses] = useState([])
-//   const [loading, setLoading] = useState(false)
-
-//   useEffect(() => {
-//     if (!category?._id) return
-//     const fetchExamTypes = async () => {
-//       try {
-//         const res = await axiosInstance.get(`/exam-types/category/${category._id}`)
-//         setExamTypes(res?.data || [])
-//         if (res?.data?.length > 0) {
-//           setSelectedExamType(res.data[0])
-//         }
-//       } catch (err) {
-//         console.error("Error fetching exam types", err)
-//       }
-//     }
-//     fetchExamTypes()
-//   }, [category])
-
-// useEffect(() => {
-//   if (!selectedExamType?._id) return
-
-//   const fetchExams = async () => {
-//     try {
-//       const res = await axiosInstance.get(`/exams/type/${selectedExamType._id}`)
-
-//       if (Array.isArray(res?.data) && res.data.length > 0) {
-//         setExams(res.data)
-//         setSelectedExam(res.data[0])
-//       } else {
-//         setExams([])
-//         setSelectedExam(null)
-//         setCourses([])
-//       }
-//     } catch (err) {
-//       if (err?.response?.status === 404) {
-//         setExams([])
-//         setSelectedExam(null)
-//         setCourses([])
-//       } else {
-//         console.error("Error fetching exams:", err?.response?.data || err.message)
-//       }
-//     }
-//   }
-
-//   fetchExams()
-// }, [selectedExamType])
-
-
-//   useEffect(() => {
-//     if (!selectedExam?._id) return
-//     const fetchCourses = async () => {
-//       setLoading(true)
-//       try {
-//         const res = await axiosInstance.get(`/courses?exam=${selectedExam._id}`)
-//         setCourses(res?.data || [])
-//       } catch (err) {
-//         console.error("Error fetching courses", err)
-//         setCourses([])
-//       } finally {
-//         setLoading(false)
-//       }
-//     }
-//     fetchCourses()
-//   }, [selectedExam])
-
-//   return (
-//     <div className="mb-16">
-
-
-
-//                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-[#009FE3]/20">
-//                             <div>
-//                                 <h2 className="text-3xl font-bold text-[#00316B] mb-2">  {category?.name} <span className="text-[#616606]">Courses</span> </h2>
-//                                 <div className="w-16 h-1 bg-gradient-to-r from-[#009FE3] to-[#0281AD] rounded-full"></div>
-//                             </div>
-//                         </div>
-
-
-//       {/* ExamTypes */}
-//       {examTypes?.length > 0 && (
-//         <div className="mb-6 flex gap-2 flex-wrap">
-//           {examTypes.map((type) => (
-//             <button
-//               key={type._id}
-//               onClick={() => setSelectedExamType(type)}
-//               className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
-//                 selectedExamType?._id === type._id
-//                   ? "bg-secondary text-secondary-foreground"
-//                   : "bg-muted hover:bg-muted/90"
-//               }`}
-//             >
-//               {type.name}
-//             </button>
-//           ))}
-//         </div>
-//       )}
-
-//       {/* Exams */}
-//       {exams?.length > 0 && (
-//         <div className="mb-6 flex gap-2 flex-wrap">
-//           {exams.map((exam) => (
-//             <button
-//               key={exam._id}
-//               onClick={() => setSelectedExam(exam)}
-//               className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
-//                 selectedExam?._id === exam._id
-//                   ? "bg-accent text-accent-foreground"
-//                   : "bg-muted hover:bg-muted/90"
-//               }`}
-//             >
-//               {exam.name}
-//             </button>
-//           ))}
-//         </div>
-//       )}
-
-//       {/* Courses */}
-//       {loading ? (
-//         <p>Loading courses...</p>
-//       ) : courses?.length > 0 ? (
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//           {courses.map((course) => (
-//             <Link
-//               href={`/courses/${course._id}`}
-//               key={course._id}
-//               className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all"
-//             >
-//               {course?.images?.length > 0 ? (
-//                 <img
-//                   src={course?.imagesFullPath[0]}
-//                   alt={course?.title}
-//                   className="w-full h-40 object-cover"
-//                 />
-//               ) : (
-//                 <div className="w-full h-40 bg-muted flex items-center justify-center">
-//                   <FaBook className="text-muted-foreground text-2xl" />
-//                 </div>
-//               )}
-
-//               <div className="p-4">
-//                 <h3 className="font-semibold mb-2">{course.title}</h3>
-//                 <p className="text-sm text-muted-foreground line-clamp-2">{course.overview}</p>
-//                 <div className="flex justify-between items-center mt-3">
-//                   <span className="font-bold text-primary">
-//                     {course.isFree ? "Free" : `₹${course.price}`}
-//                   </span>
-//                   <FaArrowRight />
-//                 </div>
-//               </div>
-//             </Link>
-//           ))}
-//         </div>
-//       ) : (
-//         <p className="text-muted-foreground">No courses available</p>
-//       )}
-//     </div>
-//   )
-// }
-
-
 
 
 "use client"
@@ -182,6 +7,7 @@ import Link from "next/link"
 import { FaBook, FaArrowRight, FaChevronRight } from "react-icons/fa"
 import axiosInstance from "../app/axios/axiosInstance"
 import Image from "next/image"
+
 
 export default function CategoryCoursesSection({ category }) {
   const [examTypes, setExamTypes] = useState([])
@@ -289,6 +115,26 @@ export default function CategoryCoursesSection({ category }) {
     fetchCourses()
   }, [selectedExam?._id])
 
+
+  const getDisplayCourses = () => {
+    if (courses.length === 1 || courses.length === 2) {
+      const comingSoonCourses = Array(3).fill(null).map((_, i) => ({
+        _id: `coming-soon-${i}`, // ✅ unique id
+        title: "Coming Soon",
+        overview: "New course will be available soon.",
+        isFree: true,
+        price: 0,
+        full_image: ["/Image/cominig-soon-courses.jpeg"],
+        isComingSoon: true
+      }));
+
+      return [...courses, ...comingSoonCourses];
+    }
+
+    return courses;
+  };
+
+  const displayCourses = getDisplayCourses();
   return (
     <div className="mb-16 ">
       {/* Header Section */}
@@ -299,7 +145,6 @@ export default function CategoryCoursesSection({ category }) {
           </h2>
           <div className="w-20 h-1.5 bg-gradient-to-r from-[#009FE3] to-[#0281AD] rounded-full"></div>
         </div>
-
 
       </div>
 
@@ -316,8 +161,8 @@ export default function CategoryCoursesSection({ category }) {
                     key={type?._id}
                     onClick={() => setSelectedExamType(type)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedExamType?._id === type?._id
-                        ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
-                        : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
+                      ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
+                      : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
                       }`}
                   >
                     {type?.name}
@@ -337,8 +182,8 @@ export default function CategoryCoursesSection({ category }) {
                     key={exam?._id}
                     onClick={() => setSelectedExam(exam)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedExam?._id === exam?._id
-                        ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
-                        : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
+                      ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
+                      : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
                       }`}
                   >
                     {exam?.name}
@@ -371,24 +216,27 @@ export default function CategoryCoursesSection({ category }) {
           </div>
         ) : courses?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {courses?.map((course) => (
+            {/* {courses?.map((course) => ( */}
+            {displayCourses?.slice(0, 4).map((course, index) => (
               <Link
-                href={`/courses/${course?._id}`}
+                // href={`/courses/${course?._id}`}
+                href={course?.isComingSoon ? "/" : `/courses/${course?._id}`}
                 key={course?._id}
                 className="group border border-gray-200 rounded-2xl bg-white overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative"
               >
                 {/* Premium/Free Badge */}
                 <div className="absolute top-3 right-3 z-10">
                   <span className={`px-3 py-1.5 rounded-full text-xs font-semibold shadow-md ${course?.isFree ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-                    {course?.isFree ? "FREE" : "PREMIUM"}
+                    {/* {course?.isFree ? "FREE" : "PREMIUM"} */}
+                    {course?.isComingSoon ? "COMING SOON" : course?.isFree ? "FREE" : "PREMIUM"}
                   </span>
                 </div>
 
                 {course?.full_image?.length > 0 ? (
                   <div className="overflow-hidden relative">
                     <Image
-width ={100}
-height ={100}
+                      width={1887}
+                      height={2512}
                       src={course?.full_image?.[0]}
                       alt={course?.title || "Course"}
                       className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-500"
@@ -420,7 +268,12 @@ height ={100}
 
                   <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                     <span className={`font-bold text-lg ${course?.isFree ? 'text-green-600' : 'text-[#00316B]'}`}>
-                      {course?.isFree ? "Free Access" : `₹${course?.price}`}
+                      {/* {course?.isFree ? "Free Access" : `₹${course?.price}`} */}
+                      {course?.isComingSoon
+                        ? "Coming Soon"
+                        : course?.isFree
+                          ? "Free Access"
+                          : `₹${course?.price}`}
                     </span>
                     <div className="flex items-center text-sm text-[#009FE3] group-hover:translate-x-1 transition-transform">
                       <span className="mr-2 font-medium">Explore</span>
@@ -438,13 +291,15 @@ height ={100}
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[#204972]/10 rounded-xl">
-            <div className="w-16 h-16 mx-auto bg-[#204972]/20 rounded-full flex items-center justify-center mb-4">
-              <FaBook className="text-[#204972] text-xl" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-700 mb-2">No courses available</h3>
-            <p className="text-gray-500">Check back later for new courses in this category</p>
-          </div>
+
+          // coming soon ka banner
+          <Image
+            src="/Image/coming-soon-banner.jpeg"
+            alt="No courses"
+            width={1600}
+            height={342}
+            className="object-contain"
+          />
         )}
       </div>
     </div>

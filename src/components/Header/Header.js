@@ -31,6 +31,7 @@ import NotificationSystem from "../NotificationSystem"
 import { useCart } from "../context/CartContext"
 import { FaPhone } from "react-icons/fa"
 import HeaderSearch from "./HeaderSearch"
+import { usePathname } from "next/navigation";
 const examData = {
   "Government Exam": {
     tabs: {
@@ -140,6 +141,8 @@ const examData = {
 const isLoggedIn = true;
 
 export default function Header() {
+  const pathname = usePathname();
+
   const { cart, storageCart, updateQuantity, removeFromCart, fetchCart, cartCount, isOpen, openCart, closeCart } = useCart();
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -152,6 +155,7 @@ export default function Header() {
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false)
   const lastScrollRef = useRef(0)
 
+
   const toggleCategory = (category) => {
     setActiveCategory(activeCategory === category ? null : category)
   }
@@ -162,13 +166,18 @@ export default function Header() {
   // ✅ Check localStorage on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    if (!token) {
+      setTimeout(() => {
+        setIsRegisterModalOpen(true);
+      }, 3000);
+    }
+    const serId = localStorage.getItem("userId");
     if (token) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, []);
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -212,6 +221,21 @@ export default function Header() {
 
   return (
     <>
+
+{isRegisterModalOpen && (
+  <RegisterModal
+    onClose={() => setIsRegisterModalOpen(false)}
+    onLoginClick={() => {
+      setIsRegisterModalOpen(false);
+      setIsLoginModalOpen(true);
+    }}
+    onRegisterSuccess={() => {
+      setIsRegisterModalOpen(false);
+      setIsLoginModalOpen(true);
+    }}
+  />
+)}
+
       {/* Top Bar */}
       <div
         className={`bg-[#00316B] text-white text-sm border-b border-gray-100 transition-all duration-300 py-4 overflow-hidden ${hideTopBar ? "-translate-y-full" : "translate-y-0"
@@ -243,20 +267,20 @@ export default function Header() {
 
             </div> */}
 
-<a
-  href="/offline-event"
-  className="flex items-center overflow-hidden rounded-md border border-white/30 hover:border-[#009FE3] transition-all"
->
-  {/* Breaking Label */}
-  <span className="bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white text-xs font-bold px-2 py-2 tracking-wide">
-    NEW
-  </span>
+            <a
+              href="/offline-event"
+              className="flex items-center overflow-hidden rounded-md border border-white/30 hover:border-[#009FE3] transition-all"
+            >
+              {/* Breaking Label */}
+              <span className="bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white text-xs font-bold px-2 py-2 tracking-wide">
+                NEW
+              </span>
 
-  {/* Text */}
-  <span className="px-3 py-1 text-sm font-medium hover:text-[#009FE3] whitespace-nowrap">
-    Offline Test Registration
-  </span>
-</a>
+              {/* Text */}
+              <span className="px-3 py-1 text-sm font-medium hover:text-[#009FE3] whitespace-nowrap">
+                Offline Test Registration
+              </span>
+            </a>
             <HeaderSearch />
           </div>
           {/* Right */}
@@ -357,7 +381,7 @@ export default function Header() {
               Test Series
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
-              <Link
+            <Link
               href="/book"
               className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
@@ -379,7 +403,7 @@ export default function Header() {
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
 
-          
+
           </nav>
 
 
