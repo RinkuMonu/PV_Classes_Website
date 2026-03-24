@@ -185,7 +185,7 @@
 
 "use client";
 import toast from "react-hot-toast";
-import React, { useEffect, useState, useRef  } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axiosInstance from "../app/axios/axiosInstance";
 import Image from "next/image";
 import { useCart } from "../components/context/CartContext";
@@ -195,7 +195,7 @@ import Link from "next/link";
 export default function TestSeriesHome() {
   const scrollRef = useRef(null);
 
-  
+
   const { addToCart, loading, openCart } = useCart();
   const [testSeriesData, setTestSeriesData] = useState([]);
 
@@ -204,7 +204,7 @@ export default function TestSeriesHome() {
       try {
         const res = await axiosInstance.get("/test-series");
         if (res?.data?.success) setTestSeriesData(res?.data?.data || []);
-      } catch (err) {}
+      } catch (err) { }
     })();
   }, []);
 
@@ -220,38 +220,38 @@ export default function TestSeriesHome() {
   };
 
   useEffect(() => {
-  const container = scrollRef.current;
-  if (!container) return;
+    const container = scrollRef.current;
+    if (!container) return;
 
-  let scrollAmount = 0;
+    let scrollAmount = 0;
 
-  const autoScroll = () => {
-    scrollAmount += 1;
-    container.scrollLeft += 1;
+    const autoScroll = () => {
+      scrollAmount += 1;
+      container.scrollLeft += 1;
 
-    // loop back
-    if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-      container.scrollLeft = 0;
-    }
-  };
+      // loop back
+      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+        container.scrollLeft = 0;
+      }
+    };
 
-  let interval = setInterval(autoScroll, 20);
+    let interval = setInterval(autoScroll, 20);
 
-  // pause on hover
-  const stopScroll = () => clearInterval(interval);
-  const startScroll = () => {
-    interval = setInterval(autoScroll, 20);
-  };
+    // pause on hover
+    const stopScroll = () => clearInterval(interval);
+    const startScroll = () => {
+      interval = setInterval(autoScroll, 20);
+    };
 
-  container.addEventListener("mouseenter", stopScroll);
-  container.addEventListener("mouseleave", startScroll);
+    container.addEventListener("mouseenter", stopScroll);
+    container.addEventListener("mouseleave", startScroll);
 
-  return () => {
-    clearInterval(interval);
-    container.removeEventListener("mouseenter", stopScroll);
-    container.removeEventListener("mouseleave", startScroll);
-  };
-}, []);
+    return () => {
+      clearInterval(interval);
+      container.removeEventListener("mouseenter", stopScroll);
+      container.removeEventListener("mouseleave", startScroll);
+    };
+  }, []);
 
   return (
     <div className="px-4 md:px-16 py-8">
@@ -272,7 +272,7 @@ export default function TestSeriesHome() {
             Math.round(
               ((series?.price - series?.discount_price) /
                 (series?.price || 1)) *
-                100
+              100
             ) || 0;
 
           const imgSrc =
@@ -327,7 +327,7 @@ export default function TestSeriesHome() {
               </Link>
 
               {/* Button */}
-              <button
+              {/* <button
                 onClick={(e) => {
                   handleAdd(e, "testSeries", series?._id);
                   openCart();
@@ -335,7 +335,43 @@ export default function TestSeriesHome() {
                 className="w-[90%] mx-auto flex items-center justify-center gap-2 absolute bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#00316B] to-[#1d3a5f] px-6 py-3 rounded-xl text-white font-bold"
               >
                 {loading ? "ADDING..." : "ADD TO CART"}
-              </button>
+              </button> */}
+
+              <div className="px-5 pb-5">
+                {series?.is_free ? (
+                  // ✅ FREE case
+                  <div className="w-full text-center bg-green-100 text-green-700 font-semibold py-3 rounded-xl">
+                    FREE ACCESS
+                  </div>
+                ) : (
+                  // ✅ PAID case
+                  <button
+                    onClick={(e) => {
+                      handleAdd(e, "testSeries", series?._id);
+                      openCart();
+                    }}
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#204972] to-[#2c5c8a] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-[#163452] hover:to-[#244c75] transition-all duration-300 group/button"
+                  >
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        ADDING...
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover/button:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                        </svg>
+                        ADD TO CART
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}
