@@ -1709,7 +1709,7 @@ export default function TestSeriesUnified() {
                     How can I access the tests?
                   </h4>
                   <p className="text-gray-600">
-                    All tests are now freely available for everyone to attempt. You just need to be logged in.
+  The test series is available only for enrolled students. You need to purchase the test series and log in to access all tests.
                   </p>
                 </div>
               </div>
@@ -2065,17 +2065,17 @@ function SidebarCard({ series, hasAccess }) {
         <hr className="my-5 border-gray-100" />
         <div className="flex items-end justify-between mb-5">
           <div>
-            <span className="text-xs text-gray-500 line-through">
+            {/* <span className="text-xs text-gray-500 line-through">
               ₹{series?.price}
-            </span>
+            </span> */}
             <div className="flex items-center gap-3 mt-1">
               <span className="text-xl font-bold text-[#204972]">
                 ₹{series?.discount_price}
               </span>
-              <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
+              {/* <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
                 {Math.round((1 - series?.discount_price / series?.price) * 100)}
                 % OFF
-              </span>
+              </span> */}
             </div>
           </div>
         </div>

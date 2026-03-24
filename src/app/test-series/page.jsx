@@ -125,11 +125,11 @@ export default function Page() {
                               </span>
                             )}
 
-                            {series?.price > 0 && (
+                            {/* {series?.price > 0 && (
                               <span className="text-gray-400 line-through text-sm">
                                 ₹{series.price}
                               </span>
-                            )}
+                            )} */}
 
                           </div>
                           {discount > 0 && (

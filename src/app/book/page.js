@@ -198,7 +198,7 @@ export default function Book() {
                             <span className="text-lg font-bold text-[#204972]">
                               ₹{book?.discount_price || book?.price}
                             </span>
-                            {book?.discount_price && (
+                            {/* {book?.discount_price && (
                               <span className="text-xs text-[#616602] font-medium bg-yellow-100 px-2 py-1 rounded">
                                 Save {Math.round(
                                   ((book.price - book.discount_price) /
@@ -206,14 +206,14 @@ export default function Book() {
                                   100
                                 )}%
                               </span>
-                            )}
+                            )} */}
                           </div>
 
-                          {book?.discount_price && (
+                          {/* {book?.discount_price && (
                             <p className="text-xs text-gray-400 line-through mb-3">
                               ₹{book?.price}
                             </p>
-                          )}
+                          )} */}
                         </div>
                       </Link>
 
