@@ -119,17 +119,25 @@ export default function Page() {
 
                         <div className="flex justify-between items-center mt-5">
                           <div className="flex flex-col">
-                            {series?.discount_price > 0 && (
-                              <span className="text-[#204972] font-bold text-xl">
-                                ₹{series.discount_price}
+                            {series?.is_free ? (
+                              <span className="text-green-600 font-bold text-xl">
+                                FREE
                               </span>
-                            )}
+                            ) : (
+                              <>
+                                {series?.discount_price > 0 && (
+                                  <span className="text-[#204972] font-bold text-xl">
+                                    ₹{series.discount_price}
+                                  </span>
+                                )}
 
-                            {/* {series?.price > 0 && (
-                              <span className="text-gray-400 line-through text-sm">
-                                ₹{series.price}
-                              </span>
-                            )} */}
+                                {/* {series?.price > 0 && (
+                                  <span className="text-gray-400 line-through text-sm">
+                                    ₹{series.price}
+                                  </span>
+                                )} */}
+                              </>
+                            )}
 
                           </div>
                           {discount > 0 && (
@@ -142,7 +150,7 @@ export default function Page() {
                     </Link>
 
                     {/* Action Section */}
-                    <div className="px-5 pb-5">
+                    {/* <div className="px-5 pb-5">
                       <button
                         onClick={(e) => {
                           handleAdd(e, "testSeries", series?._id);
@@ -168,7 +176,37 @@ export default function Page() {
                           </>
                         )}
                       </button>
-                    </div>
+                    </div> */}
+
+                    {!series?.is_free && (
+                      <div className="px-5 pb-5">
+                        <button
+                          onClick={(e) => {
+                            handleAdd(e, "testSeries", series?._id);
+                            openCart();
+                          }}
+                          disabled={loading}
+                          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#204972] to-[#2c5c8a] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-[#163452] hover:to-[#244c75] transition-all duration-300 group/button"
+                        >
+                          {loading ? (
+                            <>
+                              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              ADDING...
+                            </>
+                          ) : (
+                            <>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover/button:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                              </svg>
+                              ADD TO CART
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
