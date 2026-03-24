@@ -181,10 +181,10 @@ export default function ProductPage() {
               <span className="text-3xl font-bold text-[#204972]">₹{books?.discount_price}</span>
               {books?.discount_price && books?.price && (
                 <>
-                  <span className="line-through text-gray-400 text-xl">₹{books?.price}</span>
+                  {/* <span className="line-through text-gray-400 text-xl">₹{books?.price}</span>
                   <span className="text-green-600 font-medium bg-green-100 px-2 py-1 rounded-md">
                     Save {Math.round(((books.price - books.discount_price) / books.price) * 100)}%
-                  </span>
+                  </span> */}
                 </>
               )}
             </div>

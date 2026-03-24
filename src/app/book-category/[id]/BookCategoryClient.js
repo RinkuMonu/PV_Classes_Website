@@ -482,7 +482,7 @@ export default function BookCategoryPage() {
                               <span className="font-bold text-lg text-[#083776]">
                                 ₹{book?.discount_price}
                               </span>
-                              {book?.discount_price && book?.price && (
+                              {/* {book?.discount_price && book?.price && (
                                 <span className="text-[#616606] text-sm font-medium bg-[#616606]/10 px-1.5 py-0.5 rounded">
                                   {Math.round(
                                     ((book.price - book.discount_price) /
@@ -491,11 +491,11 @@ export default function BookCategoryPage() {
                                   )}
                                   % off
                                 </span>
-                              )}
+                              )} */}
                             </div>
-                            <div className="text-xs text-[#083776]/60 line-through">
+                            {/* <div className="text-xs text-[#083776]/60 line-through">
                               {book?.price ? `₹${book.price}` : ""}
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </Link>
