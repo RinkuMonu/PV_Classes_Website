@@ -194,7 +194,7 @@ export default function Book() {
                             {book?.title}
                           </h3>
 
-                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-1 ">
                             <span className="text-lg font-bold text-[#204972]">
                               ₹{book?.discount_price || book?.price}
                             </span>
@@ -229,7 +229,7 @@ export default function Book() {
                         {loading ? (
                           <>
                             <svg
-                              className="animate-spin h-4 w-4 text-white"
+                              className="animate-spin h-4 w-4 text-white "
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
