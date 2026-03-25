@@ -22,11 +22,12 @@ export default function CourseEnroll() {
           </div>
 
           {/* Right Image */}
-          <div className="flex justify-center md:justify-center">
+          <div className="flex justify-center md:justify-center ">
             <div className="relative">
               <div className="absolute inset-0 bg-accent/20 rounded-full blur-3xl transform scale-110"></div>
               <Image
-                src="/Image/Banner/faculties-grp.webp"
+                // src="/Image/Banner/faculties-grp.webp"
+                src="/Image/Banner/facultiesgrp.webp"
                 alt="Course Illustration"
                 width={360}
                 height={360}
