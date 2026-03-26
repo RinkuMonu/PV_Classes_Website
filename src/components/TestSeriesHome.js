@@ -309,11 +309,13 @@ export default function TestSeriesHome() {
 
                   {/* Price */}
                   <div className="mt-3 flex justify-between items-center">
-                    <span className="font-bold text-lg text-[#204972]">
-                      ₹{series?.discount_price}
-                    </span>
+                    {!series?.is_free && (
+                      <span className="font-bold text-lg text-[#204972]">
+                        ₹{series?.discount_price}
+                      </span>
+                    )}
 
-                    <span className="line-through text-gray-400 text-sm">
+                    {/* <span className="line-through text-gray-400 text-sm">
                       ₹{series?.price}
                     </span>
 
@@ -321,7 +323,7 @@ export default function TestSeriesHome() {
                       <span className="text-green-600 text-xs font-bold">
                         {discount}% OFF
                       </span>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </Link>

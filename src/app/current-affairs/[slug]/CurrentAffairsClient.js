@@ -213,8 +213,11 @@ export default function CurrentAffairsDetails() {
                   </div>
                 ))
               ) : (
-                <div className="prose prose-lg max-w-none text-gray-700">
-                  <p>{article.content}</p>
+                // <div className="prose prose-lg max-w-none text-gray-700">
+                //   <p>{article.content}</p>
+                // </div>
+                <div className="prose prose-lg max-w-none text-gray-700 whitespace-pre-line">
+                  {article.content}
                 </div>
               )}
             </div>
@@ -315,7 +318,7 @@ export default function CurrentAffairsDetails() {
                             // {item.image.startsWith("http")
                             //   ? item.image
                             //   : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
-                              {item.full_image}
+                            {item.full_image}
                             alt={item.title}
                             width={300}
                             height={200}
