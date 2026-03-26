@@ -210,13 +210,13 @@ export default function CurrentAffairsSlider() {
             with Latest Current Affairs
           </h3>
           <div className="flex justify-center">
-  {/* <Link
+            {/* <Link
     href="/current-affairs"
     className="bg-[#204972] text-white px-4 sm:px-6 md:px-8 py-2 cursor-pointer rounded-md whitespace-nowrap text-sm sm:text-base"
   >
     See All <span className="ml-1">→</span>
   </Link> */}
-</div>
+          </div>
 
         </div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#009FE3]/10 to-transparent rounded-full blur-3xl"></div>
@@ -259,13 +259,13 @@ export default function CurrentAffairsSlider() {
                         </div> */}
 
                         <div className="relative w-full h-56 overflow-hidden rounded-t-2xl bg-white">
-  <Image
-    src={item.full_image}
-    alt={item?.title || "Current Affair"}
-    fill
-    className="object-contain group-hover:scale-110 transition-transform duration-500"
-  />
-</div>
+                          <Image
+                            src={item.full_image}
+                            alt={item?.title || "Current Affair"}
+                            fill
+                            className="object-contain group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
 
                         <span className="absolute top-4 left-4 bg-gradient-to-r from-[#ABC129] to-[#87B105] text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/20">
                           {item?.category?.name || "General"}
@@ -282,10 +282,10 @@ export default function CurrentAffairsSlider() {
                           />
                           {item?.publishDate
                             ? new Date(item?.publishDate).toLocaleDateString("en-GB", {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              })
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })
                             : "No Date"}
                         </div>
 
