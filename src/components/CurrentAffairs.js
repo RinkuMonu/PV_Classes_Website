@@ -200,7 +200,7 @@ export default function CurrentAffairsSlider() {
 
   return (
     <section className="md:py-14">
-      <div className="px-4 md:px-16 py-12  bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/20 relative overflow-hidden">
+      <div className="px-4 py-12  bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00316B]/5 via-transparent to-[#87B105]/5"></div>
         <div className="mb-6 px-4 md:px-0 flex justify-between items-center" data-aos="fade-up">
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#204972]">
@@ -241,21 +241,32 @@ export default function CurrentAffairsSlider() {
                         data-aos="flip-right"
                         data-aos-duration="1000"
                       >
-                        <div className="overflow-hidden rounded-t-2xl">
+                        {/* <div className="overflow-hidden rounded-t-2xl">
                           <Image
                             src={
-                              item?.image?.startsWith("http")
-                                ? item?.image
-                                : item?.image
-                                ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${item?.image}`
-                                : "/vercel.svg"
+                              // item?.image?.startsWith("http")
+                              //   ? item?.image
+                              //   : item?.image
+                              //   ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${item?.image}`
+                              //   : "/vercel.svg"
+                              item.full_image
                             }
                             alt={item?.title || "Current Affair"}
                             width={200}
                             height={400}
-                            className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
-                        </div>
+                        </div> */}
+
+                        <div className="relative w-full h-56 overflow-hidden rounded-t-2xl bg-white">
+  <Image
+    src={item.full_image}
+    alt={item?.title || "Current Affair"}
+    fill
+    className="object-contain group-hover:scale-110 transition-transform duration-500"
+  />
+</div>
+
                         <span className="absolute top-4 left-4 bg-gradient-to-r from-[#ABC129] to-[#87B105] text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/20">
                           {item?.category?.name || "General"}
                         </span>

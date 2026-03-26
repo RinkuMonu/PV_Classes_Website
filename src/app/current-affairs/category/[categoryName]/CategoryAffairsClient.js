@@ -219,7 +219,8 @@ export default function CategoryAffairsPage() {
         <div className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 bg-white group">
           <div className="relative overflow-hidden">
             <Image
-              src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+              // src={item.image.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+              src={item.full_image}
               alt={item.title}
               width={200}
               height={400}

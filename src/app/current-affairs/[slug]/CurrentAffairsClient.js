@@ -155,7 +155,8 @@ export default function CurrentAffairsDetails() {
 
               <div className="w-full aspect-video relative rounded-lg overflow-hidden mb-6">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${article.image}`}
+                  // src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${article.image}`}
+                  src={article.full_image}
                   alt={article.title}
                   fill
                   className="object-cover"
@@ -237,7 +238,8 @@ export default function CurrentAffairsDetails() {
                     >
                       <div className="relative w-16 h-16 flex-shrink-0">
                         <Image
-                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${post.image}`}
+                          // src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${post.image}`}
+                          src={post.full_image}
                           alt={post.title}
                           fill
                           className="object-cover rounded-md"
@@ -309,9 +311,11 @@ export default function CurrentAffairsDetails() {
                       <div className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group border border-gray-200">
                         <div className="relative overflow-hidden">
                           <Image
-                            src={item.image.startsWith("http")
-                              ? item.image
-                              : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+                            src=
+                            // {item.image.startsWith("http")
+                            //   ? item.image
+                            //   : `${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}`}
+                              {item.full_image}
                             alt={item.title}
                             width={300}
                             height={200}
