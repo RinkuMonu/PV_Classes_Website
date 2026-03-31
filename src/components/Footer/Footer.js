@@ -390,11 +390,11 @@ export default function Footer() {
 
             {/* Agriculture */}
             <div>
-              <h4 className="font-semibold mb-3">REET</h4>
+              <h4 className="font-semibold mb-3">KVS-NVS SPECIAL EDUCATOR</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/courses?exam=68ad4356255f962ce73719c2">
-                    3rd Grade Teacher Exam
+                  <Link href="/results">
+                    Check Score
                   </Link>
                 </li>
               </ul>

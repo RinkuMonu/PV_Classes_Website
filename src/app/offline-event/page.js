@@ -23,8 +23,7 @@ export default function OfflineEventRegisterPage() {
         qualification: "",
         city: "",
         state: "",
-        teachingSubjects: [],
-        disabilitySpecialization: ""
+        interviewType: ""
     })
 
     // UI states
@@ -182,12 +181,8 @@ export default function OfflineEventRegisterPage() {
         if (!formData.city.trim()) newErrors.city = "City is required"
         if (!formData.state) newErrors.state = "Please select a state"
 
-        if (formData.teachingSubjects.length === 0) {
-            newErrors.teachingSubjects = "Please select at least 1 subject"
-        }
-
-        if (!formData.disabilitySpecialization) {
-            newErrors.disabilitySpecialization = "Please select disability specialization"
+        if (!formData.interviewType) {
+            newErrors.interviewType = "Please select interview type"
         }
 
         setErrors(newErrors)
@@ -231,61 +226,19 @@ export default function OfflineEventRegisterPage() {
 
         setIsLoading(true)
 
-        try {
-            // const response = await axiosInstance.post("/offline-interview/register", {
-            //     name: formData.name,
-            //     fatherName: formData.fatherName,
-            //     motherName: formData.motherName,
-            //     email: formData.email,
-            //     mobile: formData.mobile,
-            //     exam: formData.exam,
-            //     type: "test", // default type
-            //     rollNumber: formData.rollNumber,
-            //     qualification: formData.qualification,
-            //     city: formData.city,
-            //     state: formData.state,
-            //     teachingSubjects: formData.teachingSubjects,
-            //     disabilitySpecialization: formData.disabilitySpecialization
-            // })
+        await axiosInstance.post("/offline-interview/register", {
+            ...formData,
+            type: "interview"
+        });
 
-            const response = await axiosInstance.post("/offline-interview/register", {
-                ...formData,
-                type: "test"
-            });
+        Swal.fire({
+            icon: "success",
+            title: "Registration Successful",
+            text: "Your interview registration is completed!",
+        });
 
-            const orderId = response.data.orderId;
+        router.push("/"); // optional
 
-
-            // 2️⃣ Direct PayIn call
-            const payinRes = await axiosInstance.post("/payment/payin", {
-                orderId
-            });
-
-            const redirectUrl =
-                payinRes?.data?.paymentData?.data?.redirectEx;
-
-            if (!redirectUrl) {
-                throw new Error("Payment URL not received");
-            }
-
-            // 3️⃣ Redirect to payment page
-            window.location.href = redirectUrl;
-
-
-        } catch (error) {
-            console.error("Registration error:", error)
-
-
-            Swal.fire({
-                icon: "error",
-                title: "Registration Failed",
-                text: errorMessage,
-                confirmButtonColor: "#00316B"
-            })
-
-        } finally {
-            setIsLoading(false)
-        }
     }
 
     // Go back
@@ -325,10 +278,10 @@ export default function OfflineEventRegisterPage() {
             <section className="relative w-full h-[250px] sm:h-[300px] lg:h-[350px] overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
-                        // src="/Image/Banner/offline.jpeg"
+                        src="/Image/Banner/offline.jpeg"
                         // src="/Image/Banner/offlineTest.jpeg"
-                        src="/Image/Banner/offlineTestBanner.jpeg"
-                        alt="Offline Test Banner Desktop"
+                        // src="/Image/Banner/offlineTestBanner.jpeg"
+                        alt="Offline Interview Banner Desktop"
                         fill
                         className="object-cover object-center"
                         priority
@@ -351,7 +304,7 @@ export default function OfflineEventRegisterPage() {
                                 <span className="text-sm font-medium">Back</span>
                             </button>
                             <h2 className="text-xl sm:text-2xl font-semibold text-white">
-                                Registration Form for Offline Test
+                                Registration Form for Interview
                             </h2>
                             <div className="w-24" /> {/* spacer */}
                         </div>
@@ -593,60 +546,25 @@ export default function OfflineEventRegisterPage() {
                                     {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
                                 </div>
 
-                                {/* Teaching Subjects */}
-                                <div className="md:col-span-2 space-y-2">
+                                <div className="space-y-1">
                                     <label className="text-sm font-semibold text-gray-700">
-                                        Teaching Subjects (Select max 2)
-                                    </label>
-
-                                    <div className="flex flex-wrap gap-4">
-
-                                        {["maths", "sst", "hindi", "english", "science"].map((sub) => (
-                                            <label key={sub} className="flex items-center gap-2">
-
-                                                <input
-                                                    type="checkbox"
-                                                    value={sub}
-                                                    checked={formData.teachingSubjects.includes(sub)}
-                                                    onChange={handleChange}
-                                                    name="teachingSubjects"
-                                                />
-
-                                                <span className="capitalize">{sub}</span>
-
-                                            </label>
-                                        ))}
-
-                                    </div>
-
-                                    {errors.teachingSubjects && (
-                                        <p className="text-red-500 text-xs">{errors.teachingSubjects}</p>
-                                    )}
-                                </div>
-
-                                {/* Disability Specialization */}
-                                <div className="md:col-span-2 space-y-1">
-
-                                    <label className="text-sm font-semibold text-gray-700">
-                                        Disability Specialization
+                                        Interview Type <span className="text-red-500">*</span>
                                     </label>
 
                                     <select
-                                        name="disabilitySpecialization"
-                                        value={formData.disabilitySpecialization}
+                                        name="interviewType"
+                                        value={formData.interviewType}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg"
+                                        className={`w-full px-4 py-2.5 border ${errors.interviewType ? "border-red-500" : "border-gray-300"} rounded-lg`}
                                     >
-
-                                        <option value="">-- Select Specialization --</option>
-                                        <option value="Intellectual-Disability">Intellectual Disability (ID)</option>
-
+                                        <option value="">-- Select Type --</option>
+                                        <option value="TGT">TGT</option>
+                                        <option value="PRT">PRT</option>
                                     </select>
 
-                                    {errors.disabilitySpecialization && (
-                                        <p className="text-red-500 text-xs">{errors.disabilitySpecialization}</p>
+                                    {errors.interviewType && (
+                                        <p className="text-red-500 text-xs">{errors.interviewType}</p>
                                     )}
-
                                 </div>
 
                             </div>
@@ -667,7 +585,7 @@ export default function OfflineEventRegisterPage() {
                                             Submitting...
                                         </span>
                                     ) : (
-                                        "Register for Offline Test"
+                                        "Register for Offline Interview"
                                     )}
                                 </button>
                             </div>
@@ -675,7 +593,7 @@ export default function OfflineEventRegisterPage() {
                             {/* Offline Test Location */}
                             <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                                 <p className="text-sm sm:text-base font-semibold text-[#00316B]">
-                                    Offline Test Location :- <span className="text-[#009FE3]">Jagatpura, Jaipur</span>
+                                    Offline Interview Location :- <span className="text-[#009FE3]">Jagatpura, Jaipur</span>
                                 </p>
                             </div>
 

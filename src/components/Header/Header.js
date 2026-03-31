@@ -294,7 +294,7 @@ export default function Header() {
 
               {/* Text */}
               <span className="px-3 py-1 text-sm font-medium hover:text-[#009FE3] whitespace-nowrap">
-                Offline Test Registration
+                Offline Interview Registration
               </span>
             </a>
             <HeaderSearch />
