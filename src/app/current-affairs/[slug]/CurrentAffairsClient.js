@@ -129,7 +129,7 @@ export default function CurrentAffairsDetails() {
           <div className="flex-1">
             {/* Article Header */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-4 ">
                 <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1.5 rounded-full">
                   {article.category?.name}
                 </span>
@@ -190,6 +190,7 @@ export default function CurrentAffairsDetails() {
                 </div>
               </div>
             )}
+
 
             {/* Article Sections */}
             <div className="bg-white rounded-xl shadow-sm p-6">
