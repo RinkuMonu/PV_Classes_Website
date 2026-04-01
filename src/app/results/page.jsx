@@ -11,6 +11,7 @@ export default function StudentResultForm() {
     category: "",
     examType: "",
     marks: "",
+    message: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -45,6 +46,7 @@ export default function StudentResultForm() {
           category: "",
           examType: "",
           marks: "",
+          message: "",
         });
       }
     } catch (error) {
@@ -60,9 +62,9 @@ export default function StudentResultForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-4">
-      
+
       <div className="w-full max-w-6xl bg-white shadow-xl rounded-2xl overflow-hidden grid md:grid-cols-2">
-        
+
         {/* 🔵 Left Side Image */}
         <div className="relative hidden md:block">
           <Image
@@ -71,7 +73,7 @@ export default function StudentResultForm() {
             fill
             className="object-cover"
           />
-        
+
         </div>
 
         {/* 🟢 Right Side Form */}
@@ -106,6 +108,7 @@ export default function StudentResultForm() {
               <option value="SC">SC</option>
               <option value="ST">ST</option>
               <option value="GENERAL">GENERAL</option>
+              <option value="EWS">EWS</option>
             </select>
 
             {/* Exam Type */}
@@ -132,6 +135,14 @@ export default function StudentResultForm() {
               min="0"
               max="60"
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
+            />
+
+            <textarea
+              name="message"
+              placeholder="How was your exam experience?"
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full border p-3 rounded-lg"
             />
 
             {/* Button */}

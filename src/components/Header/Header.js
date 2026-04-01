@@ -189,7 +189,7 @@ export default function Header() {
   if (!token && pathname === "/") {
     const timer = setTimeout(() => {
       setIsRegisterModalOpen(true);
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(timer); // ✅ cleanup
   }
