@@ -27,6 +27,13 @@ function AddressShipping() {
 
   const [showAddressModal, setShowAddressModal] = useState(false);
 
+  const [isReturningUser, setIsReturningUser] = useState(false);
+  const TARGET_COURSE_ID = "69ddc741e2b7eba525362ace";
+
+  const hasTargetCourse = cart?.some(
+    item => item.itemId === TARGET_COURSE_ID
+  );
+
   const [shippingAddress, setShippingAddress] = useState({
     name: "",
     phone: "",
@@ -66,6 +73,20 @@ function AddressShipping() {
     };
 
     fetchCoupons();
+  }, []);
+
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await axiosInstance.get("/checkout/order/is-returning");
+        setIsReturningUser(res.data.isReturning);
+      } catch (err) {
+        setIsReturningUser(false);
+      }
+    };
+
+    checkUser();
   }, []);
 
 
@@ -156,7 +177,6 @@ function AddressShipping() {
         couponId,
         // discountAmount: discount,
         shippingAddress
-
       });
 
       const orderId = checkoutRes?.data?.order?._id;
@@ -186,6 +206,21 @@ function AddressShipping() {
       setLoading(false);
     }
   };
+
+  const discountedAmount = cart?.reduce((sum, item) => {
+    const price =
+      item?.details?.discount_price > 0
+        ? item?.details?.discount_price
+        : item?.details?.price;
+
+    // 🎯 Sirf target course par 50% discount
+    if (item.itemId === TARGET_COURSE_ID && isReturningUser) {
+      return sum + (price * item.quantity) / 2;
+    }
+
+    // ❌ baki items full price
+    return sum + price * item.quantity;
+  }, 0);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-10 px-4">
@@ -337,6 +372,24 @@ function AddressShipping() {
                 ₹{finalAmount}
               </span>
             </div>
+
+
+            {isReturningUser && hasTargetCourse && (
+              <div className="bg-green-100 text-green-700 p-2 rounded text-sm">
+                {/* 🎉 Special Offer: You got 50% discount on selected course! */}
+                🎉 Special Offer: You get a 50% discount on this course because you have purchased a course with us before!
+              </div>
+            )}
+
+            {isReturningUser && hasTargetCourse && (
+              <div className="border-t pt-6 flex justify-between text-lg font-bold">
+                <span>50 % OFFERS PRICE</span>
+                <span className="text-[#384D89]">
+                  ₹{discountedAmount}
+                </span>
+              </div>
+            )}
+
 
             {/* Pay Button */}
             <button

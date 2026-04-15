@@ -1,7 +1,4 @@
 
-
-
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -34,18 +31,16 @@ const NotificationSystem = () => {
         fetchCategories();
     }, []);
 
-    // Fetch notifications when panel is shown
+
     useEffect(() => {
-        if (showPanel) {
-            fetchAllNotifications();
-        }
-    }, [showPanel]);
+        fetchAllNotifications();
+    }, []);
+
 
     // Close panel when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (panelRef.current && !panelRef.current.contains(event.target)) {
-                // Check if the click is not on the notification button
                 if (!event.target.closest('.notification-button')) {
                     setShowPanel(false);
                 }
@@ -108,7 +103,7 @@ const NotificationSystem = () => {
                 onClick={handleNotificationClick}
                 className="notification-button relative py-2 px-3 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
-                    <Bell className="w-5 h-5" />
+                <Bell className="w-5 h-5" />
 
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
 
@@ -282,7 +277,7 @@ const NotificationSystem = () => {
 
             {/* Overlay for panel when open */}
             {showPanel && (
-                <div className="fixed inset-0  bg-opacity-30 z-40"></div>
+                <div className="fixed inset-0 bg-opacity-30 z-40"></div>
             )}
         </div>
     );

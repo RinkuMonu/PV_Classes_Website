@@ -418,8 +418,6 @@ export default function Header() {
               Notes
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
             </Link>
-
-
           </nav>
 
 
@@ -431,9 +429,13 @@ export default function Header() {
               </button>
             </Link>
 
+              {isLoggedIn && (
+              <NotificationSystem />
+            )}
+
             <button
               onClick={openCart}
-              className="relative p-3 hover:bg-[#009FE3]/10 rounded-full transition-all duration-200 group"
+              className="relative p-3 hover:bg-[#009FE3]/10 rounded-full transition-all duration-200 group ml-2"
             >
               <ShoppingCart size={20} className="text-[#204972] group-hover:text-[#009FE3]" />
               <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white text-xs px-2 py-0.5 rounded-full font-bold shadow-lg">
@@ -441,10 +443,7 @@ export default function Header() {
               </span>
             </button>
 
-            {isLoggedIn && (
-              <NotificationSystem />
-
-            )}
+          
 
             {isOpen && (
               <div
