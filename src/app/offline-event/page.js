@@ -193,14 +193,14 @@ export default function OfflineEventRegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (emailStatus !== "valid") {
-            Swal.fire({
-                icon: "warning",
-                title: "Email Not Verified",
-                text: "Please verify your email before submitting",
-            });
-            return;
-        }
+        // if (emailStatus !== "valid") {
+        //     Swal.fire({
+        //         icon: "warning",
+        //         title: "Email Not Verified",
+        //         text: "Please verify your email before submitting",
+        //     });
+        //     return;
+        // }
 
         // const token = localStorage.getItem("token");
 
