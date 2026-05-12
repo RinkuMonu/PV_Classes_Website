@@ -202,19 +202,19 @@ export default function OfflineEventRegisterPage() {
             return;
         }
 
-        const token = localStorage.getItem("token");
+        // const token = localStorage.getItem("token");
 
-        if (!token) {
-            Swal.fire({
-                icon: "warning",
-                title: "Login Required",
-                text: "Please login to continue",
-                confirmButtonText: "OKay",
-                showCancelButton: true,
-            });
+        // if (!token) {
+        //     Swal.fire({
+        //         icon: "warning",
+        //         title: "Login Required",
+        //         text: "Please login to continue",
+        //         confirmButtonText: "OKay",
+        //         showCancelButton: true,
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
 
         if (!validateForm()) {
             // Scroll to first error
