@@ -205,6 +205,7 @@ export default function OfflineEventRegisterPage() {
         // const token = localStorage.getItem("token");
 
         // if (!token) {
+        
         //     Swal.fire({
         //         icon: "warning",
         //         title: "Login Required",
