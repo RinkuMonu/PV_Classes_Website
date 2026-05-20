@@ -23,6 +23,7 @@ export default function HeaderSearch() {
         onChange={(e) => setQuery(e.target.value)}
         className="border px-3 py-2 rounded-lg w-64"
       />
+      
       <button
         type="submit"
         className="bg-[#204972] text-white px-4 py-2 rounded-lg"
