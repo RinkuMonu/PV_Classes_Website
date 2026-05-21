@@ -44,7 +44,8 @@ export default function OfflineEventRegisterPage() {
     useEffect(() => {
         const fetchExams = async () => {
             try {
-                const res = await axiosInstance.get("/offline-interview/exams"); setExams(res.data.data || []);
+                const res = await axiosInstance.get("/exams")
+                setExams(res.data)
             } catch (error) {
                 console.error("Failed to fetch exams:", error)
                 Swal.fire({
@@ -333,55 +334,7 @@ export default function OfflineEventRegisterPage() {
                                 </div>
 
                                 {/* Email Field */}
-                                <div className="space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                        <Mail size={16} className="text-[#009FE3]" />
-                                        Email Address <span className="text-red-500">*</span>
-                                    </label>
-                                    {/* <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        placeholder="you@example.com"
-                                        className={`w-full px-4 py-2.5 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent transition-all bg-gray-50/80 hover:bg-white`}
-                                    /> */}
-                                    <div className="relative">
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={(e) => {
-                                                handleChange(e);
-                                                setEmailStatus(null); // reset when typing
-                                            }}
-                                            placeholder="you@example.com"
-                                            className={`w-full px-4 py-2.5 border ${errors.email ? "border-red-500" : "border-gray-300"
-                                                } rounded-lg focus:ring-2 focus:ring-[#009FE3]`}
-                                        />
-
-                                        {/* Verify Button */}
-                                        {formData.email && emailStatus !== "valid" && (
-                                            <button
-                                                type="button"
-                                                onClick={handleVerifyEmail}
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs bg-[#00316B] text-white px-3 py-1 rounded"
-                                            >
-                                                {emailStatus === "checking" ? "Checking..." : "Verify"}
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {/* Status Message */}
-                                    {emailStatus === "valid" && (
-                                        <p className="text-green-600 text-xs mt-1">✅ Email Verified</p>
-                                    )}
-
-                                    {emailStatus === "invalid" && (
-                                        <p className="text-red-500 text-xs mt-1">{emailMessage}</p>
-                                    )}
-                                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                                </div>
+                                <div className="space-y-1"> <label className="text-sm font-semibold text-gray-700 flex items-center gap-2"> <Mail size={16} className="text-[#009FE3]" /> Email Address <span className="text-red-500">*</span> </label> <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" className={`w-full px-4 py-2.5 border ${ errors.email ? "border-red-500" : "border-gray-300" } rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent transition-all bg-gray-50/80 hover:bg-white`} /> {errors.email && ( <p className="text-red-500 text-xs mt-1"> {errors.email} </p> )} </div>
 
                                 {/* Mobile Field */}
                                 <div className="space-y-1">
@@ -414,7 +367,11 @@ export default function OfflineEventRegisterPage() {
                                         className={`w-full px-4 py-2.5 border ${errors.exam ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent transition-all bg-gray-50/80 hover:bg-white appearance-none cursor-pointer`}
                                     >
                                         <option value="">-- Choose an exam --</option>
-                                        {exams.map((exam, idx) => ( <option key={idx} value={exam}> {exam} </option> ))}
+                                        {exams.map((exam) => (
+                                            <option key={exam._id} value={exam._id}>
+                                                {exam.name}
+                                            </option>
+                                        ))}
                                     </select>
                                     {errors.exam && <p className="text-red-500 text-xs mt-1">{errors.exam}</p>}
                                 </div>
@@ -556,7 +513,6 @@ export default function OfflineEventRegisterPage() {
                                         <option value="">-- Select Type --</option>
                                         <option value="TGT">TGT</option>
                                         <option value="PRT">PRT</option>
-                                        <option value="PRT">DGT</option>
                                     </select>
 
                                     {errors.interviewType && (
