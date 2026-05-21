@@ -42,7 +42,7 @@ export default function OfflineEventRegisterPage() {
     useEffect(() => {
         const fetchExams = async () => {
             try {
-                const res = await axiosInstance.get("/exams")
+                const res = await axiosInstance.get("/offline-interview/exams")
                 setExams(res.data)
             } catch (error) {
                 console.error("Failed to fetch exams:", error)
