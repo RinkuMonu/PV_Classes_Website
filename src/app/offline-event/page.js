@@ -44,8 +44,7 @@ export default function OfflineEventRegisterPage() {
     useEffect(() => {
         const fetchExams = async () => {
             try {
-                const res = await axiosInstance.get("/exams")
-                setExams(res.data)
+                const res = await axiosInstance.get("/offline-interview/exams"); setExams(res.data.data || []);
             } catch (error) {
                 console.error("Failed to fetch exams:", error)
                 Swal.fire({
@@ -415,11 +414,7 @@ export default function OfflineEventRegisterPage() {
                                         className={`w-full px-4 py-2.5 border ${errors.exam ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent transition-all bg-gray-50/80 hover:bg-white appearance-none cursor-pointer`}
                                     >
                                         <option value="">-- Choose an exam --</option>
-                                        {exams.map((exam) => (
-                                            <option key={exam._id} value={exam._id}>
-                                                {exam.name}
-                                            </option>
-                                        ))}
+                                        {exams.map((exam, idx) => ( <option key={idx} value={exam}> {exam} </option> ))}
                                     </select>
                                     {errors.exam && <p className="text-red-500 text-xs mt-1">{errors.exam}</p>}
                                 </div>
@@ -561,6 +556,7 @@ export default function OfflineEventRegisterPage() {
                                         <option value="">-- Select Type --</option>
                                         <option value="TGT">TGT</option>
                                         <option value="PRT">PRT</option>
+                                        <option value="PRT">DGT</option>
                                     </select>
 
                                     {errors.interviewType && (

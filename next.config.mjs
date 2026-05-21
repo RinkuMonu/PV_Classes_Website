@@ -10,9 +10,9 @@
 
 
 // next.config.js
-
+ 
 const nextConfig = {
-  output: "export",   // 👈 ye line add karo
+  // output: "export",   // 👈 ye line add karo
   images: {
     unoptimized: true,
   },
