@@ -33,9 +33,7 @@ export default function OfflineEventRegisterPage() {
     const [citiesList, setCitiesList] = useState([])
     const [isFetchingCities, setIsFetchingCities] = useState(false)
 
-    const [emailStatus, setEmailStatus] = useState(null); // null | "checking" | "valid" | "invalid"
 
-    const [emailMessage, setEmailMessage] = useState("");
 
     // Validation errors
     const [errors, setErrors] = useState({})
@@ -248,30 +246,30 @@ export default function OfflineEventRegisterPage() {
     }
 
     // email varify ke liye
-    const handleVerifyEmail = async () => {
-        if (!formData.email) return;
+    // const handleVerifyEmail = async () => {
+    //     if (!formData.email) return;
 
-        setEmailStatus("checking");
+    //     setEmailStatus("checking");
 
-        try {
-            const res = await axiosInstance.post("/verify-email", {
-                email: formData.email
-            });
+    //     try {
+    //         const res = await axiosInstance.post("/verify-email", {
+    //             email: formData.email
+    //         });
 
-            if (res.data.emailvalid) {
-                setEmailStatus("valid");
-            } else {
-                setEmailStatus("invalid");
-            }
+    //         if (res.data.emailvalid) {
+    //             setEmailStatus("valid");
+    //         } else {
+    //             setEmailStatus("invalid");
+    //         }
 
-            setEmailMessage(res.data.message);
+    //         setEmailMessage(res.data.message);
 
-        } catch (error) {
-            console.error(error);
-            setEmailStatus("invalid");
-            setEmailMessage("Email verification failed");
-        }
-    };
+    //     } catch (error) {
+    //         console.error(error);
+    //         setEmailStatus("invalid");
+    //         setEmailMessage("Email verification failed");
+    //     }
+    // };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
