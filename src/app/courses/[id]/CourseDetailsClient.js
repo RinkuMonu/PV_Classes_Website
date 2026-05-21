@@ -24,8 +24,7 @@ export default function CourseDetailsPage() {
   const [cartMode, setCartMode] = useState("course"); // 'course', 'combo', or 'both'
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const [openSubject, setOpenSubject] = useState(null); // <--- add this
-
+  const [openSubject, setOpenSubject] = useState(null);
 
   const [courseNotes, setCourseNotes] = useState([]);
   const [loadingNotes, setLoadingNotes] = useState(true);
@@ -48,7 +47,7 @@ export default function CourseDetailsPage() {
             comboItems.push({
               type: "Book",
               itemId: book,
-              price: book?.discount_price || book?.price
+              price: book?.discount_price ?? book?.price
             });
           });
 
@@ -56,7 +55,7 @@ export default function CourseDetailsPage() {
             comboItems.push({
               type: "TestSeries",
               itemId: test,
-              price: test?.discount_price || test?.price
+              price: test?.discount_price ?? test?.price
             });
           });
 
@@ -64,7 +63,7 @@ export default function CourseDetailsPage() {
             comboItems.push({
               type: "PYQ",
               itemId: pyq,
-              price: pyq?.finalPrice || pyq?.price
+              price: pyq?.finalPrice ?? pyq?.price
             });
           });
         }
@@ -74,18 +73,11 @@ export default function CourseDetailsPage() {
           comboItems: comboItems
         };
 
-        // setSelectedOption({
-        //   type: "course",
-        //   id: courseData._id,
-        // })
-        // setCourse(updatedCourseData);
-
-
-        // Set default selected option
+        // FIX: Set default selected option based on whether combo exists
         if (courseData?.comboId) {
           setSelectedOption({
             type: "combo",
-            id: courseData.comboId._id,   // use combo id
+            id: courseData.comboId._id,
           });
           setCartMode("combo");
         } else {
@@ -98,11 +90,8 @@ export default function CourseDetailsPage() {
 
         setCourse(updatedCourseData);
 
-        // 🔥 Fetch Course Notes
+        // Fetch Course Notes
         try {
-          // const notesRes = await axiosInstance.get(`/notes/course/${id}`);
-          // setCourseNotes(notesRes.data);
-
           const notesRes = await axiosInstance.get(`/notes/course/${id}`);
           const notesArray = notesRes.data;
 
@@ -110,11 +99,9 @@ export default function CourseDetailsPage() {
 
           notesArray.forEach((note) => {
             const groupName = note.noteTitle || "General";
-
             if (!transformed[groupName]) {
               transformed[groupName] = [];
             }
-
             transformed[groupName].push(note);
           });
 
@@ -166,34 +153,33 @@ export default function CourseDetailsPage() {
     }
   };
 
+  // FIX: calculateTotalPrice now correctly uses discount_price when available for the course,
+  // and keeps combo pricing consistent with what gets sent to the backend.
   const calculateTotalPrice = () => {
     if (!course) return 0;
 
     let total = 0;
 
     if (cartMode === "course") {
-      total = course?.price || 0;
+      // Use discount_price if available, otherwise fall back to price
+      total = course?.discount_price ?? course?.price ?? 0;
     } else if (cartMode === "combo") {
       if (selectAll && course?.comboId?.discount_price) {
         total = course?.comboId?.discount_price;
       } else {
-        selectedComboItems?.forEach(index => {
-          if (course?.comboItems?.[index]) {
-            total += course?.comboItems?.[index]?.price;
-          }
-        });
+        total = selectedComboItems?.reduce((sum, index) => {
+          return sum + (course?.comboItems?.[index]?.price ?? 0);
+        }, 0);
       }
     } else if (cartMode === "both") {
-      total = course?.price || 0;
-      if (selectAll && course?.comboId?.discount_price) {
-        total += course?.comboId?.discount_price;
-      } else {
-        selectedComboItems?.forEach(index => {
-          if (course?.comboItems?.[index]) {
-            total += course?.comboItems?.[index]?.price;
-          }
-        });
-      }
+      const coursePrice = course?.discount_price ?? course?.price ?? 0;
+      const comboPrice =
+        selectAll && course?.comboId?.discount_price
+          ? course.comboId.discount_price
+          : selectedComboItems?.reduce((sum, index) => {
+              return sum + (course?.comboItems?.[index]?.price ?? 0);
+            }, 0);
+      total = coursePrice + comboPrice;
     }
 
     return total;
@@ -323,8 +309,11 @@ export default function CourseDetailsPage() {
     );
   };
 
+  // FIX: derive these after calculateTotalPrice is fixed
   const totalPrice = calculateTotalPrice();
-  const baseCoursePrice = course?.price || 0;
+  // Use discount_price if present, otherwise original price
+  const baseCoursePrice = course?.discount_price ?? course?.price ?? 0;
+  const originalCoursePrice = course?.price ?? 0;
   const discountAmount = calculateDiscount();
 
   return (
@@ -348,11 +337,6 @@ export default function CourseDetailsPage() {
             priority
           />
         </div>
-        {/* <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center px-4">
-            {course?.title}
-          </h1>
-        </div> */}
       </section>
 
       <section className="relative z-10 pt-6 md:pt-4 bg-gray-50 min-h-screen">
@@ -368,7 +352,6 @@ export default function CourseDetailsPage() {
                     width={100}
                     height={100}
                     src={course.full_image[0]}
-                    // src={`http://localhost:5000${course?.images?.[0]}`}
                     alt={course.title}
                     className="w-full md:w-64 h-48 object-cover rounded-lg border"
                   />
@@ -389,9 +372,20 @@ export default function CourseDetailsPage() {
                   <p className="text-gray-600 mb-4">{course?.shortDescription}</p>
 
                   <div className="flex flex-wrap gap-3">
+                    {/* FIX: Show discount_price with strikethrough of original if both exist */}
                     <span className="px-3 py-1 bg-[#616602] bg-opacity-15 text-[#fff] rounded-full text-sm font-medium">
-                      {course?.isFree ? "FREE" : `₹${baseCoursePrice}`}
+                      {course?.isFree
+                        ? "FREE"
+                        : course?.discount_price
+                        ? `₹${course.discount_price}`
+                        : `₹${course.price}`}
                     </span>
+                    {/* Show original price with strikethrough if a discount exists */}
+                    {!course?.isFree && course?.discount_price && course.discount_price !== course.price && (
+                      <span className="px-3 py-1 bg-gray-100 text-gray-500 line-through rounded-full text-sm">
+                        ₹{course.price}
+                      </span>
+                    )}
                     <span className="px-3 py-1 bg-[#204972] bg-opacity-15 text-[#fff] rounded-full text-sm">
                       Validity: {course?.validity || "N/A"}
                     </span>
@@ -402,42 +396,6 @@ export default function CourseDetailsPage() {
                 </div>
               </div>
             </div>
-
-            {/* Cart Mode Selection */}
-            {/* <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
-              <h2 className="text-xl font-bold text-[#204972] mb-4 flex items-center gap-2">
-                <FiShoppingCart className="text-[#204972]" />
-                Select what to add to cart
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                
-
-               {course.comboItems && course.comboItems.length > 0 && (
-                  <div
-                    className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${selectedOption?.type === "combo"
-                      ? "border-[#204972] bg-blue-50 shadow-md"
-                      : "border-gray-200 hover:border-[#204972] hover:bg-blue-50"
-                      }`}
-                    onClick={() => {
-                      setSelectedOption({
-                        type: "combo",
-                        id: course.comboId?._id,
-                      });
-                      setCartMode("combo");
-                    }}
-                  >
-                    <h3 className="font-semibold mb-2 text-[#204972]">Combo Only</h3>
-                    <p className="text-sm text-gray-600">
-                      {selectAll && course.comboId?.discount_price
-                        ? `₹${course.comboId.discount_price}`
-                        : `Up to ₹${course.comboId?.price || 0}`}
-                    </p>
-                  </div>
-                )}
-
-                
-              </div>
-            </div> */}
 
             {/* What You'll Learn */}
             <div className="bg-white rounded-xl shadow-sm p-6">
@@ -511,7 +469,7 @@ export default function CourseDetailsPage() {
                       {cartMode === "combo" ? "Combo Total: " : "Combo Price: "}
                       ₹{selectAll && course.comboId?.discount_price
                         ? course.comboId.discount_price
-                        : selectedComboItems.reduce((sum, index) => sum + course.comboItems[index].price, 0)
+                        : selectedComboItems.reduce((sum, index) => sum + (course.comboItems[index]?.price ?? 0), 0)
                       }
                     </div>
                     {selectAll && course.comboId && course.comboId.discount_price && (
@@ -568,8 +526,7 @@ export default function CourseDetailsPage() {
                     {/* Videos */}
                     {openSubject === sIndex &&
                       subject.videos.map((video, i) => {
-                        const BACKEND_URL =
-                          process.env.NEXT_PUBLIC_BACKEND_URL;
+                        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
                         let embedUrl = null;
                         let videoSrc = null;
@@ -580,25 +537,20 @@ export default function CourseDetailsPage() {
                           video.url?.includes("youtu.be")
                         ) {
                           if (video.url.includes("youtu.be/")) {
-                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]
-                              }`;
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtu.be/")[1].split("?")[0]}`;
                           } else if (video.url.includes("watch?v=")) {
-                            embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]
-                              }`;
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("watch?v=")[1].split("&")[0]}`;
                           } else if (video.url.includes("youtube.com/live/")) {
-                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]
-                              }`;
+                            embedUrl = `https://www.youtube.com/embed/${video.url.split("youtube.com/live/")[1].split("?")[0]}`;
                           }
                         }
-
                         // Local video
                         else if (video.url?.startsWith("/uploads")) {
                           videoSrc = `${BACKEND_URL}${video.url}`;
                         }
 
                         // Lock logic
-                        const isLocked =
-                          !video.isFree && !hasPurchased;
+                        const isLocked = !video.isFree && !hasPurchased;
 
                         return (
                           <div
@@ -611,9 +563,7 @@ export default function CourseDetailsPage() {
                                 if (isLocked) {
                                   setShowModal(true);
                                 } else {
-                                  setOpenVideo(
-                                    openVideo === i ? null : i
-                                  );
+                                  setOpenVideo(openVideo === i ? null : i);
                                 }
                               }}
                             >
@@ -637,9 +587,7 @@ export default function CourseDetailsPage() {
                                   <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                                     <span>{i + 1} lecture</span>
                                     <span>•</span>
-                                    <span>
-                                      {video.duration} min
-                                    </span>
+                                    <span>{video.duration} min</span>
                                   </p>
                                 </div>
                               </div>
@@ -684,12 +632,8 @@ export default function CourseDetailsPage() {
                                       controlsList="nodownload"
                                       className="rounded"
                                     >
-                                      <source
-                                        src={videoSrc}
-                                        type="video/mp4"
-                                      />
-                                      Your browser does not support
-                                      the video tag.
+                                      <source src={videoSrc} type="video/mp4" />
+                                      Your browser does not support the video tag.
                                     </video>
                                   </div>
                                 ) : (
@@ -704,19 +648,17 @@ export default function CourseDetailsPage() {
                                     <h5 className="font-medium text-gray-700">
                                       Notes:
                                     </h5>
-                                    {video.notes.map(
-                                      (note, nIndex) => (
-                                        <a
-                                          key={nIndex}
-                                          href={`${BACKEND_URL}${note}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-blue-600 underline text-sm block"
-                                        >
-                                          Note {nIndex + 1}
-                                        </a>
-                                      )
-                                    )}
+                                    {video.notes.map((note, nIndex) => (
+                                      <a
+                                        key={nIndex}
+                                        href={`${BACKEND_URL}${note}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 underline text-sm block"
+                                      >
+                                        Note {nIndex + 1}
+                                      </a>
+                                    ))}
                                   </div>
                                 )}
                               </div>
@@ -731,60 +673,6 @@ export default function CourseDetailsPage() {
 
 
             {/* Course Notes Section */}
-            {/* <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 mt-6">
-              <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2">
-                Course Notes
-              </h2>
-
-              {loadingNotes ? (
-                <p>Loading notes...</p>
-              ) : courseNotes.length === 0 ? (
-                <p className="text-gray-500">No notes available for this course.</p>
-              ) : (
-                <div className="space-y-4">
-                  {courseNotes.map((note) => {
-                    const isLocked = !note.isFree && !hasPurchased;
-
-                    return (
-                      <div
-                        key={note._id}
-                        className="flex justify-between items-center p-4 border rounded-lg hover:bg-blue-50 transition"
-                      >
-                        <div>
-                          <h4 className="font-semibold text-gray-800">
-                            {note.title}
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            {note.description}
-                          </p>
-                        </div>
-
-                        {isLocked ? (
-                          <button
-                            onClick={() => setShowModal(true)}
-                            className="flex items-center gap-2 text-gray-400"
-                          >
-                            <FiLock />
-                            Locked
-                          </button>
-                        ) : (
-                          <a
-                            href={note.full_pdf}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-[#204972] font-medium"
-                          >
-                            <FaFilePdf />
-                            Download
-                          </a>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div> */}
-
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 mt-6">
               <h2 className="text-xl font-bold text-[#204972] mb-4 border-b pb-2">
                 Course Notes
@@ -873,7 +761,6 @@ export default function CourseDetailsPage() {
               </h2>
 
               <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border border-gray-100 hover:shadow-md transition-all duration-300">
-
                 <div>
                   <h3 className="font-semibold text-gray-800 text-lg">
                     Access Free Study Notes
@@ -889,7 +776,6 @@ export default function CourseDetailsPage() {
                 >
                   View Notes
                 </Link>
-
               </div>
             </div>
 
@@ -926,13 +812,12 @@ export default function CourseDetailsPage() {
                       ? `http://localhost:5000${facultyMember.photo}`
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(facultyMember.name)}&background=204972&color=fff&size=80`;
 
-                    // Function to normalize YouTube URLs to embed
                     const getEmbedUrl = (url) => {
                       if (!url) return null;
                       if (url.includes("youtu.be/")) return `https://www.youtube.com/embed/${url.split("youtu.be/")[1].split("?")[0]}`;
                       if (url.includes("watch?v=")) return `https://www.youtube.com/embed/${url.split("watch?v=")[1].split("&")[0]}`;
                       if (url.includes("youtube.com/live/")) return `https://www.youtube.com/embed/${url.split("youtube.com/live/")[1].split("?")[0]}`;
-                      return url; // fallback
+                      return url;
                     };
 
                     return (
@@ -1076,7 +961,6 @@ export default function CourseDetailsPage() {
                 </h2>
                 <div className="space-y-4">
                   {course.faqs.map((faq, index) => {
-                    // Color sets for variety
                     const iconColors = ["text-blue-600", "text-green-600", "text-purple-600", "text-amber-600"];
                     const bgColors = ["bg-blue-50", "bg-green-50", "bg-purple-50", "bg-amber-50"];
                     const colorIndex = index % 4;
@@ -1133,16 +1017,20 @@ export default function CourseDetailsPage() {
 
           {/* Sidebar */}
           {!hasPurchased && (
-
             <div className="w-full md:w-96 space-y-6">
               {/* Pricing Card */}
               <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-20">
                 <div className="p-6 bg-[#204972] text-white">
                   <div className="flex flex-col gap-2 mb-4">
                     <div className="flex items-end gap-2">
+                      {/* FIX: Show the correctly calculated total price */}
                       <span className="text-3xl font-bold text-white">₹{totalPrice}</span>
-                      {cartMode === "both" && course.price !== totalPrice && (
-                        <span className="text-white line-through">₹{course.price + (course.comboId?.price || 0)}</span>
+                      {/* FIX: Show original price with strikethrough only when a real discount exists */}
+                      {cartMode === "course" && course.discount_price && course.discount_price !== course.price && (
+                        <span className="text-white line-through opacity-70">₹{originalCoursePrice}</span>
+                      )}
+                      {cartMode === "combo" && selectAll && course.comboId?.price && course.comboId.price !== course.comboId.discount_price && (
+                        <span className="text-white line-through opacity-70">₹{course.comboId.price}</span>
                       )}
                     </div>
 
@@ -1151,39 +1039,26 @@ export default function CourseDetailsPage() {
                     </div>
                   </div>
 
-                  {/* <button
-                  onClick={(e) => {
-                    handleAdd(e, selectedOption.type, selectedOption.id);
-                    openCart();
-                  }}
-                  className="w-full bg-[#788406] hover:bg-[#16385d] text-white font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2"
-                >
-                  <FiShoppingCart />
-                  Add to cart
-                </button> */}
-
                   <button
                     disabled={!totalPrice || totalPrice <= 0}
                     onClick={(e) => {
                       if (totalPrice > 0) {
+                        // FIX: pass selectedOption explicitly; don't rely on potentially-stale state
                         handleAdd(e, selectedOption.type, selectedOption.id);
                         openCart();
                       }
                     }}
                     className={`w-full font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2
-    ${totalPrice > 0
+                      ${totalPrice > 0
                         ? "bg-[#788406] hover:bg-[#16385d] text-white"
                         : "bg-gray-400 cursor-not-allowed text-white"
-                      }
-  `}
+                      }`}
                   >
                     <FiShoppingCart />
                     Add to cart
                   </button>
 
-
-                  <p className="text-center text-hite text-sm mt-4 flex items-center justify-center">
-                    {/* <FiAward className="mr-1 text-amber-500" /> */}
+                  <p className="text-center text-white text-sm mt-4 flex items-center justify-center">
                     please add to cart
                   </p>
                 </div>
@@ -1215,10 +1090,18 @@ export default function CourseDetailsPage() {
                 <div className="border-t p-6">
                   <h3 className="font-bold text-lg text-[#204972] mb-3">Selected Items:</h3>
                   <ul className="space-y-2 max-h-64 overflow-y-auto">
+
+                    {/* FIX: Show course line in all modes so price is always visible and clear */}
                     {(cartMode === "course" || cartMode === "both") && (
                       <li className="text-gray-700 text-sm flex justify-between items-center py-1">
                         <span>Course: {course.title}</span>
-                        <span className="font-medium">₹{baseCoursePrice}</span>
+                        <div className="flex flex-col items-end">
+                          <span className="font-medium">₹{baseCoursePrice}</span>
+                          {/* FIX: show original price struck through if discount exists */}
+                          {course.discount_price && course.discount_price !== course.price && (
+                            <span className="text-gray-400 text-xs line-through">₹{originalCoursePrice}</span>
+                          )}
+                        </div>
                       </li>
                     )}
 
@@ -1228,7 +1111,9 @@ export default function CourseDetailsPage() {
                           <span>Complete Combo: {course.comboId.title}</span>
                           <div className="flex flex-col items-end">
                             <span className="text-[#616602] font-medium">₹{course.comboId.discount_price}</span>
-                            <span className="text-gray-500 text-xs line-through">₹{course.comboId.price}</span>
+                            {course.comboId.price !== course.comboId.discount_price && (
+                              <span className="text-gray-500 text-xs line-through">₹{course.comboId.price}</span>
+                            )}
                           </div>
                         </li>
                       ) : (
@@ -1252,9 +1137,7 @@ export default function CourseDetailsPage() {
                   </ul>
                 </div>
               </div>
-
             </div>
-
           )}
         </div>
       </section>
@@ -1287,12 +1170,14 @@ export default function CourseDetailsPage() {
               <button
                 className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
                 onClick={(e) => {
-                  setSelectedOption({ type: "course", id: course._id });
-                  setCartMode("course");
-
+                  // FIX: call handleAdd with explicit args FIRST (before state updates)
+                  // so we don't depend on stale state inside the closure
                   handleAdd(e, "course", course._id);
                   openCart();
 
+                  // State updates happen after — that's fine
+                  setSelectedOption({ type: "course", id: course._id });
+                  setCartMode("course");
                   setShowModal(false);
                 }}
               >
