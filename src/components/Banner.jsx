@@ -183,25 +183,31 @@ const Banner = () => {
     return () => window.removeEventListener("resize", checkDevice)
   }, [])
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const endpoint = deviceType === "mobile" ? "mobile" : "desktop"
-        const res = await axiosInstance.get(`/banners/${endpoint}`)
-        const data = res?.data || {}
-        const filtered = (data?.banners || [])?.filter(
-          (item) => item?.deviceType === deviceType
-        )
-        setBanners(filtered || [])
-      } catch (err) {
-        console.error("Failed to fetch banners", err)
-      }
-    }
+useEffect(() => {
+  const fetchBanners = async () => {
+    try {
+      const endpoint = deviceType === "mobile" ? "mobile" : "desktop"
 
-    if (deviceType) {
-      fetchBanners()
+      const res = await axiosInstance.get(`/banners/${endpoint}`)
+
+      const data = res?.data || {}
+
+      const filtered = (data?.banners || [])?.filter(
+        (item) =>
+          item?.deviceType === deviceType ||
+          item?.deviceType === "both"
+      )
+
+      setBanners(filtered || [])
+    } catch (err) {
+      console.error("Failed to fetch banners", err)
     }
-  }, [deviceType])
+  }
+
+  if (deviceType) {
+    fetchBanners()
+  }
+}, [deviceType])
 
   if (!banners || banners?.length === 0) return null
 
