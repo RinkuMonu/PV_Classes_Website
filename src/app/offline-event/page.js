@@ -512,6 +512,7 @@ setExams(res.data?.data ?? []);
                                         <option value="">-- Select Type --</option>
                                         <option value="TGT">TGT</option>
                                         <option value="PRT">PRT</option>
+                                        <option value="PRT">DGT</option>
                                     </select>
 
                                     {errors.interviewType && (
