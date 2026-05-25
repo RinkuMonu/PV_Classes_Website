@@ -425,10 +425,10 @@ export default function Contact() {
               </h3>
               <p className="text-gray-600 mb-4">Mon-Sat from 9am to 6pm.</p>
               <a
-                href="tel:6375180166"
+                href="tel:9251582702"
                 className="text-gray-900 font-medium hover:underline"
               >
-                6375180166
+                9251582702
               </a>
             </div>
           </div>
