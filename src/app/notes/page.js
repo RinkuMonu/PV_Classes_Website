@@ -25,7 +25,13 @@ export default function Notes() {
   const [loading, setLoading] = useState(true);
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const getPdfUrl = (note) => {
+  if (!note?.pdfUrl) return "";
 
+  return note.pdfUrl.startsWith("http")
+    ? note.pdfUrl
+    : `${BACKEND_URL}${note.pdfUrl.startsWith("/") ? note.pdfUrl : "/" + note.pdfUrl}`;
+};
   // ================= FETCH ALL NOTES =================
   useEffect(() => {
     const fetchNotes = async () => {
@@ -73,8 +79,10 @@ export default function Notes() {
   };
 
   const getShareLinks = (note) => {
-    const pdfUrl = `${BACKEND_URL}/${note.pdfUrl}`;
+    const pdfUrl = getPdfUrl(note);
+
     const text = encodeURIComponent(`Check out ${note.title}: ${pdfUrl}`);
+
     return {
       whatsapp: `https://wa.me/?text=${text}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pdfUrl)}`
@@ -83,7 +91,7 @@ export default function Notes() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
-      
+
       <section className="relative w-full h-[60vh] text-white mb-8">
         <Image
           src="/Image/Banner/pyq-banner.webp"
@@ -185,7 +193,7 @@ export default function Notes() {
 
                 {Object.keys(groupedNotes[selectedCourse]).map((group) => (
                   <div key={group} className="mb-4 bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
-                    
+
                     <div
                       onClick={() => toggleGroup(group)}
                       className="flex justify-between items-center p-5 cursor-pointer bg-gradient-to-r from-gray-50 to-white hover:from-blue-50 transition"
@@ -231,7 +239,7 @@ export default function Notes() {
 
                               <div className="flex items-center justify-end pt-3 border-t border-gray-100">
                                 <a
-                                  href={note.full_pdf}
+                                  href={getPdfUrl(note)}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="bg-gradient-to-r from-[#00316B] to-[#009FE3] text-white px-4 py-2 rounded-lg text-sm hover:shadow-lg transition-all duration-300 flex items-center gap-2"
