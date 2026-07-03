@@ -124,7 +124,7 @@ export default function CategoryCoursesSection({ category }) {
         overview: "New course will be available soon.",
         isFree: true,
         price: 0,
-        full_image: ["/Image/cominig-soon-courses.jpeg"],
+        full_image: ["/Image/comingsoon-mob.png"],
         isComingSoon: true
       }));
 
@@ -160,7 +160,7 @@ export default function CategoryCoursesSection({ category }) {
                   <button
                     key={type?._id}
                     onClick={() => setSelectedExamType(type)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedExamType?._id === type?._id
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${selectedExamType?._id === type?._id
                       ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
                       : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
                       }`}
@@ -181,7 +181,7 @@ export default function CategoryCoursesSection({ category }) {
                   <button
                     key={exam?._id}
                     onClick={() => setSelectedExam(exam)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedExam?._id === exam?._id
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${selectedExam?._id === exam?._id
                       ? "bg-gradient-to-r from-[#204972] to-[#2c5c8f] text-white shadow-md"
                       : "bg-white text-gray-700 border border-gray-200 hover:border-[#204972] hover:text-[#204972]"
                       }`}
@@ -294,7 +294,7 @@ export default function CategoryCoursesSection({ category }) {
 
           // coming soon ka banner
           <Image
-            src="/Image/coming-soon-banner.jpeg"
+            src="/Image/Banner/comingsoon.png"
             alt="No courses"
             width={1600}
             height={342}

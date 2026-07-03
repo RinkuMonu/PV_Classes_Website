@@ -424,8 +424,9 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/contact-us">
               <button className="hidden md:flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition ">
-                <FaPhone size={16} />
+              
                 <span>Contact Us</span>
+                  <FaPhone size={16} />
               </button>
             </Link>
 

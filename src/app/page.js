@@ -31,10 +31,10 @@ export default function Home() {
 
       <FacultySlider />
       <TestSeriesHome />
-
+ <CTA />
       <CurrentAffairs />
       {/* <BannerImg2 /> */}
-      <CTA />
+     
       <PyqSlider />
       <ExamCategory />
       {/* <TrustedPlatform /> */}

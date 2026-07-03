@@ -94,7 +94,7 @@ export default function CategoryAffairsPage() {
      <section className="relative w-full h-[60vh]">
        <div className="absolute inset-0">
          <Image 
-            src="/Image/Banner/current-banner.webp"
+            src="/Image/Banner/current-affairs2.jpeg"
           alt="Banner" fill className="object-cover object-center"  />
          <div className="absolute inset-0" />
        </div>
@@ -275,7 +275,7 @@ export default function CategoryAffairsPage() {
                <button
                  key={page}
                  onClick={() => setCurrentPage(page)}
-                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                    currentPage === page
                      ? "bg-[#00316B] text-white shadow"
                      : "bg-white text-gray-700 hover:bg-blue-100"

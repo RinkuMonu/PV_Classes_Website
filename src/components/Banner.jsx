@@ -280,8 +280,9 @@ useEffect(() => {
 
           .swiper-button-next,
           .swiper-button-prev {
-            width: 56px;
-            height: 56px;
+            width: 36px;
+            height: 36px;
+            padding: 8px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
             border: 2px solid #15803d;
