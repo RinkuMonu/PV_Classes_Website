@@ -271,7 +271,7 @@ export default function ExamMegaMenu() {
 
         {/* Exam Cards */}
         <div className="grid grid-cols-2 gap-6">
-          {finalExams?.map((exam) => (
+          {exams?.map((exam) => (
             <Link
               key={exam?._id}
               href={`/courses?exam=${exam?._id || ""}`}
