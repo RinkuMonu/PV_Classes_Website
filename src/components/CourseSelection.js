@@ -193,7 +193,7 @@ export default function CoursesSection() {
         overview: "New course will be available soon.",
         isFree: true,
         price: 0,
-        full_image: ["/Image/cominig-soon-courses.jpeg"],
+        full_image: ["/Image/comingsoon-mob.png"],
         isComingSoon: true
       }));
 
@@ -526,7 +526,7 @@ export default function CoursesSection() {
                             height={200}
                             src={course?.full_image?.[0]}
                             alt={course?.title || "Course Image"}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                       ) : (
@@ -582,7 +582,7 @@ export default function CoursesSection() {
               ) : (
                 // coming soon ka banner
                 <Image
-                  src="/Image/coming-soon-banner.jpeg"
+                  src="/Image/Banner/comingsoon.png"
                   alt="No courses"
                   width={1600}
                   height={342}
