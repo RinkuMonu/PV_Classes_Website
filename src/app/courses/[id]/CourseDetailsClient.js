@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
 import ReviewSection from "../../../components/ReviewSection";
+import SpecialBatchNoticeModal from "../SpecialBatchNoticeModal";
 import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
 import { FaArrowRight, FaChevronDown, FaChevronRight, FaFilePdf } from "react-icons/fa";
@@ -17,6 +18,7 @@ export default function CourseDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [openVideo, setOpenVideo] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showSpecialBatchModal, setShowSpecialBatchModal] = useState(false);
   const [selectedComboItems, setSelectedComboItems] = useState([]);
   const [selectAll, setSelectAll] = useState(true);
   const [hasPurchased, setHasPurchased] = useState(false);
@@ -31,7 +33,11 @@ export default function CourseDetailsPage() {
 
   const [groupedCourseNotes, setGroupedCourseNotes] = useState({});
   const [expandedNoteGroup, setExpandedNoteGroup] = useState(null);
-
+  const SPECIAL_COURSE_IDS = [
+  "6a0e990f2c5264b619774974",
+  "6a11674559dbbe9825a2fe44",
+  // "COURSE_ID_3",
+];
 
   useEffect(() => {
     if (!id) return;
@@ -153,6 +159,12 @@ export default function CourseDetailsPage() {
     }
   };
 
+  const isSpecialCourse = () => {
+  if (!course?._id) return false;
+
+  return SPECIAL_COURSE_IDS.includes(course._id.toString());
+};
+
   // FIX: calculateTotalPrice now correctly uses discount_price when available for the course,
   // and keeps combo pricing consistent with what gets sent to the backend.
   const calculateTotalPrice = () => {
@@ -177,8 +189,8 @@ export default function CourseDetailsPage() {
         selectAll && course?.comboId?.discount_price
           ? course.comboId.discount_price
           : selectedComboItems?.reduce((sum, index) => {
-              return sum + (course?.comboItems?.[index]?.price ?? 0);
-            }, 0);
+            return sum + (course?.comboItems?.[index]?.price ?? 0);
+          }, 0);
       total = coursePrice + comboPrice;
     }
 
@@ -377,8 +389,8 @@ export default function CourseDetailsPage() {
                       {course?.isFree
                         ? "FREE"
                         : course?.discount_price
-                        ? `₹${course.discount_price}`
-                        : `₹${course.price}`}
+                          ? `₹${course.discount_price}`
+                          : `₹${course.price}`}
                     </span>
                     {/* Show original price with strikethrough if a discount exists */}
                     {!course?.isFree && course?.discount_price && course.discount_price !== course.price && (
@@ -1042,11 +1054,16 @@ export default function CourseDetailsPage() {
                   <button
                     disabled={!totalPrice || totalPrice <= 0}
                     onClick={(e) => {
-                      if (totalPrice > 0) {
-                        // FIX: pass selectedOption explicitly; don't rely on potentially-stale state
-                        handleAdd(e, selectedOption.type, selectedOption.id);
-                        openCart();
+                      if (totalPrice <= 0) return;
+
+                      if (isSpecialCourse()) {
+                        e.preventDefault();
+                        setShowSpecialBatchModal(true);
+                        return;
                       }
+
+                      handleAdd(e, selectedOption.type, selectedOption.id);
+                      openCart();
                     }}
                     className={`w-full font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2
                       ${totalPrice > 0
@@ -1160,33 +1177,42 @@ export default function CourseDetailsPage() {
             </p>
 
             <div className="flex gap-3 justify-center">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
+  <button
+    className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+    onClick={() => setShowModal(false)}
+  >
+    Cancel
+  </button>
 
-              <button
-                className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
-                onClick={(e) => {
-                  // FIX: call handleAdd with explicit args FIRST (before state updates)
-                  // so we don't depend on stale state inside the closure
-                  handleAdd(e, "course", course._id);
-                  openCart();
+  <button
+    className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
+    onClick={(e) => {
+      if (isSpecialCourse()) {
+        e.preventDefault();
+        setShowModal(false);
+        setShowSpecialBatchModal(true);
+        return;
+      }
 
-                  // State updates happen after — that's fine
-                  setSelectedOption({ type: "course", id: course._id });
-                  setCartMode("course");
-                  setShowModal(false);
-                }}
-              >
-                Add to Cart
-              </button>
-            </div>
+      handleAdd(e, "course", course._id);
+      openCart();
+
+      setSelectedOption({ type: "course", id: course._id });
+      setCartMode("course");
+      setShowModal(false);
+    }}
+  >
+    Add to Cart
+  </button>
+</div>
           </div>
         </div>
       )}
+      <SpecialBatchNoticeModal
+        open={showSpecialBatchModal}
+        onClose={() => setShowSpecialBatchModal(false)}
+        courseTitle={course?.title || "Course"}
+      />
     </>
   );
 }
