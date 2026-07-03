@@ -62,91 +62,69 @@ export default function CurrentAffairsSlider() {
           </div>
 
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#009FE3]/10 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#616602]/10 to-transparent rounded-full blur-3xl"></div>
+     
 
         {affairs?.length > 0 ? (
           <div className="relative">
             <Slider {...settings}>
               {affairs?.map((item, index) => (
-                <div
-                  key={item?._id || index}
-                  className="px-3 py-4"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                >
-                  <Link href={`/current-affairs/${item?.slug || ""}`}>
-                    <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 bg-white group border border-[#009FE3]/20 hover:border-[#0281AD]/40 backdrop-blur-sm">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#00316B]/5 via-transparent to-[#87B105]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div
+  key={item?._id || index}
+  className="px-3 py-4"
+  data-aos="fade-up"
+  data-aos-delay={index * 100}
+>
+  <Link href={`/current-affairs/${item?.slug || ""}`}>
+    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#204972]/20 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+      
+      {/* Image */}
+      <div className="relative h-56 bg-slate-50 border-b border-gray-100 overflow-hidden">
+        <Image
+          src={item.full_image}
+          alt={item?.title || "Current Affair"}
+          fill
+          className="object-cover p-3 transition-transform duration-500 group-hover:scale-105"
+        />
 
-                      <div
-                        className="relative"
-                        data-aos="flip-right"
-                        data-aos-duration="1000"
-                      >
-                        {/* <div className="overflow-hidden rounded-t-2xl">
-                          <Image
-                            src={
-                              // item?.image?.startsWith("http")
-                              //   ? item?.image
-                              //   : item?.image
-                              //   ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${item?.image}`
-                              //   : "/vercel.svg"
-                              item.full_image
-                            }
-                            alt={item?.title || "Current Affair"}
-                            width={200}
-                            height={400}
-                            className="w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div> */}
+        {/* Category */}
+        <span className="absolute top-4 left-4 bg-white border border-gray-200 text-[#204972] text-xs font-medium px-3 py-1.5 rounded-md shadow-sm">
+          {item?.category?.name || "General"}
+        </span>
+      </div>
 
-                        <div className="relative w-full h-56 overflow-hidden rounded-t-2xl bg-white">
-                          <Image
-                            src={item.full_image}
-                            alt={item?.title || "Current Affair"}
-                            fill
-                            className="object-contain group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+        
+        {/* Date */}
+        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+          <CalendarDays size={15} />
+          <span>
+            {item?.publishDate
+              ? new Date(item.publishDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "No Date"}
+          </span>
+        </div>
 
-                        <span className="absolute top-4 left-4 bg-gradient-to-r from-[#ABC129] to-[#87B105] text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/20">
-                          {item?.category?.name || "General"}
-                        </span>
-                        <div className="absolute top-0 right-0 w-0 h-0 border-l-[30px] border-l-transparent border-t-[30px] border-t-[#009FE3]/20 group-hover:border-t-[#0281AD]/30 transition-colors duration-300"></div>
-                      </div>
+        {/* Title */}
+        <h2 className="text-lg font-semibold text-gray-900 line-clamp-2 leading-7 mb-4">
+          {item?.title || "Untitled"}
+        </h2>
 
-                      <div className="p-6 relative flex flex-col min-h-[190px] h-full">
-                        {/* date */}
-                        <div className="flex items-center gap-2 text-[#204972] text-sm mb-3 group-hover:text-[#00316B] transition-colors duration-300">
-                          <CalendarDays
-                            size={16}
-                            className="group-hover:scale-110 transition-transform duration-300 text-[#0281AD]"
-                          />
-                          {item?.publishDate
-                            ? new Date(item?.publishDate).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })
-                            : "No Date"}
-                        </div>
-
-                        <h2 className="text-lg font-bold line-clamp-2 mb-4 text-[#00316B] group-hover:text-[#204972] transition-colors duration-300 leading-tight">
-                          {item?.title || "Untitled"}
-                        </h2>
-
-                        <div className="mt-auto">
-                          <div className="inline-flex items-center text-[#0281AD] font-semibold group-hover:text-[#009FE3] transition-all duration-300">
-                            Read More
-                            <MdOutlineArrowOutward className="ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                          </div>
-                          <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#009FE3] to-[#0281AD] group-hover:w-full transition-all duration-500"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
+        {/* Read More */}
+        <div className="mt-auto pt-4 border-t border-gray-100">
+          <div className="inline-flex items-center gap-2 text-[#204972] font-medium group-hover:text-[#0281AD] transition-colors">
+            Read Article
+            <MdOutlineArrowOutward className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </div>
+        </div>
+      </div>
+    </article>
+  </Link>
+</div>
               ))}
             </Slider>
           </div>

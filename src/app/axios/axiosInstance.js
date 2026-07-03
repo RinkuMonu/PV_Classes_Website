@@ -4,10 +4,12 @@ import Swal from "sweetalert2";
 
 const axiosInstance = axios.create({
 
-  baseURL: 'https://api.pvclasses.in/api',
+  baseURL: 'https://api.pvclasses.in/api'
   // baseURL: 'http://localhost:5006/api',
 
 // 
+
+
   // headers: {
   //     'Content-Type': 'application/json',
   // },

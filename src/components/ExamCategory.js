@@ -45,51 +45,103 @@ export default function ExamCategory() {
   ];
 
   return (
-    <section className="px-6 md:px-16 py-16 bg-[#edf3f5]">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-3 text-[#204972]">
-        Exam Categories
-      </h2>
-      <p className="text-center text-gray-600 mb-12">
-        PV is preparing students for 35+ exam categories. Scroll down to find
-        the one you are preparing for
-      </p>
+ <section className="relative overflow-hidden bg-gradient-to-br from-[#163554] via-[#204972] to-[#10253d] py-16">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-        {categories.map((cat, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-md rounded-xl p-6 relative overflow-hidden hover:shadow-lg transition-all md:px-10"
-          >
-            <h3 className="text-xl text-[#204972] font-bold mb-4">
-              {cat.title}
-            </h3>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {cat.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 border border-gray-300 rounded-full text-sm text-gray-600"
+  {/* Background Blur */}
+  <div className="absolute -top-32 -left-32 w-80 h-80 bg-[#4b8fd8]/20 rounded-full blur-[120px]" />
+  <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-[120px]" />
+
+  <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+
+  {/* Heading */}
+        <div className="mb-10 text-center">
+          <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-blue-200 text-xs">
+            35+ Categories
+          </span>
+
+          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-white">
+            Find Your Exam Category
+          </h2>
+
+          <p className="mt-3 text-blue-100">
+            PV is preparing students for 35+ exam categories. Find the one you're
+            preparing for.
+          </p>
+        </div>
+    <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+      {/* LEFT SIDE */}
+      <div>
+
+      
+
+        {/* Cards */}
+        <div className="space-y-5">
+          {categories.map((cat, index) => (
+            <div
+              key={index}
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-lg p-5 transition-all duration-300 hover:bg-white/10 hover:border-cyan-400/30"
+            >
+              <div className="grid grid-cols-[70px_1fr_auto] gap-4 items-center">
+
+                <div
+                  className={`w-16 h-16 rounded-lg ${cat.bg} flex items-center justify-center text-2xl text-white`}
                 >
-                  {tag}
-                </span>
-              ))}
-            </div>
+                  {cat.icon}
+                </div>
 
-            <div className="flex justify-between items-center">
-              <Link
-                href={cat.link}
-                className="text-[#204972] font-medium flex items-center gap-2"
-              >
-                Explore Category →
-              </Link>
-              <div
-                className={`absolute top-0 right-0 w-28 h-28 ${cat.bg} rounded-bl-full flex items-center justify-center`}
-              >
-                {cat.icon}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {cat.title}
+                  </h3>
+
+                  <div className="flex flex-wrap gap-2">
+                    {cat.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 rounded-full border border-white/15 bg-white/5 text-xs text-blue-100"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  href={cat.link}
+                  className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 text-white text-sm font-medium whitespace-nowrap"
+                >
+                  Explore →
+                </Link>
+
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
-    </section>
+
+      {/* RIGHT SIDE */}
+      <div className="hidden lg:flex justify-center sticky top-34">
+
+        <div className="relative">
+
+          {/* Glow */}
+          <div className="absolute inset-0 bg-cyan-400/20 blur-[100px] rounded-full"></div>
+
+          <img
+            src="/Image/clg-students.png"
+            alt="Exam Preparation"
+            className="relative w-full max-w-xl drop-shadow-2xl"
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
   );
 }

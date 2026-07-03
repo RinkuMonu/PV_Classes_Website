@@ -33,7 +33,11 @@ export default function CourseDetailsPage() {
 
   const [groupedCourseNotes, setGroupedCourseNotes] = useState({});
   const [expandedNoteGroup, setExpandedNoteGroup] = useState(null);
-  const SPECIAL_EXAM_ID = "6a0e960c2c5264b61977496e";
+  const SPECIAL_COURSE_IDS = [
+  "6a0e990f2c5264b619774974",
+  "6a11674559dbbe9825a2fe44",
+  // "COURSE_ID_3",
+];
 
   useEffect(() => {
     if (!id) return;
@@ -155,19 +159,11 @@ export default function CourseDetailsPage() {
     }
   };
 
-  const getCurrentExamId = () => {
-    if (!course?.exam) return null;
+  const isSpecialCourse = () => {
+  if (!course?._id) return false;
 
-    if (typeof course.exam === "object") {
-      return course.exam?._id || null;
-    }
-
-    return course.exam;
-  };
-
-  const isSpecialExamCourse = () => {
-    return getCurrentExamId() === SPECIAL_EXAM_ID;
-  };
+  return SPECIAL_COURSE_IDS.includes(course._id.toString());
+};
 
   // FIX: calculateTotalPrice now correctly uses discount_price when available for the course,
   // and keeps combo pricing consistent with what gets sent to the backend.
@@ -1060,7 +1056,7 @@ export default function CourseDetailsPage() {
                     onClick={(e) => {
                       if (totalPrice <= 0) return;
 
-                      if (isSpecialExamCourse()) {
+                      if (isSpecialCourse()) {
                         e.preventDefault();
                         setShowSpecialBatchModal(true);
                         return;
@@ -1191,7 +1187,7 @@ export default function CourseDetailsPage() {
   <button
     className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
     onClick={(e) => {
-      if (isSpecialExamCourse()) {
+      if (isSpecialCourse()) {
         e.preventDefault();
         setShowModal(false);
         setShowSpecialBatchModal(true);

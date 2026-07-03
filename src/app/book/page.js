@@ -60,7 +60,7 @@ export default function Book() {
       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
         <div className="absolute inset-0 hidden sm:block">
           <Image
-            src="/Image/Banner/main-book-banner.webp"
+            src="/Image/Banner/books2.jpeg"
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
