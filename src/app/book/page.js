@@ -160,7 +160,7 @@ export default function Book() {
                   {subCatData?.books?.map((book) => (
                     <div
                       key={book?._id}
-                      className="rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-white border border-gray-100 hover:-translate-y-1 relative"
+                      className="group relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-md hover:shadow-2xl hover:border-[#616602]/30 transition-all duration-300 hover:-translate-y-2"
                     >
                       <Link
                         href={book?._id ? `/book-detail/${book?._id}` : "/"}
@@ -171,7 +171,7 @@ export default function Book() {
                           {book?.tag?.map((tag, index) => (
                             <div
                               key={index}
-                              className="bg-[#616602] text-white text-xs px-2 py-1 rounded-md font-semibold shadow-md"
+                              className="bg-[#616602] text-white text-[10px] uppercase tracking-wide px-3 py-1 rounded-full font-semibold shadow-lg"
                             >
                               {tag.charAt(0).toUpperCase() + tag.slice(1)}
                             </div>
@@ -179,23 +179,23 @@ export default function Book() {
                         </div>
 
                         {/* Book image */}
-                        <div className="relative w-full h-48 sm:h-56 bg-gray-100">
+                        <div className="relative w-full h-56 sm:h-64 bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden">
                           <Image
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
                             alt={book?.title || "Book image"}
                             fill
-                            className="object-contain p-4 transition-transform hover:scale-105"
+                            className="object-contain p-5 transition-transform duration-500 group-hover:scale-110"
                           />
                         </div>
 
                         {/* Book details */}
-                        <div className="p-4">
-                          <h3 className="text-sm font-medium text-gray-800 line-clamp-2 h-10 mb-2">
+                        <div className="p-5 space-y-3">
+                          <h3 className="text-[15px] font-semibold text-gray-800 line-clamp-2 h-12 leading-6 group-hover:text-[#204972] transition-colors">
                             {book?.title}
                           </h3>
 
-                          <div className="flex items-center gap-2 flex-wrap mb-1 ">
-                            <span className="text-lg font-bold text-[#204972]">
+                          <div className="flex items-center justify-between gap-2 flex-wrap pt-1">
+                            <span className="text-2xl font-bold text-[#204972]">
                               ₹{book?.discount_price || book?.price}
                             </span>
                             {/* {book?.discount_price && (
@@ -218,13 +218,14 @@ export default function Book() {
                       </Link>
 
                       {/* Add Button - Modern design */}
+                      <div className="border-t border-gray-100 p-4 pt-3">
                       <button
                         onClick={(e) => {
                           handleAdd(e, "book", book?._id);
                           openCart();
                         }}
                         disabled={loading}
-                        className="w-full flex items-center justify-center gap-2 bg-[#616602] text-white py-2.5 px-4 text-sm font-semibold hover:bg-[#4d5501] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#616602] to-[#7d8203] text-white py-3 px-4 text-sm font-semibold transition-all duration-300 hover:from-[#545901] hover:to-[#6e7302] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {loading ? (
                           <>
@@ -257,7 +258,7 @@ export default function Book() {
                           </>
                         )}
                       </button>
-
+</div>
                     </div>
                   ))}
                 </div>
