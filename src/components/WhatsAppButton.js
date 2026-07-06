@@ -409,7 +409,7 @@ const WhatsAppButton = () => {
 
         <button
           onClick={() => setShowDoubtModal(true)}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          className="bg-[#204972] text-white rounded-full p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
           style={{
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)"
           }}
