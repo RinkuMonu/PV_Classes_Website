@@ -47,7 +47,8 @@ const RAJASTHAN_EXAMS = [
   "Other Rajasthan Exam",
 ];
 
-const MODES = ["💻 Online", "📝 Test Series Access Only", "🤝 Either works"];
+// Preparation level — shown after city, per the lead-capture flow
+const PREP_LEVELS = ["🌱 Beginner", "📈 Intermediate"];
 
 // Where captured leads get sent — point this at your backend / CRM / Sheet.
 const LEAD_API_ENDPOINT = "/api/leads";
@@ -59,9 +60,6 @@ const CHAT_API_ENDPOINT = "/api/chat";
 
 // ── Local knowledge base — used as instant fallback / Anthropic context.
 //    Edit this with your real info (fees, batch timings, faculty, results).
-//    Rewritten to match PV Classes' actual offering: government exam
-//    coaching (Central Level: DSSSB/KVS-NVS, Rajasthan Exams), PYQs,
-//    Test Series, Books, Current Affairs, and Notes.
 const COMPANY_KNOWLEDGE = [
   {
     keywords: ["course", "courses", "classes", "what do you teach", "offer", "exam list", "which exams"],
@@ -187,6 +185,13 @@ const SparkleIcon = () => (
   </svg>
 );
 
+const WarningIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+      stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 const TrashIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
     <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -203,11 +208,45 @@ const formatText = (text) =>
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
     .replace(/\n/g, "<br/>");
 
-const isValidPhone = (v) => {
-  const digits = v.replace(/\D/g, "");
-  return digits.length >= 10 && digits.length <= 13;
+/* ============================================================
+   VALIDATION
+   - Phone: normalizes +91 / leading 0, then requires a proper
+     10-digit Indian mobile number starting with 6-9. Also
+     rejects obviously fake numbers (all same digit, or a
+     straight sequential run like 1234567890 / 0123456789).
+   - Email: standard RFC-ish pattern, trimmed + lowercased.
+   ============================================================ */
+const normalizePhone = (v) => {
+  let digits = String(v).replace(/\D/g, "");
+  if (digits.length === 12 && digits.startsWith("91")) digits = digits.slice(2);
+  else if (digits.length === 11 && digits.startsWith("0")) digits = digits.slice(1);
+  return digits;
 };
-const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+const isValidPhone = (v) => {
+  const digits = normalizePhone(v);
+  if (!/^[6-9]\d{9}$/.test(digits)) return false; // valid Indian mobile pattern
+  if (/^(\d)\1{9}$/.test(digits)) return false;   // e.g. 9999999999
+  const seqUp = "01234567891011121314".replace(/\D/g, "");
+  const ascending = "0123456789";
+  const descending = "9876543210";
+  if (ascending.includes(digits) || descending.includes(digits)) return false; // e.g. 1234567890
+  return true;
+};
+
+const isValidEmail = (v) => {
+  const val = v.trim().toLowerCase();
+  const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  if (!re.test(val)) return false;
+  if (val.includes("..")) return false; // no consecutive dots
+  return true;
+};
+
+const isValidCity = (v) => {
+  const val = v.trim();
+  return val.length >= 2 && /^[a-zA-Z\s.'-]+$/.test(val);
+};
+
 const firstName = (n) => (n || "").trim().split(" ")[0] || "there";
 
 export default function PVClassesChatbot() {
@@ -221,10 +260,11 @@ export default function PVClassesChatbot() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // ── Lead-capture flow ──
-  // ASK_NAME -> ASK_PHONE -> ASK_EMAIL -> ASK_CATEGORY -> ASK_EXAM -> ASK_MODE -> CHAT
+  // ASK_NAME -> ASK_PHONE -> ASK_EMAIL -> ASK_CATEGORY -> ASK_EXAM
+  // -> ASK_CITY -> ASK_LEVEL -> CHAT
   const [step, setStep] = useState("ASK_NAME");
   const [lead, setLead] = useState({
-    name: "", phone: "", email: "", category: "", exam: "", mode: "",
+    name: "", phone: "", email: "", category: "", exam: "", city: "", level: "",
   });
   const [optionSet, setOptionSet] = useState(null);
 
@@ -257,10 +297,10 @@ export default function PVClassesChatbot() {
     }
   }, [open]);
 
-  const addBotMessage = (content, opts) => {
+  const addBotMessage = (content, opts, variant) => {
     setMessages((prev) => [
       ...prev,
-      { id: Date.now() + Math.random(), role: "assistant", content, time: now() },
+      { id: Date.now() + Math.random(), role: "assistant", content, time: now(), variant },
     ]);
     if (opts) setOptionSet(opts);
   };
@@ -272,11 +312,11 @@ export default function PVClassesChatbot() {
     ]);
   };
 
-  const botSay = (content, opts, delay = 600) => {
+  const botSay = (content, opts, delay = 600, variant) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      addBotMessage(content, opts);
+      addBotMessage(content, opts, variant);
       if (!open || minimized) setBadge((n) => n + 1);
     }, delay);
   };
@@ -284,7 +324,7 @@ export default function PVClassesChatbot() {
   const clearChat = () => {
     setMessages([greetingMessage()]);
     setStep("ASK_NAME");
-    setLead({ name: "", phone: "", email: "", category: "", exam: "", mode: "" });
+    setLead({ name: "", phone: "", email: "", category: "", exam: "", city: "", level: "" });
     setOptionSet(null);
     setInput("");
     setShowClearConfirm(false);
@@ -334,6 +374,21 @@ export default function PVClassesChatbot() {
     if (!open || minimized) setBadge((n) => n + 1);
   };
 
+  const finalizeAndSubmit = (finalLead) => {
+    botSay(
+      `🎉 Thank you, ${firstName(finalLead.name)}! Here's a quick summary:\n` +
+        `• Exam Category: **${finalLead.category}**\n` +
+        `• Preferred Course: **${finalLead.exam}**\n` +
+        `• City: **${finalLead.city}**\n` +
+        `• Level: **${finalLead.level}**\n` +
+        `• We'll call you on: **${finalLead.phone}**\n` +
+        `• Email: **${finalLead.email}**\n\n` +
+        `Our counsellor will reach out shortly to share batch details and the current discount offer. Meanwhile, ask me anything about ${COMPANY_NAME}! 💬`
+    );
+    submitLead(finalLead);
+    setStep("CHAT");
+  };
+
   const pickOption = (value) => {
     if (!optionSet) return;
     addUserMessage(value);
@@ -357,13 +412,10 @@ export default function PVClassesChatbot() {
           options: RAJASTHAN_EXAMS,
         });
       } else {
-        const finalLead = { ...lead, category: value, exam: value };
-        setLead(finalLead);
-        setStep("ASK_MODE");
-        botSay(`No problem — would you prefer Online classes or Test Series access only?`, {
-          type: "mode",
-          options: MODES,
-        });
+        const withExam = { ...updated, exam: value };
+        setLead(withExam);
+        setStep("ASK_CITY");
+        botSay(`No problem — which city are you in? (This helps us guide you on online vs center options.)`);
       }
       return;
     }
@@ -371,27 +423,15 @@ export default function PVClassesChatbot() {
     if (type === "exam") {
       const updated = { ...lead, exam: value };
       setLead(updated);
-      setStep("ASK_MODE");
-      botSay(`Great choice — ${value}. Would you prefer Online classes or Test Series access only?`, {
-        type: "mode",
-        options: MODES,
-      });
+      setStep("ASK_CITY");
+      botSay(`Great choice — ${value}. Which city are you in?`);
       return;
     }
 
-    if (type === "mode") {
-      const finalLead = { ...lead, mode: value };
+    if (type === "level") {
+      const finalLead = { ...lead, level: value };
       setLead(finalLead);
-      botSay(
-        `✅ All set, ${firstName(finalLead.name)}! Here's a quick summary:\n` +
-          `• Exam Category: **${finalLead.category}**\n` +
-          `• Exam: **${finalLead.exam}**\n` +
-          `• Mode: **${finalLead.mode}**\n` +
-          `• We'll call you on: **${finalLead.phone}**\n\n` +
-          `Our counsellor will reach out shortly to share batch details and the current discount offer. Meanwhile, ask me anything about ${COMPANY_NAME}! 💬`
-      );
-      submitLead(finalLead);
-      setStep("CHAT");
+      finalizeAndSubmit(finalLead);
     }
   };
 
@@ -410,16 +450,21 @@ export default function PVClassesChatbot() {
       }
       setLead((l) => ({ ...l, name: msg }));
       setStep("ASK_PHONE");
-      botSay(`Nice to meet you, ${firstName(msg)}! Could you share your phone number so our counsellor can reach you?`);
+      botSay(`Nice to meet you, ${firstName(msg)}! Could you share your 10-digit phone number so our counsellor can reach you?`);
       return;
     }
 
     if (step === "ASK_PHONE") {
       if (!isValidPhone(msg)) {
-        botSay("That doesn't look like a valid number. Please enter a 10-digit phone number.");
+        botSay(
+          "⚠️ Invalid phone number. Please enter a valid 10-digit Indian mobile number (e.g. 98XXXXXXXX).",
+          undefined,
+          600,
+          "warning"
+        );
         return;
       }
-      setLead((l) => ({ ...l, phone: msg }));
+      setLead((l) => ({ ...l, phone: normalizePhone(msg) }));
       setStep("ASK_EMAIL");
       botSay("Thanks! What's your email address?");
       return;
@@ -427,14 +472,33 @@ export default function PVClassesChatbot() {
 
     if (step === "ASK_EMAIL") {
       if (!isValidEmail(msg)) {
-        botSay("That doesn't look like a valid email. Please enter a valid email, e.g. name@example.com");
+        botSay(
+          "⚠️ Invalid email address. Please enter a correct email format (e.g. name@example.com).",
+          undefined,
+          600,
+          "warning"
+        );
         return;
       }
-      setLead((l) => ({ ...l, email: msg }));
+      setLead((l) => ({ ...l, email: msg.trim().toLowerCase() }));
       setStep("ASK_CATEGORY");
       botSay("Which government exam category are you preparing for?", {
         type: "category",
         options: EXAM_CATEGORIES,
+      });
+      return;
+    }
+
+    if (step === "ASK_CITY") {
+      if (!isValidCity(msg)) {
+        botSay("Please enter a valid city name (letters only, at least 2 characters).");
+        return;
+      }
+      setLead((l) => ({ ...l, city: msg.trim() }));
+      setStep("ASK_LEVEL");
+      botSay("Last question — what's your current preparation level?", {
+        type: "level",
+        options: PREP_LEVELS,
       });
       return;
     }
@@ -616,6 +680,15 @@ export default function PVClassesChatbot() {
           .pv-window { left: 10px; right: 10px; width: auto; bottom: ${LAUNCHER_BOTTOM + 64}px; }
           .pv-launcher { bottom: ${LAUNCHER_BOTTOM}px; right: 18px; }
         }
+
+        /* ── Inline warning message (red line) for validation errors ── */
+        .pv-bubble.pv-bubble-warning {
+          background: #fff5f5;
+          border-left: 4px solid #ef4444;
+          color: #b91c1c;
+          font-weight: 500;
+        }
+        .pv-bubble.pv-bubble-warning strong { color: #b91c1c; }
       `}</style>
 
       <div className="pv-chat">
@@ -705,7 +778,7 @@ export default function PVClassesChatbot() {
                       )}
                       <div className={`pv-msg-col ${msg.role === "user" ? "user" : ""}`}>
                         <div
-                          className={`pv-bubble ${msg.role === "user" ? "user" : "bot"}`}
+                          className={`pv-bubble ${msg.role === "user" ? "user" : "bot"} ${msg.variant === "warning" ? "pv-bubble-warning" : ""}`}
                           dangerouslySetInnerHTML={{ __html: formatText(msg.content) }}
                         />
                         <span className="pv-time">{msg.time}</span>
