@@ -12,9 +12,9 @@ const COMPANY_EMAIL = "Pvclasses01@gmail.com";
 const COMPANY_PHONE = "9251582702";
 const COMPANY_WHATSAPP = "919251582702";    // digits only, used for wa.me link
 
-const BRAND_PRIMARY = "#1E3A8A";   // deep academic indigo/blue (matches site navbar)
+const BRAND_PRIMARY = "#204972";   // deep academic indigo/blue (matches site navbar)
 const BRAND_ACCENT = "#84CC16";    // lime/green — matches site's "NEW" badge & buttons
-const BRAND_DARK = "#0F1A33";
+const BRAND_DARK = "#204972";
 
 // Keep this low (close to 0) so the launcher sits at the very bottom-right
 // corner of the screen instead of floating over mid-page content. If you
