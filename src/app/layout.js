@@ -45,6 +45,7 @@ export default function RootLayout({ children }) {
           {/* Footer */}
           <Footer />
 
+
           {/* Toast Notifications */}
           <Toaster position="top-right" />
 
