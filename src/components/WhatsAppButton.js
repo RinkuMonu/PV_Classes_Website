@@ -400,7 +400,7 @@ const WhatsAppButton = () => {
 
   return (
     <>
-      <div className="fixed bottom-5 right-5 flex flex-col items-end z-50">
+      <div className="fixed bottom-24 right-7 flex flex-col items-end z-50">
         {unreadCount > 0 && (
           <div className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mb-1 shadow-lg">
             {unreadCount}
