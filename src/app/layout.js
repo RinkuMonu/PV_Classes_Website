@@ -9,6 +9,7 @@ import WhatsAppButton from "../components/WhatsAppButton";
 
 // AI Chatbot
 import PVClassesChatbot from "../components/Pvclasseschatbot";
+import TapToSpeakCTA from "../components/Taptospeak";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
 
           {/* AI Chatbot */}
           <PVClassesChatbot />
+          <TapToSpeakCTA variant="floating" />
         </CartProvider>
       </body>
     </html>
