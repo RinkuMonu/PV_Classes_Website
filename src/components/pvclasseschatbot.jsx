@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import axiosInstance from "../app/axios/axiosInstance";
+import { useCart } from "./context/CartContext";
 
 /* ============================================================
    CONFIG — edit these to match PV Classes (Government Exam Coaching)
@@ -10,10 +12,10 @@ const BOT_NAME = "Prachi";                 // chatbot's name
 const COMPANY_NAME = "PV Classes";
 const COMPANY_EMAIL = "Pvclasses01@gmail.com";
 const COMPANY_PHONE = "9251582702";
-const COMPANY_WHATSAPP = "919251582702";    // digits only, used for wa.me link
+const COMPANY_WHATSAPP = "919251582702";    // digits only, used for wa.me link (kept for text-contact fallback only)
 
 const BRAND_PRIMARY = "#204972";   // deep academic indigo/blue (matches site navbar)
-const BRAND_ACCENT = "#84CC16";    // lime/green — matches site's "NEW" badge & buttons
+const BRAND_ACCENT = "#84CC16";    // lime/green — matches site's "NEW" badge & Add to Cart button
 const BRAND_DARK = "#204972";
 
 // Keep this low (close to 0) so the launcher sits at the very bottom-right
@@ -23,40 +25,32 @@ const BRAND_DARK = "#204972";
 const LAUNCHER_BOTTOM = 24; // px from bottom of screen — keep low so it floats at the very bottom and doesn't cover page content
 const LAUNCHER_Z_INDEX = 10000; // higher than a typical WhatsApp widget (~9999)
 
-// ── Government exam categories PV Classes actually prepares students for ──
-const EXAM_CATEGORIES = [
-  "🏛️ Central Level Exam (DSSSB / KVS-NVS)",
-  "🌅 Rajasthan Exams",
-  "📝 Test Series Only",
-  "🤔 Not sure yet",
-];
 
-// Specific exams within "Central Level" — shown as a follow-up if relevant
-const CENTRAL_EXAMS = [
-  "DSSSB General Paper",
-  "KVS (Kendriya Vidyalaya)",
-  "NVS (Navodaya Vidyalaya)",
-  "Other Central Exam",
-];
-
-const RAJASTHAN_EXAMS = [
-  "RPSC",
-  "Rajasthan Patwari",
-  "Rajasthan Police",
-  "REET",
-  "Other Rajasthan Exam",
-];
 
 // Preparation level — shown after city, per the lead-capture flow
 const PREP_LEVELS = ["🌱 Beginner", "📈 Intermediate"];
 
-// Where captured leads get sent — point this at your backend / CRM / Sheet.
-const LEAD_API_ENDPOINT = "/api/leads";
 
 // Real AI Q&A endpoint — calls Anthropic on the server with KNOWLEDGE as
 // context (see src/app/api/chat/route.js). Falls back to local keyword
 // matching automatically if this route isn't reachable.
 const CHAT_API_ENDPOINT = "/api/chat";
+
+// ── Auth ──
+// TODO: point this at your REAL login endpoint (email + password).
+// Expected response shape: { token: "...", user: { name, email, ... } }
+// — adjust the field names inside doLogin() below if your API differs
+// (e.g. res.data.data.token, res.data.accessToken, etc.)
+const LOGIN_API_ENDPOINT = "/auth/login";
+const AUTH_TOKEN_KEY = "pv_auth_token";
+const AUTH_USER_KEY = "pv_auth_user";
+
+// Where "Proceed to Checkout" should send the user — a real page redirect
+// (not a new tab), so the browser navigates straight to your checkout page.
+// Since the cart lives in localStorage under CART_STORAGE_KEY, as long as
+// this chatbot and your checkout page are on the SAME domain, the cart
+// will already be there waiting when the checkout page loads.
+const CHECKOUT_URL = "/checkout"; // TODO: change if your checkout page lives elsewhere
 
 // ── Local knowledge base — used as instant fallback / Anthropic context.
 //    Edit this with your real info (fees, batch timings, faculty, results).
@@ -69,12 +63,12 @@ const COMPANY_KNOWLEDGE = [
   {
     keywords: ["dsssb"],
     answer:
-      `Our DSSSB General Paper Complete Batch 2026 covers the full syllabus with expert faculty, live interactive classes, PDF notes & study material, test series & mock papers, previous year discussion, and doubt-solving sessions. There's currently a limited-time offer running — want me to note your details so our counsellor can share the enrollment link?`,
+      `Our DSSSB General Paper Complete Batch 2026 covers the full syllabus with expert faculty, live interactive classes, PDF notes & study material, test series & mock papers, previous year discussion, and doubt-solving sessions. There's currently a limited-time offer running — want me to add it to your cart?`,
   },
   {
     keywords: ["kvs", "nvs", "navodaya", "kendriya vidyalaya"],
     answer:
-      `We offer dedicated KVS (Kendriya Vidyalaya) and NVS (Navodaya Vidyalaya) exam preparation under our Central Level Exam category, with structured notes, test series, and PYQs. Want me to share more details or book a callback?`,
+      `We offer dedicated KVS (Kendriya Vidyalaya) and NVS (Navodaya Vidyalaya) exam preparation under our Central Level Exam category, with structured notes, test series, and PYQs. Want me to add this course to your cart?`,
   },
   {
     keywords: ["rpsc", "patwari", "rajasthan police", "reet", "rajasthan exam"],
@@ -84,7 +78,7 @@ const COMPANY_KNOWLEDGE = [
   {
     keywords: ["fee", "fees", "price", "pricing", "cost", "charges", "installment", "discount", "offer"],
     answer:
-      `Fees vary by exam (DSSSB, KVS-NVS, RPSC, Patwari, etc.) and course type. We currently have a flat discount running for a limited time. Share which exam you're targeting and our counsellor will share the exact pricing on a quick call.`,
+      `Fees vary by exam (DSSSB, KVS-NVS, RPSC, Patwari, etc.) and course type. We currently have a flat discount running for a limited time. Share which exam you're targeting and I'll show you the exact price and an Add to Cart button.`,
   },
   {
     keywords: ["demo", "trial", "free class", "trial class"],
@@ -104,7 +98,7 @@ const COMPANY_KNOWLEDGE = [
   {
     keywords: ["timing", "batch", "schedule", "timetable", "when do classes", "registration"],
     answer:
-      `Registration for our current batches (like the DSSSB General Paper Complete Batch 2026) is open now with limited seats. Tell me which exam you're preparing for and I'll note your preferred timing for our counsellor.`,
+      `Registration for our current batches (like the DSSSB General Paper Complete Batch 2026) is open now with limited seats. Tell me which exam you're preparing for and I'll show you the course card so you can add it to your cart.`,
   },
   {
     keywords: ["location", "address", "where are you", "center", "branch"],
@@ -139,6 +133,154 @@ function localAnswer(text) {
     if (entry.keywords.some((k) => lower.includes(k))) return entry.answer;
   }
   return null;
+}
+
+/* ============================================================
+   PRICING — always derive price from the /courses API response,
+   never a hardcoded/dummy number.
+
+   The API returns several price-related fields per course:
+     - price          → base price set for the course
+     - discountPrice   → sometimes used as an original/MRP price
+     - discountPercent → % discount applied
+     - finalPrice      → the ACTUAL amount the student should pay
+                         (already computed server-side from the
+                         above three fields)
+     - isFree          → NOT reliable for pricing in this API (some
+                         paid courses come back with isFree: true),
+                         so we never use it to decide the price —
+                         we only look at the real numeric amount.
+
+   Rule: show `finalPrice` if present, otherwise fall back to
+   `price`. If the resulting amount is 0, show "Free" — everything
+   else shows the real ₹ amount from the API.
+   ============================================================ */
+function getCoursePrice(course) {
+  if (!course) return { amount: 0, text: "Free" };
+  const amount =
+    typeof course.finalPrice === "number"
+      ? course.finalPrice
+      : typeof course.price === "number"
+      ? course.price
+      : 0;
+  return { amount, text: amount > 0 ? `₹${amount}` : "Free" };
+}
+
+/* ============================================================
+   PURCHASE-INTENT DETECTION
+   Lets a user type things like "buy a course of RPSC" and get a
+   full course breakdown + a real "Add to Cart" button that adds
+   the course to a persisted cart (localStorage) and syncs it to
+   your backend cart endpoint if you have one.
+   ============================================================ */
+const PURCHASE_KEYWORDS = [
+  "buy", "purchase", "enroll", "enrol", "admission", "join",
+  "register", "sign up", "signup", "book a course", "want to buy",
+  "i want to join", "get this course", "take this course", "add to cart",
+  "cart",
+];
+
+// Fallback destination if a specific course URL isn't set below.
+const COURSES_PAGE_URL = "https://www.pvclasses.com/courses"; // TODO: replace with your real "All Exams"/courses listing URL
+
+// Local persisted-cart key (see CART INTEGRATION note below).
+const CART_STORAGE_KEY = "pv_cart_items";
+
+// Matches a course from the fetched API list by checking if any words
+// from the user's text appear in the course title.
+function detectCourseFromApi(lowerText, coursesList) {
+  if (!coursesList || !coursesList.length) return null;
+  return coursesList.find((c) => {
+    const title = (c.title || c.name || "").toLowerCase();
+    return title.split(/\s+/).some((word) => word.length > 2 && lowerText.includes(word));
+  }) || null;
+}
+
+function hasPurchaseIntent(lowerText) {
+  return PURCHASE_KEYWORDS.some((k) => lowerText.includes(k));
+}
+
+/* ============================================================
+   CART INTEGRATION
+   Reads/writes a real cart in localStorage under CART_STORAGE_KEY,
+   and also best-effort POSTs to /api/cart so a backend cart (if you
+   have one) stays in sync too. Every cart item stores BOTH the
+   numeric `amount` (for totals) and the display `price` string
+   (for the confirmation bubble) — both taken straight from the API,
+   never hardcoded.
+
+   TO FULLY WIRE THIS INTO YOUR SITE:
+   1. Make sure the cart page/badge on your main site (pvclasses.com)
+      reads from the SAME localStorage key ("pv_cart_items") — or
+   2. Replace readCart/writeCart below with calls to your site's real
+      cart API/context if you already have one, so both the chatbot
+      and your product pages update the same cart.
+   ============================================================ */
+function readCart() {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (err) {
+    console.error("Cart read failed:", err);
+    return [];
+  }
+}
+
+function writeCart(cart) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    // Lets a cart icon/badge elsewhere on the page update itself live,
+    // since the native "storage" event only fires in OTHER tabs.
+    window.dispatchEvent(new CustomEvent("pv-cart-updated", { detail: cart }));
+  } catch (err) {
+    console.error("Cart write failed:", err);
+  }
+}
+// ─────────────────────────────────────────────────────────
+
+/* ============================================================
+   AUTH INTEGRATION
+   Simple email + password login. Persists the token/user in
+   localStorage (so it survives refreshes) and also sets it as
+   the default Authorization header on axiosInstance so every
+   other API call (courses, contacts, etc.) is authenticated too.
+   ============================================================ */
+function readAuth() {
+  if (typeof window === "undefined") return { token: null, user: null };
+  try {
+    const token = window.localStorage.getItem(AUTH_TOKEN_KEY);
+    const rawUser = window.localStorage.getItem(AUTH_USER_KEY);
+    return { token: token || null, user: rawUser ? JSON.parse(rawUser) : null };
+  } catch (err) {
+    console.error("Auth read failed:", err);
+    return { token: null, user: null };
+  }
+}
+
+function writeAuth(token, user) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+    window.localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user || {}));
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    window.dispatchEvent(new CustomEvent("pv-auth-updated", { detail: { token, user } }));
+  } catch (err) {
+    console.error("Auth write failed:", err);
+  }
+}
+
+function clearAuth() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(AUTH_TOKEN_KEY);
+    window.localStorage.removeItem(AUTH_USER_KEY);
+    delete axiosInstance.defaults.headers.common["Authorization"];
+    window.dispatchEvent(new CustomEvent("pv-auth-updated", { detail: { token: null, user: null } }));
+  } catch (err) {
+    console.error("Auth clear failed:", err);
+  }
 }
 // ─────────────────────────────────────────────────────────
 
@@ -185,19 +327,34 @@ const SparkleIcon = () => (
   </svg>
 );
 
-const WarningIcon = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-      stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 const TrashIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
     <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
     <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CartIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="9" cy="21" r="1.4" fill="currentColor" />
+    <circle cx="18" cy="21" r="1.4" fill="currentColor" />
+    <path d="M2 3h2l2.6 12.3a2 2 0 002 1.7h8.2a2 2 0 002-1.6L21 7H6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const UserIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+    <path d="M4.5 20c1.4-3.8 4.5-5.5 7.5-5.5s6.1 1.7 7.5 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LogoutIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
@@ -227,7 +384,6 @@ const isValidPhone = (v) => {
   const digits = normalizePhone(v);
   if (!/^[6-9]\d{9}$/.test(digits)) return false; // valid Indian mobile pattern
   if (/^(\d)\1{9}$/.test(digits)) return false;   // e.g. 9999999999
-  const seqUp = "01234567891011121314".replace(/\D/g, "");
   const ascending = "0123456789";
   const descending = "9876543210";
   if (ascending.includes(digits) || descending.includes(digits)) return false; // e.g. 1234567890
@@ -250,6 +406,9 @@ const isValidCity = (v) => {
 const firstName = (n) => (n || "").trim().split(" ")[0] || "there";
 
 export default function PVClassesChatbot() {
+  // ── Website cart integration (CartContext) ──
+  const { addToCart: addToCartContext, fetchCart } = useCart();
+
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -258,15 +417,38 @@ export default function PVClassesChatbot() {
   const [loading, setLoading] = useState(false);
   const [badge, setBadge] = useState(0);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [apiCategories, setApiCategories] = useState([]);
+  const [apiExamsList, setApiExamsList] = useState([]);
+  const [apiStates, setApiStates] = useState([]);
+  const [apiCoursesList, setApiCoursesList] = useState([]);
+
+  // ── Cart (visible in the chatbot itself) ──
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
+  // ── Auth (email + password login gate) ──
+  const [authToken, setAuthToken] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  // Holds whatever action (checkout, etc.) was waiting on a login, so it
+  // can resume automatically right after successful login.
+  const pendingActionRef = useRef(null);
 
   // ── Lead-capture flow ──
   // ASK_NAME -> ASK_PHONE -> ASK_EMAIL -> ASK_CATEGORY -> ASK_EXAM
-  // -> ASK_CITY -> ASK_LEVEL -> CHAT
+  // -> (city buttons) -> ASK_CITY_OTHER (only if "Other City" tapped) -> ASK_LEVEL -> CHAT
   const [step, setStep] = useState("ASK_NAME");
   const [lead, setLead] = useState({
     name: "", phone: "", email: "", category: "", exam: "", city: "", level: "",
   });
   const [optionSet, setOptionSet] = useState(null);
+
+  const categoryOptions = apiCategories;
 
   const inputLocked = optionSet !== null;
   const isChatMode = step === "CHAT";
@@ -274,14 +456,123 @@ export default function PVClassesChatbot() {
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const textareaRef = useRef(null);
+  const leadRef = useRef(lead);
+  useEffect(() => { leadRef.current = lead; }, [lead]);
+
+  // Keep live refs of open/minimized so the global cart-click handler
+  // (registered once) always sees the latest values, not stale ones.
+  const openRef = useRef(open);
+  const minimizedRef = useRef(minimized);
+  useEffect(() => { openRef.current = open; }, [open]);
+  useEffect(() => { minimizedRef.current = minimized; }, [minimized]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Load the cart on mount, and keep it live-synced whenever anything
+  // (this widget, another tab, or your site's own cart page) updates it.
   useEffect(() => {
-    if (open && !minimized) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading, optionSet, open, minimized]);
+    setCartItems(readCart());
+    const onCartUpdate = (e) => setCartItems(e.detail || readCart());
+    const onStorage = (e) => {
+      if (e.key === CART_STORAGE_KEY) setCartItems(readCart());
+    };
+    window.addEventListener("pv-cart-updated", onCartUpdate);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("pv-cart-updated", onCartUpdate);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
+  // Load auth (if the user already logged in on your site / a previous
+  // session) on mount, and keep it live-synced across tabs too.
+  useEffect(() => {
+    const { token, user } = readAuth();
+    if (token) {
+      setAuthToken(token);
+      setAuthUser(user);
+      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+    const onAuthUpdate = (e) => {
+      setAuthToken(e.detail?.token || null);
+      setAuthUser(e.detail?.user || null);
+    };
+    const onStorage = (e) => {
+      if (e.key === AUTH_TOKEN_KEY || e.key === AUTH_USER_KEY) {
+        const next = readAuth();
+        setAuthToken(next.token);
+        setAuthUser(next.user);
+      }
+    };
+    window.addEventListener("pv-auth-updated", onAuthUpdate);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("pv-auth-updated", onAuthUpdate);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchChatCategories = async () => {
+      try {
+        const res = await axiosInstance.get("/exams");
+        const data = Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res?.data?.data)
+          ? res.data.data
+          : [];
+        setApiExamsList(data);
+        const categories = data
+          .map((item) => item?.examType?.name || "")
+          .filter((name, index, arr) => name && arr.indexOf(name) === index);
+        if (categories.length) {
+          setApiCategories(categories);
+        }
+      } catch (err) {
+        console.error("Chatbot category fetch failed:", err);
+      }
+    };
+
+    const fetchStates = async () => {
+      try {
+        const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country: "India" })
+        });
+        const json = await res.json();
+        if (json?.data?.states) {
+          const statesList = json.data.states.map(s => s.name);
+          setApiStates(statesList);
+        }
+      } catch (err) {
+        console.error("Failed to fetch states:", err);
+      }
+    };
+
+    // Pulls the REAL course catalog (with real price / discountPercent /
+    // finalPrice) from your API so every price shown anywhere in the
+    // chatbot comes straight from here — no hardcoded numbers.
+    const fetchCoursesData = async () => {
+      try {
+        const res = await axiosInstance.get("/courses");
+        const data = Array.isArray(res?.data) ? res.data : res?.data?.data || [];
+        setApiCoursesList(data);
+      } catch (err) {
+        console.error("Failed to fetch courses:", err);
+      }
+    };
+
+    fetchChatCategories();
+    fetchStates();
+    fetchCoursesData();
+  }, []);
+
+  useEffect(() => {
+    if (open && !minimized && !cartOpen) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading, optionSet, open, minimized, cartOpen]);
 
   useEffect(() => {
     if (open && !minimized) {
@@ -340,16 +631,221 @@ export default function PVClassesChatbot() {
     }
   };
 
-  const submitLead = (finalLead) => {
+  const submitLead = async (finalLead) => {
     console.log("LEAD CAPTURED:", finalLead);
-    fetch(LEAD_API_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(finalLead),
-    }).catch((err) => console.error("Lead submission failed:", err));
+    try {
+      await axiosInstance.post("/contacts", finalLead);
+    } catch (err) {
+      console.error("Lead submission failed:", err);
+    }
+  };
+
+  // ── Cart helpers (used by the visible cart panel) ──
+  const cartTotal = cartItems.reduce((sum, item) => sum + (item.amount || 0) * (item.qty || 1), 0);
+  const cartCount = cartItems.reduce((sum, item) => sum + (item.qty || 1), 0);
+
+  const removeFromCart = (key) => {
+    const updated = cartItems.filter((item) => item.key !== key);
+    writeCart(updated);
+    setCartItems(updated);
+  };
+
+  const changeQty = (key, delta) => {
+    const updated = cartItems
+      .map((item) => (item.key === key ? { ...item, qty: Math.max(1, (item.qty || 1) + delta) } : item))
+      .filter(Boolean);
+    writeCart(updated);
+    setCartItems(updated);
+  };
+
+  // ── Auth gate ──
+  // Call this to wrap any action that needs a logged-in user. Only
+  // checkout is gated behind login now — browsing, selecting a course,
+  // and adding to cart are all allowed without an account so the user
+  // only hits the login/password screen right before payment.
+  const requireLogin = (action) => {
+    if (authToken) {
+      action();
+      return;
+    }
+    // Instead of showing the mini login, trigger the global login modal
+    window.dispatchEvent(new Event("openLoginModal"));
+    setCartOpen(false);
+    setOpen(false); // Optionally close the chatbot too
+  };
+
+  const doLogin = async () => {
+    const email = loginEmail.trim().toLowerCase();
+    if (!email || !loginPassword) {
+      setLoginError("Please enter both email and password.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setLoginError("Please enter a valid email address.");
+      return;
+    }
+    setLoginLoading(true);
+    setLoginError("");
+    try {
+      const res = await axiosInstance.post(LOGIN_API_ENDPOINT, {
+        email,
+        password: loginPassword,
+      });
+      // Adjust these to match your real API's response shape if needed.
+      const payload = res?.data?.data || res?.data || {};
+      const token = payload.token || payload.accessToken || payload.authToken;
+      const user = payload.user || payload.profile || { email };
+      if (!token) throw new Error("Login response did not include a token");
+
+      writeAuth(token, user);
+      setAuthToken(token);
+      setAuthUser(user);
+      setLoginEmail("");
+      setLoginPassword("");
+      setLoginOpen(false);
+
+      const pending = pendingActionRef.current;
+      pendingActionRef.current = null;
+      if (pending) pending();
+    } catch (err) {
+      console.error("Login failed:", err);
+      setLoginError(
+        err?.response?.data?.message ||
+          "Login failed. Please check your email & password and try again."
+      );
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    clearAuth();
+    setAuthToken(null);
+    setAuthUser(null);
+    setShowLogoutConfirm(false);
+  };
+
+  // Real page redirect (not a new tab) straight to the checkout page.
+  // We let the /checkout page handle login gating (matching the main website cart).
+  const handleCheckout = () => {
+    window.location.href = CHECKOUT_URL;
+  };
+
+  // Actually adds a course to the persisted cart (see CART INTEGRATION
+  // note above) using the REAL price from the /courses API, syncs it to
+  // a backend endpoint if present, and confirms in-chat with a
+  // "View Cart" button that opens the cart panel inside this widget.
+  // No login required here — browsing and adding to cart is open to
+  // everyone; login is only requested at checkout time.
+  const addCourseToCart = async (courseId) => {
+    const course = apiCoursesList.find((c) => c._id === courseId || c.slug === courseId);
+    if (!course) return;
+
+    const name = course.title || course.name || "Untitled";
+    const { amount, text: priceText } = getCoursePrice(course);
+    const url = course.slug ? `/courses/${course.slug}` : null;
+    const itemId = course._id || courseId;
+
+    // ✅ Add to website's main CartContext (updates header cart badge + /cart API)
+    await addToCartContext({ itemType: "course", itemId, quantity: 1 });
+    // Refresh the CartContext so header badge updates immediately
+    fetchCart();
+
+    // Also keep the chatbot's own internal cart in sync (for the in-chat cart panel)
+    const cart = readCart();
+    const existing = cart.find((item) => item.key === courseId);
+    if (existing) {
+      existing.qty += 1;
+      existing.amount = amount;
+      existing.price = priceText;
+    } else {
+      cart.push({ key: courseId, name, price: priceText, amount, url, qty: 1 });
+    }
+    writeCart(cart);
+    setCartItems(cart);
+
+    submitLead({
+      ...leadRef.current,
+      interestedCourse: name,
+      intent: "add_to_cart",
+      note: "Course added to cart during chat",
+    });
+
+    addBotMessage(
+      `✅ **${name}** (${priceText}) has been added to your cart!\n\n` +
+        `<button type="button" onclick="window.__pvOpenCart && window.__pvOpenCart()" class="pv-addcart-btn">🛒 View Cart (${cart.reduce((s, i) => s + (i.qty || 1), 0)})</button>`
+    );
+    if (!openRef.current || minimizedRef.current) setBadge((n) => n + 1);
+  };
+
+  // Exposes addCourseToCart / openCart on window so inline buttons
+  // rendered via dangerouslySetInnerHTML (see showPurchaseInfo /
+  // addCourseToCart above) can call them with a plain onclick="" attribute.
+  // Registered once.
+  useEffect(() => {
+    window.__pvAddToCart = (key) => addCourseToCart(key);
+    window.__pvOpenCart = () => {
+      setMinimized(false);
+      setOpen(true);
+      setCartOpen(true);
+    };
+    return () => {
+      if (window.__pvAddToCart) delete window.__pvAddToCart;
+      if (window.__pvOpenCart) delete window.__pvOpenCart;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiCoursesList]);
+
+  // Builds the full course breakdown + a real "Add to Cart" button using
+  // data fetched from the /courses API — price shown is always the
+  // course's real finalPrice/price from the API.
+  const showPurchaseInfo = (course) => {
+    if (!course) {
+      botSay(
+        `Thanks! Here's our full course catalog — you can browse and add any course to your cart:\n\n` +
+          `<a href="${COURSES_PAGE_URL}" target="_blank" rel="noopener noreferrer" class="pv-addcart-btn">🛒 View Courses & Add to Cart</a>`
+      );
+      return;
+    }
+
+    const name = course.title || course.name || "Untitled";
+    const { text: priceText } = getCoursePrice(course);
+    const featuresList = (course.features || []).map((f) => `• ${f}`).join("\n");
+    const courseUrl = course.slug ? `/courses/${course.slug}` : null;
+    const courseId = course._id || course.slug;
+
+    const reply =
+      `Great choice! Here's what's included in **${name}**:\n${featuresList}\n\n` +
+      `💰 **${priceText}**\n\n` +
+      `<button type="button" onclick="window.__pvAddToCart && window.__pvAddToCart('${courseId}')" class="pv-addcart-btn">🛒 Add to Cart — ${priceText}</button>` +
+      (courseUrl
+        ? `\n<a href="${courseUrl}" target="_blank" rel="noopener noreferrer" class="pv-details-link">View full course page →</a>`
+        : "");
+
+    botSay(reply);
   };
 
   const answerFreeText = async (question) => {
+    const lower = question.toLowerCase();
+
+    // Purchase-intent check runs first — e.g. "buy a course of KVS"
+    // Browsing/selecting a course does NOT require login — the user can
+    // see details and tap "Add to Cart" freely. Login is only asked for
+    // when they hit "Proceed to Checkout".
+    if (hasPurchaseIntent(lower)) {
+      const matched = detectCourseFromApi(lower, apiCoursesList);
+      if (matched) {
+        showPurchaseInfo(matched);
+      } else {
+        const courseNames = apiCoursesList.map((c) => c.title || c.name || "Untitled");
+        botSay("Sure! Which course would you like to buy?", {
+          type: "purchaseExam",
+          options: courseNames.length ? courseNames : ["View all courses"],
+        });
+      }
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(CHAT_API_ENDPOINT, {
@@ -383,39 +879,105 @@ export default function PVClassesChatbot() {
         `• Level: **${finalLead.level}**\n` +
         `• We'll call you on: **${finalLead.phone}**\n` +
         `• Email: **${finalLead.email}**\n\n` +
-        `Our counsellor will reach out shortly to share batch details and the current discount offer. Meanwhile, ask me anything about ${COMPANY_NAME}! 💬`
+        `Our counsellor will reach out shortly to share batch details and the current discount offer. Meanwhile, ask me anything about ${COMPANY_NAME} — or say "buy a course" any time to see full course details and add it to your cart! 💬`
     );
     submitLead(finalLead);
     setStep("CHAT");
   };
 
-  const pickOption = (value) => {
+  // Ask the state question with tappable buttons instead of free text.
+  const askCity = (introText) => {
+    setStep("ASK_CITY"); // informational only — the answer arrives via pickOption, not typing
+    botSay(introText.replace(/city/gi, "state"), { 
+      type: "city", 
+      options: apiStates.length ? apiStates : ["Rajasthan", "Delhi", "Uttar Pradesh", "Other State"] 
+    });
+  };
+
+  // Fetch categories if needed and ask category with API-provided options when available
+  const askCategory = async () => {
+    setStep("ASK_CATEGORY");
+    if (!apiCategories.length) {
+      try {
+        const res = await axiosInstance.get("/exams");
+        const data = Array.isArray(res?.data) ? res.data : Array.isArray(res?.data?.data) ? res.data.data : [];
+        setApiExamsList(data);
+        const categories = data
+          .map((item) => item?.examType?.name || "")
+          .filter((name, index, arr) => name && arr.indexOf(name) === index);
+        if (categories.length) {
+          setApiCategories(categories);
+          botSay("Which government exam category are you preparing for?", {
+            type: "category",
+            options: categories,
+          });
+          return;
+        }
+      } catch (err) {
+        console.error("Chatbot category fetch failed when asking:", err);
+      }
+    }
+
+    // fallback
+    botSay("Which government exam category are you preparing for?", {
+      type: "category",
+      options: categoryOptions.length ? categoryOptions : ["Other"],
+    });
+  };
+
+  const pickOption = async (value) => {
     if (!optionSet) return;
     addUserMessage(value);
     const type = optionSet.type;
     setOptionSet(null);
 
+    // If user selected a 'courses' option, fetch course list from backend
+    try {
+      const lower = String(value || "").toLowerCase();
+      if (lower === "courses" || lower.includes("course")) {
+        botSay("Fetching available courses...", undefined, 400);
+        try {
+          const res = await axiosInstance.get("/courses");
+          const data = Array.isArray(res?.data) ? res.data : res?.data?.data || [];
+          if (Array.isArray(data) && data.length > 0) {
+            const items = data.slice(0, 6).map((c) => {
+              const title = c.name || c.title || c.course_name || "Untitled course";
+              const { text: priceText } = getCoursePrice(c);
+              const link = c.slug ? `/courses/${c.slug}` : (c.url || c.courseUrl || c.link || null);
+              return `• **${title}** - ${priceText}${link ? ` — <a href="${link}" target="_blank" rel="noopener noreferrer">View</a>` : ""}`;
+            }).join("\n");
+            addBotMessage(`Here are some available courses:\n\n${items}`);
+          } else {
+            addBotMessage("No courses found right now. Please try again later.");
+          }
+        } catch (err) {
+          console.error("Failed to fetch courses:", err);
+          addBotMessage("Failed to load courses. Please try again later.");
+        }
+        return;
+      }
+    } catch (e) {
+      console.error("pickOption course-check error:", e);
+    }
+
     if (type === "category") {
       const updated = { ...lead, category: value };
       setLead(updated);
 
-      if (value.includes("Central Level")) {
+      const examsForCategory = apiExamsList
+        .filter((item) => item?.examType?.name === value)
+        .map((item) => item.name);
+
+      if (examsForCategory.length > 0) {
         setStep("ASK_EXAM");
-        botSay(`Got it — Central Level Exam. Which one specifically?`, {
+        botSay(`Got it — ${value}. Which exam specifically?`, {
           type: "exam",
-          options: CENTRAL_EXAMS,
-        });
-      } else if (value.includes("Rajasthan")) {
-        setStep("ASK_EXAM");
-        botSay(`Got it — Rajasthan Exams. Which one specifically?`, {
-          type: "exam",
-          options: RAJASTHAN_EXAMS,
+          options: examsForCategory,
         });
       } else {
         const withExam = { ...updated, exam: value };
         setLead(withExam);
-        setStep("ASK_CITY");
-        botSay(`No problem — which city are you in? (This helps us guide you on online vs center options.)`);
+        askCity(`No problem — which city are you in? (This helps us guide you on online vs center options.)`);
       }
       return;
     }
@@ -423,8 +985,23 @@ export default function PVClassesChatbot() {
     if (type === "exam") {
       const updated = { ...lead, exam: value };
       setLead(updated);
-      setStep("ASK_CITY");
-      botSay(`Great choice — ${value}. Which city are you in?`);
+      askCity(`Great choice — ${value}. Which city are you in?`);
+      return;
+    }
+
+    if (type === "city") {
+      if (value === "Other State" || value === "Other City") {
+        setStep("ASK_CITY_OTHER");
+        botSay("No problem — please type your state name:");
+        return;
+      }
+      const updated = { ...lead, city: value };
+      setLead(updated);
+      setStep("ASK_LEVEL");
+      botSay(`Great — ${value}. Last question — what's your current preparation level?`, {
+        type: "level",
+        options: PREP_LEVELS,
+      });
       return;
     }
 
@@ -432,10 +1009,18 @@ export default function PVClassesChatbot() {
       const finalLead = { ...lead, level: value };
       setLead(finalLead);
       finalizeAndSubmit(finalLead);
+      return;
+    }
+
+    // Tapped a course name after saying "buy a course" without naming one.
+    if (type === "purchaseExam") {
+      const matched = apiCoursesList.find((c) => (c.title || c.name) === value);
+      showPurchaseInfo(matched || null);
+      return;
     }
   };
 
-  const send = (text) => {
+  const send = async (text) => {
     const msg = (text || input).trim();
     if (!msg || loading || inputLocked) return;
 
@@ -481,22 +1066,24 @@ export default function PVClassesChatbot() {
         return;
       }
       setLead((l) => ({ ...l, email: msg.trim().toLowerCase() }));
-      setStep("ASK_CATEGORY");
-      botSay("Which government exam category are you preparing for?", {
-        type: "category",
-        options: EXAM_CATEGORIES,
-      });
+      await askCategory();
       return;
     }
 
-    if (step === "ASK_CITY") {
+    // Only reached when the user tapped "Other City" and is now typing their city.
+    if (step === "ASK_CITY_OTHER") {
       if (!isValidCity(msg)) {
-        botSay("Please enter a valid city name (letters only, at least 2 characters).");
+        botSay(
+          "⚠️ Please enter a valid city name (letters only, at least 2 characters).",
+          undefined,
+          600,
+          "warning"
+        );
         return;
       }
       setLead((l) => ({ ...l, city: msg.trim() }));
       setStep("ASK_LEVEL");
-      botSay("Last question — what's your current preparation level?", {
+      botSay(`Got it — ${msg.trim()}. Last question — what's your current preparation level?`, {
         type: "level",
         options: PREP_LEVELS,
       });
@@ -588,10 +1175,17 @@ export default function PVClassesChatbot() {
         .pv-hbtn {
           width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.1); border: none;
           cursor: pointer; color: rgba(255,255,255,0.75); display: flex; align-items: center; justify-content: center;
-          transition: background 0.15s, color 0.15s;
+          transition: background 0.15s, color 0.15s; position: relative;
         }
         .pv-hbtn:hover { background: rgba(255,255,255,0.2); color: white; }
         .pv-hbtn.pv-clear-btn:hover { background: rgba(239, 68, 68, 0.3); color: #ff8b8b; }
+        .pv-hbtn.pv-cart-btn.active { background: rgba(132,204,22,0.3); color: ${BRAND_ACCENT}; }
+        .pv-cart-count {
+          position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px;
+          background: ${BRAND_ACCENT}; border-radius: 8px; border: 2px solid ${BRAND_DARK};
+          font-size: 9px; font-weight: 800; color: ${BRAND_DARK};
+          display: flex; align-items: center; justify-content: center; padding: 0 3px;
+        }
         .pv-clear-confirm {
           position: absolute; top: 70px; right: 12px; background: ${BRAND_DARK};
           border: 1px solid rgba(132,204,22,0.3); border-radius: 12px; padding: 10px 14px; z-index: 10;
@@ -635,6 +1229,25 @@ export default function PVClassesChatbot() {
         .pv-bubble.bot { background: #fff; color: #14213d; border-bottom-left-radius: 4px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); }
         .pv-bubble.user { background: linear-gradient(135deg, ${BRAND_PRIMARY}, #2747a8); color: white; border-bottom-right-radius: 4px; }
         .pv-bubble.bot strong { color: ${BRAND_PRIMARY}; }
+        .pv-bubble.bot a {
+          display: inline-block; margin-top: 6px; color: ${BRAND_PRIMARY}; font-weight: 700;
+          text-decoration: underline; text-underline-offset: 2px;
+        }
+        .pv-bubble.bot a:hover { color: #2747a8; }
+        /* Add to Cart button/link — styled to match the site's lime "Add to cart" button.
+           Shared by both <button> (real add-to-cart action) and <a> (view cart / catalog link). */
+        .pv-bubble.bot .pv-addcart-btn {
+          display: block; width: 100%; margin-top: 10px; text-align: center; text-decoration: none;
+          background: ${BRAND_ACCENT}; color: #14213d; font-weight: 700; font-size: 13px;
+          padding: 11px 14px; border-radius: 12px; box-shadow: 0 4px 12px rgba(132,204,22,0.35);
+          border: none; cursor: pointer; font-family: inherit;
+          transition: opacity 0.15s, transform 0.15s;
+        }
+        .pv-bubble.bot .pv-addcart-btn:hover { opacity: 0.9; color: #14213d; transform: scale(1.02); }
+        .pv-bubble.bot a.pv-details-link {
+          display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600;
+          color: ${BRAND_PRIMARY}; text-decoration: underline; text-underline-offset: 2px;
+        }
         .pv-time { font-size: 10.5px; color: #b7bdcc; padding: 0 2px; }
         .pv-typing {
           display: flex; gap: 5px; padding: 13px 16px; background: #fff; border-radius: 18px;
@@ -689,6 +1302,87 @@ export default function PVClassesChatbot() {
           font-weight: 500;
         }
         .pv-bubble.pv-bubble-warning strong { color: #b91c1c; }
+
+        /* ── Cart panel ── */
+        .pv-cart-panel {
+          flex: 1; overflow-y: auto; background: #f5f7fb; padding: 14px;
+          display: flex; flex-direction: column; gap: 10px;
+        }
+        .pv-cart-empty {
+          flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+          gap: 10px; color: #9aa1b5; text-align: center; padding: 40px 20px;
+        }
+        .pv-cart-empty svg { opacity: 0.35; }
+        .pv-cart-item {
+          background: #fff; border-radius: 14px; padding: 12px; display: flex; gap: 10px;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.06); align-items: flex-start;
+        }
+        .pv-cart-item-info { flex: 1; min-width: 0; }
+        .pv-cart-item-name { font-size: 13px; font-weight: 700; color: #14213d; line-height: 1.35; }
+        .pv-cart-item-price { font-size: 12.5px; color: ${BRAND_PRIMARY}; font-weight: 700; margin-top: 3px; }
+        .pv-cart-item-qty {
+          display: flex; align-items: center; gap: 8px; margin-top: 8px;
+        }
+        .pv-qty-btn {
+          width: 22px; height: 22px; border-radius: 6px; border: 1px solid #e4e7f2; background: #f5f7fb;
+          color: ${BRAND_PRIMARY}; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;
+          font-size: 13px; line-height: 1;
+        }
+        .pv-qty-btn:hover { background: #eceef6; }
+        .pv-qty-val { font-size: 12.5px; font-weight: 700; color: #14213d; min-width: 14px; text-align: center; }
+        .pv-cart-remove {
+          background: none; border: none; cursor: pointer; color: #cbd0de; padding: 4px;
+          display: flex; align-items: center; justify-content: center; transition: color 0.15s;
+        }
+        .pv-cart-remove:hover { color: #ef4444; }
+        .pv-cart-summary {
+          background: #fff; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+        .pv-cart-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #55607a; }
+        .pv-cart-summary-row.total { font-size: 15px; font-weight: 800; color: #14213d; padding-top: 6px; border-top: 1px dashed #e4e7f2; }
+        .pv-cart-checkout {
+          display: block; width: 100%; text-align: center; text-decoration: none; margin-top: 4px;
+          background: ${BRAND_ACCENT}; color: #14213d; font-weight: 700; font-size: 13px;
+          padding: 12px 14px; border-radius: 12px; box-shadow: 0 4px 12px rgba(132,204,22,0.35);
+          border: none; cursor: pointer; font-family: inherit;
+          transition: opacity 0.15s, transform 0.15s;
+        }
+        .pv-cart-checkout:hover { opacity: 0.9; transform: scale(1.01); }
+        .pv-cart-back {
+          display: block; width: 100%; text-align: center; margin-top: 2px; background: none; border: none;
+          color: ${BRAND_PRIMARY}; font-weight: 600; font-size: 12.5px; cursor: pointer; padding: 8px;
+        }
+
+        /* ── Login panel ── */
+        .pv-login-box {
+          background: #fff; border-radius: 14px; padding: 18px 16px; display: flex; flex-direction: column;
+          gap: 4px; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+        .pv-login-title { font-size: 15px; font-weight: 800; color: #14213d; margin-bottom: 2px; }
+        .pv-login-sub { font-size: 12px; color: #7a8194; line-height: 1.5; margin-bottom: 10px; }
+        .pv-login-label { font-size: 11.5px; font-weight: 700; color: #55607a; margin-top: 8px; margin-bottom: 4px; }
+        .pv-login-input {
+          width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #e4e7f2; background: #f5f7fb;
+          font-size: 13.5px; color: #14213d; outline: none; font-family: inherit; transition: border-color 0.15s, background 0.15s;
+        }
+        .pv-login-input:focus { border-color: ${BRAND_PRIMARY}; background: #fff; }
+        .pv-login-input:disabled { background: #ececf2; color: #aaa; }
+        .pv-login-error {
+          margin-top: 10px; background: #fff5f5; border-left: 4px solid #ef4444; color: #b91c1c;
+          font-size: 12px; font-weight: 500; padding: 8px 10px; border-radius: 6px;
+        }
+        .pv-login-submit {
+          margin-top: 14px; width: 100%; padding: 11px 14px; border-radius: 12px; border: none; cursor: pointer;
+          background: linear-gradient(135deg, ${BRAND_PRIMARY}, #2747a8); color: #fff; font-weight: 700; font-size: 13.5px;
+          box-shadow: 0 4px 12px rgba(30,58,138,0.35); transition: opacity 0.15s;
+        }
+        .pv-login-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .pv-login-submit:hover:not(:disabled) { opacity: 0.9; }
+        .pv-login-signup {
+          display: block; text-align: center; margin-top: 12px; font-size: 12px; font-weight: 600;
+          color: ${BRAND_PRIMARY}; text-decoration: underline; text-underline-offset: 2px;
+        }
       `}</style>
 
       <div className="pv-chat">
@@ -715,13 +1409,23 @@ export default function PVClassesChatbot() {
 
               <div className="pv-header-text">
                 <div className="pv-header-name">{BOT_NAME} · {COMPANY_NAME}</div>
-                {!minimized && (
+                {!minimized && loginOpen && (
+                  <div className="pv-header-sub">🔒 Login required</div>
+                )}
+                {!minimized && !loginOpen && !cartOpen && (
                   <div className="pv-header-sub">
                     <span className="pv-online-dot" />
-                    Online · {isChatMode ? "Ask me anything" : "Admissions assistant"}
+                    {authToken
+                      ? `Logged in as ${authUser?.name || authUser?.email || "you"}`
+                      : `Online · ${isChatMode ? "Ask me anything" : "Admissions assistant"}`}
                   </div>
                 )}
-                {!minimized && (
+                {!minimized && !loginOpen && cartOpen && (
+                  <div className="pv-header-sub">
+                    🛒 {cartCount} item{cartCount === 1 ? "" : "s"} in cart
+                  </div>
+                )}
+                {!minimized && !loginOpen && !cartOpen && (
                   <div className="pv-ai-badge">
                     <SparkleIcon /> {isChatMode ? "Ask anything" : "Find your government exam batch"}
                   </div>
@@ -729,7 +1433,38 @@ export default function PVClassesChatbot() {
               </div>
 
               <div className="pv-header-btns">
-                {!minimized && (
+                {!minimized && !loginOpen && authToken && (
+                  <button
+                    className="pv-hbtn"
+                    onClick={() => setShowLogoutConfirm((v) => !v)}
+                    aria-label="Logout"
+                    title="Logout"
+                  >
+                    <LogoutIcon />
+                  </button>
+                )}
+                {!minimized && !loginOpen && !authToken && (
+                  <button
+                    className="pv-hbtn"
+                    onClick={() => requireLogin(() => {})}
+                    aria-label="Login"
+                    title="Login"
+                  >
+                    <UserIcon />
+                  </button>
+                )}
+                {!minimized && !loginOpen && (
+                  <button
+                    className={`pv-hbtn pv-cart-btn ${cartOpen ? "active" : ""}`}
+                    onClick={() => { setCartOpen((v) => !v); setShowClearConfirm(false); }}
+                    aria-label="View cart"
+                    title="View cart"
+                  >
+                    <CartIcon />
+                    {cartCount > 0 && <span className="pv-cart-count">{cartCount}</span>}
+                  </button>
+                )}
+                {!minimized && !cartOpen && !loginOpen && (
                   <button
                     className="pv-hbtn pv-clear-btn"
                     onClick={() => setShowClearConfirm((v) => !v)}
@@ -764,9 +1499,120 @@ export default function PVClassesChatbot() {
                   </div>
                 </div>
               )}
+
+              {showLogoutConfirm && (
+                <div className="pv-clear-confirm">
+                  <span>Log out of your account?</span>
+                  <div className="pv-clear-confirm-btns">
+                    <button className="pv-confirm-yes" onClick={handleLogout}>Logout</button>
+                    <button className="pv-confirm-no" onClick={() => setShowLogoutConfirm(false)}>Cancel</button>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {!minimized && (
+            {!minimized && cartOpen && !loginOpen && (
+              <div className="pv-cart-panel">
+                {cartItems.length === 0 ? (
+                  <div className="pv-cart-empty">
+                    <CartIcon size={40} />
+                    <div>Your cart is empty.<br/>Ask me about a course and tap "Add to Cart"!</div>
+                  </div>
+                ) : (
+                  <>
+                    {cartItems.map((item) => (
+                      <div className="pv-cart-item" key={item.key}>
+                        <div className="pv-cart-item-info">
+                          <div className="pv-cart-item-name">{item.name}</div>
+                          <div className="pv-cart-item-price">
+                            {item.amount > 0 ? `₹${item.amount}` : "Free"} {item.qty > 1 && item.amount > 0 ? `× ${item.qty} = ₹${item.amount * item.qty}` : ""}
+                          </div>
+                          <div className="pv-cart-item-qty">
+                            <button className="pv-qty-btn" onClick={() => changeQty(item.key, -1)}>−</button>
+                            <span className="pv-qty-val">{item.qty}</span>
+                            <button className="pv-qty-btn" onClick={() => changeQty(item.key, 1)}>+</button>
+                          </div>
+                        </div>
+                        <button className="pv-cart-remove" onClick={() => removeFromCart(item.key)} aria-label="Remove item">
+                          <TrashIcon />
+                        </button>
+                      </div>
+                    ))}
+
+                    <div className="pv-cart-summary">
+                      <div className="pv-cart-summary-row">
+                        <span>Items</span>
+                        <span>{cartCount}</span>
+                      </div>
+                      <div className="pv-cart-summary-row total">
+                        <span>Total</span>
+                        <span>{cartTotal > 0 ? `₹${cartTotal}` : "Free"}</span>
+                      </div>
+                      {/* Real page redirect straight to your checkout page — gated behind login. */}
+                      <button className="pv-cart-checkout" onClick={handleCheckout}>
+                        Proceed to Checkout →
+                      </button>
+                    </div>
+                  </>
+                )}
+                <button className="pv-cart-back" onClick={() => setCartOpen(false)}>← Back to chat</button>
+              </div>
+            )}
+
+            {!minimized && loginOpen && (
+              <div className="pv-cart-panel">
+                <div className="pv-login-box">
+                  <div className="pv-login-title">🔒 Please login to continue</div>
+                  <div className="pv-login-sub">
+                    Login with your {COMPANY_NAME} account to complete your checkout and payment.
+                  </div>
+
+                  <label className="pv-login-label">Email</label>
+                  <input
+                    type="email"
+                    className="pv-login-input"
+                    placeholder="you@example.com"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    disabled={loginLoading}
+                  />
+
+                  <label className="pv-login-label">Password</label>
+                  <input
+                    type="password"
+                    className="pv-login-input"
+                    placeholder="Your password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") doLogin(); }}
+                    disabled={loginLoading}
+                  />
+
+                  {loginError && <div className="pv-login-error">⚠️ {loginError}</div>}
+
+                  <button className="pv-login-submit" onClick={doLogin} disabled={loginLoading}>
+                    {loginLoading ? "Logging in..." : "Login"}
+                  </button>
+
+                  <a
+                    className="pv-login-signup"
+                    href={COURSES_PAGE_URL.replace(/\/courses\/?$/, "/register")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    New here? Create an account →
+                  </a>
+                </div>
+                <button
+                  className="pv-cart-back"
+                  onClick={() => { setLoginOpen(false); pendingActionRef.current = null; }}
+                >
+                  ← Back to chat
+                </button>
+              </div>
+            )}
+
+            {!minimized && !cartOpen && !loginOpen && (
               <>
                 <div className="pv-messages">
                   <div className="pv-date-divider">Today</div>
@@ -815,8 +1661,10 @@ export default function PVClassesChatbot() {
                     placeholder={
                       inputLocked
                         ? "Choose an option above..."
+                        : step === "ASK_CITY_OTHER"
+                        ? "Type your city..."
                         : isChatMode
-                        ? "Ask anything..."
+                        ? "Ask anything, or say 'buy a course'..."
                         : "Type your reply..."
                     }
                     value={input}

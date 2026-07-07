@@ -195,6 +195,13 @@ export default function Header() {
   }
 }, [pathname]);
 
+  // ✅ Listen for custom event to open login modal from anywhere
+  useEffect(() => {
+    const handleOpenLogin = () => setIsLoginModalOpen(true);
+    window.addEventListener("openLoginModal", handleOpenLogin);
+    return () => window.removeEventListener("openLoginModal", handleOpenLogin);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
