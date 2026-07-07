@@ -130,7 +130,7 @@ export default function ExamCategory() {
           <div className="absolute inset-0 bg-cyan-400/20 blur-[100px] rounded-full"></div>
 
           <img
-            src="/Image/clg-students.png"
+            src="/Image/grp-stu.png"
             alt="Exam Preparation"
             className="relative w-full max-w-xl drop-shadow-2xl"
           />
