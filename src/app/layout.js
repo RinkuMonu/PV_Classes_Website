@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
           <Header />
 
           {/* Main Page */}
+          
           <main>{children}</main>
 
           {/* Footer */}
