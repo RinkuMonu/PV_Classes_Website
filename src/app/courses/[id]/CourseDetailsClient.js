@@ -74,6 +74,7 @@ export default function CourseDetailsPage() {
           comboItems: comboItems
         };
 
+        
         // FIX: Set default selected option based on whether combo exists
         if (courseData?.comboId) {
           setSelectedOption({
