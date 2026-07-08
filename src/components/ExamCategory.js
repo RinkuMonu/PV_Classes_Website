@@ -65,7 +65,7 @@ export default function ExamCategory() {
           </h2>
 
           <p className="mt-3 text-blue-100">
-            PV is preparing students for 35+ exam categories. Find the one you're
+            PV is preparing students for 35+ exam categories. Find the one you are
             preparing for.
           </p>
         </div>
@@ -73,8 +73,6 @@ export default function ExamCategory() {
 
       {/* LEFT SIDE */}
       <div>
-
-      
 
         {/* Cards */}
         <div className="space-y-5">
