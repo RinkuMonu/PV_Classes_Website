@@ -38,6 +38,10 @@ export default function FacultySlider() {
     // "/Image/Banner/faculty-3.webp",
     // "/Image/Banner/faculty-4.webp",
     "/Image/Banner/uma-mem-webside-banner-1.jpeg",
+    "/Image/Banner/Meenakshimam.jpeg",
+
+    "/Image/Banner/Rahulsir.jpeg",
+
   ]
 
   // Mobile images
@@ -51,8 +55,8 @@ export default function FacultySlider() {
   const bannerImages = isMobile ? mobileImages : desktopImages
 
   return (
-    <div className="w-full overflow-hidden md:px-18 pt-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full pt-4">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center pb-4 border-b-2 border-[#009FE3]/20">
           <div>
             <h2 className="text-3xl font-bold text-[#00316B] mb-2">Meet Our Expert Faculty</h2>
@@ -60,7 +64,7 @@ export default function FacultySlider() {
           </div>
         </div>
 
-        <div className="relative  overflow-hidden">
+        <div className="relative  w-full mt-6">
           {/* <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00316B] via-[#009FE3] to-[#0281AD]"></div> */}
 
           <Slider {...settings}>

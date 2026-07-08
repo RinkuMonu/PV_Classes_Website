@@ -195,6 +195,13 @@ export default function Header() {
   }
 }, [pathname]);
 
+  // ✅ Listen for custom event to open login modal from anywhere
+  useEffect(() => {
+    const handleOpenLogin = () => setIsLoginModalOpen(true);
+    window.addEventListener("openLoginModal", handleOpenLogin);
+    return () => window.removeEventListener("openLoginModal", handleOpenLogin);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -222,6 +229,8 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  
 
   const total = cart?.reduce(
     (sum, item) => {
@@ -424,8 +433,9 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/contact-us">
               <button className="hidden md:flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition ">
-                <FaPhone size={16} />
+              
                 <span>Contact Us</span>
+                  <FaPhone size={16} />
               </button>
             </Link>
 

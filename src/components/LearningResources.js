@@ -46,41 +46,45 @@ export default function LearningResources() {
       </div>
 
       {/* Grid of resources */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {resources.map((item, index) => (
-          <Link href={item.link} key={index}>
-            <div
-              className={`relative group flex flex-col justify-between rounded-xl shadow-md p-6 sm:p-8 transition-all duration-300 hover:scale-105 cursor-pointer ${item.bg} h-full`}
-            >
-              {/* Arrow icon */}
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <FaArrowRight className="text-gray-700 text-base sm:text-lg" />
-              </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {resources.map((item, index) => (
+    <Link href={item.link} key={index}>
+      <div className="group h-full bg-gray-50 border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#204972] hover:shadow-xl cursor-pointer">
+        
+        {/* Content */}
+        <div className="p-6 flex flex-col h-full">
+          
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
+            <h3 className="text-xl font-semibold text-gray-900 leading-tight">
+              {item.title}
+            </h3>
 
-              {/* Text content */}
-              <div>
-                <h3 className="text-xl sm:text-2xl font-semibold mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-gray-700 text-sm sm:text-base md:text-[15px] my-4 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-
-              {/* Image */}
-              <div className="flex justify-center mt-4">
-                <Image
-                  src={item.img}
-                  alt={item.title}
-                  width={240}
-                  height={240}
-                  className="rounded-md w-40 sm:w-48 md:w-56 lg:w-60 h-auto"
-                />
-              </div>
+            <div className="w-10 h-10 flex items-center justify-center rounded-md bg-[204972]/30 text-[#204972] transition-all duration-300 group-hover:bg-[#204972] group-hover:text-white">
+              <FaArrowRight className="text-sm" />
             </div>
-          </Link>
-        ))}
+          </div>
+
+          {/* Description */}
+          <p className="text-gray-600 text-[15px] leading-7 flex-grow">
+            {item.description}
+          </p>
+
+          {/* Image Section */}
+          <div className="mt-6 bg-gray-50 rounded-md p-4 flex justify-center">
+            <Image
+              src={item.img}
+              alt={item.title}
+              width={220}
+              height={220}
+              className="w-full max-w-[220px] h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        </div>
       </div>
+    </Link>
+  ))}
+</div>
     </section>
   );
 }

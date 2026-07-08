@@ -94,7 +94,7 @@ const getPdfUrl = (note) => {
 
       <section className="relative w-full h-[60vh] text-white mb-8">
         <Image
-          src="/Image/Banner/pyq-banner.webp"
+          src="/Image/Banner/notes-banner2.jpeg"
           alt="Banner"
           fill
           className="object-cover object-center"

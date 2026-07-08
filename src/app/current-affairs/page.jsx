@@ -87,7 +87,7 @@ export default function CurrentAffairsPage() {
       <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-8">
         <div className="absolute inset-0 hidden sm:block">
           <Image
-            src="/Image/Banner/current-banner.webp"
+            src="/Image/Banner/currentaffairs2.jpeg"
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
@@ -104,7 +104,7 @@ export default function CurrentAffairsPage() {
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-28 flex flex-col items-center text-center">
-          <div className="absolute top-64 mt-6 flex space-x-4">
+          <div className="absolute top-68 mt-6 flex space-x-4">
             <div className="flex flex-wrap gap-2">
               {categories?.map((cat) => (
                 <button

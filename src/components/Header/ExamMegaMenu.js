@@ -158,7 +158,7 @@ export default function ExamMegaMenu() {
               cat && (
                 <button
                   key={cat?._id}
-                  className={`w-full text-left px-4 py-4 mb-2 rounded-xl transition-all duration-300 relative overflow-hidden group ${activeCategory?._id === cat?._id
+                  className={`w-full text-left px-4 py-4 mb-2 rounded-sm transition-all duration-300 relative overflow-hidden group ${activeCategory?._id === cat?._id
                     ? "bg-gradient-to-r from-[#00316B] to-[#204972] text-white shadow-lg transform scale-105 border-l-4 border-[#87B105]"
                     : "hover:bg-gradient-to-r hover:from-[#009FE3]/10 hover:to-[#87B105]/10 text-[#00316B] hover:shadow-md hover:transform hover:scale-102"
                     }`}
@@ -270,12 +270,12 @@ export default function ExamMegaMenu() {
 
 
         {/* Exam Cards */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           {exams?.map((exam) => (
             <Link
               key={exam?._id}
               href={`/courses?exam=${exam?._id || ""}`}
-              className="group flex items-center gap-4 p-4 border-2 border-[#009FE3]/20 rounded-xl shadow-md hover:shadow-xl hover:border-[#87B105] hover:bg-gradient-to-r hover:from-[#009FE3]/10 hover:to-[#87B105]/10 transition-all duration-300 cursor-pointer transform hover:scale-105 relative overflow-hidden"
+              className="group flex items-center gap-4 p-4 border-2 border-[#009FE3]/20 rounded-sm shadow-sm hover:shadow-xl hover:border-[#87B105] hover:bg-gradient-to-r hover:from-white hover:to-white transition-all duration-300 cursor-pointer transform hover:scale-105 relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#009FE3]/5 to-[#87B105]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -293,7 +293,7 @@ export default function ExamMegaMenu() {
               </div>
 
               <div className="flex-1 z-10">
-                <span className="text-sm font-bold text-[#00316B] group-hover:text-[#204972] transition-colors duration-300 block">
+                <span className="text-[14px] font-bold text-[#00316B] group-hover:text-[#204972] transition-colors duration-300 block">
                   {exam?.name || "Unnamed Exam"}
                 </span>
                 <div className="mt-1 inline-flex items-center px-2 py-1 bg-gradient-to-r from-[#87B105]/20 to-[#ABC129]/20 rounded-full">

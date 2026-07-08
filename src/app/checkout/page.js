@@ -144,7 +144,9 @@ function AddressShipping() {
 
       // 🔴 If user not logged in
       if (!token) {
-        // toast.error("Please login to continue checkout");
+        // Trigger the global login modal
+        window.dispatchEvent(new Event("openLoginModal"));
+        
         Swal.fire({
           icon: "warning",
           title: "Login Required",

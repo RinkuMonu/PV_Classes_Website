@@ -279,102 +279,88 @@ export default function TestSeriesHome() {
             series?.full_image?.[0] || "/placeholder-test.jpg";
 
           return (
-            <div
-              key={series?._id}
-              className="min-w-[300px] max-w-[300px] flex-shrink-0 relative rounded-2xl border border-gray-100 bg-white shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
-            >
-              <Link href={`/test-series/${series?._id}`}>
+          <div
+  key={series?._id}
+  className="min-w-[300px] max-w-[300px] flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-[#204972]/20 hover:-translate-y-1 group"
+>
+  <Link href={`/test-series/${series?._id}`}>
+    
+    {/* Image */}
+    <div className="relative h-52 bg-slate-50 border-b border-gray-100">
+      <Image
+        src={imgSrc}
+        alt={series?.title}
+        fill
+        className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+      />
+    </div>
 
-                <div className="px-5 pt-5">
+    <div className="p-5">
+      
+      {/* Title */}
+      <h2 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[56px] leading-7">
+        {series?.title}
+      </h2>
 
-                  {/* Title */}
-                  <h2 className="text-lg font-bold text-gray-800 line-clamp-2 mb-3">
-                    {series?.title}
-                  </h2>
+      {/* Meta */}
+      <div className="flex items-center gap-2 mt-4">
+        <span className="px-3 py-1 text-xs font-medium bg-blue-50 text-[#204972] rounded-md">
+          {series?.validity}
+        </span>
 
-                  {/* Image */}
-                  <div className="relative w-full h-56 overflow-hidden rounded-xl">
-                    <Image
-                      src={imgSrc}
-                      alt="test"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+        {series?.is_free ? (
+          <span className="px-3 py-1 text-xs font-medium bg-green-50 text-green-700 rounded-md">
+            Free
+          </span>
+        ) : (
+          <span className="px-3 py-1 text-xs font-medium bg-orange-50 text-orange-600 rounded-md">
+            Paid
+          </span>
+        )}
+      </div>
 
-                  {/* Validity */}
-                  <div className="mt-3 text-sm">
-                    Validity: <b>{series?.validity}</b>
-                  </div>
+      {/* Price */}
+      {!series?.is_free && (
+        <div className="mt-5">
+          <p className="text-xs text-gray-500 mb-1">
+            Course Fee
+          </p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl font-bold text-[#204972]">
+              ₹{series?.discount_price}
+            </span>
 
-                  {/* Price */}
-                  <div className="mt-3 flex justify-between items-center">
-                    {!series?.is_free && (
-                      <span className="font-bold text-lg text-[#204972]">
-                        ₹{series?.discount_price}
-                      </span>
-                    )}
+            {series?.price > series?.discount_price && (
+              <span className="text-sm text-gray-400 line-through">
+                ₹{series?.price}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </Link>
 
-                    {/* <span className="line-through text-gray-400 text-sm">
-                      ₹{series?.price}
-                    </span>
-
-                    {discount > 0 && (
-                      <span className="text-green-600 text-xs font-bold">
-                        {discount}% OFF
-                      </span>
-                    )} */}
-                  </div>
-                </div>
-              </Link>
-
-              {/* Button */}
-              {/* <button
-                onClick={(e) => {
-                  handleAdd(e, "testSeries", series?._id);
-                  openCart();
-                }}
-                className="w-[90%] mx-auto flex items-center justify-center gap-2 absolute bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#00316B] to-[#1d3a5f] px-6 py-3 rounded-xl text-white font-bold"
-              >
-                {loading ? "ADDING..." : "ADD TO CART"}
-              </button> */}
-
-              <div className="px-5 pb-5">
-                {series?.is_free ? (
-                  // ✅ FREE case
-                  <div className="w-full text-center bg-green-100 text-green-700 font-semibold py-3 rounded-xl">
-                    FREE ACCESS
-                  </div>
-                ) : (
-                  // ✅ PAID case
-                  <button
-                    onClick={(e) => {
-                      handleAdd(e, "testSeries", series?._id);
-                      openCart();
-                    }}
-                    disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#204972] to-[#2c5c8a] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-[#163452] hover:to-[#244c75] transition-all duration-300 group/button"
-                  >
-                    {loading ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        ADDING...
-                      </>
-                    ) : (
-                      <>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover/button:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                        </svg>
-                        ADD TO CART
-                      </>
-                    )}
-                  </button>
-                )}
-              </div>
-            </div>
+  {/* CTA */}
+  <div className="px-5 pb-5">
+    {series?.is_free ? (
+      <div className="w-full text-center border border-green-200 bg-green-50 text-green-700 font-medium py-3 rounded-md">
+        FREE ACCESS
+      </div>
+    ) : (
+      <button
+        onClick={(e) => {
+          handleAdd(e, "testSeries", series?._id);
+          openCart();
+        }}
+        disabled={loading}
+        className="w-full py-3 bg-[#204972] hover:bg-[#163452] text-white font-medium rounded-md transition-all duration-300"
+      >
+        {loading ? "ADDING..." : "ADD TO CART"}
+      </button>
+    )}
+  </div>
+</div>
           );
         })}
       </div>
