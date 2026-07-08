@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
 import ReviewSection from "../../../components/ReviewSection";
+import AnniversaryOfferModal from "../AnniversaryOfferModal";
 import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
 import { FaArrowRight, FaChevronDown, FaChevronRight, FaFilePdf } from "react-icons/fa";
@@ -74,7 +75,7 @@ export default function CourseDetailsPage() {
           comboItems: comboItems
         };
 
-        
+
         // FIX: Set default selected option based on whether combo exists
         if (courseData?.comboId) {
           setSelectedOption({
@@ -179,8 +180,8 @@ export default function CourseDetailsPage() {
         selectAll && course?.comboId?.discount_price
           ? course.comboId.discount_price
           : selectedComboItems?.reduce((sum, index) => {
-              return sum + (course?.comboItems?.[index]?.price ?? 0);
-            }, 0);
+            return sum + (course?.comboItems?.[index]?.price ?? 0);
+          }, 0);
       total = coursePrice + comboPrice;
     }
 
@@ -320,6 +321,7 @@ export default function CourseDetailsPage() {
 
   return (
     <>
+      <AnniversaryOfferModal />
       <section className="relative w-full h-[70vh] sm:h-[40vh] lg:h-[50vh] text-white mb-6 sm:mb-8">
         <div className="absolute inset-0 hidden sm:block">
           <Image
@@ -379,8 +381,8 @@ export default function CourseDetailsPage() {
                       {course?.isFree
                         ? "FREE"
                         : course?.discount_price
-                        ? `₹${course.discount_price}`
-                        : `₹${course.price}`}
+                          ? `₹${course.discount_price}`
+                          : `₹${course.price}`}
                     </span>
                     {/* Show original price with strikethrough if a discount exists */}
                     {!course?.isFree && course?.discount_price && course.discount_price !== course.price && (
