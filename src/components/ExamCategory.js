@@ -74,8 +74,6 @@ export default function ExamCategory() {
       {/* LEFT SIDE */}
       <div>
 
-      
-
         {/* Cards */}
         <div className="space-y-5">
           {categories.map((cat, index) => (
