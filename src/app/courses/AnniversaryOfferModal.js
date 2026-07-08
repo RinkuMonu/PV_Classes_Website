@@ -250,6 +250,5 @@ export default function AnniversaryOfferModal() {
         </div>
       </div>
     </div>
-    
   );
 }
