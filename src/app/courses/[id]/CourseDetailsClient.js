@@ -1,3 +1,4 @@
+
 "use client";
 import toast from "react-hot-toast";
 import { useCart } from "../../../components/context/CartContext";
@@ -321,7 +322,7 @@ export default function CourseDetailsPage() {
       <section className="relative w-full h-[70vh] sm:h-[40vh] lg:h-[50vh] text-white mb-6 sm:mb-8">
         <div className="absolute inset-0 hidden sm:block">
           <Image
-            src="/Image/Banner/course0detail2.jpeg"
+            src="/Image/Banner/course-deatail-banner.webp"
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
