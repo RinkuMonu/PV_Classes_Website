@@ -16,6 +16,7 @@ export default function CourseDetailsPage() {
   const { addToCart, isOpen, openCart, closeCart } = useCart();
   const { id } = useParams();
   const [course, setCourse] = useState(null);
+  const [similarCourses, setSimilarCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openVideo, setOpenVideo] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -120,6 +121,18 @@ export default function CourseDetailsPage() {
         setSelectedComboItems(initialSelections);
 
         await checkCourseAccess(id);
+
+        // Fetch Similar Courses
+        try {
+          const allRes = await axiosInstance.get("/courses");
+          const allCourses = allRes?.data || [];
+          const { getSimilarCourses } = await import("../../../utils/recommendations");
+          const recs = getSimilarCourses(allCourses, updatedCourseData);
+          setSimilarCourses(recs);
+        } catch (recErr) {
+          console.error("Error fetching similar courses", recErr);
+        }
+
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
@@ -1145,6 +1158,43 @@ export default function CourseDetailsPage() {
           )}
         </div>
       </section>
+
+      {/* SIMILAR COURSES */}
+      {similarCourses.length > 0 && (
+        <section className="bg-gray-50 py-12 border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-[#00316B] mb-8">Similar Courses</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {similarCourses.map((c) => (
+                <Link
+                  key={c?._id}
+                  href={`/courses/${c?._id}`}
+                  className="rounded-xl shadow bg-white flex flex-col overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all"
+                >
+                  <Image
+                    width={300}
+                    height={200}
+                    src={c?.full_image?.[0] || "/vercel.svg"}
+                    alt={c?.title || "Course"}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="font-bold text-[#204972] mb-2 line-clamp-2">{c?.title}</h3>
+                    <div className="mt-auto flex justify-between items-center border-t border-gray-100 pt-3">
+                      <span className="font-bold text-[#616602]">
+                        {c?.isFree ? "Free Access" : `₹${c?.price}`}
+                      </span>
+                      <span className="text-sm font-medium text-[#009FE3] flex items-center">
+                        Explore <FaArrowRight className="ml-1 text-xs" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Modal */}
       {showModal && (

@@ -304,7 +304,8 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
             // src="/Image/study.jpeg"
             src="/Image/pic2.jpeg"
             alt="register"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#00316B]/90 via-[#00316B]/60 to-transparent flex flex-col justify-end p-6 text-white">
             <h2 className="text-2xl font-bold">Start Your Journey 🚀</h2>
