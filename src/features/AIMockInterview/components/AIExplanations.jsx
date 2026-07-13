@@ -1,4 +1,4 @@
-import { renderBilingualText } from '../../utils/languageHelpers';
+import { renderBilingualText } from '../utils/languageHelpers';
 
 export default function AIExplanations({ explanation, languageMode, isCorrect, isTimeout }) {
   if (!explanation) return null;

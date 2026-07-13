@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import OptionButton from './OptionButton';
 import LockAnswerModal from './LockAnswerModal';
 import AIExplanations from './AIExplanations';
-import { renderBilingualText } from '../../utils/languageHelpers';
+import { renderBilingualText } from '../utils/languageHelpers';
+
+import VoiceAnswerInput from './VoiceAnswerInput';
 
 export default function AdaptiveMCQInterface({ 
   question, 
@@ -10,8 +12,15 @@ export default function AdaptiveMCQInterface({
   onAnswerSubmit, 
   onNextQuestion, 
   isTimeout,
-  showResultProp,
-  resultDataProp
+  // Voice Props
+  isVoiceSupported,
+  isListening,
+  transcript,
+  parsedIntent,
+  onStartListening,
+  onStopListening,
+  resetIntent,
+  speakScriptPhase
 }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +46,27 @@ export default function AdaptiveMCQInterface({
       setIsModalOpen(false);
       handleAutomaticSubmit(null, true);
     }
-  }, [isTimeout]);
+  }, [isTimeout, isLocked, showResult]);
+
+  // Handle voice intents
+  useEffect(() => {
+    if (parsedIntent && !isLocked && !showResult && !isTimeout) {
+      if (parsedIntent.option) {
+        setSelectedOption(parsedIntent.option);
+      }
+      
+      // We must wait for state update before locking.
+      // But for MVP, if we know the option, we can trigger the TTS manually or via modal.
+      if (parsedIntent.isLockCommand) {
+        const optionToLock = parsedIntent.option || selectedOption;
+        if (optionToLock) {
+          setIsModalOpen(true);
+          if (speakScriptPhase) speakScriptPhase('LOCK_CONFIRMATION', optionToLock);
+        }
+      }
+      if (resetIntent) resetIntent();
+    }
+  }, [parsedIntent, isLocked, showResult, isTimeout, selectedOption, resetIntent, speakScriptPhase]);
 
   const handleOptionClick = (optionKey) => {
     if (isLocked || showResult || isTimeout) return;
@@ -47,6 +76,7 @@ export default function AdaptiveMCQInterface({
   const handleLockClick = () => {
     if (!selectedOption || isLocked) return;
     setIsModalOpen(true);
+    if (speakScriptPhase) speakScriptPhase('LOCK_CONFIRMATION', selectedOption);
   };
 
   const handleConfirmLock = async () => {
@@ -59,6 +89,17 @@ export default function AdaptiveMCQInterface({
     const result = await onAnswerSubmit(optionKey, timeoutFlag);
     setResultData(result);
     setShowResult(true);
+    
+    if (speakScriptPhase) {
+      if (timeoutFlag) {
+        await speakScriptPhase('TIMEOUT');
+      } else {
+        await speakScriptPhase(result?.isCorrect ? 'CORRECT_FEEDBACK' : 'INCORRECT_FEEDBACK');
+      }
+      if (result?.explanation) {
+        await speakScriptPhase('EXPLANATION', result.explanation);
+      }
+    }
   };
 
   if (!question) return <div className="p-8 text-center animate-pulse text-gray-500">Loading next question...</div>;
@@ -72,6 +113,20 @@ export default function AdaptiveMCQInterface({
           {renderBilingualText(question.question, languageMode)}
         </h2>
       </div>
+
+      {/* Voice Answer Area */}
+      {!showResult && (
+        <div className="mb-6">
+          <VoiceAnswerInput 
+            isSupported={isVoiceSupported}
+            isListening={isListening}
+            transcript={transcript}
+            onStartListening={onStartListening}
+            onStopListening={onStopListening}
+            isDisabled={isLocked || isTimeout}
+          />
+        </div>
+      )}
 
       {/* Options Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 flex-1">

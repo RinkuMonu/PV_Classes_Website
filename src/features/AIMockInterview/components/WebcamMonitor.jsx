@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import ProctoringMonitor from './ProctoringMonitor';
 
-export default function WebcamMonitor({ stream, status, videoRef, error, retry }) {
+export default function WebcamMonitor({ stream, status, videoRef, error, retry, sessionId }) {
   
   useEffect(() => {
     if (videoRef.current && stream) {
@@ -11,13 +12,16 @@ export default function WebcamMonitor({ stream, status, videoRef, error, retry }
   return (
     <div className="bg-black rounded-lg overflow-hidden relative aspect-video shadow-inner flex flex-col items-center justify-center">
       {status === 'ACTIVE' && (
-        <video 
-          ref={videoRef}
-          autoPlay 
-          playsInline 
-          muted 
-          className="w-full h-full object-cover transform scale-x-[-1]"
-        />
+        <>
+          <video 
+            ref={videoRef}
+            autoPlay 
+            playsInline 
+            muted 
+            className="w-full h-full object-cover transform scale-x-[-1]"
+          />
+          <ProctoringMonitor sessionId={sessionId} videoRef={videoRef} isEnabled={true} />
+        </>
       )}
       
       {status === 'PENDING' && (

@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DIFFICULTY, LANGUAGE_MODE } from '../../constants/interviewConstants';
-import { startInterview } from '../../services/aiMockInterviewService';
-import { validateSetupConfig } from '../../utils/interviewHelpers';
+import { DIFFICULTY, LANGUAGE_MODE } from '../constants/interviewConstants';
+import { startInterview } from '../services/aiMockInterviewService';
+import { validateSetupConfig } from '../utils/interviewHelpers';
 
 export default function InterviewSetup() {
   const router = useRouter();

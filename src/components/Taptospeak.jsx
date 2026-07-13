@@ -15,7 +15,7 @@ const BRAND_ACCENT = "#84CC16";
 export default function TapToSpeakCTA({
   variant = "button",
   label = "Tap to Speak",
-  href = "/mock-interview",
+  href = "/ai-mock-interview",
 }) {
   const pathname = usePathname();
   const isFloating = variant === "floating";

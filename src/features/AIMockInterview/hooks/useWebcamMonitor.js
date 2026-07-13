@@ -17,10 +17,19 @@ export const useWebcamMonitor = (requireCamera = true) => {
         videoRef.current.srcObject = mediaStream;
       }
     } catch (err) {
-      console.error("Camera error:", err);
-      if (err.name === 'NotAllowedError') setStatus('DENIED');
-      else setStatus('UNAVAILABLE');
-      setError(err.message);
+      // Downgrade to console.warn to prevent Next.js dev overlay from triggering on standard hardware contention
+      console.warn("Camera initialization warning:", err.name, err.message);
+      
+      if (err.name === 'NotAllowedError') {
+        setStatus('DENIED');
+        setError('Camera access was denied.');
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        setStatus('UNAVAILABLE');
+        setError('Camera is in use by another application (NotReadableError).');
+      } else {
+        setStatus('UNAVAILABLE');
+        setError(err.message);
+      }
     }
   }, [requireCamera]);
 

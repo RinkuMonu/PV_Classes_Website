@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInterviewSession } from '../../../../features/AIMockInterview/hooks/useInterviewSession';
 import { useWebcamMonitor } from '../../../../features/AIMockInterview/hooks/useWebcamMonitor';
 import { useInterviewTimer } from '../../../../features/AIMockInterview/hooks/useInterviewTimer';
+import { useTextToSpeech } from '../../../../features/AIMockInterview/hooks/useTextToSpeech';
+import { useVoiceAnswer } from '../../../../features/AIMockInterview/hooks/useVoiceAnswer';
+import { useBrowserMonitoring } from '../../../../features/AIMockInterview/hooks/useBrowserMonitoring';
 import { getNextQuestion, submitAnswer } from '../../../../features/AIMockInterview/services/aiMockInterviewService';
 import { INTERVIEW_STATUS } from '../../../../features/AIMockInterview/constants/interviewConstants';
 
@@ -16,7 +19,6 @@ import ScorePanel from '../../../../features/AIMockInterview/components/ScorePan
 import AdaptiveMCQInterface from '../../../../features/AIMockInterview/components/AdaptiveMCQInterface';
 
 export default function InterviewSessionPage({ params }) {
-  // Fix for Next.js 15: Unwrapping params correctly
   const { id: sessionId } = use(params);
   const router = useRouter();
 
@@ -24,47 +26,90 @@ export default function InterviewSessionPage({ params }) {
   const [question, setQuestion] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(INTERVIEW_STATUS.SETUP);
   const [isTimeout, setIsTimeout] = useState(false);
+  const hasSpokenIntro = useRef(false);
 
-  // Initialize hooks conditionally later, but React requires unconditional hooks
   const config = session?.config || {};
+  const voiceLanguage = config.voiceLanguage || 'English';
   
   const { stream, status: camStatus, error: camError, videoRef, retry: retryCam } = useWebcamMonitor(!!config.cameraRequired);
   
   const { timeLeft, start: startTimer, stop: stopTimer } = useInterviewTimer(config.timePerQuestion || 60, () => {
     setIsTimeout(true);
-    setInterviewStatus(INTERVIEW_STATUS.WAITING);
+    setInterviewStatus(INTERVIEW_STATUS.TIMEOUT);
   });
+
+  const { isSpeaking, speakScriptPhase, cancelSpeech } = useTextToSpeech(voiceLanguage);
+
+  const {
+    isListening,
+    isSupported: isVoiceSupported,
+    transcript,
+    parsedIntent,
+    startListening,
+    stopListening,
+    resetIntent
+  } = useVoiceAnswer(voiceLanguage, isSpeaking, question ? question.options : null); // Auto-pauses STT when TTS speaks
+
+  // Browser Monitoring
+  useBrowserMonitoring(sessionId, true);
+
+  // Update AI Interviewer visual state based on TTS/STT hooks
+  useEffect(() => {
+    if (isSpeaking) {
+      setInterviewStatus(INTERVIEW_STATUS.SPEAKING);
+    } else if (isListening) {
+      setInterviewStatus(INTERVIEW_STATUS.LISTENING);
+    } else if (!isSpeaking && !isListening && interviewStatus === INTERVIEW_STATUS.SPEAKING) {
+      setInterviewStatus(INTERVIEW_STATUS.IDLE);
+    }
+  }, [isSpeaking, isListening]);
 
   // Load first question on mount if session is valid
   useEffect(() => {
     if (!sessionLoading && session) {
       if (session.currentQuestionIndex >= session.config.numQuestions) {
-        router.push(`/ai-mock-interview/report/${sessionId}`);
+        completeInterview();
         return;
       }
       fetchNextQuestion();
     } else if (!sessionLoading && !session) {
-      // Invalid session, go back to setup
       router.push('/ai-mock-interview');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionLoading, session?.currentQuestionIndex]);
+
+  const completeInterview = async () => {
+    await speakScriptPhase('COMPLETED');
+    router.push(`/ai-mock-interview/report/${sessionId}`);
+  };
 
   const fetchNextQuestion = async () => {
     try {
-      setInterviewStatus(INTERVIEW_STATUS.WAITING);
+      setInterviewStatus(INTERVIEW_STATUS.PROCESSING);
       setIsTimeout(false);
       
       const res = await getNextQuestion(sessionId);
       
       if (res.status === 'COMPLETED' || res.status === 'COMPLETED_NO_MORE_QUESTIONS') {
-        router.push(`/ai-mock-interview/report/${sessionId}`);
+        completeInterview();
         return;
       }
 
       setQuestion(res.question);
+      
+      // Orchestrate TTS
+      setInterviewStatus(INTERVIEW_STATUS.SPEAKING);
+      
+      if (!hasSpokenIntro.current && session.currentQuestionIndex === 0) {
+        await speakScriptPhase('WELCOME');
+        hasSpokenIntro.current = true;
+      }
+      
+      await speakScriptPhase('QUESTION_INTRO');
+      await speakScriptPhase('QUESTION_TEXT', res.question.question);
+      
       startTimer(config.timePerQuestion || 60);
-      setInterviewStatus(INTERVIEW_STATUS.WAITING);
+      setInterviewStatus(INTERVIEW_STATUS.LISTENING);
+      
     } catch (err) {
       console.error(err);
       alert("Error fetching question.");
@@ -73,6 +118,7 @@ export default function InterviewSessionPage({ params }) {
 
   const handleAnswerSubmit = async (selectedOptionKey, timeoutFlag) => {
     stopTimer();
+    stopListening(); // Stop voice recognition explicitly upon submit
     setInterviewStatus(INTERVIEW_STATUS.ANSWER_LOCKED);
     
     try {
@@ -93,7 +139,7 @@ export default function InterviewSessionPage({ params }) {
   };
 
   const handleNextQuestion = () => {
-    // Session state will update across renders, but triggering reload directly is safe for MVP
+    cancelSpeech();
     window.location.reload(); 
   };
 
@@ -122,6 +168,7 @@ export default function InterviewSessionPage({ params }) {
               videoRef={videoRef} 
               error={camError}
               retry={retryCam}
+              sessionId={sessionId}
             />
           </div>
 
@@ -152,6 +199,15 @@ export default function InterviewSessionPage({ params }) {
             onAnswerSubmit={handleAnswerSubmit}
             onNextQuestion={handleNextQuestion}
             isTimeout={isTimeout}
+            // Voice Props
+            isVoiceSupported={isVoiceSupported}
+            isListening={isListening}
+            transcript={transcript}
+            parsedIntent={parsedIntent}
+            onStartListening={startListening}
+            onStopListening={stopListening}
+            resetIntent={resetIntent}
+            speakScriptPhase={speakScriptPhase}
           />
           
         </div>

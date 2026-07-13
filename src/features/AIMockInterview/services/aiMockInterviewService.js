@@ -1,44 +1,50 @@
-import { generateSessionId } from '../utils/interviewHelpers';
-import { mockQuestions } from '../data/mockQuestions';
-import { selectNextQuestion, calculateNextDifficulty } from '../utils/adaptiveDifficulty';
+import questionsData from '../data/questions.json';
 
-/**
- * AI Mock Interview Service (Phase 1 MVP - Frontend Only)
- * 
- * FUTURE ARCHITECTURE:
- * These functions will later make Axios calls to the Python FastAPI backend.
- * For now, they use local mock behavior and sessionStorage.
- */
+const API_BASE_URL = process.env.NEXT_PUBLIC_AI_INTERVIEW_API_URL || 'http://127.0.0.1:8001';
 
-// POST /api/v1/interviews/start
-export const startInterview = async (config) => {
-  const sessionId = generateSessionId();
-  
-  // Local persistence for Phase 1
-  const sessionData = {
-    sessionId,
-    config,
-    currentQuestionIndex: 0,
-    currentDifficulty: config.difficulty,
-    score: 0,
-    correctCount: 0,
-    wrongCount: 0,
-    unansweredCount: 0,
-    history: [],
-    usedQuestionIds: [],
-    correctStreak: 0,
-    wrongStreak: 0,
-    status: 'READY'
-  };
-  
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem(sessionId, JSON.stringify(sessionData));
+// Helper to shuffle array
+const shuffle = (array) => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
   }
-  
-  return { sessionId, data: sessionData };
+  return newArr;
 };
 
-// GET /api/v1/interviews/{sessionId}/next
+export const startInterview = async (config) => {
+  try {
+    // Generate a unique demo session ID
+    const sessionId = 'demo-' + Date.now();
+    
+    // Select and shuffle questions based on config.numQuestions (default 10)
+    const numQuestions = config.numQuestions || 10;
+    const shuffledQuestions = shuffle(questionsData).slice(0, numQuestions);
+    
+    const sessionData = {
+      sessionId: sessionId,
+      config: { ...config, isDemo: true },
+      currentQuestionIndex: 0,
+      currentDifficulty: 'Medium',
+      score: 0,
+      status: 'READY',
+      demoQuestions: shuffledQuestions,
+      correctCount: 0,
+      wrongCount: 0,
+      unansweredCount: 0
+    };
+    
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(sessionId, JSON.stringify(sessionData));
+    }
+
+    return { sessionId, data: sessionData };
+  } catch (error) {
+    console.error("Start interview error:", error);
+    throw error;
+  }
+};
+
 export const getNextQuestion = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
@@ -46,105 +52,108 @@ export const getNextQuestion = async (sessionId) => {
   
   const session = JSON.parse(rawData);
 
-  // Check if we reached the max questions limit
   if (session.currentQuestionIndex >= session.config.numQuestions) {
     return { status: 'COMPLETED' };
   }
 
-  // Find next question based on current difficulty
-  const nextQ = selectNextQuestion(
-    mockQuestions,
-    session.usedQuestionIds,
-    session.config.subject,
-    session.config.exam,
-    session.currentDifficulty
-  );
+  try {
+    const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
+    
+    // Map JSON options array to A, B, C, D format
+    const optionKeys = ['A', 'B', 'C', 'D'];
+    const optionsMap = {};
+    activeQuestion.options.forEach((optText, index) => {
+      optionsMap[optionKeys[index]] = optText;
+    });
 
-  if (!nextQ) {
-    // If no questions left in mock data, force complete
-    return { status: 'COMPLETED_NO_MORE_QUESTIONS' };
+    const mappedQuestion = {
+      id: activeQuestion.id,
+      question: activeQuestion.question, 
+      options: optionsMap,
+      difficulty: activeQuestion.difficulty,
+      time_limit_seconds: session.config.timePerQuestion || 60
+    };
+
+    return { status: 'OK', question: mappedQuestion, backendMeta: {} };
+  } catch (error) {
+    console.error("Fetch question error:", error);
+    throw error;
   }
-
-  return { status: 'OK', question: nextQ };
 };
 
-// POST /api/v1/interviews/{sessionId}/answer
 export const submitAnswer = async (sessionId, payload) => {
-  // payload: { questionId, selectedOption, isTimeout, timeTakenSec }
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
   
   const session = JSON.parse(rawData);
-  const question = mockQuestions.find(q => q.id === payload.questionId);
-  
-  if (!question) throw new Error("Question not found");
 
-  let isCorrect = false;
-  let pointsAwarded = 0;
+  try {
+    const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
+    
+    const optionKeys = ['A', 'B', 'C', 'D'];
+    
+    // Find the correct option key
+    let correctKey = 'A';
+    activeQuestion.options.forEach((optText, index) => {
+      if (optText === activeQuestion.answer) {
+        correctKey = optionKeys[index];
+      }
+    });
 
-  if (payload.isTimeout) {
-    session.unansweredCount += 1;
-    session.correctStreak = 0;
-    session.wrongStreak = 0; // Timeout doesn't strictly drop difficulty
-  } else {
-    isCorrect = (payload.selectedOption === question.correctOption);
-    if (isCorrect) {
-      session.correctCount += 1;
-      pointsAwarded = 10;
-      session.correctStreak += 1;
-      session.wrongStreak = 0;
+    let isCorrect = false;
+    if (payload.isTimeout) {
+      session.unansweredCount += 1;
     } else {
-      session.wrongCount += 1;
-      session.wrongStreak += 1;
-      session.correctStreak = 0;
+      isCorrect = (payload.selectedOption === correctKey);
+      if (isCorrect) {
+        session.score += 10;
+        session.correctCount += 1;
+      } else {
+        session.wrongCount += 1;
+      }
     }
+
+    session.currentQuestionIndex += 1;
+    sessionStorage.setItem(sessionId, JSON.stringify(session));
+
+    return {
+      isCorrect: isCorrect,
+      correctOption: correctKey,
+      explanation: activeQuestion.explanation,
+      pointsAwarded: isCorrect ? 10 : 0,
+      newDifficulty: session.currentDifficulty,
+      status: 'OK'
+    };
+  } catch (error) {
+    console.error("Submit answer error:", error);
+    throw error;
   }
-
-  session.score += pointsAwarded;
-  session.usedQuestionIds.push(payload.questionId);
-  
-  // Calculate new difficulty based on streak
-  session.currentDifficulty = calculateNextDifficulty(
-    session.currentDifficulty,
-    isCorrect,
-    session.correctStreak,
-    session.wrongStreak
-  );
-
-  session.history.push({
-    questionId: payload.questionId,
-    selectedOption: payload.selectedOption,
-    isCorrect,
-    isTimeout: payload.isTimeout,
-    timeTakenSec: payload.timeTakenSec
-  });
-
-  session.currentQuestionIndex += 1;
-
-  sessionStorage.setItem(sessionId, JSON.stringify(session));
-
-  return {
-    isCorrect,
-    correctOption: question.correctOption,
-    explanation: question.explanation,
-    pointsAwarded,
-    newDifficulty: session.currentDifficulty
-  };
 };
 
-// GET /api/v1/interviews/{sessionId}/report
 export const getInterviewReport = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
   
-  return JSON.parse(rawData);
+  const report = JSON.parse(rawData);
+  
+  // Calculate performance level
+  const totalAttempted = report.correctCount + report.wrongCount;
+  let performanceLevel = 'Needs Improvement';
+  if (totalAttempted > 0) {
+    const accuracy = (report.correctCount / totalAttempted) * 100;
+    if (accuracy >= 90) performanceLevel = 'Excellent';
+    else if (accuracy >= 75) performanceLevel = 'Good';
+    else if (accuracy >= 50) performanceLevel = 'Average';
+  }
+  
+  report.performanceLevel = performanceLevel;
+  
+  return report;
 };
 
-// POST /api/v1/interviews/{sessionId}/camera-event
 export const logCameraEvent = async (sessionId, eventPayload) => {
-  // Mock endpoint for future "face lost", "multiple faces" events
-  console.log(`[Mock Backend] Camera event logged for session ${sessionId}:`, eventPayload);
+  console.log(`[Demo Backend] Camera event logged for session ${sessionId}:`, eventPayload);
   return { success: true };
 };

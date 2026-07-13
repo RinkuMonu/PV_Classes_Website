@@ -67,7 +67,7 @@ export default function InterviewReportPage({ params }) {
 
           <h3 className="text-xl font-bold text-[#00316B] mb-6 border-b pb-2">Performance Summary</h3>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
             <div className="p-4 rounded-xl bg-green-50 border border-green-100 text-center">
               <div className="text-green-600 text-3xl font-bold mb-1">{report.correctCount}</div>
               <div className="text-green-800 text-xs font-bold uppercase tracking-wide">Correct</div>
@@ -83,6 +83,12 @@ export default function InterviewReportPage({ params }) {
             <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 text-center">
               <div className="text-[#009FE3] text-3xl font-bold mb-1">{accuracy}%</div>
               <div className="text-blue-800 text-xs font-bold uppercase tracking-wide">Accuracy</div>
+            </div>
+            <div className="p-4 rounded-xl bg-purple-50 border border-purple-100 text-center">
+              <div className="text-purple-600 text-xl font-bold mb-1 flex items-center justify-center h-[36px] leading-tight">
+                {report.performanceLevel || 'N/A'}
+              </div>
+              <div className="text-purple-800 text-xs font-bold uppercase tracking-wide">Performance</div>
             </div>
           </div>
 
