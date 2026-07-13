@@ -71,7 +71,7 @@ export default function ExamCategory() {
         </div>
     <div className="grid lg:grid-cols-2 gap-12 items-start">
 
-      {/* LEFT SIDE */}
+      
       <div>
 
         {/* Cards */}
