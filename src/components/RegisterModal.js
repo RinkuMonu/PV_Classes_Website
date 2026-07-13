@@ -316,6 +316,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
           </div>
         </div>
 
+
         {/* RIGHT SIDE */}
         <div className="w-full md:w-1/2 p-6">
 
