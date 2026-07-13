@@ -156,6 +156,8 @@ export default function LoginModal({ onClose, onRegisterClick, onForgotPasswordC
         {/* LEFT SIDE */}
         <div className="hidden md:flex md:w-1/2 h-[70vh] relative">
           <Image
+          width={500}
+          height={500}
             src="/Image/pic2.jpeg"
             alt="login"
             className="w-full h-full object-cover"
