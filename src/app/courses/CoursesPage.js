@@ -198,16 +198,19 @@ export default function CoursesPage() {
                 <a
                   key={c?._id}
                   href={`/courses/${c?._id}`}
-                  className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
+                  className="rounded-2xl shadow hover:shadow-lg transition border border-gray-300 bg-white flex flex-col"
                 >
-                  <Image
-                    width={200}
-                    height={200}
-                    src={c?.full_image?.[0] || "/vercel.svg"}
-                    // src={`http://localhost:5000${c?.images?.[0]}`}
-                    alt={c?.title || "Course"}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
+                  <div className="p-5 pb-0">
+  <div className="overflow-hidden rounded-2xl">
+    <Image
+      width={200}
+      height={200}
+      src={c?.full_image?.[0] || "/vercel.svg"}
+      alt={c?.title || "Course"}
+      className="w-full h-28 object-cover"
+    />
+  </div>
+</div>
                   <div className="p-4 flex-1 flex flex-col">
                     <h3 className="text-lg font-semibold mb-2">{c?.title || "Untitled Course"}</h3>
                     <p className="text-sm text-gray-500 mb-4">{c?.overview || ""}</p>

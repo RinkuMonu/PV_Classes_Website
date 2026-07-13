@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import Image from "next/image"
@@ -29,7 +27,7 @@ import RegisterModal from "../RegisterModal" // You'll need to create this
 import ForgotPasswordModal from "../ForgotPasswordModal" // You'll need to create this
 import NotificationSystem from "../NotificationSystem"
 import { useCart } from "../context/CartContext"
-import { FaPhone } from "react-icons/fa"
+import { FaPhoneAlt } from "react-icons/fa";
 import HeaderSearch from "./HeaderSearch"
 import { usePathname } from "next/navigation";
 const examData = {
@@ -415,7 +413,7 @@ export default function Header() {
             </Link>
             <Link
               href="/current-affairs"
-              className="relative py-2 px-1  hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
+              className="relative py-2 px-1 hover:text-[#009FE3] transition-all duration-200 text-base font-semibold group"
             >
               Current Affairs
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#009FE3] to-[#87B105] group-hover:w-full transition-all duration-300"></div>
@@ -433,9 +431,8 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/contact-us">
               <button className="hidden md:flex items-center gap-2 bg-gradient-to-r from-[#87B105] to-[#ABC129] text-white px-4 py-2 mr-5 rounded-full hover:bg-green-800 transition ">
-              
+                <FaPhoneAlt size={16} />
                 <span>Contact Us</span>
-                  <FaPhone size={16} />
               </button>
             </Link>
 
