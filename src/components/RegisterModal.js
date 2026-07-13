@@ -301,6 +301,8 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
         {/* LEFT SIDE */}
         <div className="hidden md:flex md:w-1/2 h-[95vh] relative">
           <Image
+          width={500}
+          height={500}
             // src="/Image/study.jpeg"
             src="/Image/pic2.jpeg"
             alt="register"
