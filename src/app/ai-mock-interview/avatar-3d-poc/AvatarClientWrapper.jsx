@@ -2,11 +2,11 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-const Avatar3DPOC = dynamic(
-  () => import('../../../features/AIMockInterview/avatar3d/components/Avatar3DPOC'),
+const HumanAvatarStage = dynamic(
+  () => import('../../../features/AIMockInterview/avatar/components/HumanAvatarStage'),
   { ssr: false }
 );
 
 export default function AvatarClientWrapper() {
-  return <Avatar3DPOC />;
+  return <HumanAvatarStage status="IDLE" />;
 }
