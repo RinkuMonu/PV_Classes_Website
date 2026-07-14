@@ -1,4 +1,4 @@
-import questionsData from '../data/questions.json';
+import questionsData from '../data/demoQuestions.json';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_AI_INTERVIEW_API_URL || 'http://127.0.0.1:8001';
 
@@ -62,13 +62,33 @@ export const getNextQuestion = async (sessionId) => {
     // Map JSON options array to A, B, C, D format
     const optionKeys = ['A', 'B', 'C', 'D'];
     const optionsMap = {};
-    activeQuestion.options.forEach((optText, index) => {
-      optionsMap[optionKeys[index]] = optText;
-    });
+    
+    if (activeQuestion.options && typeof activeQuestion.options[0] === 'object') {
+      activeQuestion.options.forEach((opt, index) => {
+        const key = opt.key || optionKeys[index];
+        optionsMap[key] = {
+          english: opt.text_en,
+          hindi: opt.text_hi
+        };
+      });
+    } else if (activeQuestion.options) {
+      activeQuestion.options.forEach((optText, index) => {
+        optionsMap[optionKeys[index]] = {
+          english: optText,
+          hindi: optText
+        };
+      });
+    }
 
     const mappedQuestion = {
       id: activeQuestion.id,
-      question: activeQuestion.question, 
+      question: activeQuestion.question_en ? {
+        english: activeQuestion.question_en,
+        hindi: activeQuestion.question_hi
+      } : {
+        english: activeQuestion.question,
+        hindi: activeQuestion.question
+      },
       options: optionsMap,
       difficulty: activeQuestion.difficulty,
       time_limit_seconds: session.config.timePerQuestion || 60
@@ -94,12 +114,14 @@ export const submitAnswer = async (sessionId, payload) => {
     const optionKeys = ['A', 'B', 'C', 'D'];
     
     // Find the correct option key
-    let correctKey = 'A';
-    activeQuestion.options.forEach((optText, index) => {
-      if (optText === activeQuestion.answer) {
-        correctKey = optionKeys[index];
-      }
-    });
+    let correctKey = activeQuestion.correctAnswer || 'A';
+    if (!activeQuestion.correctAnswer && activeQuestion.answer) {
+      activeQuestion.options.forEach((optText, index) => {
+        if (optText === activeQuestion.answer) {
+          correctKey = optionKeys[index];
+        }
+      });
+    }
 
     let isCorrect = false;
     if (payload.isTimeout) {
@@ -117,10 +139,18 @@ export const submitAnswer = async (sessionId, payload) => {
     session.currentQuestionIndex += 1;
     sessionStorage.setItem(sessionId, JSON.stringify(session));
 
+    const explanationObj = activeQuestion.explanation_en ? {
+      english: activeQuestion.explanation_en,
+      hindi: activeQuestion.explanation_hi
+    } : {
+      english: activeQuestion.explanation,
+      hindi: activeQuestion.explanation
+    };
+
     return {
       isCorrect: isCorrect,
       correctOption: correctKey,
-      explanation: activeQuestion.explanation,
+      explanation: explanationObj,
       pointsAwarded: isCorrect ? 10 : 0,
       newDifficulty: session.currentDifficulty,
       status: 'OK'

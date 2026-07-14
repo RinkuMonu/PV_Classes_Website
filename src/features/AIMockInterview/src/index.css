@@ -1,0 +1,600 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Bar */
+.top-bar {
+  background-color: #0d3b66;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
+  font-size: 13px;
+}
+.top-bar-left, .top-bar-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.top-bar .new-badge {
+  background-color: #a3c423;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.top-bar .search-input {
+  background-color: #092c4c;
+  border: 1px solid #1a4971;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  outline: none;
+  min-width: 200px;
+}
+.top-bar .search-input::placeholder {
+  color: #8da9c4;
+}
+
+/* Main Nav */
+.main-nav {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #a3c423;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #fff;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+  font-weight: 500;
+  color: #0d3b66;
+  font-size: 15px;
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.contact-btn {
+  background-color: #8dc63f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cart-icon {
+  position: relative;
+  font-size: 20px;
+  color: #0d3b66;
+  cursor: pointer;
+}
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #8dc63f;
+  color: white;
+  font-size: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sub Header */
+.sub-header {
+  background-color: #082846;
+  color: white;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sub-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.session-chip {
+  background-color: #ffffff20;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  padding: 30px 40px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  margin-bottom: 24px;
+}
+
+/* AI Coach Card */
+.coach-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.coach-header h3 {
+  color: #0d3b66;
+  font-size: 18px;
+  font-weight: 700;
+}
+.online-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d3b66;
+  background-color: #f0f7f4;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #d1e8df;
+}
+.online-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00d26a;
+  border-radius: 50%;
+}
+.canvas-container {
+  background-color: #111827;
+  border-radius: 12px;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.listening-btn {
+  width: 100%;
+  background-color: white;
+  color: #0d3b66;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+/* Monitoring Card */
+.monitoring-card {
+  padding: 20px;
+}
+.monitoring-card h4 {
+  color: #8c8c8c;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.camera-feed {
+  background-color: #e5e7eb;
+  height: 120px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(45deg, #d1d5db 25%, transparent 25%, transparent 75%, #d1d5db 75%, #d1d5db), linear-gradient(45deg, #d1d5db 25%, transparent 25%, transparent 75%, #d1d5db 75%, #d1d5db);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+.camera-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Progress Section */
+.progress-card {
+  padding: 30px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8c8c8c;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.progress-bar-container {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #0d3b66;
+}
+.badges-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.level-badge {
+  background-color: #fff9e6;
+  color: #b38600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #ffe699;
+}
+.score-badge {
+  background-color: #0d3b66;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.score-badge span {
+  font-size: 16px;
+}
+
+/* Mic Section */
+.mic-status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.mic-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #0d3b66;
+}
+.mic-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #a0aab2;
+  border-radius: 50%;
+}
+.start-mic-btn {
+  background-color: #0d3b66;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.input-area {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: #f9f9f9;
+  min-height: 80px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+
+/* AI Coach Card */
+.coach-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.coach-header h3 {
+  color: #0d3b66;
+  font-size: 18px;
+  font-weight: 700;
+}
+.online-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d3b66;
+  background-color: #f0f7f4;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #d1e8df;
+}
+.online-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00d26a;
+  border-radius: 50%;
+}
+.canvas-container {
+  background-color: #111827;
+  border-radius: 12px;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.listening-btn {
+  width: 100%;
+  background-color: white;
+  color: #0d3b66;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+/* Monitoring Card */
+.monitoring-card {
+  padding: 20px;
+}
+.monitoring-card h4 {
+  color: #8c8c8c;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.camera-feed {
+  background-color: #e5e7eb;
+  height: 120px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(45deg, #d1d5db 25%, transparent 25%, transparent 75%, #d1d5db 75%, #d1d5db), linear-gradient(45deg, #d1d5db 25%, transparent 25%, transparent 75%, #d1d5db 75%, #d1d5db);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+.camera-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Progress Section */
+.progress-card {
+  padding: 30px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8c8c8c;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.progress-bar-container {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #0d3b66;
+}
+.badges-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.level-badge {
+  background-color: #fff9e6;
+  color: #b38600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #ffe699;
+}
+.score-badge {
+  background-color: #0d3b66;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.score-badge span {
+  font-size: 16px;
+}
+
+/* Mic Section */
+.mic-status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.mic-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #0d3b66;
+}
+.mic-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #a0aab2;
+  border-radius: 50%;
+}
+.start-mic-btn {
+  background-color: #0d3b66;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.input-area {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: #f9f9f9;
+  min-height: 80px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+.input-area::placeholder {
+  font-style: italic;
+  color: #b0b0b0;
+}
+
+/* Start Screen Overlay */
+.start-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(13, 59, 102, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  color: white;
+}
+.start-screen h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+.start-screen p {
+  font-size: 16px;
+  margin-bottom: 40px;
+  opacity: 0.8;
+}
+.start-btn {
+  background-color: #8dc63f;
+  color: white;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.start-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Video Feed */
+.video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}

@@ -22,6 +22,14 @@ export function useAvatarIdle({ scene, status = 'IDLE' }) {
   const targetHeadRotation = useRef(new THREE.Vector2(0, 0));
   const currentHeadRotation = useRef(new THREE.Vector2(0, 0));
 
+  const lipSyncState = useRef({
+    morphMeshes: [],
+    mouthIndices: [],
+    activeIndices: [],
+    currentVisemeValue: 0,
+    nextVisemeTime: 0,
+  });
+
   // Initialize and find bones / morph targets
   useEffect(() => {
     if (!scene) return;
@@ -58,6 +66,20 @@ export function useAvatarIdle({ scene, status = 'IDLE' }) {
           }
         });
 
+        // Find mouth/jaw/viseme morph targets for lip sync
+        const localMouthIndices = [];
+        Object.keys(child.morphTargetDictionary).forEach((key) => {
+          const lowerKey = key.toLowerCase();
+          if (lowerKey.includes('viseme') || lowerKey.includes('jawopen') || lowerKey.includes('mouthopen')) {
+            localMouthIndices.push(child.morphTargetDictionary[key]);
+          }
+        });
+
+        if (localMouthIndices.length > 0) {
+          lipSyncState.current.morphMeshes.push(child);
+          lipSyncState.current.mouthIndices.push(localMouthIndices);
+        }
+
         if (blinkIndexL !== -1 || blinkIndexR !== -1) {
           morphMeshes.push(child);
           blinkIndices.push({ l: Math.max(0, blinkIndexL), r: Math.max(0, blinkIndexR) });
@@ -78,6 +100,12 @@ export function useAvatarIdle({ scene, status = 'IDLE' }) {
       console.log("No eye blink morph targets detected.");
     }
     
+    if (lipSyncState.current.morphMeshes.length > 0) {
+      console.log(`Lip Sync System Ready: Found mouth morphs on ${lipSyncState.current.morphMeshes.length} meshes.`);
+    } else {
+      console.log("No mouth/jaw morph targets detected for lip sync.");
+    }
+
     console.log("Head Motion Ready");
     console.log("Model Ready");
 
@@ -199,6 +227,56 @@ export function useAvatarIdle({ scene, status = 'IDLE' }) {
           }
         });
       }
+    }
+
+    // 4. Lip Sync System (Tied to Browser TTS)
+    const isSpeaking = (status === 'SPEAKING') || (typeof window !== 'undefined' && window.speechSynthesis && window.speechSynthesis.speaking);
+    
+    if (isSpeaking && lipSyncState.current.morphMeshes.length > 0) {
+      const now = performance.now();
+      
+      // Pick a new viseme randomly every 50-150ms to simulate talking
+      if (!lipSyncState.current.nextVisemeTime || now > lipSyncState.current.nextVisemeTime) {
+        lipSyncState.current.currentVisemeValue = Math.random() * 0.7 + 0.3; // 0.3 to 1.0
+        lipSyncState.current.nextVisemeTime = now + 50 + Math.random() * 100; 
+        
+        lipSyncState.current.activeIndices = lipSyncState.current.mouthIndices.map(indices => 
+          indices[Math.floor(Math.random() * indices.length)]
+        );
+      }
+
+      // Smoothly apply to the chosen morph
+      lipSyncState.current.morphMeshes.forEach((mesh, meshIdx) => {
+        const targetIndex = lipSyncState.current.activeIndices[meshIdx];
+        const indices = lipSyncState.current.mouthIndices[meshIdx];
+        
+        indices.forEach(idx => {
+          const targetValue = (idx === targetIndex) ? lipSyncState.current.currentVisemeValue : 0;
+          mesh.morphTargetInfluences[idx] = THREE.MathUtils.damp(
+            mesh.morphTargetInfluences[idx] || 0,
+            targetValue,
+            15,
+            delta
+          );
+        });
+      });
+    } else if (lipSyncState.current.morphMeshes.length > 0) {
+      // Close mouth smoothly when not speaking
+      lipSyncState.current.morphMeshes.forEach((mesh, meshIdx) => {
+        const indices = lipSyncState.current.mouthIndices[meshIdx];
+        indices.forEach(idx => {
+          if (mesh.morphTargetInfluences[idx] > 0.01) {
+             mesh.morphTargetInfluences[idx] = THREE.MathUtils.damp(
+               mesh.morphTargetInfluences[idx],
+               0,
+               10,
+               delta
+             );
+          } else {
+             mesh.morphTargetInfluences[idx] = 0;
+          }
+        });
+      });
     }
   });
 }

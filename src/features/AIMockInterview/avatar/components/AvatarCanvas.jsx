@@ -28,7 +28,7 @@ export default function AvatarCanvas({ status = 'IDLE' }) {
       <ErrorBoundary fallback={<AvatarFallback />}>
         <Canvas 
           shadows 
-          camera={{ position: [0, 1.5, 4], fov: 45 }}
+          camera={{ position: [0, 1.4, 1.5], fov: 45 }}
         >
           <Suspense fallback={null}>
             <ambientLight intensity={1.2} />
@@ -38,8 +38,8 @@ export default function AvatarCanvas({ status = 'IDLE' }) {
             <axesHelper args={[2]} />
             <gridHelper args={[10,10]} />
             
-            {/* Framed for upper body/headshot */}
-            <group position={[0, -1, 0]}>
+            {/* Centered avatar group */}
+            <group>
               <AvatarModel status={status} />
             </group>
           </Suspense>
@@ -50,7 +50,7 @@ export default function AvatarCanvas({ status = 'IDLE' }) {
             enableZoom={true}
             enableRotate={true}
             enableDamping={false}
-            target={[0, 1, 0]} 
+            target={[0, 1.4, 0]} 
           />
         </Canvas>
       </ErrorBoundary>

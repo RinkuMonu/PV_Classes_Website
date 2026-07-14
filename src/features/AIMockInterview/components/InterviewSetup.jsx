@@ -33,7 +33,7 @@ export default function InterviewSetup() {
     setLoading(true);
     try {
       const { sessionId } = await startInterview(config);
-      router.push(`/ai-mock-interview/session/${sessionId}`);
+      router.push(`/ai-mock-interview/confirm/${sessionId}`);
     } catch (err) {
       setErrors([err.message || 'Failed to start interview']);
       setLoading(false);

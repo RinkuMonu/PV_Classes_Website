@@ -21,10 +21,11 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
     console.log("scene", scene);
     console.log("scene.children", scene.children);
     console.log("--------------------------------");
-    
+
     const meshNames = [];
     const skinnedMeshNames = [];
     const boneNames = [];
+
     const animationNames = animations ? animations.map(a => a.name) : [];
     const morphTargets = {};
 
@@ -55,7 +56,7 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
     Object.entries(morphTargets).forEach(([meshName, dict]) => {
       console.log(`[${meshName}]:`, dict);
     });
-    
+
     console.log("==================================================");
     console.log("Avatar Loaded Successfully");
     console.log(`Meshes: ${meshNames.length}`);
@@ -84,6 +85,13 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
     console.log("Rotation:", scene.rotation);
     console.log("Scale:", scene.scale);
 
+    // Automatically center using bounding box
+    const box = new THREE.Box3().setFromObject(scene);
+    const center = box.getCenter(new THREE.Vector3());
+    
+    scene.position.x = -center.x;
+    scene.position.z = -center.z;
+
   }, [scene, animations]);
 
   // ---------------------------------------------------------
@@ -110,7 +118,7 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
 
     // 6. Camera position
     const camPos = camera.position;
-    
+
     // 7. Camera target
     // We can infer target from the controls or the camera's looking direction
     const camTarget = new THREE.Vector3();
@@ -127,7 +135,7 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
     // DEEP SCENE GRAPH INSPECTION
     console.log("=== DEEP SCENE GRAPH INSPECTION ===");
     console.log(`scene.children.length: ${scene.children.length}`);
-    
+
     scene.children.forEach((child) => {
       console.log(`Direct Child -> name: ${child.name}, type: ${child.type}, visible: ${child.visible}`);
     });
@@ -139,7 +147,7 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
       console.log(`Visible: ${obj.visible}`);
       console.log(`Position: x:${obj.position.x}, y:${obj.position.y}, z:${obj.position.z}`);
       console.log(`Scale: x:${obj.scale.x}, y:${obj.scale.y}, z:${obj.scale.z}`);
-      
+
       if (obj.material) {
         console.log(`Material Name: ${obj.material.name}`);
         console.log(`Material Opacity: ${obj.material.opacity}`);
@@ -149,7 +157,7 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
         console.log(`Material Opacity: N/A`);
         console.log(`Material Transparent: N/A`);
       }
-      
+
       console.log(`Geometry Exists: ${!!obj.geometry}`);
       console.log(`Parent Name: ${obj.parent ? obj.parent.name : 'null'}`);
     });
@@ -161,11 +169,10 @@ export default function AvatarModel({ url = '/models/646d9dcdc8a5f5bddbfac913.gl
   // ---------------------------------------------------------
 
   return (
-    <primitive 
-      ref={group} 
-      object={scene} 
-      position={[0, -1, 0]}
-      rotation={[0, Math.PI, 0]}
+    <primitive
+      ref={group}
+      object={scene}
+      rotation={[0, 0, 0]}
       scale={2}
     />
   );
