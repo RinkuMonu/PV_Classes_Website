@@ -1,8 +1,8 @@
 import questionsData from '../data/demoQuestions.json';
+import { interviewConfig } from '../config/interviewConfig';
+import * as apiClient from './interviewApi';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AI_INTERVIEW_API_URL || 'http://127.0.0.1:8001';
-
-// Helper to shuffle array
+// Helper to shuffle array for demo mode
 const shuffle = (array) => {
   const newArr = [...array];
   for (let i = newArr.length - 1; i > 0; i--) {
@@ -12,12 +12,13 @@ const shuffle = (array) => {
   return newArr;
 };
 
-export const startInterview = async (config) => {
+// ==========================================
+// DEMO MODE IMPLEMENTATIONS
+// ==========================================
+
+const demoStartInterview = async (config) => {
   try {
-    // Generate a unique demo session ID
     const sessionId = 'demo-' + Date.now();
-    
-    // Select and shuffle questions based on config.numQuestions (default 10)
     const numQuestions = config.numQuestions || 10;
     const shuffledQuestions = shuffle(questionsData).slice(0, numQuestions);
     
@@ -40,12 +41,12 @@ export const startInterview = async (config) => {
 
     return { sessionId, data: sessionData };
   } catch (error) {
-    console.error("Start interview error:", error);
+    console.error("Demo Start interview error:", error);
     throw error;
   }
 };
 
-export const getNextQuestion = async (sessionId) => {
+const demoGetNextQuestion = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
@@ -59,7 +60,6 @@ export const getNextQuestion = async (sessionId) => {
   try {
     const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
     
-    // Map JSON options array to A, B, C, D format
     const optionKeys = ['A', 'B', 'C', 'D'];
     const optionsMap = {};
     
@@ -96,12 +96,12 @@ export const getNextQuestion = async (sessionId) => {
 
     return { status: 'OK', question: mappedQuestion, backendMeta: {} };
   } catch (error) {
-    console.error("Fetch question error:", error);
+    console.error("Demo Fetch question error:", error);
     throw error;
   }
 };
 
-export const submitAnswer = async (sessionId, payload) => {
+const demoSubmitAnswer = async (sessionId, payload) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
@@ -110,10 +110,8 @@ export const submitAnswer = async (sessionId, payload) => {
 
   try {
     const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
-    
     const optionKeys = ['A', 'B', 'C', 'D'];
     
-    // Find the correct option key
     let correctKey = activeQuestion.correctAnswer || 'A';
     if (!activeQuestion.correctAnswer && activeQuestion.answer) {
       activeQuestion.options.forEach((optText, index) => {
@@ -156,19 +154,18 @@ export const submitAnswer = async (sessionId, payload) => {
       status: 'OK'
     };
   } catch (error) {
-    console.error("Submit answer error:", error);
+    console.error("Demo Submit answer error:", error);
     throw error;
   }
 };
 
-export const getInterviewReport = async (sessionId) => {
+const demoGetInterviewReport = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
   
   const report = JSON.parse(rawData);
   
-  // Calculate performance level
   const totalAttempted = report.correctCount + report.wrongCount;
   let performanceLevel = 'Needs Improvement';
   if (totalAttempted > 0) {
@@ -179,11 +176,68 @@ export const getInterviewReport = async (sessionId) => {
   }
   
   report.performanceLevel = performanceLevel;
-  
   return report;
 };
 
-export const logCameraEvent = async (sessionId, eventPayload) => {
+const demoLogCameraEvent = async (sessionId, eventPayload) => {
   console.log(`[Demo Backend] Camera event logged for session ${sessionId}:`, eventPayload);
   return { success: true };
+};
+
+// ==========================================
+// EXPORTED FACADE (Handles Routing to API vs Demo)
+// ==========================================
+
+export const startInterview = async (config) => {
+  if (interviewConfig.MODE === 'api') {
+    try {
+      return await apiClient.startInterview(config);
+    } catch (e) {
+      console.warn("FastAPI startInterview failed. Falling back to Demo Mode.", e);
+    }
+  }
+  return await demoStartInterview(config);
+};
+
+export const getNextQuestion = async (sessionId) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.getNextQuestion(sessionId);
+    } catch (e) {
+      console.warn("FastAPI getNextQuestion failed. Cannot fallback safely mid-session.", e);
+      throw e;
+    }
+  }
+  return await demoGetNextQuestion(sessionId);
+};
+
+export const submitAnswer = async (sessionId, payload) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.submitAnswer(sessionId, payload);
+    } catch (e) {
+      console.warn("FastAPI submitAnswer failed.", e);
+      throw e;
+    }
+  }
+  return await demoSubmitAnswer(sessionId, payload);
+};
+
+export const getInterviewReport = async (sessionId) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.getInterviewReport(sessionId);
+    } catch (e) {
+      console.warn("FastAPI getInterviewReport failed.", e);
+      throw e;
+    }
+  }
+  return await demoGetInterviewReport(sessionId);
+};
+
+export const logCameraEvent = async (sessionId, eventPayload) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    return await apiClient.logCameraEvent(sessionId, eventPayload);
+  }
+  return await demoLogCameraEvent(sessionId, eventPayload);
 };
