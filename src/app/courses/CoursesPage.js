@@ -245,12 +245,10 @@ export default function CoursesPage() {
                       </button> */}
 
                       <button
-
                         className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]"
                       >
                         Free Preview
                       </button>
-
                     </div>
                   </div>
                 </a>
