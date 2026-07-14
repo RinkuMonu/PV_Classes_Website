@@ -1,0 +1,32 @@
+export const INTERVIEW_STATUS = {
+  SETUP: 'SETUP',
+  IDLE: 'IDLE',
+  READY: 'READY',
+  SPEAKING: 'SPEAKING',
+  LISTENING: 'LISTENING',
+  PROCESSING: 'PROCESSING',
+  WAITING: 'WAITING',
+  ANSWER_LOCKED: 'ANSWER_LOCKED',
+  CORRECT: 'CORRECT',
+  INCORRECT: 'INCORRECT',
+  TIMEOUT: 'TIMEOUT',
+  COMPLETED: 'COMPLETED'
+};
+
+export const DIFFICULTY = {
+  EASY: 'easy',
+  MEDIUM: 'medium',
+  HARD: 'hard'
+};
+
+export const LANGUAGE_MODE = {
+  ENGLISH: 'English',
+  HINDI: 'Hindi',
+  BOTH: 'Both'
+};
+
+export const SCORING = {
+  CORRECT: 10,
+  WRONG: 0,
+  TIMEOUT: 0
+};

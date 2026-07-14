@@ -157,13 +157,26 @@ function localAnswer(text) {
    ============================================================ */
 function getCoursePrice(course) {
   if (!course) return { amount: 0, text: "Free" };
+  // Accept multiple field names that the API might use.
+  const pickNumber = (obj, keys) => {
+    for (const k of keys) {
+      const v = obj?.[k];
+      if (typeof v === "number") return v;
+      if (v && typeof v === "object") {
+        // support nested { amount: 123 } or { value: 123 }
+        if (typeof v.amount === "number") return v.amount;
+        if (typeof v.value === "number") return v.value;
+      }
+    }
+    return null;
+  };
+
   const amount =
-    typeof course.finalPrice === "number"
-      ? course.finalPrice
-      : typeof course.price === "number"
-      ? course.price
-      : 0;
-  return { amount, text: amount > 0 ? `₹${amount}` : "Free" };
+    pickNumber(course, ["finalPrice", "final_price", "final", "sellingPrice"]) ??
+    pickNumber(course, ["price", "amount", "coursePrice"]) ?? 0;
+
+  const text = amount > 0 ? `₹${amount}` : "Free";
+  return { amount, text };
 }
 
 /* ============================================================
@@ -557,7 +570,9 @@ export default function PVClassesChatbot() {
     // chatbot comes straight from here — no hardcoded numbers.
     const fetchCoursesData = async () => {
       try {
-        const res = await axiosInstance.get("/courses");
+        // Use the public API endpoint directly so the chatbot shows the
+        // same catalog as the website: https://api.pvclasses.in/api/courses
+        const res = await axiosInstance.get("https://api.pvclasses.in/api/courses");
         const data = Array.isArray(res?.data) ? res.data : res?.data?.data || [];
         setApiCoursesList(data);
       } catch (err) {
@@ -668,10 +683,21 @@ export default function PVClassesChatbot() {
       action();
       return;
     }
-    // Instead of showing the mini login, trigger the global login modal
-    window.dispatchEvent(new Event("openLoginModal"));
+    // If your main site has a profile/login page, redirect there so the
+    // user can enter email+password on the full website (per request).
+    // Fallback: also try to open any global login modal if present.
+    try {
+      window.dispatchEvent(new Event("openLoginModal"));
+    } catch (e) {
+      // ignore
+    }
     setCartOpen(false);
     setOpen(false); // Optionally close the chatbot too
+    if (typeof window !== "undefined") {
+      // `profile` page exists in this project — redirecting there is a
+      // sensible default for a login/email page.
+      window.location.href = "/profile";
+    }
   };
 
   const doLogin = async () => {
@@ -789,9 +815,20 @@ export default function PVClassesChatbot() {
       setOpen(true);
       setCartOpen(true);
     };
+    window.__pvChatbotAddMessage = (content, role = "assistant", variant = null) => {
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now() + Math.random(), role, content, time: now(), variant },
+      ]);
+      if (!openRef.current || minimizedRef.current) {
+        setBadge((n) => n + 1);
+      }
+    };
+
     return () => {
       if (window.__pvAddToCart) delete window.__pvAddToCart;
       if (window.__pvOpenCart) delete window.__pvOpenCart;
+      if (window.__pvChatbotAddMessage) delete window.__pvChatbotAddMessage;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiCoursesList]);
@@ -825,6 +862,62 @@ export default function PVClassesChatbot() {
     botSay(reply);
   };
 
+  // Render a list of courses as rich HTML cards inside the chat bubble.
+  const showCoursesList = (courses) => {
+    if (!Array.isArray(courses) || courses.length === 0) {
+      botSay("No courses available right now.");
+      return;
+    }
+
+    const cards = courses.map((c) => {
+      const title = c.title || c.name || c.course_name || "Untitled";
+      const { text: priceText } = getCoursePrice(c);
+      const start = c.startDate || c.start_date || c.starts_on || "";
+      const validity = c.validityDays || c.validity || c.validity_in_days || (c.courseValidity && c.courseValidity + " days") || "";
+      const discountRaw = c.discountPercent ?? c.discount ?? c.discount_percent ?? c.discountPrice ?? c.discount_price ?? null;
+      let discount = "";
+      if (typeof discountRaw === "number") discount = discountRaw;
+      else {
+        // if API provides both price and finalPrice, derive percent
+        const basePrice = (typeof c.price === "number") ? c.price : (c.price && typeof c.price.amount === "number" ? c.price.amount : null);
+        const finalPrice = (typeof c.finalPrice === "number") ? c.finalPrice : (c.final_price && typeof c.final_price === "number" ? c.final_price : null);
+        if (basePrice && finalPrice && basePrice > finalPrice) {
+          discount = Math.round(((basePrice - finalPrice) / basePrice) * 100);
+        }
+      }
+      const img = c.banner || c.image || c.thumbnail || (c.media && c.media[0] && c.media[0].url) || "";
+      const id = c._id || c.slug || c.id || title;
+      const link = c.slug ? `/courses/${c.slug}` : (c.url || c.courseUrl || c.link || "#");
+
+      return `
+        <div style="border-radius:12px;background:#fff;padding:10px;margin:8px 0;box-shadow:0 6px 18px rgba(5,20,53,0.06);display:flex;gap:10px;align-items:flex-start;">
+          ${img ? `<div style="width:110px;height:62px;flex-shrink:0;border-radius:8px;overflow:hidden"><img src="${img}" alt="${title}" style="width:100%;height:100%;object-fit:cover"/></div>` : ""}
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;color:#14213d;margin-bottom:6px">${title}</div>
+            <div style="color:#6b7280;font-size:13px;margin-bottom:6px">${start ? `Starts on ${start}` : ""}${start && validity ? " · " : ""}${validity ? `Validity ${validity}` : ""}</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+              <div style="font-weight:800;color:#0f172a">${priceText}</div>
+              ${discount ? `<div style="color:#16a34a;font-weight:700">${discount}% Off</div>` : ""}
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button onclick="window.__pvAddToCart && window.__pvAddToCart('${id}')" class="pv-addcart-btn" style="padding:8px 10px;border-radius:10px;font-weight:700">Buy Now</button>
+              <a href="${link}" target="_blank" rel="noopener noreferrer" style="color:#204972;font-weight:700;text-decoration:underline">View</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    const wrapper = `
+      <div>
+        <div style="margin-bottom:8px;font-weight:700;color:#14213d">Here are some available courses — tap Buy Now to add to cart:</div>
+        ${cards}
+      </div>
+    `;
+
+    botSay(wrapper);
+  };
+
   const answerFreeText = async (question) => {
     const lower = question.toLowerCase();
 
@@ -837,11 +930,16 @@ export default function PVClassesChatbot() {
       if (matched) {
         showPurchaseInfo(matched);
       } else {
-        const courseNames = apiCoursesList.map((c) => c.title || c.name || "Untitled");
-        botSay("Sure! Which course would you like to buy?", {
-          type: "purchaseExam",
-          options: courseNames.length ? courseNames : ["View all courses"],
-        });
+        // If we already have course data, display full course cards.
+        if (Array.isArray(apiCoursesList) && apiCoursesList.length) {
+          showCoursesList(apiCoursesList.slice(0, 8));
+        } else {
+          const courseNames = apiCoursesList.map((c) => c.title || c.name || "Untitled");
+          botSay("Sure! Which course would you like to buy?", {
+            type: "purchaseExam",
+            options: courseNames.length ? courseNames : ["View all courses"],
+          });
+        }
       }
       return;
     }
@@ -937,16 +1035,11 @@ export default function PVClassesChatbot() {
       if (lower === "courses" || lower.includes("course")) {
         botSay("Fetching available courses...", undefined, 400);
         try {
-          const res = await axiosInstance.get("/courses");
+          const res = await axiosInstance.get("https://api.pvclasses.in/api/courses");
           const data = Array.isArray(res?.data) ? res.data : res?.data?.data || [];
           if (Array.isArray(data) && data.length > 0) {
-            const items = data.slice(0, 6).map((c) => {
-              const title = c.name || c.title || c.course_name || "Untitled course";
-              const { text: priceText } = getCoursePrice(c);
-              const link = c.slug ? `/courses/${c.slug}` : (c.url || c.courseUrl || c.link || null);
-              return `• **${title}** - ${priceText}${link ? ` — <a href="${link}" target="_blank" rel="noopener noreferrer">View</a>` : ""}`;
-            }).join("\n");
-            addBotMessage(`Here are some available courses:\n\n${items}`);
+            // Display full course cards in-chat with Buy buttons
+            showCoursesList(data.slice(0, 8));
           } else {
             addBotMessage("No courses found right now. Please try again later.");
           }
@@ -1014,8 +1107,23 @@ export default function PVClassesChatbot() {
 
     // Tapped a course name after saying "buy a course" without naming one.
     if (type === "purchaseExam") {
+      // If `value` is a course object (from the new course-list buttons),
+      // add it to cart directly. Otherwise try to find a matching course
+      // by title and show details.
+      if (value && typeof value === "object" && (value.id || value._id)) {
+        const courseId = value.id || value._id;
+        addCourseToCart(courseId);
+        return;
+      }
       const matched = apiCoursesList.find((c) => (c.title || c.name) === value);
       showPurchaseInfo(matched || null);
+      return;
+    }
+
+    // If user clicked a course object provided directly as a quick option
+    if (value && typeof value === "object" && (value.id || value._id) && !type) {
+      const courseId = value.id || value._id;
+      addCourseToCart(courseId);
       return;
     }
   };
@@ -1647,9 +1755,13 @@ export default function PVClassesChatbot() {
                 {optionSet && (
                   <div className="pv-quick">
                     {optionSet.options.map((opt) => (
-                      <button key={opt} className="pv-qbtn" onClick={() => pickOption(opt)}>
-                        {opt}
-                      </button>
+                          <button
+                            key={opt && typeof opt === "object" ? opt.id || opt._id || opt.label : opt}
+                            className="pv-qbtn"
+                            onClick={() => pickOption(opt)}
+                          >
+                            {opt && typeof opt === "object" ? opt.label || opt.name : opt}
+                          </button>
                     ))}
                   </div>
                 )}

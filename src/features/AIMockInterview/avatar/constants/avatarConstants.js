@@ -1,0 +1,14 @@
+export const AVATAR_STATES = {
+  IDLE: 'IDLE',
+  LISTENING: 'LISTENING',
+  SPEAKING: 'SPEAKING',
+  PROCESSING: 'PROCESSING',
+  CORRECT: 'CORRECT',
+  INCORRECT: 'INCORRECT'
+};
+
+export const AVATAR_CONFIG = {
+  MODEL_PATH: null, // To be defined
+  FOV: 30,
+  CAMERA_Z: 5
+};

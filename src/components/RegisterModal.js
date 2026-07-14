@@ -301,12 +301,10 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
         {/* LEFT SIDE */}
         <div className="hidden md:flex md:w-1/2 h-[95vh] relative">
           <Image
-          width={500}
-          height={500}
-            // src="/Image/study.jpeg"
             src="/Image/pic2.jpeg"
             alt="register"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#00316B]/90 via-[#00316B]/60 to-transparent flex flex-col justify-end p-6 text-white">
             <h2 className="text-2xl font-bold">Start Your Journey 🚀</h2>
