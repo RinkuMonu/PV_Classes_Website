@@ -815,9 +815,20 @@ export default function PVClassesChatbot() {
       setOpen(true);
       setCartOpen(true);
     };
+    window.__pvChatbotAddMessage = (content, role = "assistant", variant = null) => {
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now() + Math.random(), role, content, time: now(), variant },
+      ]);
+      if (!openRef.current || minimizedRef.current) {
+        setBadge((n) => n + 1);
+      }
+    };
+
     return () => {
       if (window.__pvAddToCart) delete window.__pvAddToCart;
       if (window.__pvOpenCart) delete window.__pvOpenCart;
+      if (window.__pvChatbotAddMessage) delete window.__pvChatbotAddMessage;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiCoursesList]);
