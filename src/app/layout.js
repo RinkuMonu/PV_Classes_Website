@@ -8,7 +8,7 @@ import { CartProvider } from "../components/context/CartContext";
 import WhatsAppButton from "../components/WhatsAppButton";
 
 // AI Chatbot
-import PVClassesChatbot from "../components/pvclasseschatbot";
+import PVClassesChatbot from "../components/Pvclasseschatbot";
 import TapToSpeakCTA from "../components/Taptospeak";
 
 const geistSans = Geist({

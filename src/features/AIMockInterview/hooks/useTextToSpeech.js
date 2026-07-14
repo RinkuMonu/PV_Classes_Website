@@ -11,21 +11,22 @@ export const useTextToSpeech = (voiceLanguage) => {
   }, [voiceLanguage]);
 
   const speakText = useCallback((text) => {
+    console.log('🔊 TTS Starting:', text.substring(0, 50) + '...');
     return new Promise((resolve) => {
       setIsSpeaking(true);
       ttsService.speak(
         text, 
         getLangCode(), 
         () => {
+          console.log('✅ TTS Completed');
           setIsSpeaking(false);
           resolve(true);
         },
         (event) => {
-          // event is a SpeechSynthesisErrorEvent
           const errReason = event.error || "Unknown Error";
+          console.error('❌ TTS Error:', errReason, event);
           
           if (errReason === 'canceled' || errReason === 'interrupted') {
-            // This happens when ttsService.cancel() is called, completely normal.
             setIsSpeaking(false);
             resolve(false);
             return;

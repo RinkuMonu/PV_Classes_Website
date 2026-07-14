@@ -5,34 +5,16 @@ Command: npx gltfjsx@6.2.3 public/models/646d9dcdc8a5f5bddbfac913.glb -o src/com
 
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
+import React, { useRef, useEffect } from "react";
 
-export function Avatar({ questionText, onSpeakEnd, ...props }) {
+export function Avatar({ isSpeaking = false, ...props }) {
   const { nodes, materials } = useGLTF("/models/646d9dcdc8a5f5bddbfac913.glb");
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const group = useRef();
 
-  // Handle Text-to-Speech
+  // Debug logging
   useEffect(() => {
-    if (questionText && questionText !== "") {
-      setIsSpeaking(true);
-      
-      const utterance = new SpeechSynthesisUtterance(questionText);
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        if (onSpeakEnd) onSpeakEnd();
-      };
-      
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    }
-    
-    return () => {
-      window.speechSynthesis.cancel();
-    }
-  }, [questionText, onSpeakEnd]);
+    console.log('👄 Avatar Component - isSpeaking:', isSpeaking);
+  }, [isSpeaking]);
 
   // Fake Lip Sync
   useFrame((state) => {

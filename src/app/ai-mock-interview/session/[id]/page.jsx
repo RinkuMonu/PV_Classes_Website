@@ -18,9 +18,28 @@ import InterviewProgress from '../../../../features/AIMockInterview/components/I
 import ScorePanel from '../../../../features/AIMockInterview/components/ScorePanel';
 import AdaptiveMCQInterface from '../../../../features/AIMockInterview/components/AdaptiveMCQInterface';
 
+import { useInterviewTracking } from '../../../../components/Hocks/UseInterviewTracking';
+import { PostureEyeTracker } from '../../../../components/PostureEyeTracking';
+import { CameraPreview } from '../../../../components/CameraPreview';
+import { FeedbackBadges } from '../../../../components/FeedbackBadges';
+
 export default function InterviewSessionPage({ params }) {
   const { id: sessionId } = use(params);
   const router = useRouter();
+
+  const {
+    posture,
+    eyeContact,
+    communication,
+    questionScores,
+    overallPosture,
+    overallEye,
+    overallCommunication,
+    handlePostureUpdate,
+    handleEyeContactUpdate,
+    startQuestion,
+    endQuestion,
+  } = useInterviewTracking();
 
   const { session, loading: sessionLoading } = useInterviewSession(sessionId);
   const [question, setQuestion] = useState(null);
@@ -95,6 +114,7 @@ export default function InterviewSessionPage({ params }) {
       }
 
       setQuestion(res.question);
+      startQuestion(session.currentQuestionIndex);
       
       // Orchestrate TTS
       setInterviewStatus(INTERVIEW_STATUS.SPEAKING);
@@ -117,6 +137,7 @@ export default function InterviewSessionPage({ params }) {
   };
 
   const handleAnswerSubmit = async (selectedOptionKey, timeoutFlag) => {
+    endQuestion();
     stopTimer();
     stopListening(); // Stop voice recognition explicitly upon submit
     setInterviewStatus(INTERVIEW_STATUS.ANSWER_LOCKED);
@@ -154,22 +175,67 @@ export default function InterviewSessionPage({ params }) {
         </div>
       </div>
 
+      <PostureEyeTracker 
+        videoStream={stream}
+        onPostureUpdate={handlePostureUpdate}
+        onEyeContactUpdate={handleEyeContactUpdate}
+        active={!!stream && camStatus === 'ACTIVE'}
+      />
+      <CameraPreview 
+        videoStream={stream}
+        posture={posture}
+        eyeContact={eyeContact}
+        visible={!!stream && camStatus === 'ACTIVE'}
+      />
+      <FeedbackBadges 
+        posture={posture}
+        eyeContact={eyeContact}
+        visible={!!stream && camStatus === 'ACTIVE'}
+      />
+
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* LEFT COLUMN: Camera & AI */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          <AIInterviewer status={interviewStatus} />
+          <AIInterviewer
+            status={interviewStatus}
+            questionText={question?.question || ''}
+            onSpeakEnd={() => {}}
+          />
           
           <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Monitoring</h3>
-            <WebcamMonitor 
-              stream={stream} 
-              status={camStatus} 
-              videoRef={videoRef} 
-              error={camError}
-              retry={retryCam}
-              sessionId={sessionId}
-            />
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Behavior Scoreboard</h3>
+            <div className="flex flex-col gap-4 mb-4">
+               <div className="bg-blue-50 p-4 rounded-lg flex items-center justify-between">
+                  <p className="text-xs text-blue-500 uppercase font-bold">Overall Posture</p>
+                  <p className="text-2xl font-extrabold text-blue-900">{overallPosture}%</p>
+               </div>
+               <div className="bg-green-50 p-4 rounded-lg flex items-center justify-between">
+                  <p className="text-xs text-green-500 uppercase font-bold">Overall Eye Contact</p>
+                  <p className="text-2xl font-extrabold text-green-900">{overallEye}%</p>
+               </div>
+               <div className="bg-purple-50 p-4 rounded-lg flex items-center justify-between">
+                  <p className="text-xs text-purple-500 uppercase font-bold">Overall Communication</p>
+                  <p className="text-2xl font-extrabold text-purple-900">{overallCommunication}%</p>
+               </div>
+            </div>
+            {questionScores.length > 0 && (
+              <div>
+                <h4 className="text-xs font-bold text-gray-400 uppercase mb-2">Question-wise Breakdown</h4>
+                <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
+                  {questionScores.map((score, idx) => (
+                    <div key={idx} className="flex justify-between items-center text-sm p-2 bg-gray-50 rounded border border-gray-100">
+                       <span className="font-semibold text-gray-600">Q{score.questionIndex + 1}</span>
+                       <div className="flex gap-4">
+                         <span className="text-blue-600 font-medium">Posture: {score.avgPosture}%</span>
+                         <span className="text-green-600 font-medium">Eye: {score.avgEye}%</span>
+                         <span className="text-purple-600 font-medium">Comm: {score.avgComm}%</span>
+                       </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow border border-gray-100">
@@ -192,6 +258,8 @@ export default function InterviewSessionPage({ params }) {
               difficulty={session.currentDifficulty} 
             />
           </div>
+
+
 
           <AdaptiveMCQInterface 
             question={question}
