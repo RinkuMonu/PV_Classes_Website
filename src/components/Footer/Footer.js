@@ -291,8 +291,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <FaMapMarkerAlt className="mt-1 flex-shrink-0" />
                 <p>
-                  Plot No 97, Dakshinpuri - I, Shrikishan, Sanganer, Jagatpura,
-                  Jaipur Rajasthan, India, 302017
+                  Basement under Lionies Store, Chitrakoot Marg, Akruti Apartments, Vaishali Nagar, Jaipur, Rajasthan 302021
                 </p>
               </div>
 
