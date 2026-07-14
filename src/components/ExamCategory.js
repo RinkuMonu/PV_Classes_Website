@@ -8,6 +8,7 @@ import {
   FaShieldAlt,
 } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ExamCategory() {
   const categories = [
@@ -64,16 +65,14 @@ export default function ExamCategory() {
           </h2>
 
           <p className="mt-3 text-blue-100">
-            PV is preparing students for 35+ exam categories. Find the one you're
+            PV is preparing students for 35+ exam categories. Find the one you are
             preparing for.
           </p>
         </div>
     <div className="grid lg:grid-cols-2 gap-12 items-start">
 
-      {/* LEFT SIDE */}
-      <div>
-
       
+      <div>
 
         {/* Cards */}
         <div className="space-y-5">
@@ -129,7 +128,9 @@ export default function ExamCategory() {
           {/* Glow */}
           <div className="absolute inset-0 bg-cyan-400/20 blur-[100px] rounded-full"></div>
 
-          <img
+          <Image
+            width={500}
+            height={500}
             src="/Image/grp-stu.png"
             alt="Exam Preparation"
             className="relative w-full max-w-xl drop-shadow-2xl"

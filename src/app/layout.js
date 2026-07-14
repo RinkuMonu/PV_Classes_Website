@@ -8,7 +8,7 @@ import { CartProvider } from "../components/context/CartContext";
 import WhatsAppButton from "../components/WhatsAppButton";
 
 // AI Chatbot
-import PVClassesChatbot from "../components/Pvclasseschatbot";
+import PVClassesChatbot from "../components/pvclasseschatbot";
 import TapToSpeakCTA from "../components/Taptospeak";
 
 const geistSans = Geist({
@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
           <Header />
 
           {/* Main Page */}
-          
+
           <main>{children}</main>
 
           {/* Footer */}

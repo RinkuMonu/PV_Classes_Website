@@ -181,29 +181,29 @@ export default function CoursesSection() {
   const displayedCourses = searchTerm ? filteredCourses : courses;
 
 
-  const getDisplayCourses = () => {
-    const minCards = 6; // yaha 6 rakh sakte ho (3 column grid ke liye perfect)
+  // const getDisplayCourses = () => {
+  //   const minCards = 6; // yaha 6 rakh sakte ho (3 column grid ke liye perfect)
 
-    if (displayedCourses.length < minCards) {
-      const remaining = minCards - displayedCourses.length;
+  //   if (displayedCourses.length < minCards) {
+  //     const remaining = minCards - displayedCourses.length;
 
-      const comingSoonCourses = Array(remaining).fill(null).map((_, i) => ({
-        _id: `coming-soon-${i}`,
-        title: "Coming Soon",
-        overview: "New course will be available soon.",
-        isFree: true,
-        price: 0,
-        full_image: ["/Image/comingsoon-mob.png"],
-        isComingSoon: true
-      }));
+  //     const comingSoonCourses = Array(remaining).fill(null).map((_, i) => ({
+  //       _id: `coming-soon-${i}`,
+  //       title: "Coming Soon",
+  //       overview: "New course will be available soon.",
+  //       isFree: true,
+  //       price: 0,
+  //       full_image: ["/Image/Banner/comingsoon.png"],
+  //       isComingSoon: true
+  //     }));
 
-      return [...displayedCourses, ...comingSoonCourses];
-    }
+  //     return [...displayedCourses, ...comingSoonCourses];
+  //   }
 
-    return displayedCourses;
-  };
+  //   return displayedCourses;
+  // };
 
-  const finalCourses = getDisplayCourses();
+  // const finalCourses = getDisplayCourses();
 
 
 
@@ -511,16 +511,16 @@ export default function CoursesSection() {
               {displayedCourses?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {/* {displayedCourses?.map((course) => ( */}
-                  {finalCourses?.slice(0, 6).map((course, index) => (
+                  {displayedCourses?.slice(0, 6).map((course) => (
                     <Link
                       // href={`/courses/${course?._id}`}
-                      href={course?.isComingSoon ? "/" : `/courses/${course?._id}`}
+                      href={`/courses/${course?._id}`}
                       key={course?._id}
                       className="group bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300"
                     >
                       {/* Course Image */}
                       {course?.full_image?.length > 0 ? (
-                        <div className="w-full h-48 overflow-hidden">
+                        <div className="w-full h-40 overflow-hidden">
                           <Image
                             width={200}
                             height={200}
@@ -546,11 +546,7 @@ export default function CoursesSection() {
                               }`}
                           >
                             {/* {course?.isFree ? "FREE COURSE" : "PREMIUM"} */}
-                            {course?.isComingSoon
-                              ? "COMING SOON"
-                              : course?.isFree
-                                ? "FREE COURSE"
-                                : "PREMIUM"}
+                          {course?.isFree ? "FREE COURSE" : "PREMIUM"}
                           </span>
                         </div>
 
@@ -564,11 +560,7 @@ export default function CoursesSection() {
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-xl text-foreground">
                             {/* {course?.isFree ? "Free Access" : `₹${course?.price}`} */}
-                            {course?.isComingSoon
-                              ? "Coming Soon"
-                              : course?.isFree
-                                ? "Free Access"
-                                : `₹${course?.price}`}
+                          {course?.isFree ? "Free Access" : `₹${course?.price}`}
                           </span>
                           <div className="flex items-center gap-2 text-[#204972] font-medium group-hover:gap-3 transition-all">
                             <span className="text-sm">View Course</span>

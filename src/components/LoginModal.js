@@ -7,6 +7,8 @@ import axiosInstance from "../app/axios/axiosInstance"
 import { toast } from "react-hot-toast"   // <-- toast added
 import Link from "next/link"
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa"
+import Image from "next/image"
+
 
 export default function LoginModal({ onClose, onRegisterClick, onForgotPasswordClick, onLoginSuccess }) {
   const [formData, setFormData] = useState({
@@ -153,8 +155,7 @@ export default function LoginModal({ onClose, onRegisterClick, onForgotPasswordC
 
         {/* LEFT SIDE */}
         <div className="hidden md:flex md:w-1/2 h-[70vh] relative">
-          <img
-            // src="/Image/study.jpeg"
+          <Image
             src="/Image/pic2.jpeg"
             alt="login"
             className="w-full h-full object-cover"

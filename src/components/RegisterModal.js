@@ -6,6 +6,8 @@ import { X, User, Phone, Lock } from "lucide-react"
 import axiosInstance from "../app/axios/axiosInstance"
 import { toast } from "react-hot-toast"
 import axios from "axios";
+import Image from "next/image"
+
 
 export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess }) {
   const [formData, setFormData] = useState({
@@ -298,11 +300,11 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
 
         {/* LEFT SIDE */}
         <div className="hidden md:flex md:w-1/2 h-[95vh] relative">
-          <img
-            // src="/Image/study.jpeg"
+          <Image
             src="/Image/pic2.jpeg"
             alt="register"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#00316B]/90 via-[#00316B]/60 to-transparent flex flex-col justify-end p-6 text-white">
             <h2 className="text-2xl font-bold">Start Your Journey 🚀</h2>

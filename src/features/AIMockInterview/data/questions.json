@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "What is the capital of Australia?",
+    "options": [
+      "Sydney",
+      "Melbourne",
+      "Canberra",
+      "Perth"
+    ],
+    "answer": "Canberra",
+    "explanation": "Canberra is Australia's capital city."
+  },
+  {
+    "id": 2,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "Who wrote 'Hamlet'?",
+    "options": [
+      "Charles Dickens",
+      "William Shakespeare",
+      "Mark Twain",
+      "Jane Austen"
+    ],
+    "answer": "William Shakespeare",
+    "explanation": "William Shakespeare is the famous playwright who wrote Hamlet."
+  },
+  {
+    "id": 3,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "What is the largest planet in our solar system?",
+    "options": [
+      "Earth",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
+    "answer": "Jupiter",
+    "explanation": "Jupiter is the largest planet in the solar system."
+  },
+  {
+    "id": 4,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "What is the chemical symbol for Gold?",
+    "options": [
+      "Go",
+      "Ag",
+      "Au",
+      "Gd"
+    ],
+    "answer": "Au",
+    "explanation": "The symbol Au comes from the Latin word aurum, meaning gold."
+  },
+  {
+    "id": 5,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "In which year did the Titanic sink?",
+    "options": [
+      "1912",
+      "1905",
+      "1920",
+      "1898"
+    ],
+    "answer": "1912",
+    "explanation": "The RMS Titanic sank on April 15, 1912."
+  },
+  {
+    "id": 6,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "Which country is known as the Land of the Rising Sun?",
+    "options": [
+      "China",
+      "Japan",
+      "South Korea",
+      "Thailand"
+    ],
+    "answer": "Japan",
+    "explanation": "Japan is often called the Land of the Rising Sun."
+  },
+  {
+    "id": 7,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "What is the hardest natural substance on Earth?",
+    "options": [
+      "Gold",
+      "Iron",
+      "Diamond",
+      "Platinum"
+    ],
+    "answer": "Diamond",
+    "explanation": "Diamond is the hardest known natural material."
+  },
+  {
+    "id": 8,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "Who painted the Mona Lisa?",
+    "options": [
+      "Vincent van Gogh",
+      "Pablo Picasso",
+      "Leonardo da Vinci",
+      "Claude Monet"
+    ],
+    "answer": "Leonardo da Vinci",
+    "explanation": "Leonardo da Vinci painted the Mona Lisa in the 16th century."
+  },
+  {
+    "id": 9,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "Which ocean is the largest?",
+    "options": [
+      "Atlantic",
+      "Indian",
+      "Arctic",
+      "Pacific"
+    ],
+    "answer": "Pacific",
+    "explanation": "The Pacific Ocean is the largest and deepest ocean on Earth."
+  },
+  {
+    "id": 10,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question": "What is the currency of Japan?",
+    "options": [
+      "Yuan",
+      "Won",
+      "Yen",
+      "Ringgit"
+    ],
+    "answer": "Yen",
+    "explanation": "The official currency of Japan is the Yen."
+  },
+  {
+    "id": 11,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Choose the synonym for 'Happy'",
+    "options": [
+      "Sad",
+      "Joyful",
+      "Angry",
+      "Tired"
+    ],
+    "answer": "Joyful",
+    "explanation": "Joyful has a similar meaning to happy."
+  },
+  {
+    "id": 12,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "What is the antonym of 'Brave'?",
+    "options": [
+      "Cowardly",
+      "Strong",
+      "Fierce",
+      "Bold"
+    ],
+    "answer": "Cowardly",
+    "explanation": "Cowardly is the opposite of brave."
+  },
+  {
+    "id": 13,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Identify the noun: The quick brown fox jumps.",
+    "options": [
+      "quick",
+      "brown",
+      "fox",
+      "jumps"
+    ],
+    "answer": "fox",
+    "explanation": "A fox is a person, place, or thing, making it a noun."
+  },
+  {
+    "id": 14,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Which sentence is grammatically correct?",
+    "options": [
+      "He go to school.",
+      "He goes to school.",
+      "He going to school.",
+      "He gone to school."
+    ],
+    "answer": "He goes to school.",
+    "explanation": "The singular third-person subject 'He' requires the verb 'goes'."
+  },
+  {
+    "id": 15,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Select the correctly spelled word.",
+    "options": [
+      "Accomodate",
+      "Acommodate",
+      "Accommodate",
+      "Acomodate"
+    ],
+    "answer": "Accommodate",
+    "explanation": "The correct spelling is A-C-C-O-M-M-O-D-A-T-E."
+  },
+  {
+    "id": 16,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "What is the plural of 'Child'?",
+    "options": [
+      "Childs",
+      "Childrens",
+      "Children",
+      "Childes"
+    ],
+    "answer": "Children",
+    "explanation": "The irregular plural form of child is children."
+  },
+  {
+    "id": 17,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Choose the correct preposition: She is good ___ math.",
+    "options": [
+      "in",
+      "at",
+      "on",
+      "with"
+    ],
+    "answer": "at",
+    "explanation": "The correct idiomatic phrase is 'good at' something."
+  },
+  {
+    "id": 18,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Identify the adjective: The tall building.",
+    "options": [
+      "The",
+      "tall",
+      "building",
+      "None"
+    ],
+    "answer": "tall",
+    "explanation": "Tall describes the noun 'building'."
+  },
+  {
+    "id": 19,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "What does the idiom 'Break a leg' mean?",
+    "options": [
+      "Get hurt",
+      "Good luck",
+      "Hurry up",
+      "Stop"
+    ],
+    "answer": "Good luck",
+    "explanation": "'Break a leg' is a theatrical idiom wishing someone good luck."
+  },
+  {
+    "id": 20,
+    "category": "English",
+    "difficulty": "Easy",
+    "question": "Which is a compound word?",
+    "options": [
+      "Apple",
+      "Sunlight",
+      "Water",
+      "Beautiful"
+    ],
+    "answer": "Sunlight",
+    "explanation": "Sunlight is made of two words: sun and light."
+  },
+  {
+    "id": 21,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What does CPU stand for?",
+    "options": [
+      "Central Process Unit",
+      "Computer Personal Unit",
+      "Central Processing Unit",
+      "Central Processor Unit"
+    ],
+    "answer": "Central Processing Unit",
+    "explanation": "CPU stands for Central Processing Unit."
+  },
+  {
+    "id": 22,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "Which of these is an input device?",
+    "options": [
+      "Monitor",
+      "Printer",
+      "Keyboard",
+      "Speaker"
+    ],
+    "answer": "Keyboard",
+    "explanation": "A keyboard is used to input data into the computer."
+  },
+  {
+    "id": 23,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What is the main circuit board called?",
+    "options": [
+      "Motherboard",
+      "Fatherboard",
+      "Central board",
+      "Mainboard"
+    ],
+    "answer": "Motherboard",
+    "explanation": "The motherboard connects all major computer components."
+  },
+  {
+    "id": 24,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What does RAM stand for?",
+    "options": [
+      "Read Access Memory",
+      "Random Access Memory",
+      "Run Access Memory",
+      "Real Access Memory"
+    ],
+    "answer": "Random Access Memory",
+    "explanation": "RAM is temporary memory used by the system."
+  },
+  {
+    "id": 25,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "Which is an operating system?",
+    "options": [
+      "Microsoft Word",
+      "Linux",
+      "Google Chrome",
+      "Intel"
+    ],
+    "answer": "Linux",
+    "explanation": "Linux is a widely used open-source operating system."
+  },
+  {
+    "id": 26,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What is a URL?",
+    "options": [
+      "A web address",
+      "A computer virus",
+      "A hardware component",
+      "An email protocol"
+    ],
+    "answer": "A web address",
+    "explanation": "URL stands for Uniform Resource Locator, commonly known as a web address."
+  },
+  {
+    "id": 27,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "Which of these is volatile memory?",
+    "options": [
+      "ROM",
+      "Hard Drive",
+      "RAM",
+      "Flash Drive"
+    ],
+    "answer": "RAM",
+    "explanation": "RAM loses its contents when power is turned off."
+  },
+  {
+    "id": 28,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What does HTTP stand for?",
+    "options": [
+      "HyperText Transfer Protocol",
+      "HighText Transfer Protocol",
+      "Hyper Transfer Text Protocol",
+      "HyperText Transmit Protocol"
+    ],
+    "answer": "HyperText Transfer Protocol",
+    "explanation": "HTTP is the foundation of data communication on the Web."
+  },
+  {
+    "id": 29,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "Which unit is the smallest?",
+    "options": [
+      "Megabyte",
+      "Kilobyte",
+      "Gigabyte",
+      "Byte"
+    ],
+    "answer": "Byte",
+    "explanation": "A byte consists of 8 bits and is the smallest standard unit of storage."
+  },
+  {
+    "id": 30,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question": "What is a firewall?",
+    "options": [
+      "A physical wall",
+      "A security system",
+      "A virus",
+      "A web browser"
+    ],
+    "answer": "A security system",
+    "explanation": "A firewall monitors and controls incoming and outgoing network traffic."
+  },
+  {
+    "id": 31,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "If A is taller than B, and B is taller than C, who is the tallest?",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "Cannot be determined"
+    ],
+    "answer": "A",
+    "explanation": "Since A > B and B > C, A is the tallest."
+  },
+  {
+    "id": 32,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "Find the odd one out.",
+    "options": [
+      "Apple",
+      "Banana",
+      "Carrot",
+      "Orange"
+    ],
+    "answer": "Carrot",
+    "explanation": "Carrot is a vegetable, while the others are fruits."
+  },
+  {
+    "id": 33,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "What comes next in the series: 2, 4, 6, 8, __",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answer": "10",
+    "explanation": "The series increases by 2 each time."
+  },
+  {
+    "id": 34,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "If DOG is coded as 4-15-7, how is CAT coded?",
+    "options": [
+      "3-1-20",
+      "4-1-20",
+      "3-2-20",
+      "3-1-19"
+    ],
+    "answer": "3-1-20",
+    "explanation": "C is the 3rd letter, A is 1st, T is 20th."
+  },
+  {
+    "id": 35,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "A man walks 5km North, then turns right and walks 5km. Which direction is he facing?",
+    "options": [
+      "North",
+      "South",
+      "East",
+      "West"
+    ],
+    "answer": "East",
+    "explanation": "Turning right from North faces you East."
+  },
+  {
+    "id": 36,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "If all roses are flowers, and some flowers fade, can we say some roses fade?",
+    "options": [
+      "Yes",
+      "No",
+      "Maybe",
+      "Cannot be determined"
+    ],
+    "answer": "Cannot be determined",
+    "explanation": "We only know some flowers fade, not necessarily the roses."
+  },
+  {
+    "id": 37,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "Which word does not belong?",
+    "options": [
+      "Circle",
+      "Square",
+      "Triangle",
+      "Cube"
+    ],
+    "answer": "Cube",
+    "explanation": "A cube is 3D, while the others are 2D shapes."
+  },
+  {
+    "id": 38,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "What is the next number: 1, 4, 9, 16, __",
+    "options": [
+      "20",
+      "24",
+      "25",
+      "30"
+    ],
+    "answer": "25",
+    "explanation": "These are squares of consecutive integers (1, 2, 3, 4, 5)."
+  },
+  {
+    "id": 39,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "If yesterday was Tuesday, what is the day after tomorrow?",
+    "options": [
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "answer": "Friday",
+    "explanation": "Today is Wednesday. Tomorrow is Thursday. Day after is Friday."
+  },
+  {
+    "id": 40,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question": "Complete the analogy: Bird is to Fly as Fish is to __",
+    "options": [
+      "Walk",
+      "Swim",
+      "Run",
+      "Crawl"
+    ],
+    "answer": "Swim",
+    "explanation": "Birds fly in the air; fish swim in the water."
+  },
+  {
+    "id": 41,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is 15 + 27?",
+    "options": [
+      "42",
+      "41",
+      "43",
+      "40"
+    ],
+    "answer": "42",
+    "explanation": "15 + 27 equals 42."
+  },
+  {
+    "id": 42,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is the square root of 144?",
+    "options": [
+      "10",
+      "11",
+      "12",
+      "14"
+    ],
+    "answer": "12",
+    "explanation": "12 multiplied by 12 is 144."
+  },
+  {
+    "id": 43,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is 20% of 150?",
+    "options": [
+      "20",
+      "30",
+      "40",
+      "50"
+    ],
+    "answer": "30",
+    "explanation": "20% is 1/5. 150 divided by 5 is 30."
+  },
+  {
+    "id": 44,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "Solve for x: 2x + 5 = 15",
+    "options": [
+      "x = 5",
+      "x = 10",
+      "x = 4",
+      "x = 6"
+    ],
+    "answer": "x = 5",
+    "explanation": "Subtract 5 to get 2x = 10, then divide by 2 to get x = 5."
+  },
+  {
+    "id": 45,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is 7 multiplied by 8?",
+    "options": [
+      "54",
+      "56",
+      "58",
+      "64"
+    ],
+    "answer": "56",
+    "explanation": "7 times 8 equals 56."
+  },
+  {
+    "id": 46,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is the area of a rectangle with length 5 and width 4?",
+    "options": [
+      "9",
+      "18",
+      "20",
+      "25"
+    ],
+    "answer": "20",
+    "explanation": "Area = length × width, so 5 × 4 = 20."
+  },
+  {
+    "id": 47,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "Convert 0.75 to a fraction.",
+    "options": [
+      "1/2",
+      "3/4",
+      "1/4",
+      "2/3"
+    ],
+    "answer": "3/4",
+    "explanation": "0.75 is equal to 75/100, which simplifies to 3/4."
+  },
+  {
+    "id": 48,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is 100 divided by 4?",
+    "options": [
+      "20",
+      "25",
+      "30",
+      "50"
+    ],
+    "answer": "25",
+    "explanation": "100 divided into 4 equal parts is 25."
+  },
+  {
+    "id": 49,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "If a triangle has a base of 6 and a height of 4, what is its area?",
+    "options": [
+      "10",
+      "12",
+      "24",
+      "48"
+    ],
+    "answer": "12",
+    "explanation": "Area = 0.5 × base × height, so 0.5 × 6 × 4 = 12."
+  },
+  {
+    "id": 50,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question": "What is the next prime number after 7?",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "13"
+    ],
+    "answer": "11",
+    "explanation": "11 is the next number divisible only by 1 and itself."
+  }
+]

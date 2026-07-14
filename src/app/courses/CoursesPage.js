@@ -9,6 +9,7 @@ import FilterDrawer from "../../components/FilterDrawer";
 import ExamToolbar from "../../components/ExamToolbar";
 import { useCart } from "../../components/context/CartContext";
 import Image from "next/image";
+import { getSearchRecommendations } from "../../utils/recommendations";
 
 
 
@@ -32,6 +33,7 @@ export default function CoursesPage() {
   const examId = searchParams?.get("exam");
 
   const [courses, setCourses] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [mode, setMode] = useState("");
@@ -74,9 +76,23 @@ export default function CoursesPage() {
 
         console.log("Fetched courses:", data);
         setCourses(data || []);
+
+        if (searchQuery) {
+          try {
+            const allRes = await axiosInstance.get("/courses");
+            const allCourses = allRes?.data || [];
+            const recs = getSearchRecommendations(allCourses, data || [], searchQuery);
+            setRecommendations(recs);
+          } catch (recErr) {
+            console.error("Error fetching recommendations", recErr);
+          }
+        } else {
+          setRecommendations([]);
+        }
       } catch (err) {
         console.error("Error fetching courses", err?.response?.data || err?.message);
         setCourses([]);
+        setRecommendations([]);
       } finally {
         setIsLoading(false);
       }
@@ -278,6 +294,39 @@ export default function CoursesPage() {
           <p className="text-center">No courses found.</p>
         )}
       </section>
+
+      {/* SEARCH RECOMMENDATIONS */}
+      {searchQuery && recommendations.length > 0 && (
+        <section className="mx-auto max-w-7xl md:px-20 mb-10 px-6 pt-10 pb-8 bg-blue-50 shadow-lg rounded-lg">
+          <h2 className="text-2xl font-bold text-[#00316B] mb-6">Related Courses You May Like</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {recommendations.map((c) => (
+              <a
+                key={c?._id}
+                href={`/courses/${c?._id}`}
+                className="rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
+              >
+                <Image
+                  width={200}
+                  height={200}
+                  src={c?.full_image?.[0] || "/vercel.svg"}
+                  alt={c?.title || "Course"}
+                  className="w-full h-48 object-cover rounded-t-lg"
+                />
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="text-lg font-semibold mb-2">{c?.title || "Untitled Course"}</h3>
+                  <p className="text-sm text-gray-500 mb-4">{c?.overview || ""}</p>
+                  <div className="mt-auto">
+                    <button className="w-full bg-[#204972] text-white py-2 rounded hover:bg-[#616602]">
+                      Free Preview
+                    </button>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

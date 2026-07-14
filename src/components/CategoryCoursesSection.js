@@ -134,7 +134,15 @@ export default function CategoryCoursesSection({ category }) {
     return courses;
   };
 
+
   const displayCourses = getDisplayCourses();
+
+
+  if (!loading && courses.length === 0) {
+  return null;
+}
+
+
   return (
     <div className="mb-16 ">
       {/* Header Section */}
@@ -290,17 +298,7 @@ export default function CategoryCoursesSection({ category }) {
               </Link>
             ))}
           </div>
-        ) : (
-
-          // coming soon ka banner
-          <Image
-            src="/Image/Banner/comingsoon.png"
-            alt="No courses"
-            width={1600}
-            height={342}
-            className="object-contain"
-          />
-        )}
+     ) : null}
       </div>
     </div>
   )

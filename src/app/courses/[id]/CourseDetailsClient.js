@@ -1,3 +1,4 @@
+
 "use client";
 import toast from "react-hot-toast";
 import { useCart } from "../../../components/context/CartContext";
@@ -5,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axiosInstance from "../../axios/axiosInstance";
 import ReviewSection from "../../../components/ReviewSection";
-import SpecialBatchNoticeModal from "../SpecialBatchNoticeModal";
+import AnniversaryOfferModal from "../AnniversaryOfferModal";
 import Image from "next/image";
 import { FiCheck, FiClock, FiDownload, FiTablet, FiTv, FiAward, FiPlay, FiBook, FiFileText, FiBarChart2, FiShoppingCart, FiLock, FiDollarSign } from "react-icons/fi";
 import { FaArrowRight, FaChevronDown, FaChevronRight, FaFilePdf } from "react-icons/fa";
@@ -15,10 +16,10 @@ export default function CourseDetailsPage() {
   const { addToCart, isOpen, openCart, closeCart } = useCart();
   const { id } = useParams();
   const [course, setCourse] = useState(null);
+  const [similarCourses, setSimilarCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openVideo, setOpenVideo] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [showSpecialBatchModal, setShowSpecialBatchModal] = useState(false);
   const [selectedComboItems, setSelectedComboItems] = useState([]);
   const [selectAll, setSelectAll] = useState(true);
   const [hasPurchased, setHasPurchased] = useState(false);
@@ -33,11 +34,7 @@ export default function CourseDetailsPage() {
 
   const [groupedCourseNotes, setGroupedCourseNotes] = useState({});
   const [expandedNoteGroup, setExpandedNoteGroup] = useState(null);
-  const SPECIAL_COURSE_IDS = [
-  "6a0e990f2c5264b619774974",
-  "6a11674559dbbe9825a2fe44",
-  // "COURSE_ID_3",
-];
+
 
   useEffect(() => {
     if (!id) return;
@@ -78,6 +75,7 @@ export default function CourseDetailsPage() {
           ...courseData,
           comboItems: comboItems
         };
+
 
         // FIX: Set default selected option based on whether combo exists
         if (courseData?.comboId) {
@@ -123,6 +121,18 @@ export default function CourseDetailsPage() {
         setSelectedComboItems(initialSelections);
 
         await checkCourseAccess(id);
+
+        // Fetch Similar Courses
+        try {
+          const allRes = await axiosInstance.get("/courses");
+          const allCourses = allRes?.data || [];
+          const { getSimilarCourses } = await import("../../../utils/recommendations");
+          const recs = getSimilarCourses(allCourses, updatedCourseData);
+          setSimilarCourses(recs);
+        } catch (recErr) {
+          console.error("Error fetching similar courses", recErr);
+        }
+
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
@@ -158,12 +168,6 @@ export default function CourseDetailsPage() {
       setCheckingAccess(false);
     }
   };
-
-  const isSpecialCourse = () => {
-  if (!course?._id) return false;
-
-  return SPECIAL_COURSE_IDS.includes(course._id.toString());
-};
 
   // FIX: calculateTotalPrice now correctly uses discount_price when available for the course,
   // and keeps combo pricing consistent with what gets sent to the backend.
@@ -330,10 +334,11 @@ export default function CourseDetailsPage() {
 
   return (
     <>
+      <AnniversaryOfferModal />
       <section className="relative w-full h-[70vh] sm:h-[40vh] lg:h-[50vh] text-white mb-6 sm:mb-8">
         <div className="absolute inset-0 hidden sm:block">
           <Image
-            src="/Image/Banner/course0detail2.jpeg"
+            src="/Image/Banner/course-deatail-banner.webp"
             alt="Banner Desktop"
             fill
             className="object-cover object-center"
@@ -1054,16 +1059,11 @@ export default function CourseDetailsPage() {
                   <button
                     disabled={!totalPrice || totalPrice <= 0}
                     onClick={(e) => {
-                      if (totalPrice <= 0) return;
-
-                      if (isSpecialCourse()) {
-                        e.preventDefault();
-                        setShowSpecialBatchModal(true);
-                        return;
+                      if (totalPrice > 0) {
+                        // FIX: pass selectedOption explicitly; don't rely on potentially-stale state
+                        handleAdd(e, selectedOption.type, selectedOption.id);
+                        openCart();
                       }
-
-                      handleAdd(e, selectedOption.type, selectedOption.id);
-                      openCart();
                     }}
                     className={`w-full font-medium py-3 rounded-lg mb-3 transition flex items-center justify-center gap-2
                       ${totalPrice > 0
@@ -1159,6 +1159,43 @@ export default function CourseDetailsPage() {
         </div>
       </section>
 
+      {/* SIMILAR COURSES */}
+      {similarCourses.length > 0 && (
+        <section className="bg-gray-50 py-12 border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-[#00316B] mb-8">Similar Courses</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {similarCourses.map((c) => (
+                <Link
+                  key={c?._id}
+                  href={`/courses/${c?._id}`}
+                  className="rounded-xl shadow bg-white flex flex-col overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all"
+                >
+                  <Image
+                    width={300}
+                    height={200}
+                    src={c?.full_image?.[0] || "/vercel.svg"}
+                    alt={c?.title || "Course"}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="font-bold text-[#204972] mb-2 line-clamp-2">{c?.title}</h3>
+                    <div className="mt-auto flex justify-between items-center border-t border-gray-100 pt-3">
+                      <span className="font-bold text-[#616602]">
+                        {c?.isFree ? "Free Access" : `₹${c?.price}`}
+                      </span>
+                      <span className="text-sm font-medium text-[#009FE3] flex items-center">
+                        Explore <FaArrowRight className="ml-1 text-xs" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50 p-4">
@@ -1177,42 +1214,33 @@ export default function CourseDetailsPage() {
             </p>
 
             <div className="flex gap-3 justify-center">
-  <button
-    className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-    onClick={() => setShowModal(false)}
-  >
-    Cancel
-  </button>
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
 
-  <button
-    className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
-    onClick={(e) => {
-      if (isSpecialCourse()) {
-        e.preventDefault();
-        setShowModal(false);
-        setShowSpecialBatchModal(true);
-        return;
-      }
+              <button
+                className="px-4 py-2 bg-[#204972] text-white rounded-lg hover:bg-[#16385d] transition"
+                onClick={(e) => {
+                  // FIX: call handleAdd with explicit args FIRST (before state updates)
+                  // so we don't depend on stale state inside the closure
+                  handleAdd(e, "course", course._id);
+                  openCart();
 
-      handleAdd(e, "course", course._id);
-      openCart();
-
-      setSelectedOption({ type: "course", id: course._id });
-      setCartMode("course");
-      setShowModal(false);
-    }}
-  >
-    Add to Cart
-  </button>
-</div>
+                  // State updates happen after — that's fine
+                  setSelectedOption({ type: "course", id: course._id });
+                  setCartMode("course");
+                  setShowModal(false);
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
       )}
-      <SpecialBatchNoticeModal
-        open={showSpecialBatchModal}
-        onClose={() => setShowSpecialBatchModal(false)}
-        courseTitle={course?.title || "Course"}
-      />
     </>
   );
 }
