@@ -7,25 +7,31 @@ export const useTextToSpeech = (voiceLanguage) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const getLangCode = useCallback(() => {
+    // If bilingual mode, default to Hindi-Indian accent (since both texts will be spoken)
+    if (voiceLanguage === 'Both' || voiceLanguage === LANGUAGE_MODE.BOTH) {
+      return 'hi-IN'; // Use Hindi voice for better pronunciation of mixed text
+    }
     return voiceLanguage === LANGUAGE_MODE.HINDI ? 'hi-IN' : 'en-IN';
   }, [voiceLanguage]);
 
   const speakText = useCallback((text) => {
+    console.log('🔊 TTS Starting:', text.substring(0, 50) + '...');
     return new Promise((resolve) => {
       setIsSpeaking(true);
+      
       ttsService.speak(
         text, 
         getLangCode(), 
         () => {
+          console.log('✅ TTS Completed');
           setIsSpeaking(false);
           resolve(true);
         },
         (event) => {
-          // event is a SpeechSynthesisErrorEvent
           const errReason = event.error || "Unknown Error";
+          console.error('❌ TTS Error:', errReason, event);
           
           if (errReason === 'canceled' || errReason === 'interrupted') {
-            // This happens when ttsService.cancel() is called, completely normal.
             setIsSpeaking(false);
             resolve(false);
             return;
@@ -34,6 +40,12 @@ export const useTextToSpeech = (voiceLanguage) => {
           console.error("TTS Error:", errReason, event);
           setIsSpeaking(false);
           resolve(false);
+        },
+        (event) => {
+          // Word boundary event - keeps isSpeaking true during speech
+          if (event.name === 'word') {
+            setIsSpeaking(true);
+          }
         }
       );
     });

@@ -7,7 +7,7 @@ export const Experience = ({ questionText, onSpeakEnd }) => {
 
   return (
     <>
-      <OrbitControls />
+      <OrbitControls enableZoom={false} />
       <Avatar position={[0, -3, 5]} scale={2} questionText={questionText} onSpeakEnd={onSpeakEnd} />
       <Environment preset="sunset" />
     </>

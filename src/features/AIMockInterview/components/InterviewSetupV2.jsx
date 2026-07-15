@@ -6,20 +6,20 @@ import { DIFFICULTY, LANGUAGE_MODE } from '../constants/interviewConstants';
 import { startInterview } from '../services/aiMockInterviewService';
 import { validateSetupConfig } from '../utils/interviewHelpers';
 
-export default function InterviewSetup() {
+export default function InterviewSetupV2() {
   const router = useRouter();
-  
+
   const [config, setConfig] = useState({
     exam: 'SSC CGL',
     subject: 'General Awareness',
-    language: LANGUAGE_MODE.BOTH,
-    voiceLanguage: 'Hindi', // Changed default to Hindi
+    language: LANGUAGE_MODE.HINDI,       // Display language default: Hindi
+    voiceLanguage: LANGUAGE_MODE.HINDI,  // Voice language default: Hindi
     difficulty: DIFFICULTY.MEDIUM,
     numQuestions: 10,
     timePerQuestion: 60,
     cameraRequired: true
   });
-  
+
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +29,7 @@ export default function InterviewSetup() {
       setErrors(validationErrors);
       return;
     }
-    
+
     setLoading(true);
     try {
       const { sessionId } = await startInterview(config);
@@ -42,8 +42,10 @@ export default function InterviewSetup() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-lg border border-gray-100 mt-10">
-      <h1 className="text-3xl font-bold text-center text-[#00316B] mb-8">AI-Powered Mock Interview Setup</h1>
-      
+      <h1 className="text-3xl font-bold text-center text-[#00316B] mb-8">
+        AI-Powered Mock Interview Setup
+      </h1>
+
       {errors.length > 0 && (
         <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6 border border-red-200">
           <ul className="list-disc pl-5">
@@ -53,12 +55,14 @@ export default function InterviewSetup() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+        {/* Target Exam */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Target Exam</label>
-          <select 
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.exam}
-            onChange={e => setConfig({...config, exam: e.target.value})}
+            onChange={e => setConfig({ ...config, exam: e.target.value })}
           >
             <option>SSC CGL</option>
             <option>Railway NTPC</option>
@@ -66,12 +70,13 @@ export default function InterviewSetup() {
           </select>
         </div>
 
+        {/* Subject */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
-          <select 
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.subject}
-            onChange={e => setConfig({...config, subject: e.target.value})}
+            onChange={e => setConfig({ ...config, subject: e.target.value })}
           >
             <option>General Awareness</option>
             <option>Quantitative Aptitude</option>
@@ -79,41 +84,46 @@ export default function InterviewSetup() {
           </select>
         </div>
 
+        {/* Display Language — only Hindi / English */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Display Language</label>
-          <select 
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.language}
-            onChange={e => setConfig({...config, language: e.target.value})}
+            onChange={e => setConfig({ ...config, language: e.target.value })}
           >
-            <option value={LANGUAGE_MODE.ENGLISH}>English Only</option>
-            <option value={LANGUAGE_MODE.HINDI}>Hindi Only</option>
-            <option value={LANGUAGE_MODE.BOTH}>Both (Bilingual)</option>
+            <option value={LANGUAGE_MODE.HINDI}>Hindi (हिन्दी)</option>
+            <option value={LANGUAGE_MODE.ENGLISH}>English</option>
           </select>
         </div>
 
+        {/* Voice Language — only Hindi / English */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Voice Language (3D Avatar)</label>
-          <select 
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Voice Language (3D Avatar)
+          </label>
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.voiceLanguage}
-            onChange={e => setConfig({...config, voiceLanguage: e.target.value})}
+            onChange={e => setConfig({ ...config, voiceLanguage: e.target.value })}
           >
-            <option value="Hindi">Hindi (हिन्दी)</option>
-            <option value="English">English</option>
-            <option value="Both">Both (Bilingual)</option>
+            <option value={LANGUAGE_MODE.HINDI}>Hindi (हिन्दी)</option>
+            <option value={LANGUAGE_MODE.ENGLISH}>English</option>
           </select>
           <p className="text-xs text-gray-500 mt-1">
             3D interviewer will speak in selected language
           </p>
         </div>
 
+        {/* Difficulty */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Difficulty (Starting)</label>
-          <select 
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Difficulty (Starting)
+          </label>
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.difficulty}
-            onChange={e => setConfig({...config, difficulty: e.target.value})}
+            onChange={e => setConfig({ ...config, difficulty: e.target.value })}
           >
             <option value={DIFFICULTY.EASY}>Easy</option>
             <option value={DIFFICULTY.MEDIUM}>Medium</option>
@@ -121,12 +131,15 @@ export default function InterviewSetup() {
           </select>
         </div>
 
+        {/* Time Per Question */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Time Per Question</label>
-          <select 
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Time Per Question
+          </label>
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.timePerQuestion}
-            onChange={e => setConfig({...config, timePerQuestion: parseInt(e.target.value)})}
+            onChange={e => setConfig({ ...config, timePerQuestion: parseInt(e.target.value) })}
           >
             <option value={30}>30 Seconds</option>
             <option value={60}>60 Seconds</option>
@@ -134,12 +147,15 @@ export default function InterviewSetup() {
           </select>
         </div>
 
+        {/* Number of Questions */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Number of Questions</label>
-          <select 
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Number of Questions
+          </label>
+          <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.numQuestions}
-            onChange={e => setConfig({...config, numQuestions: parseInt(e.target.value)})}
+            onChange={e => setConfig({ ...config, numQuestions: parseInt(e.target.value) })}
           >
             <option value={5}>5 Questions (Demo)</option>
             <option value={10}>10 Questions</option>
@@ -147,14 +163,16 @@ export default function InterviewSetup() {
             <option value={20}>20 Questions</option>
           </select>
         </div>
+
       </div>
 
+      {/* Camera monitoring */}
       <div className="flex items-center mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
-        <input 
-          type="checkbox" 
-          id="camera" 
+        <input
+          type="checkbox"
+          id="camera"
           checked={config.cameraRequired}
-          onChange={e => setConfig({...config, cameraRequired: e.target.checked})}
+          onChange={e => setConfig({ ...config, cameraRequired: e.target.checked })}
           className="w-5 h-5 text-[#00316B] rounded focus:ring-[#00316B]"
         />
         <label htmlFor="camera" className="ml-3 font-medium text-gray-700 cursor-pointer">
@@ -162,7 +180,7 @@ export default function InterviewSetup() {
         </label>
       </div>
 
-      <button 
+      <button
         onClick={handleStart}
         disabled={loading}
         className="w-full bg-[#00316B] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#00224d] transition-colors disabled:opacity-70 flex justify-center items-center"
@@ -170,7 +188,7 @@ export default function InterviewSetup() {
         {loading ? (
           <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
         ) : (
-          "Start AI Mock Interview"
+          'Start AI Mock Interview'
         )}
       </button>
     </div>
