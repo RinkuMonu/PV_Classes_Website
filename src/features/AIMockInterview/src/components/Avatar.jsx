@@ -10,38 +10,121 @@ import React, { useRef, useEffect } from "react";
 export function Avatar({ isSpeaking = false, ...props }) {
   const { nodes, materials } = useGLTF("/models/646d9dcdc8a5f5bddbfac913.glb");
   const group = useRef();
+  const blinkTimerRef = useRef(0);
+  const nextBlinkTimeRef = useRef(3); // First blink after 3 seconds
 
   // Debug logging
   useEffect(() => {
     console.log('👄 Avatar Component - isSpeaking:', isSpeaking);
-  }, [isSpeaking]);
+    
+    // Log available eye morph targets
+    if (nodes.EyeLeft && nodes.EyeLeft.morphTargetDictionary) {
+      console.log('👁️ Left Eye Morph Targets:', Object.keys(nodes.EyeLeft.morphTargetDictionary));
+    }
+    if (nodes.EyeRight && nodes.EyeRight.morphTargetDictionary) {
+      console.log('👁️ Right Eye Morph Targets:', Object.keys(nodes.EyeRight.morphTargetDictionary));
+    }
+  }, [isSpeaking, nodes]);
 
-  // Fake Lip Sync
-  useFrame((state) => {
+  // Lip Sync + Eye Blinking Animation
+  useFrame((state, delta) => {
+    // Head looks at camera
     if (group.current) {
-      group.current.getObjectByName("Head").lookAt(state.camera.position);
+      const head = group.current.getObjectByName("Head");
+      if (head) {
+        head.lookAt(state.camera.position);
+      }
     }
 
+    const time = state.clock.getElapsedTime();
+
+    // ===== LIP SYNC ANIMATION =====
     if (isSpeaking) {
-      // Create a fake oscillation for the jaw to simulate talking
-      const time = state.clock.getElapsedTime();
-      // viseme_O is usually a good one to open the mouth
-      const mouthOpen = (Math.sin(time * 15) + 1) / 2; // oscillates between 0 and 1
+      const mouthOpen = (Math.sin(time * 15) + 1) / 2;
       
-      // apply to head and teeth
-      if (nodes.Wolf3D_Head.morphTargetDictionary["viseme_O"] !== undefined) {
+      // Apply to head
+      if (nodes.Wolf3D_Head?.morphTargetDictionary?.["viseme_O"] !== undefined) {
         nodes.Wolf3D_Head.morphTargetInfluences[nodes.Wolf3D_Head.morphTargetDictionary["viseme_O"]] = mouthOpen * 0.8;
       }
-      if (nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"] !== undefined) {
-         nodes.Wolf3D_Teeth.morphTargetInfluences[nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"]] = mouthOpen * 0.8;
+      
+      // Apply to teeth
+      if (nodes.Wolf3D_Teeth?.morphTargetDictionary?.["viseme_O"] !== undefined) {
+        nodes.Wolf3D_Teeth.morphTargetInfluences[nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"]] = mouthOpen * 0.8;
       }
     } else {
       // Close mouth
-      if (nodes.Wolf3D_Head.morphTargetDictionary["viseme_O"] !== undefined) {
+      if (nodes.Wolf3D_Head?.morphTargetDictionary?.["viseme_O"] !== undefined) {
         nodes.Wolf3D_Head.morphTargetInfluences[nodes.Wolf3D_Head.morphTargetDictionary["viseme_O"]] = 0;
       }
-      if (nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"] !== undefined) {
-         nodes.Wolf3D_Teeth.morphTargetInfluences[nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"]] = 0;
+      if (nodes.Wolf3D_Teeth?.morphTargetDictionary?.["viseme_O"] !== undefined) {
+        nodes.Wolf3D_Teeth.morphTargetInfluences[nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_O"]] = 0;
+      }
+    }
+
+    // ===== EYE BLINKING ANIMATION (IMPROVED) =====
+    blinkTimerRef.current += delta;
+
+    // Time to blink?
+    if (blinkTimerRef.current >= nextBlinkTimeRef.current) {
+      const blinkProgress = (blinkTimerRef.current - nextBlinkTimeRef.current) / 0.2; // 200ms blink
+      
+      if (blinkProgress <= 1) {
+        // Blink in progress
+        const blinkAmount = Math.sin(blinkProgress * Math.PI); // 0 -> 1 -> 0
+        
+        console.log('👁️ Blinking:', blinkAmount.toFixed(2));
+        
+        // METHOD 1: Try morph targets
+        const possibleBlinkTargets = [
+          'eyeBlinkLeft', 'eyeBlinkRight', 'eyesClosed', 'blink', 
+          'eyeBlink', 'EyeBlink', 'Blink', 'eyesClosedLeft', 'eyesClosedRight'
+        ];
+        
+        // Apply to eye meshes
+        [nodes.EyeLeft, nodes.EyeRight, nodes.Wolf3D_Head].forEach(mesh => {
+          if (mesh?.morphTargetDictionary && mesh?.morphTargetInfluences) {
+            possibleBlinkTargets.forEach(targetName => {
+              const index = mesh.morphTargetDictionary[targetName];
+              if (index !== undefined) {
+                mesh.morphTargetInfluences[index] = blinkAmount;
+                console.log(`✅ Applied ${targetName} on ${mesh.name}`);
+              }
+            });
+          }
+        });
+        
+        // METHOD 2: Scale-based blink (fallback if morph targets don't exist)
+        const leftEye = group.current?.getObjectByName("EyeLeft");
+        const rightEye = group.current?.getObjectByName("EyeRight");
+        
+        if (leftEye) {
+          leftEye.scale.y = 1 - (blinkAmount * 0.9); // Close eye by scaling Y
+        }
+        if (rightEye) {
+          rightEye.scale.y = 1 - (blinkAmount * 0.9);
+        }
+        
+      } else {
+        // Blink complete - reset
+        blinkTimerRef.current = 0;
+        nextBlinkTimeRef.current = 2.5 + Math.random() * 2.5; // 2.5-5 seconds
+        
+        // Reset morph targets
+        [nodes.EyeLeft, nodes.EyeRight, nodes.Wolf3D_Head].forEach(mesh => {
+          if (mesh?.morphTargetDictionary && mesh?.morphTargetInfluences) {
+            Object.keys(mesh.morphTargetDictionary).forEach(key => {
+              if (key.toLowerCase().includes('blink') || key.toLowerCase().includes('closed')) {
+                mesh.morphTargetInfluences[mesh.morphTargetDictionary[key]] = 0;
+              }
+            });
+          }
+        });
+        
+        // Reset scale
+        const leftEye = group.current?.getObjectByName("EyeLeft");
+        const rightEye = group.current?.getObjectByName("EyeRight");
+        if (leftEye) leftEye.scale.y = 1;
+        if (rightEye) rightEye.scale.y = 1;
       }
     }
   });

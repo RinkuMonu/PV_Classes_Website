@@ -33,7 +33,7 @@ export default function AIInterviewer({ status, isSpeaking = false }) {
       style={{ height: 320, background: '#f4f6fb', cursor: 'default' }}
     >
       <Canvas
-        camera={{ position: [0, 0.08, 0.85], fov: 28 }}
+        camera={{ position: [0, 0.15, 1.2], fov: 32 }}
         style={{ cursor: 'default' }}
       >
         <Suspense fallback={null}>

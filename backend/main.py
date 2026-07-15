@@ -112,7 +112,7 @@ async def generate_video(
         # Step 1: Generate audio using OpenAI TTS
         tts_response = openai.audio.speech.create(
             model="tts-1",
-            voice="nova",  # Female voice
+            voice="onyx",  # Male voice (deep, authoritative)
             input=text
         )
         
