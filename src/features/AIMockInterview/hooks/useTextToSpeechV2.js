@@ -20,37 +20,39 @@ export const useTextToSpeechV2 = (voiceLanguage) => {
   const speakText = useCallback((text) => {
     console.log('🔊 [V2] TTS Starting:', text.substring(0, 60) + '...');
     return new Promise((resolve) => {
-      setIsSpeaking(true);
-
       ttsServiceV2.speak(
         text,
-        langCode,
+        voiceLanguage, // "Hindi" or "English" for Piper
+        () => {
+          // onStart
+          setIsSpeaking(true);
+        },
         () => {
           console.log('✅ [V2] TTS Completed');
           setIsSpeaking(false);
           resolve(true);
         },
         (event) => {
-          const errReason = event.error || 'Unknown Error';
-          console.error('❌ [V2] TTS Error:', errReason, event);
-
+          const errReason = event?.error || event?.message || 'Unknown Error';
           if (errReason === 'canceled' || errReason === 'interrupted') {
             setIsSpeaking(false);
             resolve(false);
             return;
           }
 
+          console.error('❌ [V2] TTS Error:', errReason, event);
+
           setIsSpeaking(false);
           resolve(false);
         },
         (event) => {
-          if (event.name === 'word') {
+          if (event && event.name === 'word') {
             setIsSpeaking(true);
           }
         }
       );
     });
-  }, [langCode]);
+  }, [voiceLanguage]);
 
   /**
    * Speak a named interview phase.

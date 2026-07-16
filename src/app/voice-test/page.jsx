@@ -10,20 +10,40 @@
  */
 
 import { useEffect, useState } from 'react';
+import { ttsServiceV2 } from '../../features/AIMockInterview/services/ttsServiceV2';
 
 export default function VoiceTestPage() {
   const [voices, setVoices] = useState([]);
   const [playing, setPlaying] = useState(null);
   const [filter, setFilter] = useState('');
 
+  const [piperPlaying, setPiperPlaying] = useState(false);
+
   useEffect(() => {
     const load = () => {
-      const v = window.speechSynthesis.getVoices();
+      const v = window.speechSynthesis?.getVoices() || [];
       if (v.length > 0) setVoices(v);
     };
     load();
-    window.speechSynthesis.onvoiceschanged = load;
+    if (window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = load;
+    }
   }, []);
+
+  const testPiper = async (language) => {
+    setPiperPlaying(true);
+    const text = language === 'Hindi' 
+      ? 'नमस्ते, यह पी वी क्लासेज का नया पाइपर टी टी एस सिस्टम है।' 
+      : 'Hello, this is the new Piper TTS system for PV Classes.';
+    
+    try {
+      await new Promise(resolve => {
+        ttsServiceV2.speak(text, language, () => resolve(), () => resolve());
+      });
+    } finally {
+      setPiperPlaying(false);
+    }
+  };
 
   const speak = (voice) => {
     window.speechSynthesis.cancel();
@@ -80,9 +100,31 @@ export default function VoiceTestPage() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-[#00316B] mb-2">Voice Inspector</h1>
         <p className="text-gray-600 mb-6">
-          Click any voice to hear it. Find the male Hindi/English voice and note its exact name.
-          Total voices available: <strong>{voices.length}</strong>
+          Test the new Piper Backend API or inspect local browser fallback voices.
         </p>
+
+        <div className="mb-8 p-6 bg-white border border-blue-200 rounded-lg shadow-sm">
+          <h2 className="text-xl font-bold text-blue-900 mb-4">🎙️ Piper Backend TTS (Primary)</h2>
+          <div className="flex gap-4">
+            <button 
+              onClick={() => testPiper('English')}
+              disabled={piperPlaying}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              Test Piper English
+            </button>
+            <button 
+              onClick={() => testPiper('Hindi')}
+              disabled={piperPlaying}
+              className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50"
+            >
+              Test Piper Hindi
+            </button>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold text-gray-800 mb-4">🖥️ Browser TTS (Fallback)</h2>
+        <p className="text-sm text-gray-500 mb-4">Total browser voices available: <strong>{voices.length}</strong></p>
 
         <input
           type="text"

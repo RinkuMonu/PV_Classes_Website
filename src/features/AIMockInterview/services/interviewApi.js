@@ -40,8 +40,10 @@ const mapQuestionData = (backendQ) => {
   
   if (Array.isArray(backendQ.options)) {
     backendQ.options.forEach((opt, idx) => {
-      const key = opt.key || optionKeys[idx];
-      optionsMap[key] = mapBilingual(opt.text_en || opt.english || opt, opt.text_hi || opt.hindi || opt);
+      const key = opt.key || opt.id || optionKeys[idx];
+      const en = opt.text?.en || opt.text_en || opt.english || opt;
+      const hi = opt.text?.hi || opt.text_hi || opt.hindi || opt;
+      optionsMap[key] = mapBilingual(en, hi);
     });
   } else if (typeof backendQ.options === 'object') {
     Object.entries(backendQ.options).forEach(([key, opt]) => {
@@ -57,8 +59,8 @@ const mapQuestionData = (backendQ) => {
   return {
     id: backendQ.id || backendQ.question_id || Date.now(),
     question: mapBilingual(
-      backendQ.question_en || backendQ.english || backendQ.question, 
-      backendQ.question_hi || backendQ.hindi || backendQ.question
+      backendQ.question_text?.en || backendQ.question_en || backendQ.english || backendQ.question, 
+      backendQ.question_text?.hi || backendQ.question_hi || backendQ.hindi || backendQ.question
     ),
     options: optionsMap,
     difficulty: backendQ.difficulty || 'Medium',
@@ -104,8 +106,8 @@ export const submitAnswer = async (sessionId, payload) => {
     isCorrect: !!data.isCorrect,
     correctOption: data.correctOption || data.correct_option || 'A',
     explanation: mapBilingual(
-      data.explanation_en || data.explanation, 
-      data.explanation_hi || data.explanation
+      data.explanation?.en || data.explanation_en || data.explanation, 
+      data.explanation?.hi || data.explanation_hi || data.explanation
     ),
     pointsAwarded: data.pointsAwarded || data.points_awarded || (data.isCorrect ? 10 : 0),
     newDifficulty: data.newDifficulty || data.new_difficulty || 'Medium',

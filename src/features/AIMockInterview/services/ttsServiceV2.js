@@ -1,19 +1,8 @@
 /**
  * ttsServiceV2.js
  *
- * Indian-accented Male TTS using Web Speech API.
- *
- * Voice priority (Chrome on Windows — most common setup):
- *   Hindi  → "Google हिंदी"  (hi-IN, male-sounding) or "Hemant" (hi-IN male)
- *   English → "Google Rishi" (en-IN, Indian male)  or "Microsoft Ravi" (en-IN)
- *
- * Fallback chain:
- *   1. Exact Indian voice by known name  (Rishi / Hemant / Ravi / Prabhat)
- *   2. Any voice with lang en-IN / hi-IN  (Indian accent guaranteed)
- *   3. Any non-female voice in en / hi family
- *   4. Whatever exists — pitch forced to 0.1 (deepest possible)
- *
- * pitch = 0.1  →  browser minimum = deepest / most masculine sound possible
+ * Primary TTS engine using FastAPI Piper API backend with automatic fallback
+ * to Indian-accented Web Speech API (window.speechSynthesis).
  */
 
 class TTSServiceV2 {
@@ -21,7 +10,10 @@ class TTSServiceV2 {
     this.synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
     this.currentUtterance = null;
     this._voicesReady = null;
+    this.audioElement = null;
+    this._isPiperSpeaking = false;
 
+    // Initialize browser voices for fallback
     if (this.synth) {
       this._voicesReady = new Promise((resolve) => {
         const tryResolve = () => {
@@ -38,10 +30,9 @@ class TTSServiceV2 {
 
         this.synth.onvoiceschanged = () => tryResolve();
 
-        // Hard timeout — 5 s
         setTimeout(() => {
           const v = this.synth.getVoices();
-          console.warn('[TTS] Voice load timeout, voices available:', v.length);
+          console.warn('[TTS Fallback] Voice load timeout, voices available:', v.length);
           resolve(v);
         }, 5000);
       });
@@ -50,7 +41,7 @@ class TTSServiceV2 {
 
   // ── Debug: print every voice ──────────────────────────────────────────────
   _logAll(voices) {
-    console.group('[TTS] Available voices (' + voices.length + ')');
+    console.group('[TTS Fallback] Available voices (' + voices.length + ')');
     voices.forEach((v, i) =>
       console.log(`  ${String(i).padStart(2)}. "${v.name}" | ${v.lang} | local:${v.localService}`)
     );
@@ -58,21 +49,17 @@ class TTSServiceV2 {
   }
 
   // ── Indian male voice names (exact or partial, lowercase) ─────────────────
-  // These are real voice names found on Windows + Chrome / Edge / Firefox
   _isIndianMale(v) {
     const n = v.name.toLowerCase();
     return (
-      // Google Chrome built-in Indian voices (BEST for Indian accent)
-      n.includes('rishi')    ||   // Google en-IN — Indian male English ★★★
-      n.includes('hemant')   ||   // Google hi-IN — Indian male Hindi  ★★★
-      // Microsoft / Windows Indian voices
-      n.includes('ravi')     ||   // Microsoft en-IN male
-      n.includes('prabhat')  ||   // Microsoft hi-IN male
-      n.includes('heera')    ||   // Microsoft hi-IN (sometimes listed)
-      // Edge neural Indian voices
-      n.includes('aarav')    ||   // en-IN neural male
-      n.includes('neerja')   ||   // hi-IN (check gender — can vary)
-      n.includes('kalpana')       // hi-IN
+      n.includes('rishi')    ||   
+      n.includes('hemant')   ||   
+      n.includes('ravi')     ||   
+      n.includes('prabhat')  ||   
+      n.includes('heera')    ||   
+      n.includes('aarav')    ||   
+      n.includes('neerja')   ||   
+      n.includes('kalpana')       
     );
   }
 
@@ -82,94 +69,152 @@ class TTSServiceV2 {
     return (
       n.includes('female')    ||
       n.includes('woman')     ||
-      n.includes('zira')      ||   // Windows en-US female
-      n.includes('hazel')     ||   // Windows en-GB female
+      n.includes('zira')      ||   
+      n.includes('hazel')     ||   
       n.includes('susan')     ||
-      n.includes('samantha')  ||   // macOS en-US female
+      n.includes('samantha')  ||   
       n.includes('victoria')  ||
       n.includes('karen')     ||
       n.includes('moira')     ||
       n.includes('tessa')     ||
       n.includes('fiona')     ||
-      n.includes('veena')     ||   // macOS hi-IN female
+      n.includes('veena')     ||   
       n.includes('allison')   ||
       n.includes('ava')       ||
       n.includes('kate')      ||
       n.includes('serena')    ||
-      n.includes('priya')     ||   // hi-IN female
-      n.includes('lekha')     ||   // hi-IN female
-      n.includes('aditi')     ||   // Amazon / some browsers hi-IN female
-      // Google Chrome "Google हिन्दी" is female — exclude it
-      // (Hemant is the male one — already in _isIndianMale)
+      n.includes('priya')     ||   
+      n.includes('lekha')     ||   
+      n.includes('aditi')     ||   
       n === 'google हिन्दी'
     );
   }
 
   // ── Voice selection — strict Indian male priority ─────────────────────────
   _pickVoice(voices, lang) {
-    // ── Tier 1: Known Indian male, exact lang ─────────────────────────────
     const t1 = voices.find(v => v.lang === lang && this._isIndianMale(v));
     if (t1) return t1;
 
-    // ── Tier 2: Known Indian male, same language family ───────────────────
-    const fam = lang.split('-')[0]; // 'hi' or 'en'
+    const fam = lang.split('-')[0];
     const t2 = voices.find(v => v.lang.startsWith(fam) && this._isIndianMale(v));
     if (t2) return t2;
 
-    // ── Tier 3: Any Indian-locale voice that is not female ────────────────
-    //    en-IN or hi-IN guarantees Indian accent even if gender unknown
     const indiaLangs = lang.startsWith('hi') ? ['hi-IN'] : ['en-IN'];
     const t3 = voices.find(v => indiaLangs.includes(v.lang) && !this._isFemale(v));
     if (t3) return t3;
 
-    // ── Tier 4: Any Indian-locale voice ───────────────────────────────────
     const t4 = voices.find(v => indiaLangs.includes(v.lang));
     if (t4) return t4;
 
-    // ── Tier 5: Any same-language non-female voice ────────────────────────
     const t5 = voices.find(v => v.lang.startsWith(fam) && !this._isFemale(v));
     if (t5) return t5;
 
-    // ── Tier 6: Absolute last resort ─────────────────────────────────────
     return voices.find(v => v.lang.startsWith(fam)) || voices[0] || null;
   }
 
-  // ── Main speak ────────────────────────────────────────────────────────────
-  async speak(text, lang = 'en-IN', onEnd = null, onError = null, onBoundary = null) {
+  // ── Main speak (Piper API -> Fallback) ────────────────────────────────────
+  async speak(text, language = 'English', onStart = null, onEnd = null, onError = null, onBoundary = null) {
+    if (this.synth) {
+      this.synth.cancel();
+    }
+    this.cancel();
+    if (!text) { onEnd?.(); return; }
+
+    try {
+      console.log('Piper TTS Started');
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8001';
+      console.log(`[TTS] 🎤 Requesting Piper TTS for language: ${language}`);
+      
+      const response = await fetch(`${baseUrl}/api/v1/speech/piper`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, language })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Piper API failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.status !== 'success' || !data.audio_url) {
+        throw new Error('Invalid response from Piper API');
+      }
+
+      // Play audio
+      this.audioElement = new Audio(`${baseUrl}${data.audio_url}`);
+      
+      this.audioElement.onplay = () => {
+        this._isPiperSpeaking = true;
+        console.log('Piper Audio Playing');
+        if (onStart) onStart();
+        // Synthesize fake onBoundary events to keep lip-sync active while piper plays,
+        // although useAvatarIdle primarily looks at `isSpeaking()` status.
+        if (onBoundary) {
+          // Just trigger it once at the start so state transitions correctly
+          onBoundary({ name: 'word' });
+        }
+      };
+      
+      this.audioElement.onended = () => {
+        this._isPiperSpeaking = false;
+        this.audioElement = null;
+        console.log('[TTS] ✅ Piper Audio finished');
+        onEnd?.();
+      };
+      
+      this.audioElement.onerror = (e) => {
+        this._isPiperSpeaking = false;
+        this.audioElement = null;
+        throw new Error('Audio playback failed');
+      };
+
+      await this.audioElement.play();
+      
+    } catch (err) {
+      console.error('[TTS] ⚠️ Piper TTS failed, falling back to browser SpeechSynthesis:', err);
+      console.log('Browser Fallback Activated');
+      // Fallback
+      const fallbackLangCode = language === 'Hindi' ? 'hi-IN' : 'en-IN';
+      this._speakFallback(text, fallbackLangCode, onStart, onEnd, onError, onBoundary);
+    }
+  }
+
+  // ── Fallback speak ────────────────────────────────────────────────────────
+  async _speakFallback(text, langCode = 'en-IN', onStart = null, onEnd = null, onError = null, onBoundary = null) {
     if (!this.synth) {
       onError?.(new Error('SpeechSynthesis not supported'));
       return;
     }
 
-    this.cancel();
-    if (!text) { onEnd?.(); return; }
-
     const voices = await this._voicesReady;
 
     const u = new SpeechSynthesisUtterance(text);
-    u.lang   = lang;      // en-IN or hi-IN — tells browser to use Indian accent
+    u.lang   = langCode;      
     u.volume = 1.0;
-    u.pitch  = 0.1;       // 0.1 = deepest possible = most masculine
-    u.rate   = lang === 'hi-IN' ? 0.87 : 0.9;
+    u.pitch  = 0.1;       
+    u.rate   = langCode === 'hi-IN' ? 0.87 : 0.9;
 
-    const chosen = this._pickVoice(voices, lang);
+    const chosen = this._pickVoice(voices, langCode);
     if (chosen) {
       u.voice = chosen;
       console.log(
-        `[TTS] ✅ Using voice: "${chosen.name}" | lang:${chosen.lang}` +
-        ` | Indian-male:${this._isIndianMale(chosen)} | female:${this._isFemale(chosen)}`
+        `[TTS Fallback] ✅ Using voice: "${chosen.name}" | lang:${chosen.lang}`
       );
     } else {
-      console.warn('[TTS] ⚠️ No voice found — browser default (pitch 0.1 applied)');
+      console.warn('[TTS Fallback] ⚠️ No voice found — browser default');
     }
 
     if (onBoundary) u.onboundary = onBoundary;
-    u.onstart = () => console.log('[TTS] Speaking:', text.substring(0, 80));
+    u.onstart = () => {
+      console.log('[TTS Fallback] Speaking:', text.substring(0, 80));
+      if (onStart) onStart();
+    };
     u.onend   = () => { this.currentUtterance = null; onEnd?.(); };
     u.onerror = (e) => {
       this.currentUtterance = null;
-      if (e.error === 'interrupted' || e.error === 'canceled') { onError?.(e); return; }
-      console.error('[TTS] Error:', e.error);
+      const errReason = e.error || 'Unknown Error';
+      if (errReason === 'interrupted' || errReason === 'canceled') { onError?.(e); return; }
+      console.error('[TTS Fallback] Error:', errReason);
       onError?.(e);
     };
 
@@ -178,14 +223,20 @@ class TTSServiceV2 {
   }
 
   cancel() {
-    if (this.synth?.speaking) {
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement.currentTime = 0;
+      this.audioElement = null;
+      this._isPiperSpeaking = false;
+    }
+    if (this.synth) {
       this.synth.cancel();
       this.currentUtterance = null;
     }
   }
 
   isSpeaking() {
-    return !!this.synth?.speaking;
+    return this._isPiperSpeaking || !!this.synth?.speaking;
   }
 }
 

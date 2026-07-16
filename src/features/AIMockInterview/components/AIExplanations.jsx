@@ -9,11 +9,15 @@ export default function AIExplanations({ explanation, languageMode, isCorrect, i
         <span className="mr-2 text-xl">
           {isTimeout ? '⏱️' : (isCorrect ? '✅' : '❌')}
         </span>
-        {isTimeout ? 'Time Expired' : (isCorrect ? 'Excellent Answer!' : 'Incorrect. Let\'s review.')}
+        {isTimeout ? (languageMode === 'Hindi' ? 'समय समाप्त' : 'Time Expired') 
+          : (isCorrect ? (languageMode === 'Hindi' ? 'बिल्कुल सही जवाब!' : 'Excellent Answer!') 
+          : (languageMode === 'Hindi' ? 'गलत जवाब। चलिए समीक्षा करते हैं।' : 'Incorrect. Let\'s review.'))}
       </h4>
       
       <div className="text-gray-800 bg-white/60 p-4 rounded-lg mt-3">
-        <h5 className="text-xs font-bold uppercase text-gray-500 mb-1 tracking-wider">AI Explanation</h5>
+        <h5 className="text-xs font-bold uppercase text-gray-500 mb-1 tracking-wider">
+          {languageMode === 'Hindi' ? 'एआई स्पष्टीकरण' : 'AI Explanation'}
+        </h5>
         {renderBilingualText(explanation, languageMode)}
       </div>
     </div>

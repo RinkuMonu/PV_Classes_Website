@@ -118,8 +118,6 @@ export default function InterviewSessionPage({ params }) {
       setQuestion(res.question);
       startQuestion(session.currentQuestionIndex);
 
-      setInterviewStatus(INTERVIEW_STATUS.SPEAKING);
-
       if (!hasSpokenIntro.current && session.currentQuestionIndex === 0) {
         await speakScriptPhase('WELCOME');
         hasSpokenIntro.current = true;
