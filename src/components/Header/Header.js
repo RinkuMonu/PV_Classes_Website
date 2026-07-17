@@ -273,7 +273,7 @@ export default function Header() {
                 <Phone size={14} />
               </div>
               {/* <span className="font-medium">0141-4511098</span> */}
-              <span className="font-medium">9251582702</span>
+              <span className="font-medium">7413886688</span>
             </div>
             <div className="flex items-center gap-2 hover:text-[#009FE3] transition-colors">
               <div className="p-1 bg-white/10 rounded-full">

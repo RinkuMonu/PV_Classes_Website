@@ -11,8 +11,8 @@ import { useCart } from "./context/CartContext";
 const BOT_NAME = "Prachi";                 // chatbot's name
 const COMPANY_NAME = "PV Classes";
 const COMPANY_EMAIL = "Pvclasses01@gmail.com";
-const COMPANY_PHONE = "9251582702";
-const COMPANY_WHATSAPP = "919251582702";    // digits only, used for wa.me link (kept for text-contact fallback only)
+const COMPANY_PHONE = "7413886688";
+const COMPANY_WHATSAPP = "7413886688";    // digits only, used for wa.me link (kept for text-contact fallback only)
 
 const BRAND_PRIMARY = "#204972";   // deep academic indigo/blue (matches site navbar)
 const BRAND_ACCENT = "#84CC16";    // lime/green — matches site's "NEW" badge & Add to Cart button
