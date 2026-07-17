@@ -1,0 +1,1602 @@
+[
+  {
+    "id": 1,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "What is the capital of India?",
+    "question_hi": "भारत की राजधानी क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Mumbai", "text_hi": "मुंबई" },
+      { "key": "B", "text_en": "New Delhi", "text_hi": "नई दिल्ली" },
+      { "key": "C", "text_en": "Kolkata", "text_hi": "कोलकाता" },
+      { "key": "D", "text_en": "Chennai", "text_hi": "चेन्नई" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "New Delhi is the capital city of India and the seat of the central government.",
+    "explanation_hi": "नई दिल्ली भारत की राजधानी और केंद्र सरकार का मुख्यालय है।"
+  },
+  {
+    "id": 2,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "Which river is known as the 'Ganga of the South'?",
+    "question_hi": "'दक्षिण की गंगा' किस नदी को कहा जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Krishna", "text_hi": "कृष्णा" },
+      { "key": "B", "text_en": "Kaveri", "text_hi": "कावेरी" },
+      { "key": "C", "text_en": "Godavari", "text_hi": "गोदावरी" },
+      { "key": "D", "text_en": "Narmada", "text_hi": "नर्मदा" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "The Godavari river is often called the 'Ganga of the South' due to its large size and religious significance.",
+    "explanation_hi": "गोदावरी नदी को उसके बड़े आकार और धार्मिक महत्व के कारण 'दक्षिण की गंगा' कहा जाता है।"
+  },
+  {
+    "id": 3,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "Who was the first President of India?",
+    "question_hi": "भारत के पहले राष्ट्रपति कौन थे?",
+    "options": [
+      { "key": "A", "text_en": "Jawaharlal Nehru", "text_hi": "जवाहरलाल नेहरू" },
+      { "key": "B", "text_en": "Dr. Rajendra Prasad", "text_hi": "डॉ. राजेंद्र प्रसाद" },
+      { "key": "C", "text_en": "Sardar Patel", "text_hi": "सरदार पटेल" },
+      { "key": "D", "text_en": "Dr. S. Radhakrishnan", "text_hi": "डॉ. एस. राधाकृष्णन" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Dr. Rajendra Prasad was the first President of India, serving from 1950 to 1962.",
+    "explanation_hi": "डॉ. राजेंद्र प्रसाद भारत के पहले राष्ट्रपति थे, जिन्होंने 1950 से 1962 तक कार्य किया।"
+  },
+  {
+    "id": 4,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "The Panchayati Raj system was introduced in India based on the recommendation of which committee?",
+    "question_hi": "भारत में पंचायती राज व्यवस्था किस समिति की सिफारिश पर लागू की गई?",
+    "options": [
+      { "key": "A", "text_en": "Ashok Mehta Committee", "text_hi": "अशोक मेहता समिति" },
+      { "key": "B", "text_en": "Balwant Rai Mehta Committee", "text_hi": "बलवंत राय मेहता समिति" },
+      { "key": "C", "text_en": "Sarkaria Commission", "text_hi": "सरकारिया आयोग" },
+      { "key": "D", "text_en": "Kothari Commission", "text_hi": "कोठारी आयोग" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The Balwant Rai Mehta Committee (1957) recommended a three-tier Panchayati Raj system.",
+    "explanation_hi": "बलवंत राय मेहता समिति (1957) ने त्रि-स्तरीय पंचायती राज प्रणाली की सिफारिश की।"
+  },
+  {
+    "id": 5,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "Which Article of the Indian Constitution deals with the Right to Education?",
+    "question_hi": "भारतीय संविधान का कौन सा अनुच्छेद शिक्षा के अधिकार से संबंधित है?",
+    "options": [
+      { "key": "A", "text_en": "Article 19", "text_hi": "अनुच्छेद 19" },
+      { "key": "B", "text_en": "Article 21", "text_hi": "अनुच्छेद 21" },
+      { "key": "C", "text_en": "Article 21A", "text_hi": "अनुच्छेद 21A" },
+      { "key": "D", "text_en": "Article 32", "text_hi": "अनुच्छेद 32" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Article 21A, added by the 86th Amendment in 2002, provides free and compulsory education to children aged 6-14.",
+    "explanation_hi": "अनुच्छेद 21A, 2002 में 86वें संशोधन द्वारा जोड़ा गया, 6-14 वर्ष के बच्चों को मुफ्त और अनिवार्य शिक्षा प्रदान करता है।"
+  },
+  {
+    "id": 6,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "Which Indian state has the longest coastline?",
+    "question_hi": "किस भारतीय राज्य की सबसे लंबी तटरेखा है?",
+    "options": [
+      { "key": "A", "text_en": "Kerala", "text_hi": "केरल" },
+      { "key": "B", "text_en": "Tamil Nadu", "text_hi": "तमिलनाडु" },
+      { "key": "C", "text_en": "Gujarat", "text_hi": "गुजरात" },
+      { "key": "D", "text_en": "Maharashtra", "text_hi": "महाराष्ट्र" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Gujarat has the longest coastline among Indian states at approximately 1,600 km.",
+    "explanation_hi": "गुजरात की लगभग 1,600 किमी की तटरेखा भारतीय राज्यों में सबसे लंबी है।"
+  },
+  {
+    "id": 7,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "The concept of 'Judicial Review' in the Indian Constitution has been borrowed from which country?",
+    "question_hi": "भारतीय संविधान में 'न्यायिक समीक्षा' की अवधारणा किस देश से ली गई है?",
+    "options": [
+      { "key": "A", "text_en": "United Kingdom", "text_hi": "यूनाइटेड किंगडम" },
+      { "key": "B", "text_en": "Canada", "text_hi": "कनाडा" },
+      { "key": "C", "text_en": "USA", "text_hi": "अमेरिका" },
+      { "key": "D", "text_en": "France", "text_hi": "फ्रांस" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Judicial Review was borrowed from the United States of America's constitution.",
+    "explanation_hi": "न्यायिक समीक्षा संयुक्त राज्य अमेरिका के संविधान से ली गई है।"
+  },
+  {
+    "id": 8,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "Which Schedule of the Indian Constitution deals with the division of powers between the Union and States?",
+    "question_hi": "भारतीय संविधान की कौन सी अनुसूची संघ और राज्यों के बीच शक्तियों के विभाजन से संबंधित है?",
+    "options": [
+      { "key": "A", "text_en": "Fifth Schedule", "text_hi": "पांचवीं अनुसूची" },
+      { "key": "B", "text_en": "Sixth Schedule", "text_hi": "छठी अनुसूची" },
+      { "key": "C", "text_en": "Seventh Schedule", "text_hi": "सातवीं अनुसूची" },
+      { "key": "D", "text_en": "Eighth Schedule", "text_hi": "आठवीं अनुसूची" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "The Seventh Schedule contains three lists: Union, State, and Concurrent, dividing legislative powers.",
+    "explanation_hi": "सातवीं अनुसूची में तीन सूचियाँ हैं: संघ, राज्य और समवर्ती, जो विधायी शक्तियों का विभाजन करती हैं।"
+  },
+  {
+    "id": 9,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "Which planet is known as the 'Red Planet'?",
+    "question_hi": "'लाल ग्रह' किसे कहा जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Jupiter", "text_hi": "बृहस्पति" },
+      { "key": "B", "text_en": "Mars", "text_hi": "मंगल" },
+      { "key": "C", "text_en": "Venus", "text_hi": "शुक्र" },
+      { "key": "D", "text_en": "Saturn", "text_hi": "शनि" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Mars is called the Red Planet due to the iron oxide (rust) on its surface giving it a reddish appearance.",
+    "explanation_hi": "मंगल को लाल ग्रह कहा जाता है क्योंकि इसकी सतह पर लौह ऑक्साइड (जंग) के कारण यह लाल दिखता है।"
+  },
+  {
+    "id": 10,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "The 'Swachh Bharat Mission' was launched in which year?",
+    "question_hi": "'स्वच्छ भारत मिशन' किस वर्ष शुरू किया गया था?",
+    "options": [
+      { "key": "A", "text_en": "2012", "text_hi": "2012" },
+      { "key": "B", "text_en": "2013", "text_hi": "2013" },
+      { "key": "C", "text_en": "2014", "text_hi": "2014" },
+      { "key": "D", "text_en": "2015", "text_hi": "2015" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Swachh Bharat Mission was launched on 2nd October 2014, on the occasion of Gandhi Jayanti.",
+    "explanation_hi": "स्वच्छ भारत मिशन 2 अक्टूबर 2014 को गांधी जयंती के अवसर पर शुरू किया गया था।"
+  },
+  {
+    "id": 11,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "Which amendment to the Indian Constitution is known as the 'Mini Constitution'?",
+    "question_hi": "भारतीय संविधान के किस संशोधन को 'मिनी संविधान' कहा जाता है?",
+    "options": [
+      { "key": "A", "text_en": "42nd Amendment", "text_hi": "42वाँ संशोधन" },
+      { "key": "B", "text_en": "44th Amendment", "text_hi": "44वाँ संशोधन" },
+      { "key": "C", "text_en": "73rd Amendment", "text_hi": "73वाँ संशोधन" },
+      { "key": "D", "text_en": "86th Amendment", "text_hi": "86वाँ संशोधन" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "The 42nd Amendment (1976) made extensive changes to the Constitution and is called the Mini Constitution.",
+    "explanation_hi": "42वें संशोधन (1976) ने संविधान में व्यापक बदलाव किए और इसे मिनी संविधान कहा जाता है।"
+  },
+  {
+    "id": 12,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "Which is the largest state of India by area?",
+    "question_hi": "क्षेत्रफल के अनुसार भारत का सबसे बड़ा राज्य कौन सा है?",
+    "options": [
+      { "key": "A", "text_en": "Madhya Pradesh", "text_hi": "मध्य प्रदेश" },
+      { "key": "B", "text_en": "Uttar Pradesh", "text_hi": "उत्तर प्रदेश" },
+      { "key": "C", "text_en": "Rajasthan", "text_hi": "राजस्थान" },
+      { "key": "D", "text_en": "Maharashtra", "text_hi": "महाराष्ट्र" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Rajasthan is the largest state in India by area, covering approximately 342,239 sq km.",
+    "explanation_hi": "राजस्थान क्षेत्रफल के अनुसार भारत का सबसे बड़ा राज्य है, जो लगभग 342,239 वर्ग किमी में फैला है।"
+  },
+  {
+    "id": 13,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "Who is known as the 'Father of the Indian Constitution'?",
+    "question_hi": "'भारतीय संविधान के पिता' के रूप में किसे जाना जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Mahatma Gandhi", "text_hi": "महात्मा गांधी" },
+      { "key": "B", "text_en": "Dr. B.R. Ambedkar", "text_hi": "डॉ. बी.आर. अंबेडकर" },
+      { "key": "C", "text_en": "Jawaharlal Nehru", "text_hi": "जवाहरलाल नेहरू" },
+      { "key": "D", "text_en": "Sardar Patel", "text_hi": "सरदार पटेल" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Dr. B.R. Ambedkar, as Chairman of the Drafting Committee, is known as the Father of the Indian Constitution.",
+    "explanation_hi": "डॉ. बी.आर. अंबेडकर, प्रारूप समिति के अध्यक्ष के रूप में, भारतीय संविधान के पिता के रूप में जाने जाते हैं।"
+  },
+  {
+    "id": 14,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "The Reserve Bank of India was established in which year?",
+    "question_hi": "भारतीय रिज़र्व बैंक की स्थापना किस वर्ष हुई थी?",
+    "options": [
+      { "key": "A", "text_en": "1930", "text_hi": "1930" },
+      { "key": "B", "text_en": "1935", "text_hi": "1935" },
+      { "key": "C", "text_en": "1947", "text_hi": "1947" },
+      { "key": "D", "text_en": "1950", "text_hi": "1950" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The Reserve Bank of India was established on 1st April 1935, based on the Hilton Young Commission's recommendations.",
+    "explanation_hi": "भारतीय रिज़र्व बैंक की स्थापना 1 अप्रैल 1935 को हिल्टन यंग कमीशन की सिफारिशों पर हुई थी।"
+  },
+  {
+    "id": 15,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "Which of the following taxes is exclusively levied by the Central Government?",
+    "question_hi": "निम्नलिखित में से कौन सा कर केवल केंद्र सरकार द्वारा लगाया जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Land Revenue", "text_hi": "भू-राजस्व" },
+      { "key": "B", "text_en": "Customs Duty", "text_hi": "सीमा शुल्क" },
+      { "key": "C", "text_en": "Stamp Duty", "text_hi": "स्टाम्प शुल्क" },
+      { "key": "D", "text_en": "Entertainment Tax", "text_hi": "मनोरंजन कर" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Customs Duty is exclusively levied by the Central Government under the Union List.",
+    "explanation_hi": "सीमा शुल्क केवल संघ सूची के तहत केंद्र सरकार द्वारा लगाया जाता है।"
+  },
+  {
+    "id": 16,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "Which gas is most abundant in the Earth's atmosphere?",
+    "question_hi": "पृथ्वी के वायुमंडल में सबसे अधिक मात्रा में कौन सी गैस पाई जाती है?",
+    "options": [
+      { "key": "A", "text_en": "Oxygen", "text_hi": "ऑक्सीजन" },
+      { "key": "B", "text_en": "Carbon Dioxide", "text_hi": "कार्बन डाइऑक्साइड" },
+      { "key": "C", "text_en": "Nitrogen", "text_hi": "नाइट्रोजन" },
+      { "key": "D", "text_en": "Hydrogen", "text_hi": "हाइड्रोजन" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Nitrogen makes up approximately 78% of the Earth's atmosphere.",
+    "explanation_hi": "नाइट्रोजन पृथ्वी के वायुमंडल का लगभग 78% भाग बनाती है।"
+  },
+  {
+    "id": 17,
+    "category": "General Awareness",
+    "difficulty": "Medium",
+    "question_en": "Which Mughal emperor built the Taj Mahal?",
+    "question_hi": "ताज महल किस मुगल सम्राट ने बनवाया था?",
+    "options": [
+      { "key": "A", "text_en": "Akbar", "text_hi": "अकबर" },
+      { "key": "B", "text_en": "Jahangir", "text_hi": "जहाँगीर" },
+      { "key": "C", "text_en": "Shah Jahan", "text_hi": "शाहजहाँ" },
+      { "key": "D", "text_en": "Aurangzeb", "text_hi": "औरंगज़ेब" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Shah Jahan built the Taj Mahal in memory of his wife Mumtaz Mahal between 1632-1653.",
+    "explanation_hi": "शाहजहाँ ने अपनी पत्नी मुमताज़ महल की याद में 1632-1653 के बीच ताज महल बनवाया।"
+  },
+  {
+    "id": 18,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "The Fiscal Responsibility and Budget Management (FRBM) Act was enacted in which year?",
+    "question_hi": "राजकोषीय उत्तरदायित्व और बजट प्रबंधन (FRBM) अधिनियम किस वर्ष लागू किया गया?",
+    "options": [
+      { "key": "A", "text_en": "2000", "text_hi": "2000" },
+      { "key": "B", "text_en": "2003", "text_hi": "2003" },
+      { "key": "C", "text_en": "2005", "text_hi": "2005" },
+      { "key": "D", "text_en": "2008", "text_hi": "2008" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The FRBM Act was enacted in 2003 to ensure fiscal discipline by setting targets for reducing fiscal deficit.",
+    "explanation_hi": "FRBM अधिनियम 2003 में राजकोषीय घाटे को कम करने के लक्ष्य निर्धारित करके वित्तीय अनुशासन सुनिश्चित करने के लिए लागू किया गया।"
+  },
+  {
+    "id": 19,
+    "category": "General Awareness",
+    "difficulty": "Easy",
+    "question_en": "The Indian National Congress was founded in which year?",
+    "question_hi": "भारतीय राष्ट्रीय कांग्रेस की स्थापना किस वर्ष हुई थी?",
+    "options": [
+      { "key": "A", "text_en": "1880", "text_hi": "1880" },
+      { "key": "B", "text_en": "1885", "text_hi": "1885" },
+      { "key": "C", "text_en": "1890", "text_hi": "1890" },
+      { "key": "D", "text_en": "1905", "text_hi": "1905" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The Indian National Congress was founded in 1885 by A.O. Hume in Bombay.",
+    "explanation_hi": "भारतीय राष्ट्रीय कांग्रेस की स्थापना 1885 में ए.ओ. ह्यूम द्वारा बम्बई में की गई थी।"
+  },
+  {
+    "id": 20,
+    "category": "General Awareness",
+    "difficulty": "Hard",
+    "question_en": "Which committee recommended the establishment of NITI Aayog?",
+    "question_hi": "नीति आयोग की स्थापना की सिफारिश किस समिति ने की थी?",
+    "options": [
+      { "key": "A", "text_en": "It was a Cabinet decision", "text_hi": "यह कैबिनेट का निर्णय था" },
+      { "key": "B", "text_en": "Kelkar Committee", "text_hi": "केलकर समिति" },
+      { "key": "C", "text_en": "Narasimham Committee", "text_hi": "नरसिम्हम समिति" },
+      { "key": "D", "text_en": "Gadgil Committee", "text_hi": "गाडगिल समिति" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "NITI Aayog was established by a Union Cabinet resolution on 1st January 2015, replacing the Planning Commission.",
+    "explanation_hi": "नीति आयोग की स्थापना 1 जनवरी 2015 को केंद्रीय मंत्रिमंडल के संकल्प द्वारा योजना आयोग के स्थान पर की गई।"
+  },
+  {
+    "id": 21,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Choose the correct synonym of 'Happy':",
+    "question_hi": "'Happy' (प्रसन्न) का सही पर्यायवाची चुनें:",
+    "options": [
+      { "key": "A", "text_en": "Sad", "text_hi": "उदास" },
+      { "key": "B", "text_en": "Joyful", "text_hi": "आनंदित" },
+      { "key": "C", "text_en": "Angry", "text_hi": "क्रोधित" },
+      { "key": "D", "text_en": "Tired", "text_hi": "थका हुआ" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Joyful' means full of joy, which is a synonym of 'Happy'.",
+    "explanation_hi": "'Joyful' का अर्थ है आनंद से भरा हुआ, जो 'Happy' का पर्यायवाची है।"
+  },
+  {
+    "id": 22,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Choose the correct antonym of 'Ancient':",
+    "question_hi": "'Ancient' (प्राचीन) का सही विलोम शब्द चुनें:",
+    "options": [
+      { "key": "A", "text_en": "Old", "text_hi": "पुराना" },
+      { "key": "B", "text_en": "Modern", "text_hi": "आधुनिक" },
+      { "key": "C", "text_en": "Historic", "text_hi": "ऐतिहासिक" },
+      { "key": "D", "text_en": "Traditional", "text_hi": "पारंपरिक" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Modern' is the antonym of 'Ancient', meaning relating to the present time.",
+    "explanation_hi": "'Modern' (आधुनिक) 'Ancient' (प्राचीन) का विलोम शब्द है, जिसका अर्थ वर्तमान समय से संबंधित है।"
+  },
+  {
+    "id": 23,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Fill in the blank: She ___ to school every day.",
+    "question_hi": "रिक्त स्थान भरें: She ___ to school every day.",
+    "options": [
+      { "key": "A", "text_en": "go", "text_hi": "go" },
+      { "key": "B", "text_en": "goes", "text_hi": "goes" },
+      { "key": "C", "text_en": "going", "text_hi": "going" },
+      { "key": "D", "text_en": "gone", "text_hi": "gone" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "With third-person singular subjects (She/He/It), the verb takes an 's' in simple present tense.",
+    "explanation_hi": "तृतीय-पुरुष एकवचन कर्ता (She/He/It) के साथ, सामान्य वर्तमान काल में क्रिया में 's' लगता है।"
+  },
+  {
+    "id": 24,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Identify the correct spelling:",
+    "question_hi": "सही वर्तनी पहचानें:",
+    "options": [
+      { "key": "A", "text_en": "Accomodation", "text_hi": "Accomodation" },
+      { "key": "B", "text_en": "Accommodation", "text_hi": "Accommodation" },
+      { "key": "C", "text_en": "Acomodation", "text_hi": "Acomodation" },
+      { "key": "D", "text_en": "Acommodation", "text_hi": "Acommodation" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Accommodation' has double 'c' and double 'm'.",
+    "explanation_hi": "'Accommodation' में दो 'c' और दो 'm' होते हैं।"
+  },
+  {
+    "id": 25,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the correct voice change: 'The letter was written by her.'",
+    "question_hi": "सही वाच्य परिवर्तन चुनें: 'The letter was written by her.'",
+    "options": [
+      { "key": "A", "text_en": "She writes a letter.", "text_hi": "She writes a letter." },
+      { "key": "B", "text_en": "She wrote the letter.", "text_hi": "She wrote the letter." },
+      { "key": "C", "text_en": "She has written the letter.", "text_hi": "She has written the letter." },
+      { "key": "D", "text_en": "She had written the letter.", "text_hi": "She had written the letter." }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The passive 'was written' converts to simple past active 'wrote'.",
+    "explanation_hi": "कर्मवाच्य 'was written' सामान्य भूतकाल कर्तृवाच्य 'wrote' में बदलता है।"
+  },
+  {
+    "id": 26,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the meaning of the idiom: 'To burn the midnight oil'",
+    "question_hi": "मुहावरे का अर्थ चुनें: 'To burn the midnight oil'",
+    "options": [
+      { "key": "A", "text_en": "To waste resources", "text_hi": "संसाधनों की बर्बादी करना" },
+      { "key": "B", "text_en": "To work or study late into the night", "text_hi": "रात में देर तक काम या पढ़ाई करना" },
+      { "key": "C", "text_en": "To start a fire", "text_hi": "आग लगाना" },
+      { "key": "D", "text_en": "To cook dinner", "text_hi": "रात का खाना बनाना" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'To burn the midnight oil' means to work or study late at night.",
+    "explanation_hi": "'To burn the midnight oil' का अर्थ है रात में देर तक काम या पढ़ाई करना।"
+  },
+  {
+    "id": 27,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the correct form: 'If I ___ rich, I would travel the world.'",
+    "question_hi": "सही रूप चुनें: 'If I ___ rich, I would travel the world.'",
+    "options": [
+      { "key": "A", "text_en": "am", "text_hi": "am" },
+      { "key": "B", "text_en": "was", "text_hi": "was" },
+      { "key": "C", "text_en": "were", "text_hi": "were" },
+      { "key": "D", "text_en": "be", "text_hi": "be" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "In the second conditional (unreal present), we use 'were' for all subjects.",
+    "explanation_hi": "दूसरे सशर्त वाक्य (अवास्तविक वर्तमान) में, सभी कर्ताओं के लिए 'were' का प्रयोग होता है।"
+  },
+  {
+    "id": 28,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Select the correct one-word substitution: 'One who cannot be corrected'",
+    "question_hi": "सही एक शब्द चुनें: 'जिसे सुधारा न जा सके'",
+    "options": [
+      { "key": "A", "text_en": "Incorrigible", "text_hi": "Incorrigible" },
+      { "key": "B", "text_en": "Invincible", "text_hi": "Invincible" },
+      { "key": "C", "text_en": "Infallible", "text_hi": "Infallible" },
+      { "key": "D", "text_en": "Inevitable", "text_hi": "Inevitable" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "'Incorrigible' means a person whose behaviour cannot be corrected or reformed.",
+    "explanation_hi": "'Incorrigible' का अर्थ है ऐसा व्यक्ति जिसके व्यवहार को सुधारा नहीं जा सकता।"
+  },
+  {
+    "id": 29,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Identify the type of sentence: 'What a beautiful painting!'",
+    "question_hi": "वाक्य का प्रकार पहचानें: 'What a beautiful painting!'",
+    "options": [
+      { "key": "A", "text_en": "Declarative", "text_hi": "विधानवाचक" },
+      { "key": "B", "text_en": "Interrogative", "text_hi": "प्रश्नवाचक" },
+      { "key": "C", "text_en": "Imperative", "text_hi": "आज्ञावाचक" },
+      { "key": "D", "text_en": "Exclamatory", "text_hi": "विस्मयादिबोधक" }
+    ],
+    "correctAnswer": "D",
+    "explanation_en": "Sentences that express strong feelings and end with '!' are exclamatory sentences.",
+    "explanation_hi": "जो वाक्य तीव्र भावनाओं को व्यक्त करते हैं और '!' से समाप्त होते हैं, विस्मयादिबोधक वाक्य कहलाते हैं।"
+  },
+  {
+    "id": 30,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Choose the correct narration: He said, 'I am going to Delhi tomorrow.'",
+    "question_hi": "सही कथन चुनें: He said, 'I am going to Delhi tomorrow.'",
+    "options": [
+      { "key": "A", "text_en": "He said that he is going to Delhi tomorrow.", "text_hi": "He said that he is going to Delhi tomorrow." },
+      { "key": "B", "text_en": "He said that he was going to Delhi the next day.", "text_hi": "He said that he was going to Delhi the next day." },
+      { "key": "C", "text_en": "He said that he will go to Delhi tomorrow.", "text_hi": "He said that he will go to Delhi tomorrow." },
+      { "key": "D", "text_en": "He told that he was going to Delhi yesterday.", "text_hi": "He told that he was going to Delhi yesterday." }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "In indirect speech, 'am going' becomes 'was going' and 'tomorrow' changes to 'the next day'.",
+    "explanation_hi": "अप्रत्यक्ष कथन में, 'am going' 'was going' बन जाता है और 'tomorrow' 'the next day' में बदल जाता है।"
+  },
+  {
+    "id": 31,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Choose the plural form of 'Child':",
+    "question_hi": "'Child' का बहुवचन रूप चुनें:",
+    "options": [
+      { "key": "A", "text_en": "Childs", "text_hi": "Childs" },
+      { "key": "B", "text_en": "Childrens", "text_hi": "Childrens" },
+      { "key": "C", "text_en": "Children", "text_hi": "Children" },
+      { "key": "D", "text_en": "Childes", "text_hi": "Childes" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "'Child' has an irregular plural form: 'Children'.",
+    "explanation_hi": "'Child' का अनियमित बहुवचन रूप 'Children' है।"
+  },
+  {
+    "id": 32,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the correct preposition: 'She is fond ___ music.'",
+    "question_hi": "सही संबंध सूचक शब्द चुनें: 'She is fond ___ music.'",
+    "options": [
+      { "key": "A", "text_en": "in", "text_hi": "in" },
+      { "key": "B", "text_en": "of", "text_hi": "of" },
+      { "key": "C", "text_en": "at", "text_hi": "at" },
+      { "key": "D", "text_en": "for", "text_hi": "for" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Fond of' is a standard collocation meaning to like something very much.",
+    "explanation_hi": "'Fond of' एक मानक संयोजन है जिसका अर्थ है किसी चीज़ को बहुत पसंद करना।"
+  },
+  {
+    "id": 33,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Choose the correct meaning of 'Ubiquitous':",
+    "question_hi": "'Ubiquitous' का सही अर्थ चुनें:",
+    "options": [
+      { "key": "A", "text_en": "Rare", "text_hi": "दुर्लभ" },
+      { "key": "B", "text_en": "Present everywhere", "text_hi": "सर्वव्यापी" },
+      { "key": "C", "text_en": "Dangerous", "text_hi": "खतरनाक" },
+      { "key": "D", "text_en": "Unknown", "text_hi": "अज्ञात" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Ubiquitous' means present, appearing, or found everywhere.",
+    "explanation_hi": "'Ubiquitous' का अर्थ है हर जगह उपस्थित, दिखाई देने वाला या पाया जाने वाला।"
+  },
+  {
+    "id": 34,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Identify the error: 'Each of the boys have completed their homework.'",
+    "question_hi": "त्रुटि पहचानें: 'Each of the boys have completed their homework.'",
+    "options": [
+      { "key": "A", "text_en": "'have' should be 'has'", "text_hi": "'have' की जगह 'has' होना चाहिए" },
+      { "key": "B", "text_en": "'their' should be 'his'", "text_hi": "'their' की जगह 'his' होना चाहिए" },
+      { "key": "C", "text_en": "Both A and B", "text_hi": "A और B दोनों" },
+      { "key": "D", "text_en": "No error", "text_hi": "कोई त्रुटि नहीं" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "'Each' is singular, so it takes 'has' and the pronoun should be 'his': 'Each of the boys has completed his homework.'",
+    "explanation_hi": "'Each' एकवचन है, इसलिए 'has' और सर्वनाम 'his' होना चाहिए: 'Each of the boys has completed his homework.'"
+  },
+  {
+    "id": 35,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the correct article: '___ Honest man is respected everywhere.'",
+    "question_hi": "सही उपपद चुनें: '___ Honest man is respected everywhere.'",
+    "options": [
+      { "key": "A", "text_en": "A", "text_hi": "A" },
+      { "key": "B", "text_en": "An", "text_hi": "An" },
+      { "key": "C", "text_en": "The", "text_hi": "The" },
+      { "key": "D", "text_en": "No article", "text_hi": "कोई उपपद नहीं" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Honest' starts with a silent 'h', so the vowel sound requires 'An'.",
+    "explanation_hi": "'Honest' में 'h' मूक है, इसलिए स्वर ध्वनि के लिए 'An' का प्रयोग होता है।"
+  },
+  {
+    "id": 36,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "What is the past tense of 'go'?",
+    "question_hi": "'go' का भूतकाल रूप क्या है?",
+    "options": [
+      { "key": "A", "text_en": "goed", "text_hi": "goed" },
+      { "key": "B", "text_en": "went", "text_hi": "went" },
+      { "key": "C", "text_en": "gone", "text_hi": "gone" },
+      { "key": "D", "text_en": "goes", "text_hi": "goes" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'Go' is an irregular verb. Its past tense is 'went' and past participle is 'gone'.",
+    "explanation_hi": "'Go' एक अनियमित क्रिया है। इसका भूतकाल 'went' और पूर्ण कृदंत 'gone' है।"
+  },
+  {
+    "id": 37,
+    "category": "English",
+    "difficulty": "Medium",
+    "question_en": "Choose the correct indirect speech: She said, 'I am reading a book.'",
+    "question_hi": "सही अप्रत्यक्ष कथन चुनें: She said, 'I am reading a book.'",
+    "options": [
+      { "key": "A", "text_en": "She said that she is reading a book.", "text_hi": "She said that she is reading a book." },
+      { "key": "B", "text_en": "She said that she was reading a book.", "text_hi": "She said that she was reading a book." },
+      { "key": "C", "text_en": "She said that she had been reading a book.", "text_hi": "She said that she had been reading a book." },
+      { "key": "D", "text_en": "She told she was reading a book.", "text_hi": "She told she was reading a book." }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "In indirect speech, 'am reading' (present continuous) changes to 'was reading' (past continuous).",
+    "explanation_hi": "अप्रत्यक्ष कथन में, 'am reading' (वर्तमान निरंतर) 'was reading' (भूत निरंतर) में बदल जाता है।"
+  },
+  {
+    "id": 38,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Select the correct word: 'The committee ___ divided in their opinion.'",
+    "question_hi": "सही शब्द चुनें: 'The committee ___ divided in their opinion.'",
+    "options": [
+      { "key": "A", "text_en": "was", "text_hi": "was" },
+      { "key": "B", "text_en": "were", "text_hi": "were" },
+      { "key": "C", "text_en": "is", "text_hi": "is" },
+      { "key": "D", "text_en": "has", "text_hi": "has" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "When a collective noun refers to individual members acting separately, it takes a plural verb.",
+    "explanation_hi": "जब सामूहिक संज्ञा अलग-अलग कार्य करने वाले सदस्यों को संदर्भित करती है, तो बहुवचन क्रिया लगती है।"
+  },
+  {
+    "id": 39,
+    "category": "English",
+    "difficulty": "Easy",
+    "question_en": "Which of the following is an adverb?",
+    "question_hi": "निम्नलिखित में से कौन सा क्रियाविशेषण है?",
+    "options": [
+      { "key": "A", "text_en": "Beautiful", "text_hi": "Beautiful" },
+      { "key": "B", "text_en": "Beautifully", "text_hi": "Beautifully" },
+      { "key": "C", "text_en": "Beauty", "text_hi": "Beauty" },
+      { "key": "D", "text_en": "Beautify", "text_hi": "Beautify" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Adverbs often end in '-ly'. 'Beautifully' modifies a verb, adjective, or another adverb.",
+    "explanation_hi": "क्रियाविशेषण अक्सर '-ly' से समाप्त होते हैं। 'Beautifully' क्रिया, विशेषण या अन्य क्रियाविशेषण को विशेषित करता है।"
+  },
+  {
+    "id": 40,
+    "category": "English",
+    "difficulty": "Hard",
+    "question_en": "Choose the correct meaning of the phrase: 'A white elephant'",
+    "question_hi": "मुहावरे का सही अर्थ चुनें: 'A white elephant'",
+    "options": [
+      { "key": "A", "text_en": "A rare animal", "text_hi": "एक दुर्लभ जानवर" },
+      { "key": "B", "text_en": "A costly but useless possession", "text_hi": "एक महंगी लेकिन बेकार वस्तु" },
+      { "key": "C", "text_en": "A symbol of purity", "text_hi": "पवित्रता का प्रतीक" },
+      { "key": "D", "text_en": "A powerful leader", "text_hi": "एक शक्तिशाली नेता" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "'A white elephant' refers to a possession that is costly to maintain but of no practical use.",
+    "explanation_hi": "'A white elephant' एक ऐसी वस्तु को कहते हैं जिसे रखना महंगा हो लेकिन उसका कोई व्यावहारिक उपयोग न हो।"
+  },
+  {
+    "id": 41,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question_en": "Find the next number in the series: 2, 4, 8, 16, ___",
+    "question_hi": "श्रृंखला में अगली संख्या ज्ञात करें: 2, 4, 8, 16, ___",
+    "options": [
+      { "key": "A", "text_en": "24", "text_hi": "24" },
+      { "key": "B", "text_en": "32", "text_hi": "32" },
+      { "key": "C", "text_en": "20", "text_hi": "20" },
+      { "key": "D", "text_en": "36", "text_hi": "36" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Each number is multiplied by 2. So 16 × 2 = 32.",
+    "explanation_hi": "प्रत्येक संख्या को 2 से गुणा किया जाता है। इसलिए 16 × 2 = 32."
+  },
+  {
+    "id": 42,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question_en": "If APPLE is coded as BQQMF, then how is MANGO coded?",
+    "question_hi": "यदि APPLE को BQQMF के रूप में कोड किया जाता है, तो MANGO को कैसे कोड किया जाएगा?",
+    "options": [
+      { "key": "A", "text_en": "NBOHP", "text_hi": "NBOHP" },
+      { "key": "B", "text_en": "NBOHO", "text_hi": "NBOHO" },
+      { "key": "C", "text_en": "LZMFN", "text_hi": "LZMFN" },
+      { "key": "D", "text_en": "NCOPH", "text_hi": "NCOPH" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Each letter is replaced by the next letter in the alphabet. M→N, A→B, N→O, G→H, O→P = NBOHP.",
+    "explanation_hi": "प्रत्येक अक्षर को वर्णमाला में अगले अक्षर से बदला जाता है। M→N, A→B, N→O, G→H, O→P = NBOHP."
+  },
+  {
+    "id": 43,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question_en": "Choose the odd one out:",
+    "question_hi": "विषम ज्ञात करें:",
+    "options": [
+      { "key": "A", "text_en": "Rose", "text_hi": "गुलाब" },
+      { "key": "B", "text_en": "Lotus", "text_hi": "कमल" },
+      { "key": "C", "text_en": "Jasmine", "text_hi": "चमेली" },
+      { "key": "D", "text_en": "Mango", "text_hi": "आम" }
+    ],
+    "correctAnswer": "D",
+    "explanation_en": "Rose, Lotus, and Jasmine are all flowers, whereas Mango is a fruit.",
+    "explanation_hi": "गुलाब, कमल और चमेली फूल हैं, जबकि आम एक फल है।"
+  },
+  {
+    "id": 44,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "If in a certain code, PENCIL is written as RGPEKN, how is MARKER written?",
+    "question_hi": "यदि किसी कोड में PENCIL को RGPEKN लिखा जाता है, तो MARKER कैसे लिखा जाएगा?",
+    "options": [
+      { "key": "A", "text_en": "OCTMGT", "text_hi": "OCTMGT" },
+      { "key": "B", "text_en": "OCTMLT", "text_hi": "OCTMLT" },
+      { "key": "C", "text_en": "OCTMGV", "text_hi": "OCTMGV" },
+      { "key": "D", "text_en": "OATMGT", "text_hi": "OATMGT" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Each letter is shifted by +2 in the alphabet. M→O, A→C, R→T, K→M, E→G, R→T = OCTMGT.",
+    "explanation_hi": "प्रत्येक अक्षर वर्णमाला में +2 स्थान आगे बढ़ता है। M→O, A→C, R→T, K→M, E→G, R→T = OCTMGT."
+  },
+  {
+    "id": 45,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "A is B's sister. C is B's mother. D is C's father. E is D's mother. How is A related to D?",
+    "question_hi": "A, B की बहन है। C, B की माँ है। D, C के पिता हैं। E, D की माँ है। A, D से कैसे संबंधित है?",
+    "options": [
+      { "key": "A", "text_en": "Granddaughter", "text_hi": "पोती/नातिन" },
+      { "key": "B", "text_en": "Daughter", "text_hi": "बेटी" },
+      { "key": "C", "text_en": "Grandmother", "text_hi": "दादी/नानी" },
+      { "key": "D", "text_en": "Granddaughter or Grandson", "text_hi": "पोती/नातिन या पोता/नाती" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "A is B's sister → A and B are siblings. C is their mother. D is C's father, so D is A's grandfather. A is D's granddaughter.",
+    "explanation_hi": "A, B की बहन → A और B भाई-बहन हैं। C उनकी माँ है। D, C के पिता हैं, इसलिए D, A के नाना/दादा हैं। A, D की नातिन/पोती है।"
+  },
+  {
+    "id": 46,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "Find the missing number: 3, 9, 27, 81, ___",
+    "question_hi": "लुप्त संख्या ज्ञात करें: 3, 9, 27, 81, ___",
+    "options": [
+      { "key": "A", "text_en": "162", "text_hi": "162" },
+      { "key": "B", "text_en": "243", "text_hi": "243" },
+      { "key": "C", "text_en": "108", "text_hi": "108" },
+      { "key": "D", "text_en": "300", "text_hi": "300" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Each number is multiplied by 3. 81 × 3 = 243.",
+    "explanation_hi": "प्रत्येक संख्या को 3 से गुणा किया जाता है। 81 × 3 = 243."
+  },
+  {
+    "id": 47,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "If 'COMPUTER' is coded as 'DNPQVUFS', then 'PROGRAM' is coded as:",
+    "question_hi": "यदि 'COMPUTER' को 'DNPQVUFS' कोड किया जाता है, तो 'PROGRAM' का कोड है:",
+    "options": [
+      { "key": "A", "text_en": "QSPHSBN", "text_hi": "QSPHSBN" },
+      { "key": "B", "text_en": "QSPIUBO", "text_hi": "QSPIUBO" },
+      { "key": "C", "text_en": "QSPhsbn", "text_hi": "QSPGSBN" },
+      { "key": "D", "text_en": "QSPHSBO", "text_hi": "QSPHSBO" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Each letter is shifted by +1. P→Q, R→S, O→P, G→H, R→S, A→B, M→N = QSPHSBN.",
+    "explanation_hi": "प्रत्येक अक्षर +1 आगे बढ़ता है। P→Q, R→S, O→P, G→H, R→S, A→B, M→N = QSPHSBN."
+  },
+  {
+    "id": 48,
+    "category": "Reasoning",
+    "difficulty": "Hard",
+    "question_en": "In a row of students, Ravi is 7th from the left and 12th from the right. How many students are in the row?",
+    "question_hi": "छात्रों की एक पंक्ति में, रवि बाएँ से 7वें और दाएँ से 12वें स्थान पर है। पंक्ति में कुल कितने छात्र हैं?",
+    "options": [
+      { "key": "A", "text_en": "18", "text_hi": "18" },
+      { "key": "B", "text_en": "19", "text_hi": "19" },
+      { "key": "C", "text_en": "20", "text_hi": "20" },
+      { "key": "D", "text_en": "17", "text_hi": "17" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Total = 7 + 12 - 1 = 18 (Ravi is counted once, so subtract 1).",
+    "explanation_hi": "कुल = 7 + 12 - 1 = 18 (रवि की एक बार गिनती होती है, इसलिए 1 घटाएं)।"
+  },
+  {
+    "id": 49,
+    "category": "Reasoning",
+    "difficulty": "Hard",
+    "question_en": "Which figure completes the pattern? In the series: △, □, ○, △, □, ___",
+    "question_hi": "कौन सी आकृति पैटर्न पूरा करती है? श्रृंखला में: △, □, ○, △, □, ___",
+    "options": [
+      { "key": "A", "text_en": "△", "text_hi": "△" },
+      { "key": "B", "text_en": "□", "text_hi": "□" },
+      { "key": "C", "text_en": "○", "text_hi": "○" },
+      { "key": "D", "text_en": "◇", "text_hi": "◇" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "The pattern repeats in groups of three: △, □, ○. The next figure is ○.",
+    "explanation_hi": "पैटर्न तीन के समूह में दोहराता है: △, □, ○। अगली आकृति ○ है।"
+  },
+  {
+    "id": 50,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question_en": "Look at the series: 1, 4, 9, 16, 25, ___. What comes next?",
+    "question_hi": "श्रृंखला देखें: 1, 4, 9, 16, 25, ___. अगली संख्या क्या है?",
+    "options": [
+      { "key": "A", "text_en": "30", "text_hi": "30" },
+      { "key": "B", "text_en": "36", "text_hi": "36" },
+      { "key": "C", "text_en": "49", "text_hi": "49" },
+      { "key": "D", "text_en": "35", "text_hi": "35" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "These are perfect squares: 1², 2², 3², 4², 5². The next is 6² = 36.",
+    "explanation_hi": "ये पूर्ण वर्ग हैं: 1², 2², 3², 4², 5²। अगला 6² = 36 है।"
+  },
+  {
+    "id": 51,
+    "category": "Reasoning",
+    "difficulty": "Hard",
+    "question_en": "Pointing to a woman, a man said 'Her mother is the only daughter of my mother.' How is the man related to the woman?",
+    "question_hi": "एक महिला की ओर इशारा करते हुए एक पुरुष ने कहा 'उसकी माँ मेरी माँ की एकमात्र पुत्री है।' पुरुष का महिला से क्या संबंध है?",
+    "options": [
+      { "key": "A", "text_en": "Father", "text_hi": "पिता" },
+      { "key": "B", "text_en": "Brother", "text_hi": "भाई" },
+      { "key": "C", "text_en": "Uncle", "text_hi": "चाचा/मामा" },
+      { "key": "D", "text_en": "Grandfather", "text_hi": "दादा/नाना" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "My mother's only daughter = my sister. Her mother is my sister, so the woman is my sister's daughter = my niece. The man is her uncle.",
+    "explanation_hi": "मेरी माँ की एकमात्र पुत्री = मेरी बहन। उसकी माँ मेरी बहन है, तो महिला मेरी बहन की बेटी = मेरी भांजी है। पुरुष उसका मामा/चाचा है।"
+  },
+  {
+    "id": 52,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "If South-East becomes North, then what does North-West become?",
+    "question_hi": "यदि दक्षिण-पूर्व उत्तर हो जाए, तो उत्तर-पश्चिम क्या होगा?",
+    "options": [
+      { "key": "A", "text_en": "East", "text_hi": "पूर्व" },
+      { "key": "B", "text_en": "South", "text_hi": "दक्षिण" },
+      { "key": "C", "text_en": "West", "text_hi": "पश्चिम" },
+      { "key": "D", "text_en": "North-East", "text_hi": "उत्तर-पूर्व" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "SE→N means a 135° clockwise rotation. Applying the same to NW gives South.",
+    "explanation_hi": "SE→N का अर्थ है 135° दक्षिणावर्त घूमना। NW पर यही लागू करने पर दक्षिण मिलता है।"
+  },
+  {
+    "id": 53,
+    "category": "Reasoning",
+    "difficulty": "Hard",
+    "question_en": "A clock shows 3:15. What is the angle between the hour and minute hands?",
+    "question_hi": "एक घड़ी 3:15 दिखा रही है। घंटे और मिनट की सुइयों के बीच का कोण क्या है?",
+    "options": [
+      { "key": "A", "text_en": "0°", "text_hi": "0°" },
+      { "key": "B", "text_en": "7.5°", "text_hi": "7.5°" },
+      { "key": "C", "text_en": "15°", "text_hi": "15°" },
+      { "key": "D", "text_en": "22.5°", "text_hi": "22.5°" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "At 3:15, the minute hand is at 90° and the hour hand is at 97.5° (3×30 + 15×0.5). Difference = 7.5°.",
+    "explanation_hi": "3:15 पर, मिनट की सुई 90° पर है और घंटे की सुई 97.5° (3×30 + 15×0.5) पर है। अंतर = 7.5°."
+  },
+  {
+    "id": 54,
+    "category": "Reasoning",
+    "difficulty": "Easy",
+    "question_en": "Which day comes two days after Monday?",
+    "question_hi": "सोमवार के दो दिन बाद कौन सा दिन आता है?",
+    "options": [
+      { "key": "A", "text_en": "Tuesday", "text_hi": "मंगलवार" },
+      { "key": "B", "text_en": "Wednesday", "text_hi": "बुधवार" },
+      { "key": "C", "text_en": "Thursday", "text_hi": "गुरुवार" },
+      { "key": "D", "text_en": "Friday", "text_hi": "शुक्रवार" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Monday + 1 = Tuesday, Tuesday + 1 = Wednesday.",
+    "explanation_hi": "सोमवार + 1 = मंगलवार, मंगलवार + 1 = बुधवार।"
+  },
+  {
+    "id": 55,
+    "category": "Reasoning",
+    "difficulty": "Medium",
+    "question_en": "Find the missing number in the matrix: [2, 6, 18] [3, 9, 27] [4, 12, ?]",
+    "question_hi": "मैट्रिक्स में लुप्त संख्या ज्ञात करें: [2, 6, 18] [3, 9, 27] [4, 12, ?]",
+    "options": [
+      { "key": "A", "text_en": "24", "text_hi": "24" },
+      { "key": "B", "text_en": "36", "text_hi": "36" },
+      { "key": "C", "text_en": "48", "text_hi": "48" },
+      { "key": "D", "text_en": "16", "text_hi": "16" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Each row follows ×3 pattern: 4 × 3 = 12, 12 × 3 = 36.",
+    "explanation_hi": "प्रत्येक पंक्ति ×3 पैटर्न का पालन करती है: 4 × 3 = 12, 12 × 3 = 36."
+  },
+  {
+    "id": 56,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question_en": "What does CPU stand for?",
+    "question_hi": "CPU का पूर्ण रूप क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Central Processing Unit", "text_hi": "सेंट्रल प्रोसेसिंग यूनिट" },
+      { "key": "B", "text_en": "Central Program Unit", "text_hi": "सेंट्रल प्रोग्राम यूनिट" },
+      { "key": "C", "text_en": "Computer Personal Unit", "text_hi": "कंप्यूटर पर्सनल यूनिट" },
+      { "key": "D", "text_en": "Central Peripheral Unit", "text_hi": "सेंट्रल पेरिफेरल यूनिट" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "CPU stands for Central Processing Unit, the brain of the computer that performs calculations and executes instructions.",
+    "explanation_hi": "CPU का पूर्ण रूप सेंट्रल प्रोसेसिंग यूनिट है, जो कंप्यूटर का मस्तिष्क है और गणना एवं निर्देशों को निष्पादित करता है।"
+  },
+  {
+    "id": 57,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question_en": "Which of the following is an input device?",
+    "question_hi": "निम्नलिखित में से कौन सा इनपुट डिवाइस है?",
+    "options": [
+      { "key": "A", "text_en": "Monitor", "text_hi": "मॉनिटर" },
+      { "key": "B", "text_en": "Printer", "text_hi": "प्रिंटर" },
+      { "key": "C", "text_en": "Keyboard", "text_hi": "कीबोर्ड" },
+      { "key": "D", "text_en": "Speaker", "text_hi": "स्पीकर" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "A keyboard is used to input data into the computer. Monitor, printer, and speaker are output devices.",
+    "explanation_hi": "कीबोर्ड कंप्यूटर में डेटा इनपुट करने के लिए उपयोग किया जाता है। मॉनिटर, प्रिंटर और स्पीकर आउटपुट डिवाइस हैं।"
+  },
+  {
+    "id": 58,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question_en": "What does RAM stand for?",
+    "question_hi": "RAM का पूर्ण रूप क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Read Access Memory", "text_hi": "रीड एक्सेस मेमोरी" },
+      { "key": "B", "text_en": "Random Access Memory", "text_hi": "रैंडम एक्सेस मेमोरी" },
+      { "key": "C", "text_en": "Run Application Memory", "text_hi": "रन एप्लीकेशन मेमोरी" },
+      { "key": "D", "text_en": "Random Application Memory", "text_hi": "रैंडम एप्लीकेशन मेमोरी" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "RAM stands for Random Access Memory. It is volatile memory used for temporary data storage.",
+    "explanation_hi": "RAM का पूर्ण रूप रैंडम एक्सेस मेमोरी है। यह अस्थायी डेटा भंडारण के लिए उपयोग की जाने वाली अस्थिर मेमोरी है।"
+  },
+  {
+    "id": 59,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "Which of the following is NOT an operating system?",
+    "question_hi": "निम्नलिखित में से कौन सा ऑपरेटिंग सिस्टम नहीं है?",
+    "options": [
+      { "key": "A", "text_en": "Windows", "text_hi": "विंडोज़" },
+      { "key": "B", "text_en": "Linux", "text_hi": "लिनक्स" },
+      { "key": "C", "text_en": "Oracle", "text_hi": "ओरेकल" },
+      { "key": "D", "text_en": "macOS", "text_hi": "macOS" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Oracle is a database management system, not an operating system.",
+    "explanation_hi": "Oracle एक डेटाबेस प्रबंधन प्रणाली है, ऑपरेटिंग सिस्टम नहीं।"
+  },
+  {
+    "id": 60,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "What is the full form of HTML?",
+    "question_hi": "HTML का पूर्ण रूप क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Hyper Text Makeup Language", "text_hi": "हाइपर टेक्स्ट मेकअप लैंग्वेज" },
+      { "key": "B", "text_en": "Hyper Text Markup Language", "text_hi": "हाइपर टेक्स्ट मार्कअप लैंग्वेज" },
+      { "key": "C", "text_en": "High Text Markup Language", "text_hi": "हाई टेक्स्ट मार्कअप लैंग्वेज" },
+      { "key": "D", "text_en": "Hyper Tabular Markup Language", "text_hi": "हाइपर टेबुलर मार्कअप लैंग्वेज" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "HTML stands for Hyper Text Markup Language, used to create web pages.",
+    "explanation_hi": "HTML का पूर्ण रूप हाइपर टेक्स्ट मार्कअप लैंग्वेज है, जिसका उपयोग वेब पेज बनाने में होता है।"
+  },
+  {
+    "id": 61,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "Which generation of computers used Integrated Circuits (ICs)?",
+    "question_hi": "कंप्यूटर की किस पीढ़ी में एकीकृत परिपथ (IC) का उपयोग किया गया?",
+    "options": [
+      { "key": "A", "text_en": "First Generation", "text_hi": "पहली पीढ़ी" },
+      { "key": "B", "text_en": "Second Generation", "text_hi": "दूसरी पीढ़ी" },
+      { "key": "C", "text_en": "Third Generation", "text_hi": "तीसरी पीढ़ी" },
+      { "key": "D", "text_en": "Fourth Generation", "text_hi": "चौथी पीढ़ी" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Third generation computers (1964-1971) used Integrated Circuits, making them smaller and more efficient.",
+    "explanation_hi": "तीसरी पीढ़ी के कंप्यूटरों (1964-1971) में एकीकृत परिपथ का उपयोग किया गया, जिससे वे छोटे और अधिक कुशल बने।"
+  },
+  {
+    "id": 62,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "What is the binary equivalent of the decimal number 10?",
+    "question_hi": "दशमलव संख्या 10 का बाइनरी समतुल्य क्या है?",
+    "options": [
+      { "key": "A", "text_en": "1000", "text_hi": "1000" },
+      { "key": "B", "text_en": "1010", "text_hi": "1010" },
+      { "key": "C", "text_en": "1100", "text_hi": "1100" },
+      { "key": "D", "text_en": "1001", "text_hi": "1001" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "10 in decimal = 1010 in binary (8+0+2+0).",
+    "explanation_hi": "दशमलव में 10 = बाइनरी में 1010 (8+0+2+0)।"
+  },
+  {
+    "id": 63,
+    "category": "Computer Fundamentals",
+    "difficulty": "Hard",
+    "question_en": "Which protocol is used for secure data transmission over the internet?",
+    "question_hi": "इंटरनेट पर सुरक्षित डेटा संचारण के लिए किस प्रोटोकॉल का उपयोग किया जाता है?",
+    "options": [
+      { "key": "A", "text_en": "HTTP", "text_hi": "HTTP" },
+      { "key": "B", "text_en": "FTP", "text_hi": "FTP" },
+      { "key": "C", "text_en": "HTTPS", "text_hi": "HTTPS" },
+      { "key": "D", "text_en": "SMTP", "text_hi": "SMTP" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "HTTPS (Hyper Text Transfer Protocol Secure) encrypts data using SSL/TLS for secure transmission.",
+    "explanation_hi": "HTTPS (हाइपर टेक्स्ट ट्रांसफर प्रोटोकॉल सिक्योर) सुरक्षित संचारण के लिए SSL/TLS का उपयोग करके डेटा को एन्क्रिप्ट करता है।"
+  },
+  {
+    "id": 64,
+    "category": "Computer Fundamentals",
+    "difficulty": "Hard",
+    "question_en": "Which of the following is a non-volatile memory?",
+    "question_hi": "निम्नलिखित में से कौन सी गैर-अस्थिर (नॉन-वोलेटाइल) मेमोरी है?",
+    "options": [
+      { "key": "A", "text_en": "RAM", "text_hi": "RAM" },
+      { "key": "B", "text_en": "Cache", "text_hi": "कैश" },
+      { "key": "C", "text_en": "ROM", "text_hi": "ROM" },
+      { "key": "D", "text_en": "Register", "text_hi": "रजिस्टर" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "ROM (Read Only Memory) is non-volatile, meaning it retains data even when power is turned off.",
+    "explanation_hi": "ROM (रीड ओनली मेमोरी) गैर-अस्थिर है, अर्थात बिजली बंद होने पर भी डेटा बना रहता है।"
+  },
+  {
+    "id": 65,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question_en": "Which key is used to delete a character to the right of the cursor?",
+    "question_hi": "कर्सर के दाईं ओर के अक्षर को हटाने के लिए किस कुंजी का उपयोग किया जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Backspace", "text_hi": "बैकस्पेस" },
+      { "key": "B", "text_en": "Delete", "text_hi": "डिलीट" },
+      { "key": "C", "text_en": "Enter", "text_hi": "एंटर" },
+      { "key": "D", "text_en": "Escape", "text_hi": "एस्केप" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "The Delete key removes the character to the right of the cursor, while Backspace removes the character to the left.",
+    "explanation_hi": "Delete कुंजी कर्सर के दाईं ओर के अक्षर को हटाती है, जबकि Backspace बाईं ओर के अक्षर को हटाती है।"
+  },
+  {
+    "id": 66,
+    "category": "Computer Fundamentals",
+    "difficulty": "Hard",
+    "question_en": "What does SQL stand for?",
+    "question_hi": "SQL का पूर्ण रूप क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Structured Query Language", "text_hi": "स्ट्रक्चर्ड क्वेरी लैंग्वेज" },
+      { "key": "B", "text_en": "Simple Query Language", "text_hi": "सिंपल क्वेरी लैंग्वेज" },
+      { "key": "C", "text_en": "Sequential Query Language", "text_hi": "सीक्वेंशियल क्वेरी लैंग्वेज" },
+      { "key": "D", "text_en": "Standard Query Language", "text_hi": "स्टैंडर्ड क्वेरी लैंग्वेज" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "SQL stands for Structured Query Language, used for managing and querying relational databases.",
+    "explanation_hi": "SQL का पूर्ण रूप स्ट्रक्चर्ड क्वेरी लैंग्वेज है, जिसका उपयोग रिलेशनल डेटाबेस को प्रबंधित और क्वेरी करने में होता है।"
+  },
+  {
+    "id": 67,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "What is the shortcut key to copy selected text?",
+    "question_hi": "चयनित टेक्स्ट को कॉपी करने की शॉर्टकट कुंजी क्या है?",
+    "options": [
+      { "key": "A", "text_en": "Ctrl + V", "text_hi": "Ctrl + V" },
+      { "key": "B", "text_en": "Ctrl + X", "text_hi": "Ctrl + X" },
+      { "key": "C", "text_en": "Ctrl + C", "text_hi": "Ctrl + C" },
+      { "key": "D", "text_en": "Ctrl + Z", "text_hi": "Ctrl + Z" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Ctrl + C is used to copy. Ctrl + V is paste, Ctrl + X is cut, and Ctrl + Z is undo.",
+    "explanation_hi": "Ctrl + C कॉपी करने के लिए है। Ctrl + V पेस्ट, Ctrl + X कट और Ctrl + Z अंडू के लिए है।"
+  },
+  {
+    "id": 68,
+    "category": "Computer Fundamentals",
+    "difficulty": "Hard",
+    "question_en": "Which topology connects all devices to a single central cable?",
+    "question_hi": "कौन सी टोपोलॉजी सभी उपकरणों को एक केंद्रीय केबल से जोड़ती है?",
+    "options": [
+      { "key": "A", "text_en": "Star", "text_hi": "स्टार" },
+      { "key": "B", "text_en": "Ring", "text_hi": "रिंग" },
+      { "key": "C", "text_en": "Bus", "text_hi": "बस" },
+      { "key": "D", "text_en": "Mesh", "text_hi": "मेश" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "In Bus topology, all devices are connected to a single backbone cable.",
+    "explanation_hi": "बस टोपोलॉजी में, सभी उपकरण एक ही मुख्य केबल से जुड़े होते हैं।"
+  },
+  {
+    "id": 69,
+    "category": "Computer Fundamentals",
+    "difficulty": "Easy",
+    "question_en": "1 Kilobyte (KB) is equal to how many bytes?",
+    "question_hi": "1 किलोबाइट (KB) कितने बाइट्स के बराबर होता है?",
+    "options": [
+      { "key": "A", "text_en": "100 bytes", "text_hi": "100 बाइट्स" },
+      { "key": "B", "text_en": "512 bytes", "text_hi": "512 बाइट्स" },
+      { "key": "C", "text_en": "1024 bytes", "text_hi": "1024 बाइट्स" },
+      { "key": "D", "text_en": "1000 bytes", "text_hi": "1000 बाइट्स" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "1 Kilobyte = 1024 bytes (2^10 bytes) in binary computing.",
+    "explanation_hi": "बाइनरी कंप्यूटिंग में 1 किलोबाइट = 1024 बाइट्स (2^10 बाइट्स)।"
+  },
+  {
+    "id": 70,
+    "category": "Computer Fundamentals",
+    "difficulty": "Medium",
+    "question_en": "Which of the following is an example of system software?",
+    "question_hi": "निम्नलिखित में से कौन सा सिस्टम सॉफ्टवेयर का उदाहरण है?",
+    "options": [
+      { "key": "A", "text_en": "MS Word", "text_hi": "MS Word" },
+      { "key": "B", "text_en": "Google Chrome", "text_hi": "Google Chrome" },
+      { "key": "C", "text_en": "Windows 11", "text_hi": "Windows 11" },
+      { "key": "D", "text_en": "VLC Player", "text_hi": "VLC Player" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Windows 11 is an operating system, which is a type of system software. Others are application software.",
+    "explanation_hi": "Windows 11 एक ऑपरेटिंग सिस्टम है, जो सिस्टम सॉफ्टवेयर का एक प्रकार है। अन्य एप्लीकेशन सॉफ्टवेयर हैं।"
+  },
+  {
+    "id": 71,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question_en": "What is 25% of 200?",
+    "question_hi": "200 का 25% क्या है?",
+    "options": [
+      { "key": "A", "text_en": "25", "text_hi": "25" },
+      { "key": "B", "text_en": "50", "text_hi": "50" },
+      { "key": "C", "text_en": "75", "text_hi": "75" },
+      { "key": "D", "text_en": "100", "text_hi": "100" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "25% of 200 = (25/100) × 200 = 50.",
+    "explanation_hi": "200 का 25% = (25/100) × 200 = 50."
+  },
+  {
+    "id": 72,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question_en": "What is the square root of 144?",
+    "question_hi": "144 का वर्गमूल क्या है?",
+    "options": [
+      { "key": "A", "text_en": "11", "text_hi": "11" },
+      { "key": "B", "text_en": "12", "text_hi": "12" },
+      { "key": "C", "text_en": "13", "text_hi": "13" },
+      { "key": "D", "text_en": "14", "text_hi": "14" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "√144 = 12, because 12 × 12 = 144.",
+    "explanation_hi": "√144 = 12, क्योंकि 12 × 12 = 144."
+  },
+  {
+    "id": 73,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question_en": "If a train travels 60 km in 1 hour, what is its speed?",
+    "question_hi": "यदि एक ट्रेन 1 घंटे में 60 किमी चलती है, तो उसकी गति क्या है?",
+    "options": [
+      { "key": "A", "text_en": "30 km/hr", "text_hi": "30 किमी/घंटा" },
+      { "key": "B", "text_en": "60 km/hr", "text_hi": "60 किमी/घंटा" },
+      { "key": "C", "text_en": "90 km/hr", "text_hi": "90 किमी/घंटा" },
+      { "key": "D", "text_en": "120 km/hr", "text_hi": "120 किमी/घंटा" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Speed = Distance / Time = 60 km / 1 hour = 60 km/hr.",
+    "explanation_hi": "गति = दूरी / समय = 60 किमी / 1 घंटा = 60 किमी/घंटा।"
+  },
+  {
+    "id": 74,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "A shopkeeper sells an article for ₹450 with a profit of 25%. What was the cost price?",
+    "question_hi": "एक दुकानदार 25% लाभ पर एक वस्तु ₹450 में बेचता है। लागत मूल्य क्या था?",
+    "options": [
+      { "key": "A", "text_en": "₹350", "text_hi": "₹350" },
+      { "key": "B", "text_en": "₹360", "text_hi": "₹360" },
+      { "key": "C", "text_en": "₹375", "text_hi": "₹375" },
+      { "key": "D", "text_en": "₹400", "text_hi": "₹400" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "SP = CP × (1 + Profit%). So CP = 450 / 1.25 = ₹360.",
+    "explanation_hi": "SP = CP × (1 + लाभ%). तो CP = 450 / 1.25 = ₹360."
+  },
+  {
+    "id": 75,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "The average of 5 numbers is 20. If one number is removed, the average becomes 15. What is the removed number?",
+    "question_hi": "5 संख्याओं का औसत 20 है। यदि एक संख्या हटा दी जाए, तो औसत 15 हो जाता है। हटाई गई संख्या क्या है?",
+    "options": [
+      { "key": "A", "text_en": "30", "text_hi": "30" },
+      { "key": "B", "text_en": "35", "text_hi": "35" },
+      { "key": "C", "text_en": "40", "text_hi": "40" },
+      { "key": "D", "text_en": "45", "text_hi": "45" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Sum of 5 numbers = 100. Sum of 4 numbers = 60. Removed number = 100 - 60 = 40.",
+    "explanation_hi": "5 संख्याओं का योग = 100। 4 संख्याओं का योग = 60। हटाई गई संख्या = 100 - 60 = 40."
+  },
+  {
+    "id": 76,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "A can do a piece of work in 12 days. B can do it in 18 days. In how many days will they finish it together?",
+    "question_hi": "A एक काम 12 दिन में कर सकता है। B उसे 18 दिन में कर सकता है। दोनों मिलकर कितने दिन में काम पूरा करेंगे?",
+    "options": [
+      { "key": "A", "text_en": "7.2 days", "text_hi": "7.2 दिन" },
+      { "key": "B", "text_en": "8 days", "text_hi": "8 दिन" },
+      { "key": "C", "text_en": "9 days", "text_hi": "9 दिन" },
+      { "key": "D", "text_en": "6 days", "text_hi": "6 दिन" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Combined rate = 1/12 + 1/18 = 5/36. Time = 36/5 = 7.2 days.",
+    "explanation_hi": "संयुक्त दर = 1/12 + 1/18 = 5/36। समय = 36/5 = 7.2 दिन।"
+  },
+  {
+    "id": 77,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "Find the simple interest on ₹5000 at 8% per annum for 3 years.",
+    "question_hi": "₹5000 पर 8% वार्षिक दर से 3 वर्ष का साधारण ब्याज ज्ञात करें।",
+    "options": [
+      { "key": "A", "text_en": "₹1000", "text_hi": "₹1000" },
+      { "key": "B", "text_en": "₹1200", "text_hi": "₹1200" },
+      { "key": "C", "text_en": "₹1500", "text_hi": "₹1500" },
+      { "key": "D", "text_en": "₹800", "text_hi": "₹800" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "SI = P × R × T / 100 = 5000 × 8 × 3 / 100 = ₹1200.",
+    "explanation_hi": "SI = P × R × T / 100 = 5000 × 8 × 3 / 100 = ₹1200."
+  },
+  {
+    "id": 78,
+    "category": "Mathematics",
+    "difficulty": "Hard",
+    "question_en": "The compound interest on ₹10,000 at 10% per annum for 2 years is:",
+    "question_hi": "₹10,000 पर 10% वार्षिक दर से 2 वर्ष का चक्रवृद्धि ब्याज है:",
+    "options": [
+      { "key": "A", "text_en": "₹2000", "text_hi": "₹2000" },
+      { "key": "B", "text_en": "₹2100", "text_hi": "₹2100" },
+      { "key": "C", "text_en": "₹2200", "text_hi": "₹2200" },
+      { "key": "D", "text_en": "₹2500", "text_hi": "₹2500" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "CI = P(1 + R/100)^T - P = 10000(1.1)² - 10000 = 12100 - 10000 = ₹2100.",
+    "explanation_hi": "CI = P(1 + R/100)^T - P = 10000(1.1)² - 10000 = 12100 - 10000 = ₹2100."
+  },
+  {
+    "id": 79,
+    "category": "Mathematics",
+    "difficulty": "Hard",
+    "question_en": "A boat can travel 20 km upstream in 4 hours and 20 km downstream in 2 hours. Find the speed of the boat in still water.",
+    "question_hi": "एक नाव 4 घंटे में 20 किमी धारा के विपरीत और 2 घंटे में 20 किमी धारा के अनुकूल चल सकती है। शांत जल में नाव की गति ज्ञात करें।",
+    "options": [
+      { "key": "A", "text_en": "5 km/hr", "text_hi": "5 किमी/घंटा" },
+      { "key": "B", "text_en": "7.5 km/hr", "text_hi": "7.5 किमी/घंटा" },
+      { "key": "C", "text_en": "10 km/hr", "text_hi": "10 किमी/घंटा" },
+      { "key": "D", "text_en": "12.5 km/hr", "text_hi": "12.5 किमी/घंटा" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Upstream speed = 5 km/hr, Downstream speed = 10 km/hr. Speed in still water = (5+10)/2 = 7.5 km/hr.",
+    "explanation_hi": "धारा के विपरीत गति = 5 किमी/घंटा, धारा के अनुकूल गति = 10 किमी/घंटा। शांत जल में गति = (5+10)/2 = 7.5 किमी/घंटा।"
+  },
+  {
+    "id": 80,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question_en": "What is the LCM of 4 and 6?",
+    "question_hi": "4 और 6 का LCM (लघुत्तम समापवर्त्य) क्या है?",
+    "options": [
+      { "key": "A", "text_en": "6", "text_hi": "6" },
+      { "key": "B", "text_en": "12", "text_hi": "12" },
+      { "key": "C", "text_en": "18", "text_hi": "18" },
+      { "key": "D", "text_en": "24", "text_hi": "24" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "LCM of 4 and 6 = 12 (smallest number divisible by both 4 and 6).",
+    "explanation_hi": "4 और 6 का LCM = 12 (सबसे छोटी संख्या जो 4 और 6 दोनों से विभाज्य हो)।"
+  },
+  {
+    "id": 81,
+    "category": "Mathematics",
+    "difficulty": "Hard",
+    "question_en": "Two pipes can fill a tank in 15 and 20 minutes respectively. A drain pipe can empty it in 30 minutes. If all three are opened, how long to fill the tank?",
+    "question_hi": "दो पाइप क्रमशः 15 और 20 मिनट में एक टंकी भर सकते हैं। एक निकासी पाइप 30 मिनट में उसे खाली कर सकता है। तीनों खोलने पर टंकी कितने समय में भरेगी?",
+    "options": [
+      { "key": "A", "text_en": "10 minutes", "text_hi": "10 मिनट" },
+      { "key": "B", "text_en": "12 minutes", "text_hi": "12 मिनट" },
+      { "key": "C", "text_en": "15 minutes", "text_hi": "15 मिनट" },
+      { "key": "D", "text_en": "20 minutes", "text_hi": "20 मिनट" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Net rate = 1/15 + 1/20 - 1/30 = (4+3-2)/60 = 5/60 = 1/12. Time = 12 minutes.",
+    "explanation_hi": "शुद्ध दर = 1/15 + 1/20 - 1/30 = (4+3-2)/60 = 5/60 = 1/12। समय = 12 मिनट।"
+  },
+  {
+    "id": 82,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "The ratio of ages of A and B is 3:5. If the sum of their ages is 40, find A's age.",
+    "question_hi": "A और B की आयु का अनुपात 3:5 है। यदि उनकी आयु का योग 40 है, तो A की आयु ज्ञात करें।",
+    "options": [
+      { "key": "A", "text_en": "12", "text_hi": "12" },
+      { "key": "B", "text_en": "15", "text_hi": "15" },
+      { "key": "C", "text_en": "18", "text_hi": "18" },
+      { "key": "D", "text_en": "20", "text_hi": "20" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "A = 3x, B = 5x. 3x + 5x = 40, so x = 5. A's age = 3 × 5 = 15.",
+    "explanation_hi": "A = 3x, B = 5x. 3x + 5x = 40, तो x = 5। A की आयु = 3 × 5 = 15."
+  },
+  {
+    "id": 83,
+    "category": "Mathematics",
+    "difficulty": "Hard",
+    "question_en": "A mixture contains milk and water in the ratio 7:3. If 10 liters of water is added, the ratio becomes 7:5. Find the original quantity of the mixture.",
+    "question_hi": "एक मिश्रण में दूध और पानी 7:3 के अनुपात में हैं। 10 लीटर पानी मिलाने पर अनुपात 7:5 हो जाता है। मिश्रण की मूल मात्रा ज्ञात करें।",
+    "options": [
+      { "key": "A", "text_en": "35 liters", "text_hi": "35 लीटर" },
+      { "key": "B", "text_en": "40 liters", "text_hi": "40 लीटर" },
+      { "key": "C", "text_en": "50 liters", "text_hi": "50 लीटर" },
+      { "key": "D", "text_en": "45 liters", "text_hi": "45 लीटर" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Milk = 7x, Water = 3x. After adding 10L: 7x/(3x+10) = 7/5. So 35x = 21x + 70, x = 5. Total = 10 × 5 = 50 liters.",
+    "explanation_hi": "दूध = 7x, पानी = 3x। 10L जोड़ने पर: 7x/(3x+10) = 7/5। तो 35x = 21x + 70, x = 5। कुल = 10 × 5 = 50 लीटर।"
+  },
+  {
+    "id": 84,
+    "category": "Mathematics",
+    "difficulty": "Easy",
+    "question_en": "What is the HCF of 12 and 18?",
+    "question_hi": "12 और 18 का HCF (महत्तम समापवर्तक) क्या है?",
+    "options": [
+      { "key": "A", "text_en": "3", "text_hi": "3" },
+      { "key": "B", "text_en": "6", "text_hi": "6" },
+      { "key": "C", "text_en": "9", "text_hi": "9" },
+      { "key": "D", "text_en": "12", "text_hi": "12" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Factors of 12: 1,2,3,4,6,12. Factors of 18: 1,2,3,6,9,18. HCF = 6.",
+    "explanation_hi": "12 के गुणनखंड: 1,2,3,4,6,12। 18 के गुणनखंड: 1,2,3,6,9,18। HCF = 6."
+  },
+  {
+    "id": 85,
+    "category": "Mathematics",
+    "difficulty": "Medium",
+    "question_en": "A train 150m long passes a platform 250m long in 20 seconds. Find the speed of the train.",
+    "question_hi": "150 मीटर लंबी ट्रेन 250 मीटर लंबे प्लेटफॉर्म को 20 सेकंड में पार करती है। ट्रेन की गति ज्ञात करें।",
+    "options": [
+      { "key": "A", "text_en": "72 km/hr", "text_hi": "72 किमी/घंटा" },
+      { "key": "B", "text_en": "54 km/hr", "text_hi": "54 किमी/घंटा" },
+      { "key": "C", "text_en": "20 km/hr", "text_hi": "20 किमी/घंटा" },
+      { "key": "D", "text_en": "36 km/hr", "text_hi": "36 किमी/घंटा" }
+    ],
+    "correctAnswer": "A",
+    "explanation_en": "Total distance = 150 + 250 = 400m. Speed = 400/20 = 20 m/s = 72 km/hr.",
+    "explanation_hi": "कुल दूरी = 150 + 250 = 400 मीटर। गति = 400/20 = 20 मी/से = 72 किमी/घंटा।"
+  },
+  {
+    "id": 86,
+    "category": "Science",
+    "difficulty": "Easy",
+    "question_en": "What is the chemical symbol for water?",
+    "question_hi": "पानी का रासायनिक सूत्र क्या है?",
+    "options": [
+      { "key": "A", "text_en": "CO2", "text_hi": "CO2" },
+      { "key": "B", "text_en": "H2O", "text_hi": "H2O" },
+      { "key": "C", "text_en": "O2", "text_hi": "O2" },
+      { "key": "D", "text_en": "NaCl", "text_hi": "NaCl" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Water is composed of two hydrogen atoms and one oxygen atom, hence H2O.",
+    "explanation_hi": "पानी दो हाइड्रोजन और एक ऑक्सीजन परमाणु से मिलकर बना है, इसलिए H2O."
+  },
+  {
+    "id": 87,
+    "category": "Science",
+    "difficulty": "Easy",
+    "question_en": "Which vitamin is obtained from sunlight?",
+    "question_hi": "सूर्य के प्रकाश से कौन सा विटामिन प्राप्त होता है?",
+    "options": [
+      { "key": "A", "text_en": "Vitamin A", "text_hi": "विटामिन A" },
+      { "key": "B", "text_en": "Vitamin B", "text_hi": "विटामिन B" },
+      { "key": "C", "text_en": "Vitamin C", "text_hi": "विटामिन C" },
+      { "key": "D", "text_en": "Vitamin D", "text_hi": "विटामिन D" }
+    ],
+    "correctAnswer": "D",
+    "explanation_en": "Vitamin D is synthesized in the skin when exposed to sunlight (UV-B rays).",
+    "explanation_hi": "सूर्य के प्रकाश (UV-B किरणों) के संपर्क में आने पर त्वचा में विटामिन D का संश्लेषण होता है।"
+  },
+  {
+    "id": 88,
+    "category": "Science",
+    "difficulty": "Easy",
+    "question_en": "Which organ purifies blood in the human body?",
+    "question_hi": "मानव शरीर में रक्त को शुद्ध करने वाला अंग कौन सा है?",
+    "options": [
+      { "key": "A", "text_en": "Heart", "text_hi": "हृदय" },
+      { "key": "B", "text_en": "Liver", "text_hi": "यकृत" },
+      { "key": "C", "text_en": "Kidney", "text_hi": "गुर्दा" },
+      { "key": "D", "text_en": "Lungs", "text_hi": "फेफड़े" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Kidneys filter waste products from the blood and produce urine.",
+    "explanation_hi": "गुर्दे रक्त से अपशिष्ट पदार्थों को छानते हैं और मूत्र का उत्पादन करते हैं।"
+  },
+  {
+    "id": 89,
+    "category": "Science",
+    "difficulty": "Medium",
+    "question_en": "Which gas is released during photosynthesis?",
+    "question_hi": "प्रकाश संश्लेषण के दौरान कौन सी गैस निकलती है?",
+    "options": [
+      { "key": "A", "text_en": "Carbon Dioxide", "text_hi": "कार्बन डाइऑक्साइड" },
+      { "key": "B", "text_en": "Nitrogen", "text_hi": "नाइट्रोजन" },
+      { "key": "C", "text_en": "Oxygen", "text_hi": "ऑक्सीजन" },
+      { "key": "D", "text_en": "Hydrogen", "text_hi": "हाइड्रोजन" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "During photosynthesis, plants absorb CO2 and water, and release oxygen as a byproduct.",
+    "explanation_hi": "प्रकाश संश्लेषण के दौरान, पौधे CO2 और पानी अवशोषित करते हैं और उपोत्पाद के रूप में ऑक्सीजन छोड़ते हैं।"
+  },
+  {
+    "id": 90,
+    "category": "Science",
+    "difficulty": "Medium",
+    "question_en": "Which metal is liquid at room temperature?",
+    "question_hi": "कमरे के तापमान पर कौन सी धातु तरल अवस्था में होती है?",
+    "options": [
+      { "key": "A", "text_en": "Iron", "text_hi": "लोहा" },
+      { "key": "B", "text_en": "Mercury", "text_hi": "पारा" },
+      { "key": "C", "text_en": "Gold", "text_hi": "सोना" },
+      { "key": "D", "text_en": "Silver", "text_hi": "चाँदी" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Mercury (Hg) is the only metal that is liquid at room temperature.",
+    "explanation_hi": "पारा (Hg) एकमात्र धातु है जो कमरे के तापमान पर तरल अवस्था में होती है।"
+  },
+  {
+    "id": 91,
+    "category": "Science",
+    "difficulty": "Medium",
+    "question_en": "Newton's first law of motion is also called:",
+    "question_hi": "न्यूटन के गति का पहला नियम किस नाम से भी जाना जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Law of Acceleration", "text_hi": "त्वरण का नियम" },
+      { "key": "B", "text_en": "Law of Inertia", "text_hi": "जड़त्व का नियम" },
+      { "key": "C", "text_en": "Law of Reaction", "text_hi": "प्रतिक्रिया का नियम" },
+      { "key": "D", "text_en": "Law of Gravity", "text_hi": "गुरुत्वाकर्षण का नियम" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Newton's First Law states that a body remains at rest or in uniform motion unless acted upon by an external force. This is the Law of Inertia.",
+    "explanation_hi": "न्यूटन का पहला नियम कहता है कि कोई वस्तु अपनी स्थिति में तब तक बनी रहती है जब तक उस पर बाहरी बल न लगे। यह जड़त्व का नियम है।"
+  },
+  {
+    "id": 92,
+    "category": "Science",
+    "difficulty": "Hard",
+    "question_en": "Which acid is found in the human stomach?",
+    "question_hi": "मानव पेट में कौन सा अम्ल पाया जाता है?",
+    "options": [
+      { "key": "A", "text_en": "Sulphuric Acid", "text_hi": "सल्फ्यूरिक एसिड" },
+      { "key": "B", "text_en": "Hydrochloric Acid", "text_hi": "हाइड्रोक्लोरिक एसिड" },
+      { "key": "C", "text_en": "Nitric Acid", "text_hi": "नाइट्रिक एसिड" },
+      { "key": "D", "text_en": "Acetic Acid", "text_hi": "एसिटिक एसिड" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Hydrochloric acid (HCl) is produced by the stomach lining and helps in digestion.",
+    "explanation_hi": "हाइड्रोक्लोरिक एसिड (HCl) पेट की दीवार द्वारा उत्पन्न होता है और पाचन में सहायता करता है।"
+  },
+  {
+    "id": 93,
+    "category": "Science",
+    "difficulty": "Hard",
+    "question_en": "The SI unit of electric current is:",
+    "question_hi": "विद्युत धारा की SI इकाई है:",
+    "options": [
+      { "key": "A", "text_en": "Volt", "text_hi": "वोल्ट" },
+      { "key": "B", "text_en": "Watt", "text_hi": "वाट" },
+      { "key": "C", "text_en": "Ampere", "text_hi": "एम्पीयर" },
+      { "key": "D", "text_en": "Ohm", "text_hi": "ओम" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Ampere is the SI unit of electric current. Volt is for potential difference, Watt is for power, and Ohm is for resistance.",
+    "explanation_hi": "एम्पीयर विद्युत धारा की SI इकाई है। वोल्ट विभवांतर की, वाट शक्ति की और ओम प्रतिरोध की इकाई है।"
+  },
+  {
+    "id": 94,
+    "category": "Current Affairs",
+    "difficulty": "Easy",
+    "question_en": "Which is the national game of India (traditionally recognized)?",
+    "question_hi": "भारत का राष्ट्रीय खेल (पारंपरिक रूप से मान्यता प्राप्त) कौन सा है?",
+    "options": [
+      { "key": "A", "text_en": "Cricket", "text_hi": "क्रिकेट" },
+      { "key": "B", "text_en": "Hockey", "text_hi": "हॉकी" },
+      { "key": "C", "text_en": "Kabaddi", "text_hi": "कबड्डी" },
+      { "key": "D", "text_en": "Football", "text_hi": "फुटबॉल" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Hockey is traditionally recognized as India's national game, though there is no official notification.",
+    "explanation_hi": "हॉकी पारंपरिक रूप से भारत के राष्ट्रीय खेल के रूप में मान्यता प्राप्त है, हालांकि कोई आधिकारिक अधिसूचना नहीं है।"
+  },
+  {
+    "id": 95,
+    "category": "Current Affairs",
+    "difficulty": "Easy",
+    "question_en": "Which organization is responsible for space research in India?",
+    "question_hi": "भारत में अंतरिक्ष अनुसंधान के लिए कौन सा संगठन जिम्मेदार है?",
+    "options": [
+      { "key": "A", "text_en": "NASA", "text_hi": "NASA" },
+      { "key": "B", "text_en": "ISRO", "text_hi": "ISRO" },
+      { "key": "C", "text_en": "DRDO", "text_hi": "DRDO" },
+      { "key": "D", "text_en": "BARC", "text_hi": "BARC" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "ISRO (Indian Space Research Organisation) is India's national space agency responsible for space research and satellite launches.",
+    "explanation_hi": "ISRO (भारतीय अंतरिक्ष अनुसंधान संगठन) भारत की राष्ट्रीय अंतरिक्ष एजेंसी है जो अंतरिक्ष अनुसंधान और उपग्रह प्रक्षेपण के लिए जिम्मेदार है।"
+  },
+  {
+    "id": 96,
+    "category": "Current Affairs",
+    "difficulty": "Medium",
+    "question_en": "India's Chandrayaan-3 mission successfully landed on the Moon in which year?",
+    "question_hi": "भारत का चंद्रयान-3 मिशन किस वर्ष चंद्रमा पर सफलतापूर्वक उतरा?",
+    "options": [
+      { "key": "A", "text_en": "2021", "text_hi": "2021" },
+      { "key": "B", "text_en": "2022", "text_hi": "2022" },
+      { "key": "C", "text_en": "2023", "text_hi": "2023" },
+      { "key": "D", "text_en": "2024", "text_hi": "2024" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Chandrayaan-3 successfully soft-landed on the Moon's south pole on August 23, 2023, making India the 4th country to land on the Moon.",
+    "explanation_hi": "चंद्रयान-3 ने 23 अगस्त 2023 को चंद्रमा के दक्षिणी ध्रुव पर सफलतापूर्वक सॉफ्ट लैंडिंग की, जिससे भारत चंद्रमा पर उतरने वाला चौथा देश बना।"
+  },
+  {
+    "id": 97,
+    "category": "Current Affairs",
+    "difficulty": "Medium",
+    "question_en": "Which country hosted the G20 Summit in 2023?",
+    "question_hi": "2023 में G20 शिखर सम्मेलन की मेजबानी किस देश ने की?",
+    "options": [
+      { "key": "A", "text_en": "Japan", "text_hi": "जापान" },
+      { "key": "B", "text_en": "India", "text_hi": "भारत" },
+      { "key": "C", "text_en": "Brazil", "text_hi": "ब्राज़ील" },
+      { "key": "D", "text_en": "Germany", "text_hi": "जर्मनी" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "India hosted the G20 Summit in September 2023 in New Delhi under the presidency of PM Narendra Modi.",
+    "explanation_hi": "भारत ने प्रधानमंत्री नरेंद्र मोदी की अध्यक्षता में सितंबर 2023 में नई दिल्ली में G20 शिखर सम्मेलन की मेजबानी की।"
+  },
+  {
+    "id": 98,
+    "category": "Current Affairs",
+    "difficulty": "Medium",
+    "question_en": "India's Unified Payments Interface (UPI) was developed by:",
+    "question_hi": "भारत का यूनिफाइड पेमेंट्स इंटरफेस (UPI) किसके द्वारा विकसित किया गया?",
+    "options": [
+      { "key": "A", "text_en": "RBI", "text_hi": "RBI" },
+      { "key": "B", "text_en": "NPCI", "text_hi": "NPCI" },
+      { "key": "C", "text_en": "SEBI", "text_hi": "SEBI" },
+      { "key": "D", "text_en": "NITI Aayog", "text_hi": "नीति आयोग" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "UPI was developed by the National Payments Corporation of India (NPCI) and launched in April 2016.",
+    "explanation_hi": "UPI को भारतीय राष्ट्रीय भुगतान निगम (NPCI) द्वारा विकसित किया गया और अप्रैल 2016 में लॉन्च किया गया।"
+  },
+  {
+    "id": 99,
+    "category": "Current Affairs",
+    "difficulty": "Hard",
+    "question_en": "Which Indian city was renamed as 'Prayagraj'?",
+    "question_hi": "किस भारतीय शहर का नाम बदलकर 'प्रयागराज' किया गया?",
+    "options": [
+      { "key": "A", "text_en": "Varanasi", "text_hi": "वाराणसी" },
+      { "key": "B", "text_en": "Allahabad", "text_hi": "इलाहाबाद" },
+      { "key": "C", "text_en": "Lucknow", "text_hi": "लखनऊ" },
+      { "key": "D", "text_en": "Agra", "text_hi": "आगरा" }
+    ],
+    "correctAnswer": "B",
+    "explanation_en": "Allahabad was renamed to Prayagraj in October 2018 by the Uttar Pradesh government.",
+    "explanation_hi": "उत्तर प्रदेश सरकार द्वारा अक्टूबर 2018 में इलाहाबाद का नाम बदलकर प्रयागराज किया गया।"
+  },
+  {
+    "id": 100,
+    "category": "Current Affairs",
+    "difficulty": "Hard",
+    "question_en": "The 'Ayushman Bharat' scheme provides health coverage up to:",
+    "question_hi": "'आयुष्मान भारत' योजना कितनी तक की स्वास्थ्य कवरेज प्रदान करती है?",
+    "options": [
+      { "key": "A", "text_en": "₹1 lakh per family", "text_hi": "₹1 लाख प्रति परिवार" },
+      { "key": "B", "text_en": "₹3 lakh per family", "text_hi": "₹3 लाख प्रति परिवार" },
+      { "key": "C", "text_en": "₹5 lakh per family", "text_hi": "₹5 लाख प्रति परिवार" },
+      { "key": "D", "text_en": "₹10 lakh per family", "text_hi": "₹10 लाख प्रति परिवार" }
+    ],
+    "correctAnswer": "C",
+    "explanation_en": "Ayushman Bharat (PM-JAY) provides health coverage of up to ₹5 lakh per family per year for secondary and tertiary hospitalization.",
+    "explanation_hi": "आयुष्मान भारत (PM-JAY) द्वितीयक और तृतीयक अस्पताल में भर्ती के लिए प्रति परिवार प्रति वर्ष ₹5 लाख तक की स्वास्थ्य कवरेज प्रदान करता है।"
+  }
+]

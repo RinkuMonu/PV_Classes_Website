@@ -1,0 +1,197 @@
+﻿[
+    {
+        "discountPercent":  0,
+        "subjects":  [
+                         {
+                             "_id":  "69a57863262f86c94e4aa250",
+                             "title":  "intellectual disability/ teaching-method",
+                             "description":  "Intellectual disability is a neurodevelopmental condition characterized by limitations in intellectual functioning, such as reasoning, learning, and problem-solving",
+                             "course":  "68b2d9e058157b866aee3959",
+                             "videos":  [
+                                            "@{title=intellectual disability/ class -1; url=https://www.youtube.com/watch?v=mzCBMLq2CWI\u0026t=367s; duration=37; order=1; isFree=True; notes=System.Object[]}",
+                                            "@{title=class-2nd by pankaj sir; url=https://www.youtube.com/watch?v=lJfbmlhBLaA\u0026t=1s; duration=30; order=2; isFree=True; notes=System.Object[]}"
+                                        ],
+                             "createdAt":  "2026-03-02T11:45:39.973Z",
+                             "updatedAt":  "2026-03-02T11:50:25.135Z",
+                             "__v":  2
+                         },
+                         {
+                             "_id":  "69a579c8262f86c94e4aa2fa",
+                             "title":  "psychology/ hi/vi By Uma dhakad",
+                             "description":  "Psychology (HI/VI) by Uma Dhakad is a specialized course designed to help learners understand psychological concepts related to Hearing Impairment (HI) and Visual Impairment (VI).",
+                             "course":  "68b2d9e058157b866aee3959",
+                             "videos":  [
+                                            "@{title=Psychology class -1; url=https://www.youtube.com/watch?v=dQuOCpKUIMU\u0026t=534s; duration=37; order=1; isFree=True; notes=System.Object[]}",
+                                            "@{title=human growth and development; url=https://www.youtube.com/watch?v=A3hEdzOWj_Y; duration=23; order=2; isFree=True; notes=System.Object[]}"
+                                        ],
+                             "createdAt":  "2026-03-02T11:51:36.434Z",
+                             "updatedAt":  "2026-03-02T11:53:55.791Z",
+                             "__v":  2
+                         }
+                     ],
+        "_id":  "68b2d9e058157b866aee3959",
+        "title":  "KVS-NVS PRT SPECIAL EDUCATOR Complete Preparation Course",
+        "slug":  "kvs-nvs-PRT-special-educator-complete-preparation-course",
+        "author":  null,
+        "exam":  {
+                     "_id":  "6a14419959dbbe9825b4aee9",
+                     "name":  "KVS-NVS COURSE",
+                     "slug":  "kvs-nvs-course",
+                     "examType":  "692e803ad9863dd17beac2c3",
+                     "description":  "kvs-nvs course",
+                     "logo":  "/uploads/exam/1779712409821-kvsnvs.png",
+                     "createdAt":  "2026-05-25T12:33:29.825Z",
+                     "updatedAt":  "2026-05-27T07:13:26.240Z",
+                     "__v":  0,
+                     "serialNo":  3
+                 },
+        "type":  "Course",
+        "price":  199,
+        "faculty":  [
+                        {
+                            "_id":  "6992cc085e4aa18252a18ff9",
+                            "name":  "Pankaj Dobwal",
+                            "experience":  "5 years ",
+                            "specialization":  "Special Educator ID \u0026 Interview Expert",
+                            "photo":  null,
+                            "createdAt":  "2026-02-16T07:49:28.500Z",
+                            "updatedAt":  "2026-02-16T07:49:28.500Z",
+                            "__v":  0
+                        }
+                    ],
+        "discountPrice":  25,
+        "isFree":  true,
+        "validity":  "12 MONTHS",
+        "language":  "bilingual",
+        "rating":  0,
+        "learnersCount":  0,
+        "shortDescription":  "Complete preparation course covering syllabus, practice, and guidance for teacher recruitment exams.",
+        "longDescription":  "A comprehensive preparation program designed for aspirants of teacher recruitment exams like KVS, NVS TGT SPECIAL EDUCATOR posts. Includes concept-building lectures, practice questions, previous year paper discussions, and mock tests as per the latest syllabus and exam pattern.",
+        "mainMotive":  "Prepare for KVS NVS Teacher Recruitment TGT SPECIAL EDUCATOR with full syllabus coverage and practice.",
+        "topics":  [
+                       "Child Development \u0026 Pedagogy",
+                       "Quantitative Aptitude",
+                       "Subject Concerned TGT  SPECIAL EDUCATOR"
+                   ],
+        "features":  [
+                         "Live interactive classes",
+                         "Recorded lectures",
+                         "PDF notes in Hindi \u0026 English",
+                         "Chapter-wise quizzes",
+                         "Full length mock tests",
+                         "Previous Year Paper Discussion",
+                         "Doubt solving sessions"
+                     ],
+        "images":  [
+                       "1779707024725.jpeg"
+                   ],
+        "status":  "active",
+        "comboId":  null,
+        "pyqs":  [
+
+                 ],
+        "lastUpdated":  "2025-08-30T11:00:48.143Z",
+        "videos":  [
+
+                   ],
+        "createdAt":  "2025-08-30T11:00:48.144Z",
+        "updatedAt":  "2026-05-25T12:23:45.603Z",
+        "__v":  0,
+        "faqs":  [
+                     {
+                         "question":  "",
+                         "answer":  ""
+                     }
+                 ],
+        "full_image":  [
+                           "https://api.pvclasses.in/uploads/course/1779707024725.jpeg"
+                       ],
+        "id":  "68b2d9e058157b866aee3959",
+        "finalPrice":  199
+    },
+    {
+        "discountPercent":  0,
+        "subjects":  [
+
+                     ],
+        "_id":  "68b2f4e74377e5356eaf795e",
+        "title":  "CTET Paper I Complete Preparation Course",
+        "slug":  "ctet-paper-1-complete-course",
+        "author":  {
+                       "_id":  "694fe6ae600c3fd1dcbd8718",
+                       "name":  "DINDAYAL MEENA",
+                       "profile_image_url":  null,
+                       "id":  "694fe6ae600c3fd1dcbd8718"
+                   },
+        "exam":  {
+                     "_id":  "6a0e95802c5264b61977496d",
+                     "name":  "CTET",
+                     "slug":  "ctet",
+                     "examType":  "692e803ad9863dd17beac2c3",
+                     "description":  "THIS IS FOR CTET ASPIRINTS",
+                     "logo":  "/uploads/exam/1779340672628-ctet.jpg",
+                     "createdAt":  "2026-05-21T05:17:52.632Z",
+                     "updatedAt":  "2026-05-25T10:35:29.860Z",
+                     "__v":  0,
+                     "serialNo":  0
+                 },
+        "type":  "Course",
+        "price":  0,
+        "faculty":  [
+
+                    ],
+        "discountPrice":  0,
+        "isFree":  true,
+        "validity":  "12 months",
+        "language":  "Hindi",
+        "rating":  0,
+        "learnersCount":  0,
+        "shortDescription":  "Complete preparation course covering syllabus, practice, and guidance for teacher eligibility exams",
+        "longDescription":  "A comprehensive preparation program designed for CTET aspirants focusing on Paper I syllabus. Covers child development, pedagogy, languages, mathematics, and EVS with live and recorded classes, notes, quizzes, mock tests, and doubt clearing support as per the latest pattern",
+        "mainMotive":  "Complete preparation for CTET Paper I with full syllabus coverage and practice tests.",
+        "topics":  [
+                       "Child Development \u0026 Pedagogy",
+                       "Language I (Hindi)",
+                       "Language II (English)",
+                       "Mathematics",
+                       "Environmental Studies",
+                       "Teaching Methodology",
+                       "Previous Year Questions"
+                   ],
+        "features":  [
+                         "Live interactive classes",
+                         "Recorded lectures",
+                         "PDF notes",
+                         "Chapter-wise quizzes",
+                         "Full length mock tests",
+                         "Previous Year Paper Discussion",
+                         "Doubt solving sessions"
+                     ],
+        "images":  [
+                       "1767869485494.jpg"
+                   ],
+        "status":  "active",
+        "comboId":  null,
+        "pyqs":  [
+
+                 ],
+        "lastUpdated":  "2025-08-30T12:56:07.822Z",
+        "videos":  [
+
+                   ],
+        "createdAt":  "2025-08-30T12:56:07.823Z",
+        "updatedAt":  "2026-01-08T10:51:25.496Z",
+        "__v":  0,
+        "faqs":  [
+                     {
+                         "question":  "",
+                         "answer":  ""
+                     }
+                 ],
+        "full_image":  [
+                           "https://api.pvclasses.in/uploads/course/1767869485494.jpg"
+                       ],
+        "id":  "68b2f4e74377e5356eaf795e",
+        "finalPrice":  0
+    }
+]

@@ -1,5 +1,48 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## 🎭 AI Talking Head Mock Interview
+
+Complete AI mock interview system with **talking head video** (passport photo to AI video with lip sync).
+
+### Key Features
+
+✅ **Talking Head Video** - Your photo becomes AI interviewer  
+✅ **Lip Sync Animation** - Realistic mouth movement  
+✅ **Camera + Mic Access** - User video/audio recording  
+✅ **MCQ Questions** - AI-generated teaching questions  
+✅ **OpenAI Powered** - GPT-4 + TTS  
+✅ **Python Backend** - FastAPI + D-ID/Wav2Lip  
+
+### Quick Start
+
+**See:** [`TALKING_HEAD_SETUP.md`](./TALKING_HEAD_SETUP.md) for complete setup guide
+
+#### 1. Backend (Python)
+```bash
+cd backend
+pip install -r requirements.txt
+# Add OPENAI_API_KEY to .env
+python main.py
+```
+
+#### 2. Frontend (React)
+```bash
+npm install
+npm run dev
+```
+
+#### 3. Test
+- Frontend: http://localhost:3000/mock-interview
+- Backend: http://localhost:8000
+
+4. **Test it:**
+   - Open http://localhost:3000/mock-interview
+   - Select teaching post → Start Interview
+   - 3D avatar will speak questions with lip sync
+   - Select MCQ answers and get instant feedback!
+
+---
+
 ## Getting Started
 
 First, run the development server:
