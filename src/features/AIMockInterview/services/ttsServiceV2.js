@@ -12,6 +12,12 @@ class TTSServiceV2 {
     this._voicesReady = null;
     this.audioElement = null;
     this._isPiperSpeaking = false;
+    
+    // Playback queue and locking mechanisms
+    this.queue = [];
+    this.isProcessingQueue = false;
+    this.abortController = null;
+    this.currentSpeakId = 0;
 
     // Initialize browser voices for fallback
     if (this.synth) {
@@ -112,81 +118,166 @@ class TTSServiceV2 {
     return voices.find(v => v.lang.startsWith(fam)) || voices[0] || null;
   }
 
-  // ── Main speak (Piper API -> Fallback) ────────────────────────────────────
+  // ── Main speak (Queue system) ─────────────────────────────────────────────
   async speak(text, language = 'English', onStart = null, onEnd = null, onError = null, onBoundary = null) {
-    if (this.synth) {
-      this.synth.cancel();
-    }
-    this.cancel();
     if (!text) { onEnd?.(); return; }
+    
+    this.queue.push({ text, language, onStart, onEnd, onError, onBoundary });
+    this.processQueue();
+  }
 
-    try {
-      console.log('Piper TTS Started');
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8001';
-      console.log(`[TTS] 🎤 Requesting Piper TTS for language: ${language}`);
-      
-      const response = await fetch(`${baseUrl}/api/v1/speech/piper`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language })
-      });
+  async processQueue() {
+    if (this.isProcessingQueue || this.queue.length === 0) return;
+    this.isProcessingQueue = true;
 
-      if (!response.ok) {
-        throw new Error(`Piper API failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data.status !== 'success' || !data.audio_url) {
-        throw new Error('Invalid response from Piper API');
-      }
-
-      // Play audio
-      this.audioElement = new Audio(`${baseUrl}${data.audio_url}`);
-      
-      this.audioElement.onplay = () => {
-        this._isPiperSpeaking = true;
-        console.log('Piper Audio Playing');
-        if (onStart) onStart();
-        // Synthesize fake onBoundary events to keep lip-sync active while piper plays,
-        // although useAvatarIdle primarily looks at `isSpeaking()` status.
-        if (onBoundary) {
-          // Just trigger it once at the start so state transitions correctly
-          onBoundary({ name: 'word' });
-        }
-      };
-      
-      this.audioElement.onended = () => {
-        this._isPiperSpeaking = false;
-        this.audioElement = null;
-        console.log('[TTS] ✅ Piper Audio finished');
-        onEnd?.();
-      };
-      
-      this.audioElement.onerror = (e) => {
-        this._isPiperSpeaking = false;
-        this.audioElement = null;
-        throw new Error('Audio playback failed');
-      };
-
-      await this.audioElement.play();
-      
-    } catch (err) {
-      console.error('[TTS] ⚠️ Piper TTS failed, falling back to browser SpeechSynthesis:', err);
-      console.log('Browser Fallback Activated');
-      // Fallback
-      const fallbackLangCode = language === 'Hindi' ? 'hi-IN' : 'en-IN';
-      this._speakFallback(text, fallbackLangCode, onStart, onEnd, onError, onBoundary);
+    while (this.queue.length > 0) {
+      const item = this.queue.shift();
+      await this._executeSpeak(item);
     }
+
+    this.isProcessingQueue = false;
+  }
+
+  async _executeSpeak({ text, language, onStart, onEnd, onError, onBoundary }) {
+    return new Promise(async (resolve) => {
+      const speakId = ++this.currentSpeakId;
+      this.abortController = new AbortController();
+
+      const finish = () => {
+        this.abortController = null;
+        resolve();
+      };
+
+      try {
+        console.log('[TTS] ➡️ TTS request sent');
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8001';
+        console.log(`[TTS] 🎤 Requesting Piper TTS for language: ${language}`);
+        
+        const response = await fetch(`${baseUrl}/api/v1/speech/piper`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, language }),
+          signal: this.abortController.signal
+        });
+
+        if (this.currentSpeakId !== speakId) return resolve(); // Interrupted
+
+        console.log(`[TTS] ⬅️ TTS response received (Status: ${response.status})`);
+        if (!response.ok) {
+          throw new Error(`Piper API failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (this.currentSpeakId !== speakId) return resolve(); // Interrupted
+
+        if (data.status !== 'success' || !data.audio_url) {
+          throw new Error(`Invalid response from Piper API: ${JSON.stringify(data)}`);
+        }
+        
+        console.log(`[TTS] 🔗 Audio URL created: ${data.audio_url}`);
+        this.audioElement = new Audio(`${baseUrl}${data.audio_url}`);
+        
+        this.audioElement.onloadeddata = () => {
+          console.log('[TTS] ⏳ Audio loaded');
+        };
+        
+        this.audioElement.onplay = () => {
+          if (this.currentSpeakId !== speakId) return;
+          this._isPiperSpeaking = true;
+          console.log('[TTS] ▶️ Audio started');
+          if (onStart) onStart();
+          if (onBoundary) {
+            onBoundary({ name: 'word' });
+          }
+        };
+        
+        this.audioElement.onended = () => {
+          if (this.currentSpeakId !== speakId) return;
+          this._isPiperSpeaking = false;
+          
+          this.audioElement.onloadeddata = null;
+          this.audioElement.onplay = null;
+          this.audioElement.onended = null;
+          this.audioElement.onerror = null;
+          this.audioElement = null;
+          
+          console.log('[TTS] ⏹️ Audio ended');
+          if (onEnd) onEnd();
+          finish();
+        };
+        
+        this.audioElement.onerror = (e) => {
+          if (this.currentSpeakId !== speakId) return;
+          this._isPiperSpeaking = false;
+          
+          const errMessage = e.target?.error?.message || e.message || 'Unknown Audio Error';
+          const errCode = e.target?.error?.code || 'No Code';
+          console.error(`[TTS] ❌ Audio playback failed: Code ${errCode}, Message: ${errMessage}`);
+          
+          this.audioElement.onloadeddata = null;
+          this.audioElement.onplay = null;
+          this.audioElement.onended = null;
+          this.audioElement.onerror = null;
+          this.audioElement = null;
+          
+          throw new Error(`Audio playback failed: ${errMessage}`);
+        };
+
+        const playPromise = this.audioElement.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.error(`[TTS] ❌ Playback rejected by browser (autoplay issue?):`, err);
+            throw err;
+          });
+        }
+        
+        
+      } catch (err) {
+        if (err.name === 'AbortError' || this.currentSpeakId !== speakId) {
+          console.log('[TTS] 🛑 Piper TTS fetch aborted.');
+          if (onError) onError(new Error('canceled'));
+          return resolve();
+        }
+        
+        console.error('[TTS] ⚠️ Piper TTS failed, falling back to browser SpeechSynthesis:', err);
+        console.log('Browser Fallback Activated');
+        const fallbackLangCode = language === 'Hindi' ? 'hi-IN' : 'en-IN';
+        
+        await new Promise((fallbackResolve) => {
+          this._speakFallback(
+            text, 
+            fallbackLangCode, 
+            onStart, 
+            () => {
+              if (onEnd) onEnd();
+              fallbackResolve();
+            }, 
+            (e) => {
+              if (onError) onError(e);
+              fallbackResolve();
+            }, 
+            onBoundary,
+            speakId
+          );
+        });
+        finish();
+      }
+    });
   }
 
   // ── Fallback speak ────────────────────────────────────────────────────────
-  async _speakFallback(text, langCode = 'en-IN', onStart = null, onEnd = null, onError = null, onBoundary = null) {
+  async _speakFallback(text, langCode = 'en-IN', onStart = null, onEnd = null, onError = null, onBoundary = null, speakId = null) {
     if (!this.synth) {
       onError?.(new Error('SpeechSynthesis not supported'));
       return;
     }
 
+    if (speakId && this.currentSpeakId !== speakId) return; // Interrupted
+
     const voices = await this._voicesReady;
+    
+    if (speakId && this.currentSpeakId !== speakId) return; // Interrupted
 
     const u = new SpeechSynthesisUtterance(text);
     u.lang   = langCode;      
@@ -206,10 +297,18 @@ class TTSServiceV2 {
 
     if (onBoundary) u.onboundary = onBoundary;
     u.onstart = () => {
+      if (speakId && this.currentSpeakId !== speakId) {
+        this.synth.cancel();
+        return;
+      }
       console.log('[TTS Fallback] Speaking:', text.substring(0, 80));
       if (onStart) onStart();
     };
-    u.onend   = () => { this.currentUtterance = null; onEnd?.(); };
+    u.onend   = () => { 
+      if (speakId && this.currentSpeakId !== speakId) return;
+      this.currentUtterance = null; 
+      onEnd?.(); 
+    };
     u.onerror = (e) => {
       this.currentUtterance = null;
       const errReason = e.error || 'Unknown Error';
@@ -223,12 +322,25 @@ class TTSServiceV2 {
   }
 
   cancel() {
+    this.queue = [];
+    this.currentSpeakId++;
+
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
+
     if (this.audioElement) {
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
+      
+      this.audioElement.onplay = null;
+      this.audioElement.onended = null;
+      this.audioElement.onerror = null;
       this.audioElement = null;
       this._isPiperSpeaking = false;
     }
+    
     if (this.synth) {
       this.synth.cancel();
       this.currentUtterance = null;

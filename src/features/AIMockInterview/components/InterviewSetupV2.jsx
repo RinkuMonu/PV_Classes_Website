@@ -5,13 +5,18 @@ import { useRouter } from 'next/navigation';
 import { DIFFICULTY, LANGUAGE_MODE } from '../constants/interviewConstants';
 import { startInterview } from '../services/aiMockInterviewService';
 import { validateSetupConfig } from '../utils/interviewHelpers';
+import { EXAMS } from '../../../mockInterview/config/exams';
+import { SUBJECT_MAPPING } from '../../../mockInterview/config/subjectMapping';
 
 export default function InterviewSetupV2() {
   const router = useRouter();
 
+  const initialExam = EXAMS[0];
+  const [subjectsList, setSubjectsList] = useState(SUBJECT_MAPPING[initialExam] || []);
+
   const [config, setConfig] = useState({
-    exam: 'SSC CGL',
-    subject: 'General Awareness',
+    exam: initialExam,
+    subject: subjectsList[0] || '',
     language: LANGUAGE_MODE.HINDI,       // Display language default: Hindi
     voiceLanguage: LANGUAGE_MODE.HINDI,  // Voice language default: Hindi
     difficulty: DIFFICULTY.MEDIUM,
@@ -62,11 +67,22 @@ export default function InterviewSetupV2() {
           <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             value={config.exam}
-            onChange={e => setConfig({ ...config, exam: e.target.value })}
+            onChange={e => {
+              const newExam = e.target.value;
+              const newSubjects = [...(SUBJECT_MAPPING[newExam] || [])];
+              
+              setSubjectsList(newSubjects); // Replace, don't append
+              
+              setConfig({ 
+                ...config, 
+                exam: newExam, 
+                subject: newSubjects[0] || '' 
+              });
+            }}
           >
-            <option>SSC CGL</option>
-            <option>Railway NTPC</option>
-            <option>Banking</option>
+            {EXAMS.map(exam => (
+              <option key={exam} value={exam}>{exam}</option>
+            ))}
           </select>
         </div>
 
@@ -78,9 +94,9 @@ export default function InterviewSetupV2() {
             value={config.subject}
             onChange={e => setConfig({ ...config, subject: e.target.value })}
           >
-            <option>General Awareness</option>
-            <option>Quantitative Aptitude</option>
-            <option>Computer Awareness</option>
+            {subjectsList.map(sub => (
+              <option key={sub} value={sub}>{sub}</option>
+            ))}
           </select>
         </div>
 

@@ -1,16 +1,6 @@
-import questionsData from '../data/demoQuestions.json';
 import { interviewConfig } from '../config/interviewConfig';
 import * as apiClient from './interviewApi';
-
-// Helper to shuffle array for demo mode
-const shuffle = (array) => {
-  const newArr = [...array];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
+import { loadQuestions } from '../../../mockInterview/questionLoader';
 
 // ==========================================
 // DEMO MODE IMPLEMENTATIONS
@@ -20,16 +10,21 @@ const demoStartInterview = async (config) => {
   try {
     const sessionId = 'demo-' + Date.now();
     const numQuestions = config.numQuestions || 10;
-    const shuffledQuestions = shuffle(questionsData).slice(0, numQuestions);
+    
+    const questions = await loadQuestions(config.exam, config.subject, config.difficulty, numQuestions);
+    
+    if (questions.length === 0) {
+      throw new Error(`No mock questions available yet for ${config.exam} - ${config.subject}.`);
+    }
     
     const sessionData = {
       sessionId: sessionId,
       config: { ...config, isDemo: true },
       currentQuestionIndex: 0,
-      currentDifficulty: 'Medium',
+      currentDifficulty: config.difficulty || 'Medium',
       score: 0,
       status: 'READY',
-      demoQuestions: shuffledQuestions,
+      demoQuestions: questions,
       correctCount: 0,
       wrongCount: 0,
       unansweredCount: 0
@@ -63,7 +58,15 @@ const demoGetNextQuestion = async (sessionId) => {
     const optionKeys = ['A', 'B', 'C', 'D'];
     const optionsMap = {};
     
-    if (activeQuestion.options && typeof activeQuestion.options[0] === 'object') {
+    if (activeQuestion.options_en && activeQuestion.options_hi) {
+      activeQuestion.options_en.forEach((text_en, index) => {
+        const key = optionKeys[index];
+        optionsMap[key] = {
+          english: text_en,
+          hindi: activeQuestion.options_hi[index] || text_en
+        };
+      });
+    } else if (activeQuestion.options && typeof activeQuestion.options[0] === 'object') {
       activeQuestion.options.forEach((opt, index) => {
         const key = opt.key || optionKeys[index];
         optionsMap[key] = {
@@ -112,9 +115,19 @@ const demoSubmitAnswer = async (sessionId, payload) => {
     const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
     const optionKeys = ['A', 'B', 'C', 'D'];
     
-    let correctKey = activeQuestion.correctAnswer || 'A';
-    if (!activeQuestion.correctAnswer && activeQuestion.answer) {
+    let correctKey = 'A';
+    if (typeof activeQuestion.correctAnswer === 'number') {
+      correctKey = optionKeys[activeQuestion.correctAnswer];
+    } else if (activeQuestion.correctAnswer) {
+      correctKey = activeQuestion.correctAnswer;
+    } else if (activeQuestion.answer && activeQuestion.options) {
       activeQuestion.options.forEach((optText, index) => {
+        if (optText === activeQuestion.answer) {
+          correctKey = optionKeys[index];
+        }
+      });
+    } else if (activeQuestion.answer && activeQuestion.options_en) {
+      activeQuestion.options_en.forEach((optText, index) => {
         if (optText === activeQuestion.answer) {
           correctKey = optionKeys[index];
         }
