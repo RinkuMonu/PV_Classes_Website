@@ -8,7 +8,7 @@ import { validateSetupConfig } from '../utils/interviewHelpers';
 import { EXAMS } from '../../../mockInterview/config/exams';
 import { SUBJECT_MAPPING } from '../../../mockInterview/config/subjectMapping';
 
-export default function InterviewSetupV2() {
+export default function MCQSetup() {
   const router = useRouter();
 
   const initialExam = EXAMS[0];
