@@ -3,11 +3,11 @@
 import React from 'react';
 import AIInterviewer from '../../AIMockInterview/components/AIInterviewer';
 
-export default function MainInteractionCard({ candidate, currentQuestion, transcript, status, internalState, onMicClick }) {
-  const isListening = status === "Listening" || status === "Recording" || internalState === "Listening" || internalState === "Recording";
-  const isSpeaking = status === "AI Speaking" || internalState === "AI Speaking";
-  const isUserSpeaking = internalState === "Recording";
-  const isProcessing = internalState === "Processing";
+export default function MainInteractionCard({ candidate, currentQuestion, transcript, status, internalState, onMicClick, onPlayAudioFallback }) {
+  const isListening = status === "Listening" || status === "Recording" || internalState === "LISTENING" || internalState === "RECORDING";
+  const isSpeaking = status === "Interviewer Speaking" || status === "AI Speaking" || internalState === "AI_SPEAKING";
+  const isUserSpeaking = internalState === "RECORDING";
+  const isProcessing = internalState === "PROCESSING";
   
   const questionText = typeof currentQuestion === 'object' ? currentQuestion?.text : currentQuestion;
 
@@ -20,7 +20,7 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
           Live Interviewer
         </div>
         <div className="w-full max-w-[360px] mt-4">
-           <AIInterviewer isSpeaking={isSpeaking} languageMode={candidate.language} />
+           <AIInterviewer isSpeaking={isSpeaking} languageMode={candidate?.language} />
         </div>
       </div>
 
@@ -76,16 +76,26 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
               </p>
             )}
 
-            {/* Large Central Microphone */}
+            {/* Large Central Microphone or Play Button */}
             <div className="mt-4 flex flex-col items-center">
-              <button 
-                onClick={onMicClick}
-                disabled={isSpeaking || isProcessing}
-                className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-md transition-all duration-300 relative ${
+              
+              {internalState === "AUTOPLAY_BLOCKED" ? (
+                <button 
+                  onClick={onPlayAudioFallback}
+                  className="px-6 py-3 rounded-full bg-[#009FE3] text-white font-bold text-sm shadow-lg shadow-blue-500/30 hover:bg-blue-500 hover:-translate-y-1 transition-all animate-bounce"
+                >
+                  ▶ Click to Hear Question
+                </button>
+              ) : (
+                <>
+                  <button 
+                    onClick={onMicClick}
+                    disabled={isSpeaking || isProcessing}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-md transition-all duration-300 relative ${
                   isSpeaking ? 'bg-gray-200 cursor-not-allowed opacity-50' :
                   isProcessing ? 'bg-yellow-100 text-yellow-600' :
-                  internalState === 'Recording' ? 'bg-red-50 text-red-500 animate-pulse' :
-                  internalState === 'Listening' ? 'bg-blue-50 text-[#009FE3] animate-pulse shadow-[0_0_15px_rgba(0,159,227,0.4)]' :
+                  internalState === 'RECORDING' ? 'bg-red-50 text-red-500 animate-pulse' :
+                  internalState === 'LISTENING' ? 'bg-blue-50 text-[#009FE3] animate-pulse shadow-[0_0_15px_rgba(0,159,227,0.4)]' :
                   'bg-gray-100 text-gray-400 hover:bg-gray-200'
                 }`}
               >
@@ -95,16 +105,18 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
               <span className={`text-[10px] font-bold uppercase tracking-wider mt-3 ${
                 isSpeaking ? 'text-gray-400' :
                 isProcessing ? 'text-yellow-600' :
-                internalState === 'Recording' ? 'text-red-500' :
-                internalState === 'Listening' ? 'text-[#009FE3]' :
+                internalState === 'RECORDING' ? 'text-red-500' :
+                internalState === 'LISTENING' ? 'text-[#009FE3]' :
                 'text-gray-400'
               }`}>
                 {isSpeaking ? 'AI Speaking' : 
                  isProcessing ? 'Processing' : 
-                 internalState === 'Recording' ? 'Recording' : 
-                 internalState === 'Listening' ? 'Tap to Speak' : 
+                 internalState === 'RECORDING' ? 'Recording' : 
+                 internalState === 'LISTENING' ? 'Tap to Speak' : 
                  'Idle'}
               </span>
+                </>
+              )}
             </div>
           </div>
         </div>

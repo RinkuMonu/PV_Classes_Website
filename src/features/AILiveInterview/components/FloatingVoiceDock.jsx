@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export default function FloatingVoiceDock({ isMuted, onToggleMute, onSettingsClick, onEndClick }) {
+export default function FloatingVoiceDock({ isMuted, onToggleMute, onSettingsClick, onRestartClick, onEndClick }) {
   return (
     <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-200/50 p-3 flex flex-row justify-between gap-2 w-full mt-auto">
       
@@ -25,6 +25,7 @@ export default function FloatingVoiceDock({ isMuted, onToggleMute, onSettingsCli
 
       {/* Restart Button */}
       <button 
+        onClick={onRestartClick}
         className="w-12 h-12 rounded-xl flex flex-col items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 group relative"
         aria-label="Restart Interview"
       >
