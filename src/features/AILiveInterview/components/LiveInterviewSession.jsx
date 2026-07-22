@@ -15,7 +15,7 @@ import ConversationTimeline from './ConversationTimeline';
 import FloatingVoiceDock from './FloatingVoiceDock';
 import VoiceSettingsModal from './VoiceSettingsModal';
 
-const API_BASE = "http://localhost:8001";
+const API_BASE = typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000";
 
 export default function LiveInterviewSession() {
   const searchParams = useSearchParams();
