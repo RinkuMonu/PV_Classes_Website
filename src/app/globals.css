@@ -160,3 +160,46 @@ cursor: pointer !important;
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(1.1); }
 }
+
+/* About page journey scroll reveal */
+@keyframes journey-reveal-left {
+  from { opacity: 0; transform: translateX(-42px) translateY(12px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes journey-reveal-right {
+  from { opacity: 0; transform: translateX(42px) translateY(12px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes journey-marker-pop {
+  0% { opacity: 0; transform: scale(0.2); }
+  70% { transform: scale(1.35); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.journey-card-left,
+.journey-card-right {
+  animation-duration: 700ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-timeline: view();
+  animation-range: entry 8% cover 32%;
+}
+
+.journey-card-left { animation-name: journey-reveal-left; }
+.journey-card-right { animation-name: journey-reveal-right; }
+
+.journey-marker {
+  animation: journey-marker-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-timeline: view();
+  animation-range: entry 15% cover 28%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-card-left,
+  .journey-card-right,
+  .journey-marker {
+    animation: none;
+  }
+}
