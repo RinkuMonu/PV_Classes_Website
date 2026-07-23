@@ -13,7 +13,7 @@ import InterviewTopBar from './InterviewTopBar';
 import MainInteractionCard from './MainInteractionCard';
 import ConversationTimeline from './ConversationTimeline';
 import FloatingVoiceDock from './FloatingVoiceDock';
-import VoiceSettingsModal from './VoiceSettingsModal';
+import { ttsServiceV2 } from '../../AIMockInterview/services/ttsServiceV2';
 
 const API_BASE = typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000";
 
@@ -33,8 +33,9 @@ export default function LiveInterviewSession() {
     scores: {
       overall: 0,
       communication: 0,
-      knowledge: 0,
-      confidence: 0
+      subjectKnowledge: 0,
+      confidence: 0,
+      teachingSkills: 0
     },
     conversation: [],
     contextUsed: []
@@ -46,7 +47,6 @@ export default function LiveInterviewSession() {
   // Voice State Machine: INITIALIZING -> AI_SPEAKING -> LISTENING -> RECORDING -> UPLOADING -> PROCESSING -> AI_SPEAKING
   const [interviewState, setInterviewState] = useState("INITIALIZING");
   const [isMuted, setIsMuted] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [liveTranscript, setLiveTranscript] = useState("Preparing session...");
   
   // Camera State
@@ -93,16 +93,28 @@ export default function LiveInterviewSession() {
 
   // API Callbacks
   const updateUIFromBackend = useCallback((apiResponse, turnTranscript) => {
-    if (apiResponse.profile) {
+    if (apiResponse.metrics) {
        setData(prev => ({
          ...prev,
          scores: {
+           overall: Math.round((apiResponse.metrics.communication + apiResponse.metrics.confidence + apiResponse.metrics.subject_knowledge + apiResponse.metrics.teaching_skill) / 4) || prev.scores.overall,
+           communication: apiResponse.metrics.communication || prev.scores.communication,
+           subjectKnowledge: apiResponse.metrics.subject_knowledge || prev.scores.subjectKnowledge,
+           confidence: apiResponse.metrics.confidence || prev.scores.confidence,
+           teachingSkills: apiResponse.metrics.teaching_skill || prev.scores.teachingSkills
+         },
+         contextUsed: apiResponse.profile?.strengths || prev.contextUsed
+       }));
+    } else if (apiResponse.profile) {
+       setData(prev => ({
+         ...prev,
+         scores: {
+           ...prev.scores,
            overall: apiResponse.profile.confidence_level === "High" ? 85 : 70,
            communication: apiResponse.profile.communication_level === "Excellent" ? 90 : 75,
-           knowledge: 80,
            confidence: 75
          },
-         contextUsed: apiResponse.profile.strengths || []
+         contextUsed: apiResponse.profile.strengths || prev.contextUsed
        }));
     }
     
@@ -159,6 +171,7 @@ export default function LiveInterviewSession() {
          throw new Error("Invalid backend response: missing next_question or audio_url");
       }
 
+      console.log(`[Verification] 📥 Frontend Received audio_url: ${result.audio_url}`);
       console.log(`✓ Next Question Received: ${result.next_question.substring(0, 60)}...`);
       console.log(`✓ Audio URL Received: ${result.audio_url}`);
       console.log("✓ Loop Continued");
@@ -178,7 +191,8 @@ export default function LiveInterviewSession() {
     
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log("✓ Recording Started");
+      console.log("[Verification] 🎤 Microphone Enabled");
+      console.log("[Verification] 🔴 Recording Started");
       updateInterviewState("RECORDING");
       setLiveTranscript("Recording audio... (speak now)");
 
@@ -257,57 +271,35 @@ export default function LiveInterviewSession() {
   const playAudioLoop = async (audioUrl) => {
     if (!audioUrl) return;
     
-    if (stateRef.current.activeAudio) {
-       stateRef.current.activeAudio.pause();
-       stateRef.current.activeAudio.src = "";
+    if (stateRef.current.activeRecorder && stateRef.current.activeRecorder.state !== "inactive") {
+       stateRef.current.activeRecorder.stop();
     }
 
-    const fullUrl = audioUrl.startsWith('http') ? audioUrl : `${API_BASE}${audioUrl}`;
-    console.log(`[Audio] Creating new Audio object for URL: ${fullUrl}`);
-    const audio = new Audio(fullUrl);
-    stateRef.current.activeAudio = audio;
+    setLiveTranscript("Loading audio stream...");
 
-    audio.onloadeddata = () => {
-        console.log("✓ Audio Loaded (onloadeddata)");
-        setLiveTranscript("Audio downloaded, starting playback...");
-    };
-    audio.oncanplay = () => console.log("✓ Audio Ready (oncanplay)");
-    audio.onpause = () => console.log("[Audio Event] onpause");
-    
-    audio.onplay = () => {
-       console.log("✓ Audio Playing (onplay)");
-       console.log("✓ Avatar Speaking");
-       updateInterviewState("AI_SPEAKING");
-       setLiveTranscript("Interviewer is speaking...");
-    };
-
-    audio.onended = () => {
-       console.log("✓ Audio Finished (onended)");
-       console.log("✓ Listening Started");
-       updateInterviewState("LISTENING");
-       startRecordingWithSilenceDetection();
-    };
-
-    audio.onerror = (e) => {
-       const errorMsg = audio.error ? `Code: ${audio.error.code}, Message: ${audio.error.message}` : "Unknown error";
-       console.error(`[Audio Pipeline] onerror fired: ${errorMsg}`);
-       setLiveTranscript(`Audio Error: ${errorMsg}`);
-       updateInterviewState("ERROR");
-    };
-
-    try {
-      audio.load();
-      await audio.play();
-    } catch (e) {
-      console.error("[Audio Pipeline] audio.play() rejected", e);
-      if (e.name === "NotAllowedError") {
-         setLiveTranscript("Autoplay Blocked. Please click the Play button below.");
-         updateInterviewState("AUTOPLAY_BLOCKED");
-      } else {
-         setLiveTranscript(`${e.name}: ${e.message}`);
-         updateInterviewState("ERROR");
+    await ttsServiceV2.playPreGeneratedAudio(
+      audioUrl,
+      // onStart
+      () => {
+        console.log("[Verification] ▶️ Audio Playback Started via ttsServiceV2");
+        console.log("[Verification] 🗣️ Avatar Speaking Started");
+        updateInterviewState("AI_SPEAKING");
+        setLiveTranscript("Interviewer is speaking...");
+      },
+      // onEnd
+      () => {
+        console.log("[Verification] ⏹️ Audio Playback Finished");
+        console.log("✓ Listening Started");
+        updateInterviewState("LISTENING");
+        startRecordingWithSilenceDetection();
+      },
+      // onError
+      (error) => {
+        console.error(`[Audio Pipeline] Error: ${error.message}`);
+        setLiveTranscript(`Audio Error: ${error.message}`);
+        updateInterviewState("ERROR");
       }
-    }
+    );
   };
 
   const initSession = async () => {
@@ -315,10 +307,13 @@ export default function LiveInterviewSession() {
     stateRef.current.hasInitialized = true;
     
     let candidateName = "Candidate";
-    let exam = searchParams.get('exam') || "KVS PRT";
-    let subject = searchParams.get('subject') || "English";
-    let language = searchParams.get('language') || "English";
-    let duration = searchParams.get('duration') || "20 Minutes";
+    let exam = "Unknown";
+    let subject = "Unknown";
+    let language = "English";
+    let duration = "20 Minutes";
+    let mode = "Normal Interview";
+    let focus = "Subject Knowledge";
+    let difficulty = "Medium";
     
     const storedConfig = sessionStorage.getItem('aiLiveInterviewSessionData');
     if (storedConfig) {
@@ -328,8 +323,13 @@ export default function LiveInterviewSession() {
         if (parsed.config?.subject) subject = parsed.config.subject;
         if (parsed.config?.duration) duration = parsed.config.duration;
         if (parsed.config?.language) language = parsed.config.language;
+        if (parsed.config?.interviewMode) mode = parsed.config.interviewMode;
+        if (parsed.config?.interviewFocus) focus = parsed.config.interviewFocus;
+        if (parsed.config?.difficulty) difficulty = parsed.config.difficulty;
         if (parsed.candidate?.name) candidateName = parsed.candidate.name;
       } catch(e) {}
+    } else {
+      console.warn("No session config found in sessionStorage, using defaults");
     }
     
     setDurationParam(duration);
@@ -339,7 +339,11 @@ export default function LiveInterviewSession() {
     }));
 
     try {
-      console.log("[Init] Starting new session via POST /api/live-interview/start");
+      console.log(`[Init] Starting new session via POST /api/live-interview/start`);
+      console.log(`[Verification] 🚀 Interview Started`);
+      console.log(`[Verification] 📝 Selected Exam : ${exam}`);
+      console.log(`[Verification] 📚 Selected Subject : ${subject}`);
+      console.log(`[Verification] 🗣️ Interview Language : ${language}`);
       setLiveTranscript("Connecting to backend...");
       const res = await fetch(`${API_BASE}/api/live-interview/start`, {
         method: "POST",
@@ -349,8 +353,9 @@ export default function LiveInterviewSession() {
           exam: exam,
           subject: subject,
           language: language,
-          difficulty: "Medium",
-          interview_mode: "Voice",
+          difficulty: difficulty,
+          interview_mode: mode,
+          focus: focus,
           duration: parseInt(duration) || 20
         })
       });
@@ -367,6 +372,7 @@ export default function LiveInterviewSession() {
 
       console.log("✓ Interview Started");
       console.log(`✓ Session Created: ${sessionData.session_id}`);
+      console.log(`[Verification] 📥 Frontend Received audio_url: ${sessionData.audio_url}`);
       console.log(`✓ Question Received: ${sessionData.first_question.substring(0, 60)}...`);
       console.log(`✓ Audio URL Received: ${sessionData.audio_url}`);
       
@@ -399,9 +405,7 @@ export default function LiveInterviewSession() {
     return () => {
        mounted = false;
        // Cleanup audio and mic on unmount
-       if (stateRef.current.activeAudio) {
-          stateRef.current.activeAudio.pause();
-       }
+       ttsServiceV2.cancel();
        if (stateRef.current.activeRecorder && stateRef.current.activeRecorder.state !== "inactive") {
           stateRef.current.activeRecorder.stop();
        }
@@ -412,11 +416,10 @@ export default function LiveInterviewSession() {
   }, []);
 
   const handlePlayAudioFallback = () => {
-    if (stateRef.current.activeAudio) {
-      stateRef.current.activeAudio.play().catch(e => {
-         setLiveTranscript(`Fallback Play Error: ${e.message}`);
-      });
-    }
+     // No fallback needed anymore as ttsServiceV2 handles it, but we can restart queue if blocked
+     if (interviewState === "AUTOPLAY_BLOCKED") {
+         ttsServiceV2.processQueue();
+     }
   };
 
   const handleManualMicClick = () => {
@@ -460,7 +463,7 @@ export default function LiveInterviewSession() {
 
   const handleRestartClick = () => {
     if (confirm("Are you sure you want to restart the interview?")) {
-      if (stateRef.current.activeAudio) stateRef.current.activeAudio.pause();
+      ttsServiceV2.cancel();
       if (stateRef.current.activeRecorder && stateRef.current.activeRecorder.state !== "inactive") stateRef.current.activeRecorder.stop();
       if (stateRef.current.animationFrameId) cancelAnimationFrame(stateRef.current.animationFrameId);
       
@@ -499,7 +502,6 @@ export default function LiveInterviewSession() {
           <FloatingVoiceDock 
             isMuted={isMuted} 
             onToggleMute={() => setIsMuted(p => !p)}
-            onSettingsClick={() => setShowSettings(true)}
             onRestartClick={handleRestartClick}
             onEndClick={() => confirm("Are you sure you want to end the interview?") && (window.location.href = '/')}
           />
@@ -542,11 +544,6 @@ export default function LiveInterviewSession() {
         </div>
 
       </div>
-
-      <VoiceSettingsModal 
-        isOpen={showSettings} 
-        onClose={() => setShowSettings(false)} 
-      />
     </div>
   );
 }

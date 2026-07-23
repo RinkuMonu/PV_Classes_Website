@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export default function FloatingVoiceDock({ isMuted, onToggleMute, onSettingsClick, onRestartClick, onEndClick }) {
+export default function FloatingVoiceDock({ isMuted, onToggleMute, onRestartClick, onEndClick }) {
   return (
     <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-200/50 p-3 flex flex-row justify-between gap-2 w-full mt-auto">
       
@@ -37,19 +37,6 @@ export default function FloatingVoiceDock({ isMuted, onToggleMute, onSettingsCli
         </div>
       </button>
 
-      {/* Settings Button */}
-      <button 
-        onClick={onSettingsClick}
-        className="w-12 h-12 rounded-xl flex flex-col items-center justify-center bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 group relative"
-        aria-label="Settings"
-      >
-        <span className="text-xl mb-0.5">⚙️</span>
-        <span className="text-[9px] font-bold uppercase tracking-wider">Settings</span>
-        
-        <div className="absolute bottom-full mb-3 px-2 py-1 bg-gray-800 text-white text-xs font-medium rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap transition-opacity">
-          Voice Settings
-        </div>
-      </button>
 
       {/* Divider */}
       <div className="w-px bg-gray-200 h-8 mx-1 my-auto"></div>

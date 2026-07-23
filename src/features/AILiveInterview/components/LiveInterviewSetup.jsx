@@ -35,7 +35,7 @@ export default function LiveInterviewSetup() {
     exam: initialExam,
     subject: subjectsList[0] || '',
     language: LANGUAGE_MODE.HINDI,       // Interview language default
-    voiceLanguage: LANGUAGE_MODE.HINDI,  // AI Interviewer Voice language
+    displayLanguage: 'English',          // Display language default
     difficulty: DIFFICULTY.MEDIUM,
     interviewMode: 'Normal Interview',
     duration: '20 Minutes',
@@ -55,14 +55,18 @@ export default function LiveInterviewSetup() {
 
     setLoading(true);
     try {
-      // For now, no backend integration. Just route to the placeholder session page.
+      // Save configuration to sessionStorage for LiveInterviewSession to use
+      sessionStorage.setItem('aiLiveInterviewSessionData', JSON.stringify({ config, candidate: { name: "Candidate" } }));
+      
       const query = new URLSearchParams({
         exam: config.exam,
         subject: config.subject,
         mode: config.interviewMode,
         duration: config.duration,
         focus: config.interviewFocus,
-        depth: config.questionDepth
+        depth: config.questionDepth,
+        displayLanguage: config.displayLanguage,
+        language: config.language
       }).toString();
       
       router.push(`/ai-live-interview/onboarding?${query}`);
@@ -96,19 +100,35 @@ export default function LiveInterviewSetup() {
           <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] outline-none"
             value={config.exam}
-            onChange={e => {
+            onChange={async (e) => {
               const newExam = e.target.value;
-              const newSubjects = [...(SUBJECT_MAPPING[newExam] || [])];
+              let newSubjects = [...(SUBJECT_MAPPING[newExam] || [])];
               const newFocusOptions = getFocusOptions(newExam);
+              
+              if (newExam === "KVS/NVS Special Educator") {
+                try {
+                  const API_BASE = typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000";
+                  // Attempt to fetch dynamically from backend API
+                  const res = await fetch(`${API_BASE}/api/live-interview/subjects?exam=${encodeURIComponent(newExam)}`);
+                  if (res.ok) {
+                    const data = await res.json();
+                    if (data && Array.isArray(data.subjects) && data.subjects.length > 0) {
+                      newSubjects = data.subjects;
+                    }
+                  }
+                } catch (err) {
+                  console.warn("Failed to fetch dynamically, using fallback list.", err);
+                }
+              }
               
               setSubjectsList(newSubjects);
               
-              setConfig({ 
-                ...config, 
+              setConfig(prev => ({ 
+                ...prev, 
                 exam: newExam, 
                 subject: newSubjects[0] || '',
                 interviewFocus: newFocusOptions[0]
-              });
+              }));
             }}
           >
             {EXAMS.map(exam => (
@@ -141,24 +161,22 @@ export default function LiveInterviewSetup() {
           >
             <option value={LANGUAGE_MODE.HINDI}>Hindi (हिन्दी)</option>
             <option value={LANGUAGE_MODE.ENGLISH}>English</option>
-            <option value={LANGUAGE_MODE.BOTH}>Bilingual</option>
           </select>
         </div>
 
-        {/* AI Voice Language */}
+        {/* Display Language */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            AI Interviewer Voice Language
-          </label>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Display Language</label>
           <select
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] outline-none"
-            value={config.voiceLanguage}
-            onChange={e => setConfig({ ...config, voiceLanguage: e.target.value })}
+            value={config.displayLanguage}
+            onChange={e => setConfig({ ...config, displayLanguage: e.target.value })}
           >
-            <option value={LANGUAGE_MODE.HINDI}>Hindi (हिन्दी)</option>
-            <option value={LANGUAGE_MODE.ENGLISH}>English</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi (हिन्दी)</option>
           </select>
         </div>
+
 
         {/* Difficulty */}
         <div>

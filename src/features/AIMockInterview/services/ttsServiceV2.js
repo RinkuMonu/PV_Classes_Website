@@ -1,15 +1,13 @@
 /**
  * ttsServiceV2.js
  *
- * Primary TTS engine using FastAPI Piper API backend with automatic fallback
- * to Indian-accented Web Speech API (window.speechSynthesis).
+ * Primary TTS engine using backend Piper API.
+ * Shared playback service for both MCQ Mock Interview and AI Live Interview.
+ * Browser fallback has been strictly removed to ensure voice consistency.
  */
 
 class TTSServiceV2 {
   constructor() {
-    this.synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
-    this.currentUtterance = null;
-    this._voicesReady = null;
     this.audioElement = null;
     this._isPiperSpeaking = false;
     
@@ -18,111 +16,21 @@ class TTSServiceV2 {
     this.isProcessingQueue = false;
     this.abortController = null;
     this.currentSpeakId = 0;
-
-    // Initialize browser voices for fallback
-    if (this.synth) {
-      this._voicesReady = new Promise((resolve) => {
-        const tryResolve = () => {
-          const v = this.synth.getVoices();
-          if (v.length > 0) {
-            this._logAll(v);
-            resolve(v);
-            return true;
-          }
-          return false;
-        };
-
-        if (tryResolve()) return;
-
-        this.synth.onvoiceschanged = () => tryResolve();
-
-        setTimeout(() => {
-          const v = this.synth.getVoices();
-          console.warn('[TTS Fallback] Voice load timeout, voices available:', v.length);
-          resolve(v);
-        }, 5000);
-      });
-    }
   }
 
-  // ── Debug: print every voice ──────────────────────────────────────────────
-  _logAll(voices) {
-    console.group('[TTS Fallback] Available voices (' + voices.length + ')');
-    voices.forEach((v, i) =>
-      console.log(`  ${String(i).padStart(2)}. "${v.name}" | ${v.lang} | local:${v.localService}`)
-    );
-    console.groupEnd();
-  }
-
-  // ── Indian male voice names (exact or partial, lowercase) ─────────────────
-  _isIndianMale(v) {
-    const n = v.name.toLowerCase();
-    return (
-      n.includes('rishi')    ||   
-      n.includes('hemant')   ||   
-      n.includes('ravi')     ||   
-      n.includes('prabhat')  ||   
-      n.includes('heera')    ||   
-      n.includes('aarav')    ||   
-      n.includes('neerja')   ||   
-      n.includes('kalpana')       
-    );
-  }
-
-  // ── Known female voice names — used to EXCLUDE them ───────────────────────
-  _isFemale(v) {
-    const n = v.name.toLowerCase();
-    return (
-      n.includes('female')    ||
-      n.includes('woman')     ||
-      n.includes('zira')      ||   
-      n.includes('hazel')     ||   
-      n.includes('susan')     ||
-      n.includes('samantha')  ||   
-      n.includes('victoria')  ||
-      n.includes('karen')     ||
-      n.includes('moira')     ||
-      n.includes('tessa')     ||
-      n.includes('fiona')     ||
-      n.includes('veena')     ||   
-      n.includes('allison')   ||
-      n.includes('ava')       ||
-      n.includes('kate')      ||
-      n.includes('serena')    ||
-      n.includes('priya')     ||   
-      n.includes('lekha')     ||   
-      n.includes('aditi')     ||   
-      n === 'google हिन्दी'
-    );
-  }
-
-  // ── Voice selection — strict Indian male priority ─────────────────────────
-  _pickVoice(voices, lang) {
-    const t1 = voices.find(v => v.lang === lang && this._isIndianMale(v));
-    if (t1) return t1;
-
-    const fam = lang.split('-')[0];
-    const t2 = voices.find(v => v.lang.startsWith(fam) && this._isIndianMale(v));
-    if (t2) return t2;
-
-    const indiaLangs = lang.startsWith('hi') ? ['hi-IN'] : ['en-IN'];
-    const t3 = voices.find(v => indiaLangs.includes(v.lang) && !this._isFemale(v));
-    if (t3) return t3;
-
-    const t4 = voices.find(v => indiaLangs.includes(v.lang));
-    if (t4) return t4;
-
-    const t5 = voices.find(v => v.lang.startsWith(fam) && !this._isFemale(v));
-    if (t5) return t5;
-
-    return voices.find(v => v.lang.startsWith(fam)) || voices[0] || null;
-  }
-
-  // ── Main speak (Queue system) ─────────────────────────────────────────────
+  // ── Main speak (Queue system for text-based TTS generation) ───────────────
   async speak(text, language = 'English', onStart = null, onEnd = null, onError = null, onBoundary = null) {
     if (!text) { onEnd?.(); return; }
     
-    this.queue.push({ text, language, onStart, onEnd, onError, onBoundary });
+    this.queue.push({ type: 'text', text, language, onStart, onEnd, onError, onBoundary });
+    this.processQueue();
+  }
+
+  // ── Queue system for playing pre-generated backend audio URLs ─────────────
+  async playPreGeneratedAudio(audioUrl, onStart = null, onEnd = null, onError = null) {
+    if (!audioUrl) { onEnd?.(); return; }
+
+    this.queue.push({ type: 'url', audioUrl, onStart, onEnd, onError, onBoundary: null });
     this.processQueue();
   }
 
@@ -132,7 +40,11 @@ class TTSServiceV2 {
 
     while (this.queue.length > 0) {
       const item = this.queue.shift();
-      await this._executeSpeak(item);
+      if (item.type === 'text') {
+        await this._executeSpeak(item);
+      } else if (item.type === 'url') {
+        await this._executePlayUrl(item);
+      }
     }
 
     this.isProcessingQueue = false;
@@ -150,7 +62,7 @@ class TTSServiceV2 {
 
       try {
         console.log('[TTS] ➡️ TTS request sent');
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || (typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000");
         console.log(`[TTS] 🎤 Requesting Piper TTS for language: ${language}`);
         
         const response = await fetch(`${baseUrl}/api/v1/speech/piper`, {
@@ -175,11 +87,70 @@ class TTSServiceV2 {
           throw new Error(`Invalid response from Piper API: ${JSON.stringify(data)}`);
         }
         
-        console.log(`[TTS] 🔗 Audio URL created: ${data.audio_url}`);
-        this.audioElement = new Audio(`${baseUrl}${data.audio_url}`);
+        await this._playAudio(data.audio_url, onStart, onEnd, onError, onBoundary, speakId);
+        finish();
         
-        this.audioElement.onloadeddata = () => {
-          console.log('[TTS] ⏳ Audio loaded');
+      } catch (err) {
+        if (err.name === 'AbortError' || this.currentSpeakId !== speakId) {
+          console.log('[TTS] 🛑 Piper TTS fetch aborted.');
+          if (onError) onError(new Error('canceled'));
+          return resolve();
+        }
+        
+        console.error('[TTS] ❌ Piper TTS failed. No browser fallback is permitted.', err);
+        if (onError) onError(new Error("Voice generation failed. Please try again."));
+        finish();
+      }
+    });
+  }
+
+  async _executePlayUrl({ audioUrl, onStart, onEnd, onError, onBoundary }) {
+    return new Promise(async (resolve) => {
+      const speakId = ++this.currentSpeakId;
+      this.abortController = new AbortController();
+
+      const finish = () => {
+        this.abortController = null;
+        resolve();
+      };
+      
+      try {
+        await this._playAudio(audioUrl, onStart, onEnd, onError, onBoundary, speakId);
+      } catch (err) {
+        console.error('[TTS] ❌ Playback failed for pre-generated URL.', err);
+        if (onError) onError(new Error("Voice playback failed. Please try again."));
+      }
+      finish();
+    });
+  }
+
+  async _playAudio(audioUrl, onStart, onEnd, onError, onBoundary, speakId) {
+    return new Promise((resolvePlay, rejectPlay) => {
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || (typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000");
+        const fullUrl = audioUrl.startsWith('http') ? audioUrl : `${baseUrl}${audioUrl}`;
+        
+        this.audioElement = new Audio(fullUrl);
+        
+        // Requirements: Verify exactly before playing
+        console.group('[TTS Verification] Audio Playback Trace');
+        console.log(`[TTS] 🔗 Backend audio_url: ${audioUrl}`);
+        console.log(`[TTS] 🔗 Resolved audio.src: ${this.audioElement.src}`);
+        
+        // Confirm matching
+        const expectedResolved = new URL(fullUrl, window.location.origin).href;
+        if (this.audioElement.src === expectedResolved) {
+            console.log(`[TTS] ✅ MATCH CONFIRMED: audio.src exactly matches the backend audio_url (resolved).`);
+        } else {
+            console.warn(`[TTS] ❌ MISMATCH DETECTED!`);
+            console.warn(`      Expected: ${expectedResolved}`);
+            console.warn(`      Actual audio.src: ${this.audioElement.src}`);
+            console.warn(`      Code modifying URL: Browser's URL resolution or unexpected interceptor.`);
+        }
+        console.log(`[TTS] 🎵 Current voice engine: PIPER TTS (Backend Generated)`);
+        console.groupEnd();
+        
+        this.audioElement.onloadedmetadata = () => {
+          console.log(`[TTS] ⏳ Audio loaded. Duration: ${this.audioElement.duration}s`);
         };
         
         this.audioElement.onplay = () => {
@@ -196,7 +167,7 @@ class TTSServiceV2 {
           if (this.currentSpeakId !== speakId) return;
           this._isPiperSpeaking = false;
           
-          this.audioElement.onloadeddata = null;
+          this.audioElement.onloadedmetadata = null;
           this.audioElement.onplay = null;
           this.audioElement.onended = null;
           this.audioElement.onerror = null;
@@ -204,7 +175,7 @@ class TTSServiceV2 {
           
           console.log('[TTS] ⏹️ Audio ended');
           if (onEnd) onEnd();
-          finish();
+          resolvePlay();
         };
         
         this.audioElement.onerror = (e) => {
@@ -215,110 +186,25 @@ class TTSServiceV2 {
           const errCode = e.target?.error?.code || 'No Code';
           console.error(`[TTS] ❌ Audio playback failed: Code ${errCode}, Message: ${errMessage}`);
           
-          this.audioElement.onloadeddata = null;
+          this.audioElement.onloadedmetadata = null;
           this.audioElement.onplay = null;
           this.audioElement.onended = null;
           this.audioElement.onerror = null;
           this.audioElement = null;
           
-          throw new Error(`Audio playback failed: ${errMessage}`);
+          if (onError) onError(new Error(`Audio playback failed: ${errMessage}`));
+          rejectPlay(new Error(errMessage));
         };
 
         const playPromise = this.audioElement.play();
         if (playPromise !== undefined) {
           playPromise.catch(err => {
             console.error(`[TTS] ❌ Playback rejected by browser (autoplay issue?):`, err);
-            throw err;
+            if (onError) onError(new Error("Voice generation failed. Please try again."));
+            rejectPlay(err);
           });
         }
-        
-        
-      } catch (err) {
-        if (err.name === 'AbortError' || this.currentSpeakId !== speakId) {
-          console.log('[TTS] 🛑 Piper TTS fetch aborted.');
-          if (onError) onError(new Error('canceled'));
-          return resolve();
-        }
-        
-        console.error('[TTS] ⚠️ Piper TTS failed, falling back to browser SpeechSynthesis:', err);
-        console.log('Browser Fallback Activated');
-        const fallbackLangCode = language === 'Hindi' ? 'hi-IN' : 'en-IN';
-        
-        await new Promise((fallbackResolve) => {
-          this._speakFallback(
-            text, 
-            fallbackLangCode, 
-            onStart, 
-            () => {
-              if (onEnd) onEnd();
-              fallbackResolve();
-            }, 
-            (e) => {
-              if (onError) onError(e);
-              fallbackResolve();
-            }, 
-            onBoundary,
-            speakId
-          );
-        });
-        finish();
-      }
     });
-  }
-
-  // ── Fallback speak ────────────────────────────────────────────────────────
-  async _speakFallback(text, langCode = 'en-IN', onStart = null, onEnd = null, onError = null, onBoundary = null, speakId = null) {
-    if (!this.synth) {
-      onError?.(new Error('SpeechSynthesis not supported'));
-      return;
-    }
-
-    if (speakId && this.currentSpeakId !== speakId) return; // Interrupted
-
-    const voices = await this._voicesReady;
-    
-    if (speakId && this.currentSpeakId !== speakId) return; // Interrupted
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang   = langCode;      
-    u.volume = 1.0;
-    u.pitch  = 0.1;       
-    u.rate   = langCode === 'hi-IN' ? 0.87 : 0.9;
-
-    const chosen = this._pickVoice(voices, langCode);
-    if (chosen) {
-      u.voice = chosen;
-      console.log(
-        `[TTS Fallback] ✅ Using voice: "${chosen.name}" | lang:${chosen.lang}`
-      );
-    } else {
-      console.warn('[TTS Fallback] ⚠️ No voice found — browser default');
-    }
-
-    if (onBoundary) u.onboundary = onBoundary;
-    u.onstart = () => {
-      if (speakId && this.currentSpeakId !== speakId) {
-        this.synth.cancel();
-        return;
-      }
-      console.log('[TTS Fallback] Speaking:', text.substring(0, 80));
-      if (onStart) onStart();
-    };
-    u.onend   = () => { 
-      if (speakId && this.currentSpeakId !== speakId) return;
-      this.currentUtterance = null; 
-      onEnd?.(); 
-    };
-    u.onerror = (e) => {
-      this.currentUtterance = null;
-      const errReason = e.error || 'Unknown Error';
-      if (errReason === 'interrupted' || errReason === 'canceled') { onError?.(e); return; }
-      console.error('[TTS Fallback] Error:', errReason);
-      onError?.(e);
-    };
-
-    this.currentUtterance = u;
-    this.synth.speak(u);
   }
 
   cancel() {
@@ -334,21 +220,17 @@ class TTSServiceV2 {
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
       
+      this.audioElement.onloadedmetadata = null;
       this.audioElement.onplay = null;
       this.audioElement.onended = null;
       this.audioElement.onerror = null;
       this.audioElement = null;
       this._isPiperSpeaking = false;
     }
-    
-    if (this.synth) {
-      this.synth.cancel();
-      this.currentUtterance = null;
-    }
   }
 
   isSpeaking() {
-    return this._isPiperSpeaking || !!this.synth?.speaking;
+    return this._isPiperSpeaking;
   }
 }
 

@@ -41,7 +41,9 @@ export default function OnboardingWizard() {
       mode: searchParams.get('mode') || 'Normal Interview',
       duration: searchParams.get('duration') || '20 Minutes',
       focus: searchParams.get('focus') || 'Mixed',
-      depth: searchParams.get('depth') || 'Moderate'
+      depth: searchParams.get('depth') || 'Moderate',
+      language: searchParams.get('language') || 'English',
+      displayLanguage: searchParams.get('displayLanguage') || 'English'
     },
     // User info collected
     candidate: {

@@ -9,7 +9,7 @@ export default function LiveScoreCard({ scores }) {
     { label: 'Communication', value: scores.communication, colorText: 'text-green-500', bg: 'bg-green-500' },
     { label: 'Confidence', value: scores.confidence, colorText: 'text-yellow-500', bg: 'bg-yellow-500' },
     { label: 'Subject Knowledge', value: scores.subjectKnowledge, colorText: 'text-orange-500', bg: 'bg-orange-500' },
-    { label: 'Teaching Skills', value: scores.teachingSkills || 70, colorText: 'text-blue-500', bg: 'bg-blue-500' } // Default 70 for UI match
+    { label: 'Teaching Skills', value: scores.teachingSkills, colorText: 'text-blue-500', bg: 'bg-blue-500' }
   ];
 
   return (
