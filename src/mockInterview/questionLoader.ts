@@ -24,10 +24,10 @@ export const loadQuestions = async (
 
   // Prevent dynamic import errors for new/unpopulated exams
   if (exam === "KVS/NVS Special Educator") {
-    const fallbackDifficulty = difficulty ? 
-      (difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase()) as "Easy" | "Medium" | "Hard" : 
+    const fallbackDifficulty = difficulty ?
+      (difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase()) as "Easy" | "Medium" | "Hard" :
       "Medium";
-      
+
     return Array.from({ length: numQuestions }).map((_, i) => ({
       id: i + 1,
       question_en: `Sample question ${i + 1} for ${subject}?`,
@@ -41,7 +41,7 @@ export const loadQuestions = async (
     }));
   }
 
-  let questions: InterviewQuestion[] = [];
+  let questions: interviewQuestion[] = [];
 
   try {
     // Dynamic import to lazy-load the static question chunk
@@ -50,10 +50,11 @@ export const loadQuestions = async (
     questions = questionModule.questions;
   } catch (error) {
     console.warn(`Static questions not found for ${examPath}/${subjectPath}. Falling back to dummy questions.`);
-    const fallbackDifficulty = difficulty ? 
-      (difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase()) as "Easy" | "Medium" | "Hard" : 
+    const fallbackDifficulty = difficulty ?
+      (difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase()) as "Easy" | "Medium" | "Hard" :
       "Medium";
-      
+
+
     return Array.from({ length: numQuestions }).map((_, i) => ({
       id: i + 1,
       question_en: `Sample question ${i + 1} for ${subject}?`,
@@ -70,7 +71,7 @@ export const loadQuestions = async (
   // Filter by difficulty if provided (Easy, Medium, Hard)
   // Our interview constants uses 'Easy', 'Medium', 'Hard'
   let filteredQuestions = questions;
-  
+
   if (difficulty) {
     const diffCapitalized = difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase();
     const diffMatch = questions.filter(q => q.difficulty === diffCapitalized);
