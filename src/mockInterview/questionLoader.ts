@@ -46,8 +46,8 @@ export const loadQuestions = async (
   try {
     // Dynamic import to lazy-load the static question chunk
     // Note: The bundler will create chunks for all matching files in the directory
-    const module = await import(`./questions/${examPath}/${subjectPath}.ts`);
-    questions = module.questions;
+    const questionModule = await import(`./questions/${examPath}/${subjectPath}.ts`);
+    questions = questionModule.questions;
   } catch (error) {
     console.warn(`Static questions not found for ${examPath}/${subjectPath}. Falling back to dummy questions.`);
     const fallbackDifficulty = difficulty ? 

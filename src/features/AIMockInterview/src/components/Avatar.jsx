@@ -102,7 +102,7 @@ export function Avatar({ avatarState = "idle", avatarBehavior = {}, ...props }) 
       }
     }
 
-    const speaking = avatarStateRef.current === "speaking" || behavior.animation === "speaking";
+    const speaking = avatarStateRef.current === "speaking" || behavior.animation === "speaking" || props.isSpeaking;
 
     // Get actual mesh refs
     const headMesh = headMeshRef.current;

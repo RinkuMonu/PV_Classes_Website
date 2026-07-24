@@ -210,6 +210,7 @@ class TTSServiceV2 {
   cancel() {
     this.queue = [];
     this.currentSpeakId++;
+    this.isProcessingQueue = false; // Prevent permanent queue lock
 
     if (this.abortController) {
       this.abortController.abort();

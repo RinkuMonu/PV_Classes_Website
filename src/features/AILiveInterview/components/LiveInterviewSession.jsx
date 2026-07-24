@@ -479,6 +479,17 @@ export default function LiveInterviewSession() {
     }
   };
 
+  const handleTimeUp = () => {
+    updateInterviewState("COMPLETED");
+    setLiveTranscript("Interview time is up. Session completed.");
+    ttsServiceV2.cancel();
+    if (stateRef.current.activeRecorder && stateRef.current.activeRecorder.state !== "inactive") {
+       stateRef.current.activeRecorder.stop();
+    }
+    if (stateRef.current.animationFrameId) cancelAnimationFrame(stateRef.current.animationFrameId);
+    setData(prev => ({ ...prev, status: "completed" }));
+  };
+
   // Map state to UI
   let displayStatus = interviewState.replace("_", " ");
   if (interviewState === "PROCESSING") displayStatus = "Evaluating Answer";
@@ -488,6 +499,7 @@ export default function LiveInterviewSession() {
   if (interviewState === "AI_SPEAKING") displayStatus = "Interviewer Speaking";
   if (interviewState === "AUTOPLAY_BLOCKED") displayStatus = "Interaction Required";
   if (interviewState === "ERROR") displayStatus = "Error Encountered";
+  if (interviewState === "COMPLETED" || data.status === "completed") displayStatus = "Interview Completed";
 
   return (
     <div className="min-h-[calc(100vh-100px)] p-4 md:p-6 bg-[#F8FAFC] relative">
@@ -495,7 +507,7 @@ export default function LiveInterviewSession() {
         
         {/* Left Column (20%) */}
         <div className="w-full xl:col-span-1 flex flex-col order-2 xl:order-1 h-fit xl:h-[calc(100vh-120px)] xl:sticky xl:top-4 gap-4 pb-4">
-          <InterviewTimer durationString={durationParam} />
+          <InterviewTimer durationString={durationParam} onTimeUp={handleTimeUp} />
           <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
             <InterviewProgress stages={data.stages} />
           </div>
@@ -544,6 +556,47 @@ export default function LiveInterviewSession() {
         </div>
 
       </div>
+
+      {/* Completion Overlay / Report */}
+      {(interviewState === "COMPLETED" || data.status === "completed") && (
+        <div className="absolute inset-0 z-50 bg-white/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-10 max-w-2xl w-full flex flex-col items-center animate-in fade-in zoom-in duration-500">
+            <div className="w-24 h-24 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-5xl mb-6 shadow-inner">
+              ✓
+            </div>
+            <h1 className="text-4xl font-bold text-[#00316B] mb-2">Interview Completed</h1>
+            <p className="text-gray-500 mb-8 text-lg">Your time is up and the session has successfully concluded.</p>
+            
+            <div className="w-full grid grid-cols-2 gap-4 mb-8">
+              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
+                <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Overall Score</p>
+                <div className="text-5xl font-black text-[#009FE3]">{data.scores.overall}%</div>
+              </div>
+              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center flex flex-col gap-2 justify-center">
+                 <div className="flex justify-between items-center text-sm font-bold text-gray-600">
+                   <span>Communication</span>
+                   <span className="text-[#009FE3]">{data.scores.communication}%</span>
+                 </div>
+                 <div className="flex justify-between items-center text-sm font-bold text-gray-600">
+                   <span>Subject Knowledge</span>
+                   <span className="text-[#009FE3]">{data.scores.subjectKnowledge}%</span>
+                 </div>
+                 <div className="flex justify-between items-center text-sm font-bold text-gray-600">
+                   <span>Confidence</span>
+                   <span className="text-[#009FE3]">{data.scores.confidence}%</span>
+                 </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => window.location.href = '/'}
+              className="px-10 py-4 bg-[#009FE3] text-white font-bold rounded-full text-lg shadow-lg hover:bg-blue-600 hover:-translate-y-1 transition-all"
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
