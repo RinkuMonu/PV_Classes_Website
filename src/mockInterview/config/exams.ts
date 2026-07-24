@@ -9,5 +9,6 @@ export const EXAMS = [
   "KVS PGT",
   "NVS PRT",
   "NVS TGT",
-  "NVS PGT"
+  "NVS PGT",
+  "KVS/NVS Special Educator"
 ];

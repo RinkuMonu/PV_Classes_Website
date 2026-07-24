@@ -559,10 +559,22 @@ export default function PVClassesChatbot() {
         if (json?.data?.states) {
           const statesList = json.data.states.map(s => s.name);
           setApiStates(statesList);
+          return;
         }
       } catch (err) {
-        console.error("Failed to fetch states:", err);
+        console.warn("Failed to fetch states from API, using fallback list.");
       }
+      
+      // Fallback list of Indian states and UTs
+      setApiStates([
+        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+        "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+        "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+        "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", 
+        "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+        "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", 
+        "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+      ]);
     };
 
     // Pulls the REAL course catalog (with real price / discountPercent /

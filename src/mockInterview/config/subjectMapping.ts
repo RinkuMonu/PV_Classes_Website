@@ -120,5 +120,8 @@ export const SUBJECT_MAPPING: Record<string, string[]> = {
     "Sociology",
     "Psychology",
     "Home Science"
+  ],
+  "KVS/NVS Special Educator": [
+    "Special Education"
   ]
 };

@@ -2,22 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 
-export default function InterviewTimer({ durationString }) {
+export default function InterviewTimer({ durationString, onTimeUp }) {
   const [timeLeft, setTimeLeft] = useState(15 * 60 + 15); // Default for mockup
 
   useEffect(() => {
     if (durationString) {
-      const mins = parseInt(durationString.split(' ')[0]) || 20;
+      const mins = parseInt(String(durationString).split(' ')[0]) || 20;
       setTimeLeft(mins * 60);
     }
   }, [durationString]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          if (onTimeUp) onTimeUp();
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [onTimeUp]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');

@@ -1,6 +1,7 @@
 import { interviewConfig } from '../config/interviewConfig';
 import * as apiClient from './interviewApi';
 import { loadQuestions } from '../../../mockInterview/questionLoader';
+import { fetchBackendQuestions } from './QuestionBankService';
 
 // ==========================================
 // DEMO MODE IMPLEMENTATIONS
@@ -11,7 +12,23 @@ const demoStartInterview = async (config) => {
     const sessionId = 'demo-' + Date.now();
     const numQuestions = config.numQuestions || 10;
     
-    const questions = await loadQuestions(config.exam, config.subject, config.difficulty, numQuestions);
+    let questions = [];
+    try {
+      // 1. Attempt to fetch from Backend API
+      console.log(`[aiMockInterviewService] Fetching dynamic questions for ${config.exam} - ${config.subject}...`);
+      questions = await fetchBackendQuestions(
+        config.exam,
+        config.subject,
+        config.difficulty,
+        config.language || 'Hindi', // default to Hindi if not set, or whatever config has
+        numQuestions
+      );
+      console.log(`[aiMockInterviewService] Successfully loaded ${questions.length} questions from backend.`);
+    } catch (backendError) {
+      // 2. Fallback to static JSON if backend fails
+      console.warn(`[aiMockInterviewService] Backend fetch failed, falling back to static questions. Error:`, backendError);
+      questions = await loadQuestions(config.exam, config.subject, config.difficulty, numQuestions);
+    }
     
     if (questions.length === 0) {
       throw new Error(`No mock questions available yet for ${config.exam} - ${config.subject}.`);

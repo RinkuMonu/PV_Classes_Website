@@ -40,7 +40,7 @@ export default function MCQSetup() {
       const { sessionId } = await startInterview(config);
       router.push(`/ai-mock-interview/confirm/${sessionId}`);
     } catch (err) {
-      setErrors([err.message || 'Failed to start interview']);
+      setErrors(['Unable to load questions. Please try again.']);
       setLoading(false);
     }
   };
@@ -202,7 +202,10 @@ export default function MCQSetup() {
         className="w-full bg-[#00316B] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#00224d] transition-colors disabled:opacity-70 flex justify-center items-center"
       >
         {loading ? (
-          <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          <div className="flex items-center">
+            <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></span>
+            Loading Questions...
+          </div>
         ) : (
           'Start AI Mock Interview'
         )}
