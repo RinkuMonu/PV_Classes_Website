@@ -280,7 +280,20 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/cancellation-and-refund-policy">
-                  Cancellation & Refund Policy
+                  Refund & Cancellation Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-delivery-policy">
+                  Shipping & Delivery Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer">Disclaimer</Link>
+              </li>
+              <li>
+                <Link href="/additional-website-policies">
+                  Additional Website Policies
                 </Link>
               </li>
             </ul>

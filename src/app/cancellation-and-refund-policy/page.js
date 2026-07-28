@@ -1,94 +1,202 @@
-"use client";
-import React from "react";
-import Image from "next/image"
+import {
+  Layers,
+  MonitorPlay,
+  Radio,
+  Video,
+  BookOpen,
+  Ban,
+  CopyCheck,
+  CircleAlert,
+  XCircle,
+  PackageCheck,
+  Bot,
+  BadgePercent,
+  Clock3,
+  CreditCard,
+  RefreshCw,
+  Mail,
+} from "lucide-react";
+import LegalPolicyPage from "../../components/LegalPolicyPage";
+
+const sections = [
+  {
+    id: "scope",
+    title: "Scope",
+    icon: Layers,
+    intro: "This policy applies to PV Classes products and services, including:",
+    items: [
+      "Live and recorded courses",
+      "Printed books and study materials",
+      "Test series and digital downloads",
+      "AI Mock Interviews",
+      "Mock interview programs",
+      "Other educational products or services",
+    ],
+  },
+  {
+    id: "digital",
+    title: "Digital Products",
+    icon: MonitorPlay,
+    intro:
+      "Digital products become accessible after purchase, so sales are generally final.",
+    items: [
+      "Online courses and recorded lectures",
+      "Test series",
+      "PDFs and notes",
+      "AI Mock Interviews",
+      "Digital study materials",
+    ],
+    note:
+      "Once access is provided, a purchase is non-refundable and non-transferable except where required by law or where PV Classes cannot provide the purchased service.",
+  },
+  {
+    id: "live",
+    title: "Live Courses",
+    icon: Radio,
+    intro:
+      "Once live-course access is provided, refunds are not ordinarily available.",
+    items: [
+      "Duplicate payment for the same course may be reviewed.",
+      "An unresolved PV Classes technical failure preventing access may be reviewed.",
+    ],
+  },
+  {
+    id: "recorded",
+    title: "Recorded Courses",
+    icon: Video,
+    intro:
+      "Refunds and cancellations are generally unavailable after activation.",
+    note:
+      "Review the syllabus, duration, language, validity, and course details carefully before purchasing.",
+  },
+  {
+    id: "books",
+    title: "Printed Books",
+    icon: BookOpen,
+    intro:
+      "A replacement or refund may be considered for a wrong, damaged, defective, or incomplete book.",
+    items: [
+      "Submit the request within 7 days of delivery",
+      "Provide the order ID",
+      "Provide clear product photographs",
+      "Describe the issue",
+    ],
+    note:
+      "PV Classes may inspect and verify the claim before approving a resolution.",
+  },
+  {
+    id: "not-eligible",
+    title: "When Refunds Are Not Provided",
+    icon: Ban,
+    intro: "Refunds are generally not issued for:",
+    items: [
+      "Change of mind",
+      "Decision not to continue",
+      "Lack of study time",
+      "Failure to qualify",
+      "Expired course validity",
+      "Accidental purchase of the wrong course",
+      "Personal expectations rather than service defects",
+      "Downloaded or accessed digital material",
+    ],
+  },
+  {
+    id: "duplicate",
+    title: "Duplicate Payment",
+    icon: CopyCheck,
+    intro:
+      "An additional charge for the same order will be refunded after verification.",
+    note:
+      "Refunds are generally processed within 7–10 business days through the original payment method.",
+  },
+  {
+    id: "failed",
+    title: "Failed Transactions",
+    icon: CircleAlert,
+    intro:
+      "If payment is deducted but an order is not confirmed, allow up to 24 hours for automatic reconciliation.",
+    note:
+      "If the issue remains, contact support with your transaction details.",
+  },
+  {
+    id: "cancellation",
+    title: "Order Cancellation",
+    icon: XCircle,
+    intro:
+      "Printed-book cancellation may be accepted only before processing or dispatch. Digital orders cannot ordinarily be cancelled after access is granted.",
+  },
+  {
+    id: "replacement",
+    title: "Replacement Policy",
+    icon: PackageCheck,
+    intro:
+      "Books damaged in transit may be replaced after verification when requested within 7 days of delivery.",
+  },
+  {
+    id: "ai",
+    title: "AI Mock Interview",
+    icon: Bot,
+    intro:
+      "Fees are generally non-refundable after a session begins or a report is generated.",
+    note:
+      "If a PV Classes technical issue prevents completion, we may offer rescheduling or another suitable resolution.",
+  },
+  {
+    id: "offers",
+    title: "Promotional Offers",
+    icon: BadgePercent,
+    intro:
+      "Discounted, festive, promotional, and special-sale purchases remain subject to this policy unless stated otherwise.",
+  },
+  {
+    id: "processing",
+    title: "Processing Time",
+    icon: Clock3,
+    intro:
+      "Approved refunds are generally processed within 7–10 business days. Actual credit timing depends on the bank or payment provider.",
+  },
+  {
+    id: "method",
+    title: "Refund Method",
+    icon: CreditCard,
+    intro:
+      "Approved refunds are generally credited through the original payment method. Supporting information may be requested.",
+  },
+  {
+    id: "updates",
+    title: "Policy Updates",
+    icon: RefreshCw,
+    intro:
+      "PV Classes may amend this policy at any time. The latest published version will apply.",
+  },
+  {
+    id: "contact",
+    title: "Contact Us",
+    icon: Mail,
+    intro: "For refund, replacement, or cancellation queries, provide:",
+    items: [
+      "Order ID",
+      "Registered mobile number",
+      "Registered email address",
+      "Transaction reference, if applicable",
+      "Description of the issue",
+    ],
+  },
+];
 
 export default function RefundPolicy() {
   return (
-    <section className="">
-      <section className="relative w-full h-[80vh] sm:h-[60vh] lg:h-[60vh] text-white mb-6 sm:mb-2">
-        <div className="absolute inset-0 hidden sm:block">
-          <Image
-            src="/Image/Banner/refund.webp"
-            alt="Banner Desktop"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 block sm:hidden">
-          <Image
-            src="/Image/pv-mobile/refund-mob.webp"
-            alt="Banner Mobile"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-      </section>
-      <div className="px-16 py-12 bg-[#E6EEF5]">
-
-        <h1 className="text-4xl font-bold text-center text-[#204972] mb-4">
-
-          Cancellation & Refund Policy
-        </h1>
-        <p className="text-center text-gray-600 mb-10">
-Please read our cancellation and refund policy carefully before purchasing any course.
-        </p>
-
-      <div className="bg-white shadow-md rounded-lg border-l-4 border-[#616602] p-6 mb-8">
-  <h3 className="text-2xl font-semibold text-[#204972] mb-4">
-    Refund Policy
-  </h3>
-
-  <p className="text-gray-700 mb-3">
-    All courses available on the PV Classes website are digital learning
-    products. Once a course is purchased and access is provided to the user,
-    the payment is considered final.
-  </p>
-
-  <p className="text-gray-700 mb-3">
-    We do not offer any refunds, cancellations, or exchanges after the purchase
-    of a course under any circumstances. We strongly recommend that users read
-    the course details, description, and syllabus carefully before making a
-    purchase.
-  </p>
-
-  <p className="text-gray-700 mb-3">
-    Once the course access has been granted to your account, it cannot be
-    transferred, canceled, or refunded. This policy helps us maintain the
-    integrity of our digital learning platform.
-  </p>
-
-  <p className="text-gray-700">
-    If you face any technical issues while accessing the course, you may contact
-    our support team, and we will assist you in resolving the issue as soon as
-    possible.
-  </p>
-</div>
-
-
-        <div className="bg-white shadow-md rounded-lg border-l-4 border-[#616602] p-6 mb-8">
-          <h3 className="text-2xl font-semibold text-[#204972] mb-4">Security</h3>
-          <p className="text-gray-700 mb-3">
-            The security of your personal information is very important to us. We
-            use physical, administrative and technical safeguards to protect your
-            personal data from unauthorized access.
-          </p>
-          <p className="text-gray-700 mb-3">
-            In addition, we use standard security protocols and mechanisms to
-            exchange the transmission of sensitive data such as credit card
-            details.
-          </p>
-          <p className="text-gray-700">
-            In the event of any breach of your personal information, we will
-            notify you by email or fax and restore the integrity of the data
-            system.
-          </p>
-        </div>
-
-
-    
-      </div>
-    </section>
+    <LegalPolicyPage
+      title="Refund & Cancellation Policy"
+      eyebrow="Clear and transparent resolutions"
+      headline={<>Know before you purchase.</>}
+      description="Understand eligibility, timelines, exceptions, and resolution options for PV Classes digital products, courses, books, and AI services."
+      highlights={[
+        ["Digital access", "Activated digital products are generally final."],
+        ["7-day book claims", "Report eligible physical-product issues promptly."],
+        ["7–10 day refunds", "Approved refunds follow the original payment mode."],
+      ]}
+      sections={sections}
+    />
   );
 }
