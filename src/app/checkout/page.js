@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 function AddressShipping() {
   const { cart } = useCart();
 
-  const hasBook = cart?.some(item => item.itemType === "book");
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -25,7 +24,6 @@ function AddressShipping() {
   const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [coupons, setCoupons] = useState([]);
 
-  const [showAddressModal, setShowAddressModal] = useState(false);
 
   const [isReturningUser, setIsReturningUser] = useState(false);
   const TARGET_COURSE_ID = "69ddc741e2b7eba525362ace";
@@ -34,15 +32,38 @@ function AddressShipping() {
     item => item.itemId === TARGET_COURSE_ID
   );
 
-  const [shippingAddress, setShippingAddress] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    district: "",
-    pincode: ""
-  });
+  
+  const [bookDelivery, setBookDelivery] = useState({});
+  const handleDeliveryType = (itemId, type) => {
+    setBookDelivery((prev) => ({
+      ...prev,
+      [itemId]: {
+        deliveryType: type,
+        shippingAddress:
+          prev[itemId]?.shippingAddress || {
+            fullName: "",
+            mobile: "",
+            address: "",
+            city: "",
+            state: "",
+            pincode: "",
+          },
+      },
+    }));
+  };
+
+  const handleBookAddress = (itemId, field, value) => {
+    setBookDelivery((prev) => ({
+      ...prev,
+      [itemId]: {
+        deliveryType: prev[itemId]?.deliveryType || "pdf",
+        shippingAddress: {
+          ...(prev[itemId]?.shippingAddress || {}),
+          [field]: value,
+        },
+      },
+    }));
+  };
 
   // 🔹 Calculate Total
   useEffect(() => {
@@ -146,7 +167,7 @@ function AddressShipping() {
       if (!token) {
         // Trigger the global login modal
         window.dispatchEvent(new Event("openLoginModal"));
-        
+
         Swal.fire({
           icon: "warning",
           title: "Login Required",
@@ -166,19 +187,54 @@ function AddressShipping() {
       }
 
       setLoading(true);
+      const physicalBooks = cart.filter(
+        (item) =>
+          item.itemType === "book" &&
+          bookDelivery[item.itemId]?.deliveryType === "physical"
+      );
 
+      for (const book of physicalBooks) {
+        const address = bookDelivery[book.itemId]?.shippingAddress;
+
+        if (
+          !address?.fullName ||
+          !address?.mobile ||
+          !address?.address ||
+          !address?.city ||
+          !address?.state ||
+          !address?.pincode
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: "Address Required",
+            text: "Please fill complete address for all physical books.",
+          });
+
+          setLoading(false);
+          return;
+        }
+      }
       // 1️⃣ Checkout
       const checkoutRes = await axiosInstance.post("/checkout", {
         cart: cart.map((item) => ({
           itemType: item.itemType,
           itemId: item.itemId,
           quantity: item.quantity,
+
+          deliveryType:
+            item.itemType === "book"
+              ? (bookDelivery[item.itemId]?.deliveryType || "pdf")
+              : undefined,
+
+          shippingAddress:
+            item.itemType === "book"
+              ? (bookDelivery[item.itemId]?.shippingAddress || {})
+              : undefined,
         })),
         paymentMethod: "upi",
         // totalAmount: finalAmount,
         couponId,
         // discountAmount: discount,
-        shippingAddress
       });
 
       const orderId = checkoutRes?.data?.order?._id;
@@ -300,6 +356,121 @@ function AddressShipping() {
                       <p className="text-xs text-gray-500">
                         Qty: {item.quantity}
                       </p>
+                      {item.itemType === "book" && (
+                        <div className="mt-3 space-y-3">
+
+                          <div className="flex gap-4">
+
+                            <label className="flex items-center gap-2">
+                              <input
+                                type="radio"
+                                name={`delivery-${item.itemId}`}
+                                checked={
+                                  (bookDelivery[item.itemId]?.deliveryType || "pdf") === "pdf"
+                                }
+                                onChange={() =>
+                                  handleDeliveryType(item.itemId, "pdf")
+                                }
+                              />
+                              PDF
+                            </label>
+
+                            <label className="flex items-center gap-2">
+                              <input
+                                type="radio"
+                                name={`delivery-${item.itemId}`}
+                                checked={
+                                  bookDelivery[item.itemId]?.deliveryType === "physical"
+                                }
+                                onChange={() =>
+                                  handleDeliveryType(item.itemId, "physical")
+                                }
+                              />
+                              Physical Book
+                            </label>
+
+                          </div>
+
+                          {bookDelivery[item.itemId]?.deliveryType === "physical" && (
+                            <div className="grid grid-cols-1 gap-2">
+
+                              <input
+                                placeholder="Full Name"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "fullName",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                              <input
+                                placeholder="Mobile"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "mobile",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                              <textarea
+                                placeholder="Address"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "address",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                              <input
+                                placeholder="City"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "city",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                              <input
+                                placeholder="State"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "state",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                              <input
+                                placeholder="Pincode"
+                                className="border rounded p-2"
+                                onChange={(e) =>
+                                  handleBookAddress(
+                                    item.itemId,
+                                    "pincode",
+                                    e.target.value
+                                  )
+                                }
+                              />
+
+                            </div>
+                          )}
+
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -426,80 +597,7 @@ function AddressShipping() {
         </div>
 
 
-        {showAddressModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl w-full max-w-md">
-
-              <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
-
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full border p-2 mb-2 rounded"
-                value={shippingAddress.name}
-                onChange={(e) => setShippingAddress({ ...shippingAddress, name: e.target.value })}
-              />
-
-              <input
-                type="text"
-                placeholder="Phone"
-                className="w-full border p-2 mb-2 rounded"
-                value={shippingAddress.phone}
-                onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })}
-              />
-
-              <textarea
-                placeholder="Address"
-                className="w-full border p-2 mb-2 rounded"
-                value={shippingAddress.address}
-                onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })}
-              />
-
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  placeholder="City"
-                  className="border p-2 rounded"
-                  value={shippingAddress.city}
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                />
-
-                <input
-                  placeholder="State"
-                  className="border p-2 rounded"
-                  value={shippingAddress.state}
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, state: e.target.value })}
-                />
-              </div>
-
-              <input
-                placeholder="Pincode"
-                className="w-full border p-2 mt-2 rounded"
-                value={shippingAddress.pincode}
-                onChange={(e) => setShippingAddress({ ...shippingAddress, pincode: e.target.value })}
-              />
-
-              <div className="flex gap-2 mt-4">
-                <button
-                  className="flex-1 bg-gray-300 py-2 rounded"
-                  onClick={() => setShowAddressModal(false)}
-                >
-                  Cancel
-                </button>
-
-                <button
-                  className="flex-1 bg-[#384D89] text-white py-2 rounded"
-                  onClick={() => {
-                    setShowAddressModal(false);
-                    handleCheckoutAndPay();
-                  }}
-                >
-                  Continue
-                </button>
-              </div>
-
-            </div>
-          </div>
-        )}
+    
 
       </div>
     </div>
