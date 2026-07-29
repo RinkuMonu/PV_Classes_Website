@@ -1,30 +1,40 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function InterviewTimer({ durationString, onTimeUp }) {
   const [timeLeft, setTimeLeft] = useState(15 * 60 + 15); // Default for mockup
+  const hasTimeUpRun = useRef(false);
 
   useEffect(() => {
     if (durationString) {
       const mins = parseInt(String(durationString).split(' ')[0]) || 20;
       setTimeLeft(mins * 60);
+      hasTimeUpRun.current = false;
     }
   }, [durationString]);
+
+  useEffect(() => {
+    if (timeLeft <= 0 && !hasTimeUpRun.current) {
+      hasTimeUpRun.current = true;
+      if (onTimeUp) {
+        onTimeUp();
+      }
+    }
+  }, [timeLeft, onTimeUp]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          if (onTimeUp) onTimeUp();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [onTimeUp]);
+  }, []);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
