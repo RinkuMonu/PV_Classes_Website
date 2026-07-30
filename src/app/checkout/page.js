@@ -56,7 +56,7 @@ function AddressShipping() {
     setBookDelivery((prev) => ({
       ...prev,
       [itemId]: {
-        deliveryType: prev[itemId]?.deliveryType || "pdf",
+        deliveryType: prev[itemId]?.deliveryType || "physical",
         shippingAddress: {
           ...(prev[itemId]?.shippingAddress || {}),
           [field]: value,
@@ -222,9 +222,14 @@ function AddressShipping() {
           quantity: item.quantity,
 
           deliveryType:
-            item.itemType === "book"
-              ? (bookDelivery[item.itemId]?.deliveryType || "pdf")
-              : undefined,
+item.itemType === "book"
+? (
+    bookDelivery[item.itemId]?.deliveryType ||
+    (item?.details?.sale_type === "physical"
+      ? "physical"
+      : "pdf")
+  )
+: undefined,
 
           shippingAddress:
             item.itemType === "book"
@@ -359,39 +364,80 @@ function AddressShipping() {
                       {item.itemType === "book" && (
                         <div className="mt-3 space-y-3">
 
-                          <div className="flex gap-4">
+                         <>
+  {(() => {
+    const saleType = item?.details?.sale_type || "both";
 
-                            <label className="flex items-center gap-2">
-                              <input
-                                type="radio"
-                                name={`delivery-${item.itemId}`}
-                                checked={
-                                  (bookDelivery[item.itemId]?.deliveryType || "pdf") === "pdf"
-                                }
-                                onChange={() =>
-                                  handleDeliveryType(item.itemId, "pdf")
-                                }
-                              />
-                              PDF
-                            </label>
+    return (
+      <>
+        <div className="flex gap-4">
 
-                            <label className="flex items-center gap-2">
-                              <input
-                                type="radio"
-                                name={`delivery-${item.itemId}`}
-                                checked={
-                                  bookDelivery[item.itemId]?.deliveryType === "physical"
-                                }
-                                onChange={() =>
-                                  handleDeliveryType(item.itemId, "physical")
-                                }
-                              />
-                              Physical Book
-                            </label>
+          {(saleType === "both" || saleType === "pdf") && (
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name={`delivery-${item.itemId}`}
+                checked={
+(
+bookDelivery[item.itemId]?.deliveryType ||
+(item?.details?.sale_type === "physical"
+? "physical"
+: "pdf")
+) === "pdf"
+}
+                onChange={() =>
+                  handleDeliveryType(item.itemId, "pdf")
+                }
+              />
+              PDF
+            </label>
+          )}
 
-                          </div>
+          {(saleType === "both" || saleType === "physical") && (
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name={`delivery-${item.itemId}`}
+                checked={
+  (
+    bookDelivery[item.itemId]?.deliveryType ||
+    (item?.details?.sale_type === "physical"
+      ? "physical"
+      : "pdf")
+  ) === "physical"
+}
+                onChange={() =>
+                  handleDeliveryType(item.itemId, "physical")
+                }
+              />
+              Physical Book
+            </label>
+          )}
 
-                          {bookDelivery[item.itemId]?.deliveryType === "physical" && (
+        </div>
+
+        {saleType === "pdf" && (
+          <p className="text-sm text-blue-600 mt-2">
+            This book is available only in PDF format.
+          </p>
+        )}
+
+        {saleType === "physical" && (
+          <p className="text-sm text-orange-600 mt-2">
+            This book is available only as a Physical Book.
+          </p>
+        )}
+      </>
+    );
+  })()}
+</>
+
+                          {(
+bookDelivery[item.itemId]?.deliveryType ||
+(item?.details?.sale_type === "physical"
+? "physical"
+: "pdf")
+) === "physical" && (
                             <div className="grid grid-cols-1 gap-2">
 
                               <input

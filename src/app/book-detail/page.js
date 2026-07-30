@@ -27,7 +27,7 @@ export default function ProductPage() {
         fetchBooks();
     }, [id]);
     console.log("book details = ",books);
-
+const saleType = books?.sale_type || "both";
   const features = [
      {
       icon: <FaHandshakeSimple />,
@@ -43,6 +43,12 @@ export default function ProductPage() {
     },
   ];
   const [mainImage, setMainImage] = useState(books?.full_image?.[0]);
+  useEffect(() => {
+  if (books?.full_image?.length > 0) {
+    setMainImage(books.full_image[0]);
+  }
+}, [books]);
+
   return (
     <div className="flex gap-8 p-6">
       {/* Left Thumbnails */}
@@ -74,18 +80,58 @@ export default function ProductPage() {
             className="border rounded-lg object-cover md:ml-16"
             />
 
-            <div className="flex gap-4 mt-6 md:ml-16">
-            {/* Add to Bag */}
-            <Link href="/addtocart" className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold text-base hover:bg-yellow-50 transition-colors duration-200">
-                <FiShoppingBag className="text-[#616602] text-lg" />
-                <span className="text-[#616602]">Add To Bag</span>
-            </Link>
+            <div className="flex gap-4 mt-6 md:ml-16 flex-wrap">
 
-            {/* Buy Now */}
-            <Link href="/buynow" className="px-14 py-3 bg-[#616602] text-white font-medium rounded-md hover:bg-[#0281ad] transition-colors duration-200">
-                Buy Now
-            </Link>
-            </div>
+  {saleType === "both" && (
+    <>
+      <Link
+        href="/addtocart"
+        className="flex items-center gap-2 px-6 py-3 border-2 border-[#616602] rounded-md text-[#616602] font-semibold"
+      >
+        <FiShoppingBag className="text-lg" />
+        <span>Add To Bag</span>
+      </Link>
+
+      <Link
+        href="/buynow"
+        className="px-14 py-3 bg-[#616602] text-white rounded-md"
+      >
+        Buy Now
+      </Link>
+    </>
+  )}
+
+  {saleType === "pdf" && (
+    <>
+      <div className="w-full rounded-lg bg-blue-50 border border-blue-200 p-3 text-blue-700">
+        📘 This book is available only in PDF format. Physical copy is currently unavailable.
+      </div>
+
+      <Link
+        href="/buynow"
+        className="px-14 py-3 bg-[#616602] text-white rounded-md"
+      >
+        Buy PDF
+      </Link>
+    </>
+  )}
+
+  {saleType === "physical" && (
+    <>
+      <div className="w-full rounded-lg bg-yellow-50 border border-yellow-300 p-3 text-yellow-700">
+        📦 This book is available only as a Physical Book. PDF version is currently unavailable.
+      </div>
+
+      <Link
+        href="/buynow"
+        className="px-14 py-3 bg-[#616602] text-white rounded-md"
+      >
+        Buy Physical Book
+      </Link>
+    </>
+  )}
+
+</div>
 
         </div>
 
