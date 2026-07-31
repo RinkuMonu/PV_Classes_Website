@@ -11,15 +11,17 @@ import Image from "next/image"
 
 export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess }) {
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    state: "",
-    district: "",
-    exam: ""
-
-  })
+  name: "",
+  fatherName: "",
+  motherName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
+  state: "",
+  district: "",
+  exam: ""
+})
   const [isLoading, setIsLoading] = useState(false)
 
   const [states, setStates] = useState([])
@@ -126,14 +128,16 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
 
     try {
       const { data } = await axiosInstance.post("/users/register", {
-        name: formData.name,
-        phone: formData.phone,
-        password: formData.password,
-        state: formData.state,
-        district: formData.district,
-        exam: formData.exam
-
-      })
+  name: formData.name,
+  fatherName: formData.fatherName,
+  motherName: formData.motherName,
+  email: formData.email,
+  phone: formData.phone,
+  password: formData.password,
+  state: formData.state,
+  district: formData.district,
+  exam: formData.exam
+})
 
       toast.success(data.message || "Registration successful!")
       if (onRegisterSuccess) onRegisterSuccess()
@@ -148,158 +152,11 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
   }
 
   return (
-    // <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    //   <div className="bg-white rounded-xl w-full max-w-md overflow-hidden">
-    //     <div className="flex justify-between items-center p-6 bg-gradient-to-r from-[#00316B] to-[#204972] text-white">
-    //       <h2 className="text-xl font-bold">Create Account</h2>
-    //       <button onClick={onClose} className="p-1 hover:bg-white/20 rounded-full">
-    //         <X size={20} />
-    //       </button>
-    //     </div>
-
-    //     <form onSubmit={handleSubmit} className="px-4 py-2 space-y-3">
-    //       {/* 🔹 Inline error box removed — toast will handle errors */}
-
-    //       <div className="space-y-2">
-    //         <label className="text-sm font-medium text-gray-700">Full Name</label>
-    //         <div className="relative">
-    //           <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-    //           <input
-    //             type="text"
-    //             name="name"
-    //             value={formData.name}
-    //             onChange={handleChange}
-    //             required
-    //             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent"
-    //             placeholder="Enter your full name"
-    //           />
-    //         </div>
-    //       </div>
-
-    //       <div className="space-y-2">
-    //         <label className="text-sm font-medium text-gray-700">Phone Number</label>
-    //         <div className="relative">
-    //           <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-    //           <input
-    //             type="tel"
-    //             name="phone"
-    //             value={formData.phone}
-    //             onChange={handleChange}
-    //             required
-    //             maxLength={10}  // <-- added as safety
-    //             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent"
-    //             placeholder="Enter your phone number"
-    //           />
-    //         </div>
-    //       </div>
-
-    //       <div className="space-y-2">
-    //         <label className="text-sm font-medium text-gray-700">Password</label>
-    //         <div className="relative">
-    //           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-    //           <input
-    //             type="password"
-    //             name="password"
-    //             value={formData.password}
-    //             onChange={handleChange}
-    //             required
-    //             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent"
-    //             placeholder="Create a password"
-    //           />
-    //         </div>
-    //       </div>
-
-    //       <div className="space-y-2">
-    //         <label className="text-sm font-medium text-gray-700">Confirm Password</label>
-    //         <div className="relative">
-    //           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-    //           <input
-    //             type="password"
-    //             name="confirmPassword"
-    //             value={formData.confirmPassword}
-    //             onChange={handleChange}
-    //             required
-    //             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009FE3] focus:border-transparent"
-    //             placeholder="Confirm your password"
-    //           />
-    //         </div>
-    //       </div>
-
-    //       <select
-    //         name="state"
-    //         value={formData.state}
-    //         onChange={handleStateChange}
-    //         required
-    //         className="w-full border p-2 rounded"
-    //       >
-    //         <option value="">Select State</option>
-    //         {states.map((s, i) => (
-    //           <option key={i} value={s.name}>
-    //             {s.name}
-    //           </option>
-    //         ))}
-    //       </select>
-
-
-    //       <select
-    //         name="district"
-    //         value={formData.district}
-    //         onChange={handleChange}
-    //         required
-    //         className="w-full border p-2 rounded"
-    //       >
-    //         <option value="">Select District</option>
-    //         {districts.map((d, i) => (
-    //           <option key={i} value={d}>
-    //             {d}
-    //           </option>
-    //         ))}
-    //       </select>
-
-    //       <select
-    //         name="exam"
-    //         value={formData.exam}
-    //         onChange={handleChange}
-    //         required
-    //         className="w-full border p-2 rounded"
-    //       >
-    //         <option value="">Select Exam</option>
-
-    //         {exams.map((exam) => (
-    //           <option key={exam._id} value={exam._id}>
-    //             {exam.name}
-    //           </option>
-    //         ))}
-
-    //       </select>
-
-    //       <button
-    //         type="submit"
-    //         disabled={isLoading}
-    //         className="w-full bg-gradient-to-r from-[#00316B] to-[#204972] text-white py-3 rounded-lg font-semibold hover:from-[#204972] hover:to-[#009FE3] transition-all duration-200 disabled:opacity-50"
-    //       >
-    //         {isLoading ? "Creating Account..." : "Create Account"}
-    //       </button>
-
-    //       <div className="text-center text-sm text-gray-600">
-    //         Already have an account?{" "}
-    //         <button
-    //           type="button"
-    //           onClick={onLoginClick}
-    //           className="text-[#009FE3] font-semibold hover:underline"
-    //         >
-    //           Login here
-    //         </button>
-    //       </div>
-    //     </form>
-    //   </div>
-    // </div>
-
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
+      <div className="w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
 
         {/* LEFT SIDE */}
-        <div className="hidden md:flex md:w-1/2 h-[95vh] relative">
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden max-h-[90vh]">
           <Image
             src="/Image/pic2.jpeg"
             alt="register"
@@ -316,7 +173,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
 
 
         {/* RIGHT SIDE */}
-        <div className="w-full md:w-1/2 p-6">
+        <div className="w-full md:w-1/2 p-6 overflow-y-auto max-h-[90vh]">
 
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
@@ -337,8 +194,34 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+              className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
             />
+            <input
+  type="text"
+  name="fatherName"
+  placeholder="Father's Name"
+  value={formData.fatherName}
+  onChange={handleChange}
+  className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+/>
+
+<input
+  type="text"
+  name="motherName"
+  placeholder="Mother's Name"
+  value={formData.motherName}
+  onChange={handleChange}
+  className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+/>
+
+<input
+  type="email"
+  name="email"
+  placeholder="Email Address"
+  value={formData.email}
+  onChange={handleChange}
+  className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+/>
 
             {/* Phone */}
             <input
@@ -347,7 +230,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+              className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
             />
 
             {/* Password */}
@@ -357,7 +240,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+              className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
             />
 
             {/* Confirm Password */}
@@ -367,7 +250,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
+              className="w-full py-2.5 px-3 border rounded-lg focus:ring-2 focus:ring-[#009FE3]"
             />
 
             {/* State */}
@@ -375,7 +258,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               name="state"
               value={formData.state}
               onChange={handleStateChange}
-              className="w-full p-3 border rounded-lg"
+              className="w-full py-2.5 px-3 border rounded-lg"
             >
               <option value="">Select State</option>
               {states.map((s, i) => (
@@ -388,7 +271,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               name="district"
               value={formData.district}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
+              className="w-full py-2.5 px-3 border rounded-lg"
             >
               <option value="">Select District</option>
               {districts.map((d, i) => (
@@ -401,7 +284,7 @@ export default function RegisterModal({ onClose, onLoginClick, onRegisterSuccess
               name="exam"
               value={formData.exam}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
+              className="w-full py-2.5 px-3 border rounded-lg"
             >
               <option value="">Select Exam</option>
               {exams.map((exam) => (
