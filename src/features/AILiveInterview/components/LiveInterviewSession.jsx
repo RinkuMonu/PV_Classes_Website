@@ -219,7 +219,9 @@ export default function LiveInterviewSession() {
       const SILENCE_THRESHOLD = 5; // Very low threshold to capture any speech
       const MAX_SILENCE_DURATION = 3500; // 3.5 seconds
       const MAX_RECORDING_DURATION = 60000; // 60 seconds
+      const NO_RESPONSE_TIMEOUT = 30000; // 30 seconds no response timeout
       const recordingStartTime = Date.now();
+      let hasSpoken = false; // Track if candidate has started speaking
 
       const checkSilence = () => {
         if (mediaRecorder.state !== "recording") return;
@@ -231,13 +233,20 @@ export default function LiveInterviewSession() {
 
         if (average > SILENCE_THRESHOLD) {
           silenceStart = Date.now();
+          hasSpoken = true;
         }
 
         const silenceDuration = Date.now() - silenceStart;
         const totalDuration = Date.now() - recordingStartTime;
 
-        if (silenceDuration > MAX_SILENCE_DURATION || totalDuration > MAX_RECORDING_DURATION) {
+        if (hasSpoken && silenceDuration > MAX_SILENCE_DURATION) {
           console.log(`[Recording] Auto-stopping. Silence: ${silenceDuration}ms, Total: ${totalDuration}ms`);
+          mediaRecorder.stop();
+        } else if (!hasSpoken && totalDuration > NO_RESPONSE_TIMEOUT) {
+          console.log(`[Recording] No response for ${totalDuration}ms. Auto-ending interview.`);
+          handleTimeUp(); // Trigger completion
+        } else if (totalDuration > MAX_RECORDING_DURATION) {
+          console.log(`[Recording] Max duration reached. Auto-stopping.`);
           mediaRecorder.stop();
         } else {
           stateRef.current.animationFrameId = requestAnimationFrame(checkSilence);
@@ -248,6 +257,14 @@ export default function LiveInterviewSession() {
         if (stateRef.current.animationFrameId) {
             cancelAnimationFrame(stateRef.current.animationFrameId);
         }
+        
+        // Don't upload if interview was completed (e.g., due to timeout)
+        if (stateRef.current.interviewState === "COMPLETED") {
+            stream.getTracks().forEach(track => track.stop());
+            if (audioContext.state !== "closed") audioContext.close();
+            return;
+        }
+
         updateInterviewState("UPLOADING");
         setLiveTranscript("Uploading response...");
         
