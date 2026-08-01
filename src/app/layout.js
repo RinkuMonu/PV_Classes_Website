@@ -6,6 +6,7 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { CartProvider } from "../components/context/CartContext";
 import WhatsAppButton from "../components/WhatsAppButton";
+import QueryProvider from "./QueryProvider";
 
 // AI Chatbot
 import PVClassesChatbot from "../components/pvclasseschatbot";
@@ -36,28 +37,30 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          {/* Header */}
-          <Header />
+        <QueryProvider>
+          <CartProvider>
+            {/* Header */}
+            <Header />
 
-          {/* Main Page */}
+            {/* Main Page */}
 
-          <main>{children}</main>
+            <main>{children}</main>
 
-          {/* Footer */}
-          <Footer />
+            {/* Footer */}
+            <Footer />
 
 
-          {/* Toast Notifications */}
-          <Toaster position="top-right" />
+            {/* Toast Notifications */}
+            <Toaster position="top-right" />
 
-          {/* Floating WhatsApp */}
-          <WhatsAppButton />
+            {/* Floating WhatsApp */}
+            <WhatsAppButton />
 
-          {/* AI Chatbot */}
-          <PVClassesChatbot />
-          <TapToSpeakCTA variant="floating" />
-        </CartProvider>
+            {/* AI Chatbot */}
+            <PVClassesChatbot />
+            <TapToSpeakCTA variant="floating" />
+          </CartProvider>
+        </QueryProvider>
       </body>
     </html>
   );

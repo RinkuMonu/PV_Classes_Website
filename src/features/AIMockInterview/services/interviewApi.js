@@ -1,28 +1,4 @@
-import { interviewConfig } from '../config/interviewConfig';
-
-const API_BASE_URL = interviewConfig.API_BASE_URL;
-
-// Helper for generic API calls
-const fetchApi = async (endpoint, options = {}) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error(`API returned ${response.status}: ${response.statusText}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error(`[API Error] ${endpoint}:`, error);
-    throw error;
-  }
-};
+import { apiClient } from '../../../services/apiClient';
 
 // Map bilingual fields safely
 const mapBilingual = (en, hi, fallback = '') => ({
@@ -69,77 +45,94 @@ const mapQuestionData = (backendQ) => {
 };
 
 export const startInterview = async (config) => {
-  const data = await fetchApi('/api/v1/interviews/start', {
-    method: 'POST',
-    body: JSON.stringify(config)
-  });
-  
-  // Backend should return { sessionId: '...', data: {...} }
-  // We adapt if it returns differently
-  return {
-    sessionId: data.sessionId || data.id,
-    data: data.sessionData || data
-  };
+  try {
+    const response = await apiClient.post('/api/mock-interview/start', config);
+    const data = response.data;
+    
+    return {
+      sessionId: data.session_id || data.id,
+      data: data.sessionData || data
+    };
+  } catch (error) {
+    console.error("[API Error] startInterview:", error);
+    throw error;
+  }
 };
 
 export const getNextQuestion = async (sessionId) => {
-  const data = await fetchApi(`/api/v1/interviews/${sessionId}/next`);
-  
-  if (data.status === 'COMPLETED' || data.status === 'COMPLETED_NO_MORE_QUESTIONS') {
-    return { status: 'COMPLETED' };
+  try {
+    // Typically the backend might just have a questions endpoint
+    const response = await apiClient.get(`/api/v1/interviews/${sessionId}/next`);
+    const data = response.data;
+    
+    if (data.status === 'COMPLETED' || data.status === 'COMPLETED_NO_MORE_QUESTIONS') {
+      return { status: 'COMPLETED' };
+    }
+    
+    return {
+      status: 'OK',
+      question: mapQuestionData(data.question || data),
+      backendMeta: data.meta || {}
+    };
+  } catch (error) {
+    console.error("[API Error] getNextQuestion:", error);
+    throw error;
   }
-  
-  return {
-    status: 'OK',
-    question: mapQuestionData(data.question || data),
-    backendMeta: data.meta || {}
-  };
 };
 
 export const submitAnswer = async (sessionId, payload) => {
-  const data = await fetchApi(`/api/v1/interviews/${sessionId}/answer`, {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  });
-  
-  return {
-    isCorrect: !!data.isCorrect,
-    correctOption: data.correctOption || data.correct_option || 'A',
-    explanation: mapBilingual(
-      data.explanation?.en || data.explanation_en || data.explanation, 
-      data.explanation?.hi || data.explanation_hi || data.explanation
-    ),
-    pointsAwarded: data.pointsAwarded || data.points_awarded || (data.isCorrect ? 10 : 0),
-    newDifficulty: data.newDifficulty || data.new_difficulty || 'Medium',
-    status: 'OK'
-  };
+  try {
+    const response = await apiClient.post(`/api/mock-interview/answer`, {
+      session_id: sessionId,
+      ...payload
+    });
+    const data = response.data;
+    
+    return {
+      isCorrect: !!data.isCorrect,
+      correctOption: data.correctOption || data.correct_option || 'A',
+      explanation: mapBilingual(
+        data.explanation?.en || data.explanation_en || data.explanation, 
+        data.explanation?.hi || data.explanation_hi || data.explanation
+      ),
+      pointsAwarded: data.pointsAwarded || data.points_awarded || (data.isCorrect ? 10 : 0),
+      newDifficulty: data.newDifficulty || data.new_difficulty || 'Medium',
+      status: 'OK'
+    };
+  } catch (error) {
+    console.error("[API Error] submitAnswer:", error);
+    throw error;
+  }
 };
 
 export const getInterviewReport = async (sessionId) => {
-  const data = await fetchApi(`/api/v1/interviews/${sessionId}/report`);
-  
-  // Ensure we have a performance level
-  if (!data.performanceLevel) {
-    const total = (data.correctCount || 0) + (data.wrongCount || 0);
-    let level = 'Needs Improvement';
-    if (total > 0) {
-      const acc = ((data.correctCount || 0) / total) * 100;
-      if (acc >= 90) level = 'Excellent';
-      else if (acc >= 75) level = 'Good';
-      else if (acc >= 50) level = 'Average';
+  try {
+    const response = await apiClient.post(`/api/mock-interview/end`, { session_id: sessionId });
+    const data = response.data;
+    
+    // Ensure we have a performance level
+    if (!data.performanceLevel) {
+      const total = (data.correctCount || 0) + (data.wrongCount || 0);
+      let level = 'Needs Improvement';
+      if (total > 0) {
+        const acc = ((data.correctCount || 0) / total) * 100;
+        if (acc >= 90) level = 'Excellent';
+        else if (acc >= 75) level = 'Good';
+        else if (acc >= 50) level = 'Average';
+      }
+      data.performanceLevel = level;
     }
-    data.performanceLevel = level;
+    
+    return data;
+  } catch (error) {
+    console.error("[API Error] getInterviewReport:", error);
+    throw error;
   }
-  
-  return data;
 };
 
 export const logCameraEvent = async (sessionId, eventPayload) => {
   try {
-    await fetchApi(`/api/v1/interviews/${sessionId}/camera-event`, {
-      method: 'POST',
-      body: JSON.stringify(eventPayload)
-    });
+    await apiClient.post(`/api/v1/interviews/${sessionId}/camera-event`, eventPayload);
     return { success: true };
   } catch (e) {
     // Non-critical, just fail silently

@@ -32,7 +32,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
         async function initModels() {
             try {
                 const vision = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.17/wasm"
                 );
 
                 const [pose, face] = await Promise.all([
@@ -40,7 +40,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
                         baseOptions: {
                             modelAssetPath:
                                 "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
-                            delegate: "GPU",
+                            delegate: "CPU",
                         },
                         runningMode: "VIDEO",
                         numPoses: 1,
@@ -49,7 +49,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
                         baseOptions: {
                             modelAssetPath:
                                 "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-                            delegate: "GPU",
+                            delegate: "CPU",
                         },
                         runningMode: "VIDEO",
                         numFaces: 1,
@@ -86,6 +86,9 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
     useEffect(() => {
         if (videoRef.current && videoStream) {
             videoRef.current.srcObject = videoStream;
+            videoRef.current.onloadedmetadata = () => {
+                videoRef.current.play().catch(e => console.error("Hidden video play error:", e));
+            };
         }
     }, [videoStream]);
 
@@ -231,6 +234,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
                     onPostureUpdate?.(postureData);
                     onEyeContactUpdate?.(eyeContactData);
                 } catch (e) {
+                    console.error("MediaPipe detect error:", e);
                     // Silently skip frames that error (e.g. model not ready yet)
                 }
             }
@@ -255,8 +259,8 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
             muted
             style={{
                 position: "absolute",
-                width: 1,
-                height: 1,
+                width: 640,
+                height: 480,
                 opacity: 0,
                 pointerEvents: "none",
                 top: -9999,

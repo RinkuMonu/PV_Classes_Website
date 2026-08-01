@@ -158,8 +158,8 @@ export default function MCQSetup() {
             onChange={e => setConfig({ ...config, timePerQuestion: parseInt(e.target.value) })}
           >
             <option value={30}>30 Seconds</option>
+            <option value={45}>45 Seconds</option>
             <option value={60}>60 Seconds</option>
-            <option value={90}>90 Seconds</option>
           </select>
         </div>
 

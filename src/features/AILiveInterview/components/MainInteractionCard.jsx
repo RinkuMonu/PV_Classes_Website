@@ -68,13 +68,15 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
           </div>
           
           <div className="flex flex-col items-center justify-center pt-2 gap-4">
-            {transcript ? (
-              <p className="text-gray-700 italic text-center w-full">{transcript}</p>
-            ) : (
-              <p className="text-gray-400 italic text-center w-full">
-                {isSpeaking ? "AI is speaking..." : isProcessing ? "Analyzing answer..." : "Listening to your response..."}
-              </p>
-            )}
+            <div className="w-full max-h-[80px] overflow-y-auto">
+              {transcript ? (
+                <p className="text-gray-700 italic text-center w-full">{transcript}</p>
+              ) : (
+                <p className="text-gray-400 italic text-center w-full">
+                  {isSpeaking ? "AI is speaking..." : isProcessing ? "Analyzing answer..." : "Listening to your response..."}
+                </p>
+              )}
+            </div>
 
             {/* Large Central Microphone or Play Button */}
             <div className="mt-4 flex flex-col items-center">
@@ -94,9 +96,8 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
                     className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-md transition-all duration-300 relative ${
                   isSpeaking ? 'bg-gray-200 cursor-not-allowed opacity-50' :
                   isProcessing ? 'bg-yellow-100 text-yellow-600' :
-                  internalState === 'RECORDING' ? 'bg-red-50 text-red-500 animate-pulse' :
-                  internalState === 'LISTENING' ? 'bg-blue-50 text-[#009FE3] animate-pulse shadow-[0_0_15px_rgba(0,159,227,0.4)]' :
-                  'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                  internalState === 'RECORDING' ? 'bg-red-50 text-red-500 animate-pulse ring-4 ring-red-200' :
+                  'bg-blue-50 text-[#009FE3] hover:bg-blue-100 hover:shadow-lg cursor-pointer'
                 }`}
               >
                 {isProcessing ? '⏳' : '🎤'}
@@ -106,14 +107,12 @@ export default function MainInteractionCard({ candidate, currentQuestion, transc
                 isSpeaking ? 'text-gray-400' :
                 isProcessing ? 'text-yellow-600' :
                 internalState === 'RECORDING' ? 'text-red-500' :
-                internalState === 'LISTENING' ? 'text-[#009FE3]' :
-                'text-gray-400'
+                'text-[#009FE3]'
               }`}>
                 {isSpeaking ? 'AI Speaking' : 
                  isProcessing ? 'Processing' : 
-                 internalState === 'RECORDING' ? 'Recording' : 
-                 internalState === 'LISTENING' ? 'Tap to Speak' : 
-                 'Idle'}
+                 internalState === 'RECORDING' ? 'Recording... Tap to Stop' : 
+                 'Tap to Speak'}
               </span>
                 </>
               )}

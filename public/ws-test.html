@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>WebSocket Test</title></head>
+<body>
+<h2>WebSocket Direct Test</h2>
+<pre id="log"></pre>
+<script>
+  const log = document.getElementById('log');
+  function addLog(msg) {
+    log.textContent += new Date().toISOString() + ' | ' + msg + '\n';
+    console.log(msg);
+  }
+
+  addLog('Starting WebSocket test...');
+  
+  const ws = new WebSocket('ws://localhost:8000/api/v1/interview-session/ws/browser-test-001');
+  
+  ws.onopen = () => {
+    addLog('✅ CONNECTED!');
+    ws.send(JSON.stringify({type: 'ping'}));
+    addLog('Sent ping');
+  };
+  
+  ws.onmessage = (e) => {
+    addLog('📩 Message: ' + e.data);
+  };
+  
+  ws.onerror = (e) => {
+    addLog('❌ ERROR: ' + JSON.stringify(e));
+    addLog('readyState: ' + ws.readyState);
+  };
+  
+  ws.onclose = (e) => {
+    addLog('🔴 CLOSED: code=' + e.code + ' reason=' + e.reason + ' wasClean=' + e.wasClean);
+  };
+</script>
+</body>
+</html>

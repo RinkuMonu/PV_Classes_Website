@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DIFFICULTY, LANGUAGE_MODE } from '../../AIMockInterview/constants/interviewConstants';
 import { EXAMS } from '../../../mockInterview/config/exams';
@@ -26,7 +26,7 @@ export default function LiveInterviewSetup() {
     return ['Subject Knowledge', 'Teaching Skills', 'Pedagogy', 'Classroom Management', 'Mixed'];
   };
 
-  const initialExam = EXAMS[0];
+  const initialExam = "KVS/NVS Special Educator";
   const initialFocusOptions = getFocusOptions(initialExam);
   
   const [subjectsList, setSubjectsList] = useState(SUBJECT_MAPPING[initialExam] || []);
@@ -46,6 +46,29 @@ export default function LiveInterviewSetup() {
 
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (initialExam === "KVS/NVS Special Educator") {
+      const fetchSubjects = async () => {
+        try {
+          const API_BASE = typeof window !== "undefined" ? `http://${window.location.hostname}:8000` : "http://localhost:8000";
+          const res = await fetch(`${API_BASE}/api/live-interview/subjects?exam=${encodeURIComponent(initialExam)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.subjects) && data.subjects.length > 0 && isMounted) {
+              setSubjectsList(data.subjects);
+              setConfig(prev => ({ ...prev, subject: data.subjects[0] || '' }));
+            }
+          }
+        } catch (err) {
+          console.warn("Failed to fetch dynamically, using fallback list.", err);
+        }
+      };
+      fetchSubjects();
+    }
+    return () => { isMounted = false; };
+  }, [initialExam]);
 
   const handleStart = async () => {
     if (!config.exam || !config.subject) {
@@ -132,7 +155,13 @@ export default function LiveInterviewSetup() {
             }}
           >
             {EXAMS.map(exam => (
-              <option key={exam} value={exam}>{exam}</option>
+              <option 
+                key={exam} 
+                value={exam} 
+                disabled={exam !== 'KVS/NVS Special Educator'}
+              >
+                {exam}{exam !== 'KVS/NVS Special Educator' ? ' (Locked)' : ''}
+              </option>
             ))}
           </select>
         </div>
@@ -221,10 +250,8 @@ export default function LiveInterviewSetup() {
             onChange={e => setConfig({ ...config, duration: e.target.value })}
           >
             <option value="10 Minutes">10 Minutes</option>
+            <option value="15 Minutes">15 Minutes</option>
             <option value="20 Minutes">20 Minutes</option>
-            <option value="30 Minutes">30 Minutes</option>
-            <option value="45 Minutes">45 Minutes</option>
-            <option value="60 Minutes">60 Minutes</option>
           </select>
         </div>
 

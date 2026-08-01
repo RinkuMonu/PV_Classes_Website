@@ -5,10 +5,13 @@ import React, { useRef, useEffect } from 'react';
 export default function ConversationTimeline({ conversation }) {
   const bottomRef = useRef(null);
 
-  // Auto-scroll to newest message
+  // Auto-scroll inside the container only (not the whole page)
   useEffect(() => {
     if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+      const container = bottomRef.current.parentElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
     }
   }, [conversation]);
 
