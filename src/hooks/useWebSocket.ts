@@ -83,7 +83,7 @@ export const useWebSocket = ({
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          
+
           if (data.type === 'pong') {
             const currentLatency = Date.now() - pingTimestampRef.current;
             setLatency(currentLatency);
@@ -102,7 +102,7 @@ export const useWebSocket = ({
         wsRef.current = null;
         stopHeartbeat();
         onCloseRef.current?.();
-        
+
         // Only reconnect if we didn't close intentionally
         if (reconnectCountRef.current < reconnectAttempts) {
           reconnectCountRef.current += 1;
@@ -155,6 +155,7 @@ export const useWebSocket = ({
       // Let the connection survive strict-mode remount; it will be reused via the guard in connect()
     };
   }, [url]);
+
 
   const sendMessage = useCallback((type: string, payload: any) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
