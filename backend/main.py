@@ -13,16 +13,28 @@ import requests
 
 load_dotenv()
 
-app = FastAPI()
+# ── Routers ───────────────────────────────────────────────────────────────────
+from doubt_solver_router import router as doubt_solver_router
+from database import close_connection
 
-# CORS
+app = FastAPI(title="PV Classes Backend API")
+
+# ── Lifecycle ─────────────────────────────────────────────────────────────────
+@app.on_event("shutdown")
+async def shutdown_db():
+    await close_connection()
+
+# ── CORS ──────────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Register routers ──────────────────────────────────────────────────────────
+app.include_router(doubt_solver_router)
 
 # OpenAI setup
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -39,7 +51,14 @@ DID_API_KEY = os.getenv("DID_API_KEY", "")
 
 @app.get("/")
 def read_root():
-    return {"message": "AI Mock Interview Backend API"}
+    return {
+        "message": "PV Classes Backend API",
+        "routes": {
+            "doubt_solver": "/api/ai-tutor/chat",
+            "history":      "/api/ai-tutor/chat/history",
+            "docs":         "/docs",
+        }
+    }
 
 
 @app.post("/api/upload-avatar")
