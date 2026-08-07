@@ -41,7 +41,7 @@ export const fetchBackendQuestions = async (exam, subject, difficulty, language,
     
     return data;
   } catch (error) {
-    console.error("[QuestionBankService] fetchBackendQuestions error:", error);
+    // Re-throw so the caller (aiMockInterviewService) can handle it and fall back to static questions
     throw error;
   }
 };

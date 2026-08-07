@@ -110,10 +110,10 @@ export default function DoubtSolverLayout({ isModal = false }) {
       const res = await aiAxios.post("/ai-tutor/chat", payload);
       
       const newSessionId = res.data.session_id;
-      const aiReply = res.data.answer; // Assuming response has 'answer' and 'session_id' based on typical structure
       
-      // Add AI response
-      setMessages((prev) => [...prev, { role: "assistant", content: aiReply }]);
+      if (res.data.messages) {
+        setMessages(res.data.messages);
+      }
       
       if (newSessionId && newSessionId !== currentSessionId) {
         setCurrentSessionId(newSessionId);

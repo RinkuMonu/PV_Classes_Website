@@ -10,6 +10,7 @@ import { useVoiceAnswer } from '../../../../features/AIMockInterview/hooks/useVo
 import { useBrowserMonitoring } from '../../../../features/AIMockInterview/hooks/useBrowserMonitoring';
 import { getNextQuestion, submitAnswer } from '../../../../features/AIMockInterview/services/aiMockInterviewService';
 import { INTERVIEW_STATUS } from '../../../../features/AIMockInterview/constants/interviewConstants';
+import { HelpCircle, X } from 'lucide-react';
 
 import AIInterviewer from '../../../../features/AIMockInterview/components/AIInterviewer';
 import WebcamMonitor from '../../../../features/AIMockInterview/components/WebcamMonitor';
@@ -17,6 +18,7 @@ import InterviewTimer from '../../../../features/AIMockInterview/components/Inte
 import InterviewProgress from '../../../../features/AIMockInterview/components/InterviewProgress';
 import ScorePanel from '../../../../features/AIMockInterview/components/ScorePanel';
 import AdaptiveMCQInterface from '../../../../features/AIMockInterview/components/AdaptiveMCQInterface';
+import DoubtSolverLayout from '../../../../features/AITutor/components/DoubtSolver';
 
 import { useInterviewTracking } from '../../../../components/Hocks/UseInterviewTracking';
 import { PostureEyeTracker } from '../../../../components/PostureEyeTracking';
@@ -45,6 +47,7 @@ export default function InterviewSessionPage({ params }) {
   const [question, setQuestion] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(INTERVIEW_STATUS.SETUP);
   const [isTimeout, setIsTimeout] = useState(false);
+  const [isDoubtSolverOpen, setIsDoubtSolverOpen] = useState(false);
   const hasSpokenIntro = useRef(false);
 
   const config = session?.config || {};
@@ -170,7 +173,16 @@ export default function InterviewSessionPage({ params }) {
       <div className="bg-[#00316B] text-white py-4 px-6 shadow-md mb-8">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold">PV Classes AI Mock Interview</h1>
-          <div className="text-sm bg-white/20 px-3 py-1 rounded-full">Session: {sessionId.substring(0, 8)}...</div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsDoubtSolverOpen(true)}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+            >
+              <HelpCircle size={16} />
+              AI Doubt Solver
+            </button>
+            <div className="text-sm bg-white/20 px-3 py-2 rounded-full">Session: {sessionId.substring(0, 8)}...</div>
+          </div>
         </div>
       </div>
 
@@ -276,6 +288,29 @@ export default function InterviewSessionPage({ params }) {
 
         </div>
       </div>
+
+      {/* Doubt Solver Modal */}
+      {isDoubtSolverOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center p-4 border-b bg-gray-50">
+              <h2 className="text-lg font-bold text-[#00316B] flex items-center gap-2">
+                <HelpCircle size={20} className="text-[#00316B]" />
+                24*7 AI Doubt Solver
+              </h2>
+              <button
+                onClick={() => setIsDoubtSolverOpen(false)}
+                className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500 cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden relative">
+              <DoubtSolverLayout isModal={true} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

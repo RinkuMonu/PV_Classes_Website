@@ -284,94 +284,105 @@ function TaskCard({ task, isActive, onToggle, onComplete, completing }) {
   const statusColor = task.completed
     ? "border-emerald-500/30 bg-emerald-500/5"
     : isActive
-      ? "border-white/20 bg-white/6"
-      : "border-white/8 bg-white/3 hover:border-white/14";
+      ? "border-emerald-500/40 bg-emerald-500/5 shadow-lg shadow-emerald-900/20"
+      : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10";
 
   return (
-    <div className={`border rounded-2xl transition-all duration-200 overflow-hidden ${statusColor}`}>
+    <div className={`border rounded-2xl transition-all duration-300 overflow-hidden ${statusColor} ${isActive ? 'scale-[1.01]' : 'scale-100'}`}>
       {/* Row */}
-      <div className="flex items-center gap-3 px-4 py-3.5 cursor-pointer" onClick={onToggle}>
+      <div className="flex items-center gap-4 px-5 py-4 cursor-pointer" onClick={onToggle}>
         {/* Checkbox */}
         <button type="button" disabled={task.completed || completing}
           onClick={e => { e.stopPropagation(); onComplete(); }}
-          className={`shrink-0 transition-all cursor-pointer disabled:cursor-default
-            ${task.completed ? "text-emerald-500" : "text-white/20 hover:text-emerald-400"}`}>
-          {completing ? <Loader2 size={20} className="animate-spin text-emerald-400" />
-            : task.completed ? <CheckCircle2 size={20} />
-            : <Circle size={20} />}
+          className={`shrink-0 p-1 rounded-full transition-all cursor-pointer disabled:cursor-default
+            ${task.completed ? "text-emerald-500 bg-emerald-500/10" : "text-white/30 hover:text-emerald-400 hover:bg-emerald-400/10"}`}>
+          {completing ? <Loader2 size={24} className="animate-spin text-emerald-400" />
+            : task.completed ? <CheckCircle2 size={24} />
+            : <Circle size={24} />}
         </button>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-full shrink-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-black tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md shrink-0 uppercase">
               Day {task.day}
             </span>
             {task.completed && (
-              <span className="text-[10px] text-emerald-500 font-bold">✓ Done</span>
+              <span className="text-[10px] text-emerald-500 font-bold tracking-wide uppercase">✓ Done</span>
             )}
           </div>
-          <p className={`text-sm font-semibold truncate ${task.completed ? "text-white/30 line-through" : "text-white/90"}`}>
+          <p className={`text-base font-bold truncate transition-colors ${task.completed ? "text-white/40 line-through" : "text-white"}`}>
             {task.title}
           </p>
         </div>
 
-        {isActive ? <ChevronUp size={14} className="text-white/30 shrink-0" />
-          : <ChevronDown size={14} className="text-white/30 shrink-0" />}
+        <div className={`p-2 rounded-full transition-colors ${isActive ? 'bg-white/10 text-white' : 'bg-transparent text-white/40'}`}>
+          {isActive ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </div>
       </div>
 
       {/* Expanded Detail */}
-      {isActive && (
-        <div className="px-4 pb-4 space-y-2.5 border-t border-white/6 pt-3">
-          {/* What to study */}
-          {task.what_to_study && (
-            <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <BookOpen size={12} className="text-blue-400" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">What to Study</span>
+      <div className={`grid transition-all duration-300 ease-in-out ${isActive ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
+          <div className="px-5 pb-5 space-y-4 border-t border-white/10 pt-4 bg-black/20">
+            {/* What to study */}
+            {task.what_to_study && (
+              <div className="group rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 p-4 hover:border-blue-500/50 hover:from-blue-500/15 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-xl bg-blue-500/20 text-blue-400 group-hover:scale-110 transition-transform">
+                    <BookOpen size={16} />
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-widest text-blue-400">What to Study</span>
+                </div>
+                <p className="text-sm text-blue-50/90 leading-relaxed whitespace-pre-line ml-11">{task.what_to_study}</p>
               </div>
-              <p className="text-xs text-blue-200/80 leading-relaxed whitespace-pre-line">{task.what_to_study}</p>
-            </div>
-          )}
+            )}
 
-          {/* How to study */}
-          {task.how_to_study && (
-            <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Lightbulb size={12} className="text-emerald-400" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">How to Study</span>
+            {/* How to study */}
+            {task.how_to_study && (
+              <div className="group rounded-2xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 p-4 hover:border-emerald-500/50 hover:from-emerald-500/15 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-110 transition-transform">
+                    <Lightbulb size={16} />
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-widest text-emerald-400">How to Study</span>
+                </div>
+                <p className="text-sm text-emerald-50/90 leading-relaxed whitespace-pre-line ml-11">{task.how_to_study}</p>
               </div>
-              <p className="text-xs text-emerald-200/80 leading-relaxed whitespace-pre-line">{task.how_to_study}</p>
-            </div>
-          )}
+            )}
 
-          {/* Weakness / tip */}
-          {task.weakness && (
-            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <AlertTriangle size={12} className="text-red-400" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Common Weakness</span>
+            {/* Weakness / tip */}
+            {task.weakness && (
+              <div className="group rounded-2xl bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/20 p-4 hover:border-red-500/50 hover:from-red-500/15 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-xl bg-red-500/20 text-red-400 group-hover:scale-110 transition-transform">
+                    <AlertTriangle size={16} />
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-widest text-red-400">Improvement Focus</span>
+                </div>
+                <p className="text-sm text-red-50/90 leading-relaxed ml-11">{task.weakness}</p>
               </div>
-              <p className="text-xs text-red-200/80 leading-relaxed">{task.weakness}</p>
-            </div>
-          )}
+            )}
 
-          {/* Description fallback */}
-          {!task.what_to_study && !task.how_to_study && task.description && (
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-              <p className="text-xs text-white/60 leading-relaxed">{task.description}</p>
-            </div>
-          )}
+            {/* Description fallback */}
+            {!task.what_to_study && !task.how_to_study && task.description && (
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition-colors">
+                <p className="text-sm text-white/80 leading-relaxed">{task.description}</p>
+              </div>
+            )}
 
-          {!task.completed && (
-            <button type="button" onClick={e => { e.stopPropagation(); onComplete(); }}
-              disabled={completing}
-              className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer transition-colors w-fit">
-              <CheckCircle2 size={13} /> Mark Day {task.day} Complete
-            </button>
-          )}
+            {!task.completed && (
+              <div className="pt-2">
+                <button type="button" onClick={e => { e.stopPropagation(); onComplete(); }}
+                  disabled={completing}
+                  className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white text-sm font-black px-4 py-3.5 rounded-xl cursor-pointer transition-all duration-300 shadow-lg shadow-emerald-900/50 active:scale-[0.98]">
+                  <CheckCircle2 size={18} /> Mark Day {task.day} Complete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
