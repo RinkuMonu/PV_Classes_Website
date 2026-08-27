@@ -26,7 +26,7 @@ export default function LiveInterviewSetup() {
     return ['Subject Knowledge', 'Teaching Skills', 'Pedagogy', 'Classroom Management', 'Mixed'];
   };
 
-  const initialExam = EXAMS[0];
+  const initialExam = "KVS/NVS Special Educator";
   const initialFocusOptions = getFocusOptions(initialExam);
   
   const [subjectsList, setSubjectsList] = useState(SUBJECT_MAPPING[initialExam] || []);
@@ -132,7 +132,7 @@ export default function LiveInterviewSetup() {
             }}
           >
             {EXAMS.map(exam => (
-              <option key={exam} value={exam}>{exam}</option>
+              <option key={exam} value={exam} disabled={exam !== "KVS/NVS Special Educator"}>{exam}</option>
             ))}
           </select>
         </div>
