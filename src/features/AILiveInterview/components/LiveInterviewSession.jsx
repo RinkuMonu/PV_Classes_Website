@@ -190,7 +190,7 @@ export default function LiveInterviewSession() {
     if (currentState !== "LISTENING" && currentState !== "RECORDING") return;
     
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
       console.log("[Verification] 🎤 Microphone Enabled");
       console.log("[Verification] 🔴 Recording Started");
       updateInterviewState("RECORDING");
@@ -216,8 +216,8 @@ export default function LiveInterviewSession() {
       const dataArray = new Uint8Array(bufferLength);
       
       let silenceStart = Date.now();
-      const SILENCE_THRESHOLD = 5; // Very low threshold to capture any speech
-      const MAX_SILENCE_DURATION = 3500; // 3.5 seconds
+      const SILENCE_THRESHOLD = 18; // Very low threshold to capture any speech
+      const MAX_SILENCE_DURATION = 1800; // 3.5 seconds
       const MAX_RECORDING_DURATION = 60000; // 60 seconds
       const NO_RESPONSE_TIMEOUT = 30000; // 30 seconds no response timeout
       const recordingStartTime = Date.now();
@@ -617,3 +617,4 @@ export default function LiveInterviewSession() {
     </div>
   );
 }
+

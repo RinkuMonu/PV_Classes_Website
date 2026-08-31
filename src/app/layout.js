@@ -5,7 +5,7 @@ import "./globals.css";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { CartProvider } from "../components/context/CartContext";
-import WhatsAppButton from "../components/WhatsAppButton";
+
 
 // AI Chatbot
 import PVClassesChatbot from "../components/pvclasseschatbot";
@@ -51,8 +51,7 @@ export default function RootLayout({ children }) {
           {/* Toast Notifications */}
           <Toaster position="top-right" />
 
-          {/* Floating WhatsApp */}
-          <WhatsAppButton />
+
 
           {/* AI Chatbot */}
           <PVClassesChatbot />
