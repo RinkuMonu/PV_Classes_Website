@@ -26,7 +26,7 @@ export default function ProductPage() {
     try {
       const response = await axiosInstance.get(`/access/check/${bookId}`);
 
-    console.log("HElllooooooooooo Access API:", response); // 👈 check this
+      console.log("HElllooooooooooo Access API:", response); // 👈 check this
 
 
       if (response?.data?.message?.includes("granted")) {
@@ -239,13 +239,13 @@ export default function ProductPage() {
                       Download
                     </a>
                   ) : (
-                    <span 
-                    
+                    <span
+
                       onClick={(e) => {
-                  handleAdd(e, "book", books?._id);
-                  openCart();
-                }}
-                    className="flex items-center gap-1 text-gray-500 cursor-pointer">
+                        handleAdd(e, "book", books?._id);
+                        openCart();
+                      }}
+                      className="flex items-center gap-1 text-gray-500 cursor-pointer">
                       🔒 Locked
                     </span>
                   )}
@@ -352,7 +352,7 @@ export default function ProductPage() {
 
                       <div className="relative w-full h-60 bg-gray-100">
                         <Image
-                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
+                          src={`https://api.pvclasses.in/uploads/book/${book?.images?.[0]}`}
                           alt={book?.title || "Book image"}
                           fill
                           className="object-contain p-4"

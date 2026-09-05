@@ -181,7 +181,7 @@ export default function Book() {
                         {/* Book image */}
                         <div className="relative w-full h-56 sm:h-64 bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden">
                           <Image
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/book/${book?.images?.[0]}`}
+                            src={`https://api.pvclasses.in/uploads/book/${book?.images?.[0]}`}
                             alt={book?.title || "Book image"}
                             fill
                             className="object-contain p-5 transition-transform duration-500 group-hover:scale-110"
@@ -219,46 +219,46 @@ export default function Book() {
 
                       {/* Add Button - Modern design */}
                       <div className="border-t border-gray-100 p-4 pt-3">
-                      <button
-                        onClick={(e) => {
-                          handleAdd(e, "book", book?._id);
-                          openCart();
-                        }}
-                        disabled={loading}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#616602] to-[#7d8203] text-white py-3 px-4 text-sm font-semibold transition-all duration-300 hover:from-[#545901] hover:to-[#6e7302] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {loading ? (
-                          <>
-                            <svg
-                              className="animate-spin h-4 w-4 text-white "
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            ADDING...
-                          </>
-                        ) : (
-                          <>
-                            <FaShoppingCart className="text-sm" />
-                            ADD TO CART
-                          </>
-                        )}
-                      </button>
-</div>
+                        <button
+                          onClick={(e) => {
+                            handleAdd(e, "book", book?._id);
+                            openCart();
+                          }}
+                          disabled={loading}
+                          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#616602] to-[#7d8203] text-white py-3 px-4 text-sm font-semibold transition-all duration-300 hover:from-[#545901] hover:to-[#6e7302] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {loading ? (
+                            <>
+                              <svg
+                                className="animate-spin h-4 w-4 text-white "
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                              ADDING...
+                            </>
+                          ) : (
+                            <>
+                              <FaShoppingCart className="text-sm" />
+                              ADD TO CART
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
