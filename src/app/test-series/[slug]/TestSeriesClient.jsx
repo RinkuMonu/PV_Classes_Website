@@ -2028,94 +2028,90 @@ function SidebarCard({ series, hasAccess }) {
     }
   };
 
-  const img =
-    `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}` ||
-    (series?.images?.[0]
-      ? `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}`
-      : "/placeholder-test.jpg");
-  return (
-    <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
-      <div className="relative h-64 rounded-xl overflow-hidden mb-5">
-        <Image
-          src={img}
-          alt={series?.title}
-          fill
-          className="object-cover"
-          priority
-        />
-        <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-          Test Series
+const img = series?.images?.[0]
+  ? `https://api.pvclasses.in/uploads/testSeries/${series.images[0]}`
+  : "/placeholder-test.jpg";
+
+return (
+  <div className="sticky top-10 pt-6 pb-8 px-5 w-full h-fit bg-white rounded-2xl border border-gray-100 shadow-xl">
+
+    <div className="relative w-full rounded-xl overflow-hidden mb-5 bg-gray-50">
+      <img
+        src={img}
+        alt={series?.title || "Test Series"}
+        className="block w-full h-auto object-contain"
+      />
+
+      <span className="absolute top-4 right-4 bg-[#616602] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+        Test Series
+      </span>
+    </div>
+
+    <div className="p-2">
+      <h2 className="text-xl font-bold text-gray-800">
+        {series?.title}
+      </h2>
+
+      <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+        <Award size={16} className="text-[#204972]" />
+        {series?.exam_id?.name}
+      </p>
+
+      <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
+        <span className="flex items-center gap-1">
+          <Clock size={16} className="text-blue-500" />
+          {series?.validity}
+        </span>
+
+        <span className="flex items-center gap-1">
+          <FileText size={16} className="text-green-500" />
+          {series?.total_tests} Tests
         </span>
       </div>
-      <div className="p-2">
-        <h2 className="text-xl font-bold text-gray-800">{series?.title}</h2>
-        <p className="flex items-center gap-2 text-sm text-gray-500 mt-2">
-          <Award size={16} className="text-[#204972]" />
-          {series?.exam_id?.name}
-        </p>
-        <div className="flex items-center gap-4 text-sm mt-4 text-gray-600">
-          <span className="flex items-center gap-1">
-            <Clock size={16} className="text-blue-500" />
-            {series?.validity}
-          </span>
-          <span className="flex items-center gap-1">
-            <FileText size={16} className="text-green-500" />
-            {series?.total_tests} Tests
-          </span>
-        </div>
-        <hr className="my-5 border-gray-100" />
-        <div className="flex items-end justify-between mb-5">
-          <div>
-            {/* <span className="text-xs text-gray-500 line-through">
-              ₹{series?.price}
-            </span> */}
-            <div className="flex items-center gap-3 mt-1">
-              {!series?.is_free && (
-                <span className="text-xl font-bold text-[#204972]">
-                  ₹{series?.discount_price}
-                </span>
-              )}
 
-              {series?.is_free && (
-                <span className="text-green-600 font-bold text-lg">
-                  FREE
-                </span>
+      <hr className="my-5 border-gray-100" />
+
+      <div className="flex items-end justify-between mb-5">
+        <div>
+          <span className="text-xs text-gray-500 line-through">
+            ₹{series?.price}
+          </span>
+
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-xl font-bold text-[#204972]">
+              ₹{series?.discount_price}
+            </span>
+
+            <span className="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
+              {Math.round(
+                (1 - series?.discount_price / series?.price) * 100
               )}
-            </div>
+              % OFF
+            </span>
           </div>
         </div>
-        {/* {!hasAccess && (
-          <button
-            onClick={(e) => {
-              handleAdd(e, "testSeries", series?._id);
-              openCart();
-            }}
-            className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
-          >
-            Add to Library
-          </button>
+      </div>
 
-        )} */}
-
-        {!hasAccess && !series?.is_free && (
-  <button
-    onClick={(e) => {
-      handleAdd(e, "testSeries", series?._id);
-      openCart();
-    }}
-    className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
-  >
-    Add to Library
-  </button>
-)}
-        <div
-          onClick={handleShare}
-          className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer"
+      {!hasAccess && (
+        <button
+          onClick={(e) => {
+            handleAdd(e, "testSeries", series?._id);
+            openCart();
+          }}
+          className="w-full bg-[#788406] text-white font-semibold py-3.5 rounded-xl"
         >
-          <Share2 size={18} className="text-blue-500" />
-          <span className="text-sm font-medium">Share</span>
-        </div>
+          Add to Library
+        </button>
+      )}
+
+      <div
+        onClick={handleShare}
+        className="mt-5 flex items-center justify-center gap-2 text-gray-600 cursor-pointer"
+      >
+        <Share2 size={18} className="text-blue-500" />
+        <span className="text-sm font-medium">Share</span>
       </div>
     </div>
-  );
+  </div>
+);
 }

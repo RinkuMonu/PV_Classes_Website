@@ -286,14 +286,13 @@ export default function TestSeriesHome() {
   <Link href={`/test-series/${series?._id}`}>
     
     {/* Image */}
-    <div className="relative h-52 bg-slate-50 border-b border-gray-100">
-      <Image
-        src={imgSrc}
-        alt={series?.title}
-        fill
-        className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-      />
-    </div>
+    <div className="w-full bg-slate-50 border-b border-gray-100 overflow-hidden">
+  <img
+    src={imgSrc}
+    alt={series?.title || "Test Series"}
+    className="w-full h-auto object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+  />
+</div>
 
     <div className="p-5">
       

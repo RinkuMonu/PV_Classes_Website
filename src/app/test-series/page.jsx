@@ -155,19 +155,18 @@ export default function Page() {
     </div>
 
     {/* RIGHT SIDE - 30% */}
-    <Link
-      href={`/test-series/${series?._id}`}
-      className="w-full lg:w-[30%]"
-    >
-      <div className="relative h-64 lg:h-full min-h-[260px] bg-gray-50 flex items-center justify-center">
-        <Image
-          src={imgSrc}
-          alt={series?.title || "Test Series"}
-          fill
-          className="object-contain p-4 hover:scale-105 transition-transform duration-500"
-        />
-      </div>
-    </Link>
+  <Link
+  href={`/test-series/${series?._id}`}
+  className="w-full lg:w-[30%] block"
+>
+  <div className="w-full bg-gray-50 flex items-center justify-center overflow-hidden">
+    <img
+      src={imgSrc}
+      alt={series?.title || "Test Series"}
+      className="w-full h-auto object-contain p-4 hover:scale-105 transition-transform duration-500"
+    />
+  </div>
+</Link>
   </div>
 </div>
                 );
