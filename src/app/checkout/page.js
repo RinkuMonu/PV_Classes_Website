@@ -247,16 +247,18 @@ item.itemType === "book"
       if (!orderId) throw new Error("Order creation failed");
 
       // 2️⃣ PayIn
-      const payinRes = await axiosInstance.post("/payment/payin", {
-        orderId,
-      });
+const payinRes = await axiosInstance.post("/payment/payin", {
+  orderId,
+});
 
-      const redirectUrl =
-        payinRes?.data?.paymentData?.data?.redirectEx;
+const redirectUrl =
+  payinRes?.data?.paymentData?.data?.redirectURL;
 
-      if (!redirectUrl) throw new Error("Payment URL not received");
+if (!redirectUrl) {
+  throw new Error("Payment URL not received");
+}
 
-      window.location.href = redirectUrl;
+window.location.href = redirectUrl;
 
     } catch (error) {
       // toast.error("Something went wrong. Please try again.");
