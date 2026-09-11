@@ -179,41 +179,27 @@ export default function Book() {
                         </div>
 
                         {/* Book image */}
-                        <div className="relative w-full h-56 sm:h-64 bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden">
+                        <div className="relative w-full aspect-[79/64] bg-white overflow-hidden">
                           <Image
                             src={`https://api.pvclasses.in/uploads/book/${book?.images?.[0]}`}
                             alt={book?.title || "Book image"}
                             fill
-                            className="object-contain p-5 transition-transform duration-500 group-hover:scale-110"
+                            className="object-contain transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           />
                         </div>
 
                         {/* Book details */}
-                        <div className="p-5 space-y-3">
-                          <h3 className="text-[15px] font-semibold text-gray-800 line-clamp-2 h-12 leading-6 group-hover:text-[#204972] transition-colors">
+                        <div className="px-5 py-3 space-y-1">
+                          <h3 className="text-[15px] font-semibold text-gray-800 line-clamp-2 h-10 leading-5 group-hover:text-[#204972] transition-colors">
                             {book?.title}
                           </h3>
 
-                          <div className="flex items-center justify-between gap-2 flex-wrap pt-1">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span className="text-2xl font-bold text-[#204972]">
                               ₹{book?.discount_price || book?.price}
                             </span>
-                            {/* {book?.discount_price && (
-                              <span className="text-xs text-[#616602] font-medium bg-yellow-100 px-2 py-1 rounded">
-                                Save {Math.round(
-                                  ((book.price - book.discount_price) /
-                                    book.price) *
-                                  100
-                                )}%
-                              </span>
-                            )} */}
                           </div>
-
-                          {/* {book?.discount_price && (
-                            <p className="text-xs text-gray-400 line-through mb-3">
-                              ₹{book?.price}
-                            </p>
-                          )} */}
                         </div>
                       </Link>
 
