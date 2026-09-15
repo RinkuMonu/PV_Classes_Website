@@ -251,8 +251,9 @@ const payinRes = await axiosInstance.post("/payment/payin", {
   orderId,
 });
 
-const redirectUrl =
-  payinRes?.data?.paymentData?.data?.redirectURL;
+const paymentData = payinRes?.data?.paymentData?.data;
+
+const redirectUrl = paymentData?.redirectEx;
 
 if (!redirectUrl) {
   throw new Error("Payment URL not received");
