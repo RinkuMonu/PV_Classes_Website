@@ -9,9 +9,8 @@ export default function StudentResultForm() {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
-    examType: "",
-    marks: "",
-    message: "",
+    mockInterview: "",
+    contact: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -31,7 +30,6 @@ export default function StudentResultForm() {
 
       const res = await axiosInstance.post("/results", {
         ...formData,
-        marks: Number(formData.marks),
       });
 
       if (res.data.success) {
@@ -44,9 +42,8 @@ export default function StudentResultForm() {
         setFormData({
           name: "",
           category: "",
-          examType: "",
-          marks: "",
-          message: "",
+          mockInterview: "",
+          contact: "",
         });
       }
     } catch (error) {
@@ -111,38 +108,28 @@ export default function StudentResultForm() {
               <option value="EWS">EWS</option>
             </select>
 
-            {/* Exam Type */}
+            {/* Mock Interview */}
             <select
-              name="examType"
-              value={formData.examType}
+              name="mockInterview"
+              value={formData.mockInterview}
               onChange={handleChange}
               required
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
             >
-              <option value="">Select Exam Type</option>
+              <option value="">Select Mock Interview</option>
               <option value="PRT">PRT</option>
               <option value="TGT">TGT</option>
             </select>
 
-            {/* Marks */}
+            {/* Contact */}
             <input
-              type="number"
-              name="marks"
-              placeholder="Marks (out of 60)"
-              value={formData.marks}
+              type="text"
+              name="contact"
+              placeholder="Enter your contact"
+              value={formData.contact}
               onChange={handleChange}
               required
-              min="0"
-              max="60"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
-            />
-
-            <textarea
-              name="message"
-              placeholder="How was your exam experience?"
-              value={formData.message}
-              onChange={handleChange}
-              className="w-full border p-3 rounded-lg"
+              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             />
 
             {/* Button */}
