@@ -8,7 +8,6 @@ import Image from "next/image";
 export default function StudentResultForm() {
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
     mockInterview: "",
     contact: "",
   });
@@ -41,7 +40,6 @@ export default function StudentResultForm() {
 
         setFormData({
           name: "",
-          category: "",
           mockInterview: "",
           contact: "",
         });
@@ -92,22 +90,6 @@ export default function StudentResultForm() {
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
             />
 
-            {/* Category */}
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
-            >
-              <option value="">Select Category</option>
-              <option value="OBC">OBC</option>
-              <option value="SC">SC</option>
-              <option value="ST">ST</option>
-              <option value="GENERAL">GENERAL</option>
-              <option value="EWS">EWS</option>
-            </select>
-
             {/* Mock Interview */}
             <select
               name="mockInterview"
@@ -116,7 +98,7 @@ export default function StudentResultForm() {
               required
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
             >
-              <option value="">Select Mock Interview</option>
+              <option value="">Select Mock Interview Program</option>
               <option value="PRT">PRT</option>
               <option value="TGT">TGT</option>
             </select>

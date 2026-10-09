@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import LiveInterviewSession from '../../../features/AILiveInterview/components/LiveInterviewSession';
 
 export const metadata = {
@@ -8,7 +9,9 @@ export const metadata = {
 export default function AILiveInterviewSessionPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <LiveInterviewSession />
+      <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading session...</div>}>
+        <LiveInterviewSession />
+      </Suspense>
     </div>
   );
 }

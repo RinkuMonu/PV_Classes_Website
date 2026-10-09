@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { WebSocketEvent } from '../types/api';
+
+export interface WebSocketEvent {
+  type: string;
+  payload?: any;
+  [key: string]: any;
+}
 
 interface UseWebSocketOptions {
   url: string;
