@@ -406,7 +406,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 <li>
                   <Link href="/results">
-                    Check Score
+                    MOCK INTERVIEW PROGRAM
                   </Link>
                 </li>
               </ul>

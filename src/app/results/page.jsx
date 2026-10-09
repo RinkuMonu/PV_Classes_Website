@@ -74,7 +74,7 @@ export default function StudentResultForm() {
         {/* 🟢 Right Side Form */}
         <div className="p-8">
           <h2 className="text-2xl font-bold text-[#00316B] mb-6 text-center">
-            🎓 KVS-NVS SPECIAL EDUCATOR EXAM SCORE
+            🎓 KVS-NVS SPECIAL EDUCATOR MOCK INTERVIEW PROGRAM
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,8 +99,8 @@ export default function StudentResultForm() {
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#00316B]"
             >
               <option value="">Select Mock Interview Program</option>
-              <option value="PRT">PRT</option>
-              <option value="TGT">TGT</option>
+              <option value="PRT Special Educator">PRT Special Educator</option>
+              <option value="TGT Special Educator">TGT Special Educator</option>
             </select>
 
             {/* Contact */}
