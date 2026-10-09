@@ -156,7 +156,7 @@ export default function AdaptiveMCQInterface({
                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
                 : 'bg-[#009FE3] text-white hover:bg-blue-600 hover:shadow-lg active:scale-[0.98]'}`}
           >
-            🔒 Lock Answer
+            🔒 {languageMode === 'Hindi' ? 'उत्तर लॉक करें' : 'Lock Answer'}
           </button>
         ) : (
           <div className="space-y-4">
@@ -171,7 +171,7 @@ export default function AdaptiveMCQInterface({
               onClick={onNextQuestion}
               className="w-full py-4 rounded-xl font-bold text-lg transition-all shadow-md bg-[#00316B] text-white hover:bg-[#00224d]"
             >
-              Next Question ➡️
+              {languageMode === 'Hindi' ? 'अगला प्रश्न' : 'Next Question'} ➡️
             </button>
           </div>
         )}

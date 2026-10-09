@@ -19,6 +19,15 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
     // ── Initialize MediaPipe models ────────────────────────────────────────────
     useEffect(() => {
         mountedRef.current = true;
+        
+        // Suppress MediaPipe INFO logs that Emscripten routes to console.error
+        const originalConsoleError = console.error;
+        console.error = (...args) => {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('TensorFlow Lite XNNPACK delegate')) {
+                return;
+            }
+            originalConsoleError(...args);
+        };
 
         async function initModels() {
             try {
@@ -58,7 +67,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
                 poseLandmarkerRef.current = pose;
                 faceLandmarkerRef.current = face;
             } catch (err) {
-                console.error("[PostureEyeTracker] Model init error:", err);
+                originalConsoleError("[PostureEyeTracker] Model init error:", err);
             }
         }
 
@@ -66,6 +75,7 @@ export function PostureEyeTracker({ videoStream, onPostureUpdate, onEyeContactUp
 
         return () => {
             mountedRef.current = false;
+            console.error = originalConsoleError;
             cancelAnimationFrame(rafRef.current);
             poseLandmarkerRef.current?.close();
             faceLandmarkerRef.current?.close();

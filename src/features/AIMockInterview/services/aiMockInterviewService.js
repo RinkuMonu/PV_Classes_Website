@@ -1,34 +1,47 @@
-import questionsData from '../data/demoQuestions.json';
+import { interviewConfig } from '../config/interviewConfig';
+import * as apiClient from './interviewApi';
+import { loadQuestions } from '../../../mockInterview/questionLoader';
+import { fetchBackendQuestions } from './QuestionBankService';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AI_INTERVIEW_API_URL || 'http://127.0.0.1:8001';
+// ==========================================
+// DEMO MODE IMPLEMENTATIONS
+// ==========================================
 
-// Helper to shuffle array
-const shuffle = (array) => {
-  const newArr = [...array];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
-
-export const startInterview = async (config) => {
+const demoStartInterview = async (config) => {
   try {
-    // Generate a unique demo session ID
     const sessionId = 'demo-' + Date.now();
-    
-    // Select and shuffle questions based on config.numQuestions (default 10)
     const numQuestions = config.numQuestions || 10;
-    const shuffledQuestions = shuffle(questionsData).slice(0, numQuestions);
+    
+    let questions = [];
+    try {
+      // 1. Attempt to fetch from Backend API
+      console.log(`[aiMockInterviewService] Fetching dynamic questions for ${config.exam} - ${config.subject}...`);
+      questions = await fetchBackendQuestions(
+        config.exam,
+        config.subject,
+        config.difficulty,
+        config.language || 'Hindi', // default to Hindi if not set, or whatever config has
+        numQuestions
+      );
+      console.log(`[aiMockInterviewService] Successfully loaded ${questions.length} questions from backend.`);
+    } catch (backendError) {
+      // 2. Fallback to static JSON if backend fails
+      console.warn(`[aiMockInterviewService] Backend fetch failed, falling back to static questions. Error:`, backendError);
+      questions = await loadQuestions(config.exam, config.subject, config.difficulty, numQuestions);
+    }
+    
+    if (questions.length === 0) {
+      throw new Error(`No mock questions available yet for ${config.exam} - ${config.subject}.`);
+    }
     
     const sessionData = {
       sessionId: sessionId,
       config: { ...config, isDemo: true },
       currentQuestionIndex: 0,
-      currentDifficulty: 'Medium',
+      currentDifficulty: config.difficulty || 'Medium',
       score: 0,
       status: 'READY',
-      demoQuestions: shuffledQuestions,
+      demoQuestions: questions,
       correctCount: 0,
       wrongCount: 0,
       unansweredCount: 0
@@ -40,12 +53,12 @@ export const startInterview = async (config) => {
 
     return { sessionId, data: sessionData };
   } catch (error) {
-    console.error("Start interview error:", error);
+    console.error("Demo Start interview error:", error);
     throw error;
   }
 };
 
-export const getNextQuestion = async (sessionId) => {
+const demoGetNextQuestion = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
@@ -59,11 +72,18 @@ export const getNextQuestion = async (sessionId) => {
   try {
     const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
     
-    // Map JSON options array to A, B, C, D format
     const optionKeys = ['A', 'B', 'C', 'D'];
     const optionsMap = {};
     
-    if (activeQuestion.options && typeof activeQuestion.options[0] === 'object') {
+    if (activeQuestion.options_en && activeQuestion.options_hi) {
+      activeQuestion.options_en.forEach((text_en, index) => {
+        const key = optionKeys[index];
+        optionsMap[key] = {
+          english: text_en,
+          hindi: activeQuestion.options_hi[index] || text_en
+        };
+      });
+    } else if (activeQuestion.options && typeof activeQuestion.options[0] === 'object') {
       activeQuestion.options.forEach((opt, index) => {
         const key = opt.key || optionKeys[index];
         optionsMap[key] = {
@@ -96,12 +116,12 @@ export const getNextQuestion = async (sessionId) => {
 
     return { status: 'OK', question: mappedQuestion, backendMeta: {} };
   } catch (error) {
-    console.error("Fetch question error:", error);
+    console.error("Demo Fetch question error:", error);
     throw error;
   }
 };
 
-export const submitAnswer = async (sessionId, payload) => {
+const demoSubmitAnswer = async (sessionId, payload) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
@@ -110,13 +130,21 @@ export const submitAnswer = async (sessionId, payload) => {
 
   try {
     const activeQuestion = session.demoQuestions[session.currentQuestionIndex];
-    
     const optionKeys = ['A', 'B', 'C', 'D'];
     
-    // Find the correct option key
-    let correctKey = activeQuestion.correctAnswer || 'A';
-    if (!activeQuestion.correctAnswer && activeQuestion.answer) {
+    let correctKey = 'A';
+    if (typeof activeQuestion.correctAnswer === 'number') {
+      correctKey = optionKeys[activeQuestion.correctAnswer];
+    } else if (activeQuestion.correctAnswer) {
+      correctKey = activeQuestion.correctAnswer;
+    } else if (activeQuestion.answer && activeQuestion.options) {
       activeQuestion.options.forEach((optText, index) => {
+        if (optText === activeQuestion.answer) {
+          correctKey = optionKeys[index];
+        }
+      });
+    } else if (activeQuestion.answer && activeQuestion.options_en) {
+      activeQuestion.options_en.forEach((optText, index) => {
         if (optText === activeQuestion.answer) {
           correctKey = optionKeys[index];
         }
@@ -156,19 +184,18 @@ export const submitAnswer = async (sessionId, payload) => {
       status: 'OK'
     };
   } catch (error) {
-    console.error("Submit answer error:", error);
+    console.error("Demo Submit answer error:", error);
     throw error;
   }
 };
 
-export const getInterviewReport = async (sessionId) => {
+const demoGetInterviewReport = async (sessionId) => {
   if (typeof window === 'undefined') return null;
   const rawData = sessionStorage.getItem(sessionId);
   if (!rawData) throw new Error("Session not found");
   
   const report = JSON.parse(rawData);
   
-  // Calculate performance level
   const totalAttempted = report.correctCount + report.wrongCount;
   let performanceLevel = 'Needs Improvement';
   if (totalAttempted > 0) {
@@ -179,11 +206,68 @@ export const getInterviewReport = async (sessionId) => {
   }
   
   report.performanceLevel = performanceLevel;
-  
   return report;
 };
 
-export const logCameraEvent = async (sessionId, eventPayload) => {
+const demoLogCameraEvent = async (sessionId, eventPayload) => {
   console.log(`[Demo Backend] Camera event logged for session ${sessionId}:`, eventPayload);
   return { success: true };
+};
+
+// ==========================================
+// EXPORTED FACADE (Handles Routing to API vs Demo)
+// ==========================================
+
+export const startInterview = async (config) => {
+  if (interviewConfig.MODE === 'api') {
+    try {
+      return await apiClient.startInterview(config);
+    } catch (e) {
+      console.warn("FastAPI startInterview failed. Falling back to Demo Mode.", e);
+    }
+  }
+  return await demoStartInterview(config);
+};
+
+export const getNextQuestion = async (sessionId) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.getNextQuestion(sessionId);
+    } catch (e) {
+      console.warn("FastAPI getNextQuestion failed. Cannot fallback safely mid-session.", e);
+      throw e;
+    }
+  }
+  return await demoGetNextQuestion(sessionId);
+};
+
+export const submitAnswer = async (sessionId, payload) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.submitAnswer(sessionId, payload);
+    } catch (e) {
+      console.warn("FastAPI submitAnswer failed.", e);
+      throw e;
+    }
+  }
+  return await demoSubmitAnswer(sessionId, payload);
+};
+
+export const getInterviewReport = async (sessionId) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    try {
+      return await apiClient.getInterviewReport(sessionId);
+    } catch (e) {
+      console.warn("FastAPI getInterviewReport failed.", e);
+      throw e;
+    }
+  }
+  return await demoGetInterviewReport(sessionId);
+};
+
+export const logCameraEvent = async (sessionId, eventPayload) => {
+  if (interviewConfig.MODE === 'api' && !sessionId.startsWith('demo-')) {
+    return await apiClient.logCameraEvent(sessionId, eventPayload);
+  }
+  return await demoLogCameraEvent(sessionId, eventPayload);
 };

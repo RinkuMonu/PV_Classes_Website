@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useInterviewSession } from '../../../../features/AIMockInterview/hooks/useInterviewSession';
 import { useWebcamMonitor } from '../../../../features/AIMockInterview/hooks/useWebcamMonitor';
 import { useInterviewTimer } from '../../../../features/AIMockInterview/hooks/useInterviewTimer';
-import { useTextToSpeech } from '../../../../features/AIMockInterview/hooks/useTextToSpeech';
+import { useTextToSpeechV2 } from '../../../../features/AIMockInterview/hooks/useTextToSpeechV2';
 import { useVoiceAnswer } from '../../../../features/AIMockInterview/hooks/useVoiceAnswer';
 import { useBrowserMonitoring } from '../../../../features/AIMockInterview/hooks/useBrowserMonitoring';
 import { getNextQuestion, submitAnswer } from '../../../../features/AIMockInterview/services/aiMockInterviewService';
 import { INTERVIEW_STATUS } from '../../../../features/AIMockInterview/constants/interviewConstants';
+import { HelpCircle, X } from 'lucide-react';
 
 import AIInterviewer from '../../../../features/AIMockInterview/components/AIInterviewer';
 import WebcamMonitor from '../../../../features/AIMockInterview/components/WebcamMonitor';
@@ -17,6 +18,7 @@ import InterviewTimer from '../../../../features/AIMockInterview/components/Inte
 import InterviewProgress from '../../../../features/AIMockInterview/components/InterviewProgress';
 import ScorePanel from '../../../../features/AIMockInterview/components/ScorePanel';
 import AdaptiveMCQInterface from '../../../../features/AIMockInterview/components/AdaptiveMCQInterface';
+import DoubtSolverLayout from '../../../../features/AITutor/components/DoubtSolver';
 
 import { useInterviewTracking } from '../../../../components/Hocks/UseInterviewTracking';
 import { PostureEyeTracker } from '../../../../components/PostureEyeTracking';
@@ -45,19 +47,22 @@ export default function InterviewSessionPage({ params }) {
   const [question, setQuestion] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(INTERVIEW_STATUS.SETUP);
   const [isTimeout, setIsTimeout] = useState(false);
+  const [isDoubtSolverOpen, setIsDoubtSolverOpen] = useState(false);
   const hasSpokenIntro = useRef(false);
 
   const config = session?.config || {};
-  const voiceLanguage = config.voiceLanguage || 'English';
-  
+  // Only Hindi or English — no bilingual fallback
+  const voiceLanguage = config.voiceLanguage === 'Both' ? 'Hindi' : (config.voiceLanguage || 'Hindi');
+
   const { stream, status: camStatus, error: camError, videoRef, retry: retryCam } = useWebcamMonitor(!!config.cameraRequired);
-  
+
   const { timeLeft, start: startTimer, stop: stopTimer } = useInterviewTimer(config.timePerQuestion || 60, () => {
     setIsTimeout(true);
     setInterviewStatus(INTERVIEW_STATUS.TIMEOUT);
   });
 
-  const { isSpeaking, speakScriptPhase, cancelSpeech } = useTextToSpeech(voiceLanguage);
+  // ✅ V2 hook: bilingual removed, math normalized
+  const { isSpeaking, speakScriptPhase, cancelSpeech } = useTextToSpeechV2(voiceLanguage);
 
   const {
     isListening,
@@ -67,7 +72,7 @@ export default function InterviewSessionPage({ params }) {
     startListening,
     stopListening,
     resetIntent
-  } = useVoiceAnswer(voiceLanguage, isSpeaking, question ? question.options : null); // Auto-pauses STT when TTS speaks
+  } = useVoiceAnswer(voiceLanguage, isSpeaking, question ? question.options : null);
 
   // Browser Monitoring
   useBrowserMonitoring(sessionId, true);
@@ -105,9 +110,9 @@ export default function InterviewSessionPage({ params }) {
     try {
       setInterviewStatus(INTERVIEW_STATUS.PROCESSING);
       setIsTimeout(false);
-      
+
       const res = await getNextQuestion(sessionId);
-      
+
       if (res.status === 'COMPLETED' || res.status === 'COMPLETED_NO_MORE_QUESTIONS') {
         completeInterview();
         return;
@@ -115,21 +120,18 @@ export default function InterviewSessionPage({ params }) {
 
       setQuestion(res.question);
       startQuestion(session.currentQuestionIndex);
-      
-      // Orchestrate TTS
-      setInterviewStatus(INTERVIEW_STATUS.SPEAKING);
-      
+
       if (!hasSpokenIntro.current && session.currentQuestionIndex === 0) {
         await speakScriptPhase('WELCOME');
         hasSpokenIntro.current = true;
       }
-      
+
       await speakScriptPhase('QUESTION_INTRO');
       await speakScriptPhase('QUESTION_TEXT', res.question.question);
-      
+
       startTimer(config.timePerQuestion || 60);
       setInterviewStatus(INTERVIEW_STATUS.LISTENING);
-      
+
     } catch (err) {
       console.error(err);
       alert("Error fetching question.");
@@ -139,12 +141,12 @@ export default function InterviewSessionPage({ params }) {
   const handleAnswerSubmit = async (selectedOptionKey, timeoutFlag) => {
     endQuestion();
     stopTimer();
-    stopListening(); // Stop voice recognition explicitly upon submit
+    stopListening();
     setInterviewStatus(INTERVIEW_STATUS.ANSWER_LOCKED);
-    
+
     try {
       const timeTaken = (config.timePerQuestion || 60) - timeLeft;
-      
+
       const result = await submitAnswer(sessionId, {
         questionId: question.id,
         selectedOption: selectedOptionKey,
@@ -161,7 +163,7 @@ export default function InterviewSessionPage({ params }) {
 
   const handleNextQuestion = () => {
     cancelSpeech();
-    window.location.reload(); 
+    window.location.reload();
   };
 
   if (sessionLoading || !session) return <div className="min-h-screen flex items-center justify-center">Loading Session...</div>;
@@ -171,53 +173,63 @@ export default function InterviewSessionPage({ params }) {
       <div className="bg-[#00316B] text-white py-4 px-6 shadow-md mb-8">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold">PV Classes AI Mock Interview</h1>
-          <div className="text-sm bg-white/20 px-3 py-1 rounded-full">Session: {sessionId.substring(0, 8)}...</div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsDoubtSolverOpen(true)}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+            >
+              <HelpCircle size={16} />
+              AI Doubt Solver
+            </button>
+            <div className="text-sm bg-white/20 px-3 py-2 rounded-full">Session: {sessionId.substring(0, 8)}...</div>
+          </div>
         </div>
       </div>
 
-      <PostureEyeTracker 
+      <PostureEyeTracker
         videoStream={stream}
         onPostureUpdate={handlePostureUpdate}
         onEyeContactUpdate={handleEyeContactUpdate}
         active={!!stream && camStatus === 'ACTIVE'}
       />
-      <CameraPreview 
+      <CameraPreview
         videoStream={stream}
         posture={posture}
         eyeContact={eyeContact}
         visible={!!stream && camStatus === 'ACTIVE'}
       />
-      <FeedbackBadges 
+      <FeedbackBadges
         posture={posture}
         eyeContact={eyeContact}
         visible={!!stream && camStatus === 'ACTIVE'}
       />
 
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
+
         {/* LEFT COLUMN: Camera & AI */}
         <div className="lg:col-span-4 flex flex-col gap-6">
           <AIInterviewer
+            isSpeaking={isSpeaking}
             status={interviewStatus}
             questionText={question?.question || ''}
             onSpeakEnd={() => {}}
           />
-          
+
           <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Behavior Scoreboard</h3>
             <div className="flex flex-col gap-4 mb-4">
-               <div className="bg-blue-50 p-4 rounded-lg flex items-center justify-between">
-                  <p className="text-xs text-blue-500 uppercase font-bold">Overall Posture</p>
-                  <p className="text-2xl font-extrabold text-blue-900">{overallPosture}%</p>
-               </div>
-               <div className="bg-green-50 p-4 rounded-lg flex items-center justify-between">
-                  <p className="text-xs text-green-500 uppercase font-bold">Overall Eye Contact</p>
-                  <p className="text-2xl font-extrabold text-green-900">{overallEye}%</p>
-               </div>
-               <div className="bg-purple-50 p-4 rounded-lg flex items-center justify-between">
-                  <p className="text-xs text-purple-500 uppercase font-bold">Overall Communication</p>
-                  <p className="text-2xl font-extrabold text-purple-900">{overallCommunication}%</p>
-               </div>
+              <div className="bg-blue-50 p-4 rounded-lg flex items-center justify-between">
+                <p className="text-xs text-blue-500 uppercase font-bold">Overall Posture</p>
+                <p className="text-2xl font-extrabold text-blue-900">{overallPosture}%</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg flex items-center justify-between">
+                <p className="text-xs text-green-500 uppercase font-bold">Overall Eye Contact</p>
+                <p className="text-2xl font-extrabold text-green-900">{overallEye}%</p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg flex items-center justify-between">
+                <p className="text-xs text-purple-500 uppercase font-bold">Overall Communication</p>
+                <p className="text-2xl font-extrabold text-purple-900">{overallCommunication}%</p>
+              </div>
             </div>
             {questionScores.length > 0 && (
               <div>
@@ -225,12 +237,12 @@ export default function InterviewSessionPage({ params }) {
                 <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
                   {questionScores.map((score, idx) => (
                     <div key={idx} className="flex justify-between items-center text-sm p-2 bg-gray-50 rounded border border-gray-100">
-                       <span className="font-semibold text-gray-600">Q{score.questionIndex + 1}</span>
-                       <div className="flex gap-4">
-                         <span className="text-blue-600 font-medium">Posture: {score.avgPosture}%</span>
-                         <span className="text-green-600 font-medium">Eye: {score.avgEye}%</span>
-                         <span className="text-purple-600 font-medium">Comm: {score.avgComm}%</span>
-                       </div>
+                      <span className="font-semibold text-gray-600">Q{score.questionIndex + 1}</span>
+                      <div className="flex gap-4">
+                        <span className="text-blue-600 font-medium">Posture: {score.avgPosture}%</span>
+                        <span className="text-green-600 font-medium">Eye: {score.avgEye}%</span>
+                        <span className="text-purple-600 font-medium">Comm: {score.avgComm}%</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -239,35 +251,31 @@ export default function InterviewSessionPage({ params }) {
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow border border-gray-100">
-             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 text-center">Time Remaining</h3>
-             <InterviewTimer timeLeft={timeLeft} totalTime={config.timePerQuestion || 60} />
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 text-center">Time Remaining</h3>
+            <InterviewTimer timeLeft={timeLeft} totalTime={config.timePerQuestion || 60} />
           </div>
         </div>
 
         {/* RIGHT COLUMN: MCQ Interface */}
         <div className="lg:col-span-8 flex flex-col">
-          
+
           <div className="bg-white p-6 rounded-xl shadow border border-gray-100 mb-6">
-            <InterviewProgress 
-              current={session.currentQuestionIndex + 1} 
-              total={config.numQuestions} 
+            <InterviewProgress
+              current={session.currentQuestionIndex + 1}
+              total={config.numQuestions}
             />
-            
-            <ScorePanel 
-              score={session.score} 
-              difficulty={session.currentDifficulty} 
+            <ScorePanel
+              score={session.score}
+              difficulty={session.currentDifficulty}
             />
           </div>
 
-
-
-          <AdaptiveMCQInterface 
+          <AdaptiveMCQInterface
             question={question}
             languageMode={config.language}
             onAnswerSubmit={handleAnswerSubmit}
             onNextQuestion={handleNextQuestion}
             isTimeout={isTimeout}
-            // Voice Props
             isVoiceSupported={isVoiceSupported}
             isListening={isListening}
             transcript={transcript}
@@ -277,9 +285,32 @@ export default function InterviewSessionPage({ params }) {
             resetIntent={resetIntent}
             speakScriptPhase={speakScriptPhase}
           />
-          
+
         </div>
       </div>
+
+      {/* Doubt Solver Modal */}
+      {isDoubtSolverOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center p-4 border-b bg-gray-50">
+              <h2 className="text-lg font-bold text-[#00316B] flex items-center gap-2">
+                <HelpCircle size={20} className="text-[#00316B]" />
+                24*7 AI Doubt Solver
+              </h2>
+              <button
+                onClick={() => setIsDoubtSolverOpen(false)}
+                className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500 cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden relative">
+              <DoubtSolverLayout isModal={true} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

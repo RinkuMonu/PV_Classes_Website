@@ -13,7 +13,7 @@ export default function InterviewSetup() {
     exam: 'SSC CGL',
     subject: 'General Awareness',
     language: LANGUAGE_MODE.BOTH,
-    voiceLanguage: 'English',
+    voiceLanguage: 'Hindi', // Changed default to Hindi
     difficulty: DIFFICULTY.MEDIUM,
     numQuestions: 10,
     timePerQuestion: 60,
@@ -90,6 +90,22 @@ export default function InterviewSetup() {
             <option value={LANGUAGE_MODE.HINDI}>Hindi Only</option>
             <option value={LANGUAGE_MODE.BOTH}>Both (Bilingual)</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Voice Language (3D Avatar)</label>
+          <select 
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00316B] outline-none"
+            value={config.voiceLanguage}
+            onChange={e => setConfig({...config, voiceLanguage: e.target.value})}
+          >
+            <option value="Hindi">Hindi (हिन्दी)</option>
+            <option value="English">English</option>
+            <option value="Both">Both (Bilingual)</option>
+          </select>
+          <p className="text-xs text-gray-500 mt-1">
+            3D interviewer will speak in selected language
+          </p>
         </div>
 
         <div>

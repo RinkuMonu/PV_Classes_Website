@@ -1,6 +1,7 @@
 import { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { ttsServiceV2 } from '../../services/ttsServiceV2';
 
 export function useAvatarIdle({ scene, status = 'IDLE' }) {
   const bones = useRef({
@@ -229,8 +230,8 @@ export function useAvatarIdle({ scene, status = 'IDLE' }) {
       }
     }
 
-    // 4. Lip Sync System (Tied to Browser TTS)
-    const isSpeaking = (status === 'SPEAKING') || (typeof window !== 'undefined' && window.speechSynthesis && window.speechSynthesis.speaking);
+    // 4. Lip Sync System (Tied to TTS Service)
+    const isSpeaking = (status === 'SPEAKING') || ttsServiceV2.isSpeaking();
     
     if (isSpeaking && lipSyncState.current.morphMeshes.length > 0) {
       const now = performance.now();

@@ -110,6 +110,45 @@ export default function InterviewReportPage({ params }) {
             </p>
           </div>
 
+          {/* Study Planner Section */}
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-500 p-8 rounded-xl border border-teal-600 mb-8 shadow-md text-white text-center">
+            <h3 className="text-2xl font-bold mb-2 flex items-center justify-center">
+              <span className="mr-2">📅</span> Need a Study Plan?
+            </h3>
+            <p className="text-teal-50 mb-6 max-w-lg mx-auto">
+              Based on your interview results, our AI can generate a personalized day-by-day study plan outlining what to study, how to study, and where to focus.
+            </p>
+            <Link
+              href={(() => {
+                const total   = report.currentQuestionIndex || report.config.numQuestions;
+                const correct = report.correctCount || 0;
+                const wrong   = report.wrongCount   || 0;
+                const score   = report.score        || 0;
+                const pct     = total > 0 ? Math.round((correct / total) * 100) : 0;
+                // Derive strong/weak from accuracy
+                const subject = report.config.subject || '';
+                const strong  = pct >= 70 ? subject : '';
+                const weak    = pct < 50  ? subject : '';
+                const params  = new URLSearchParams({
+                  exam:       report.config.exam             || '',
+                  subject,
+                  difficulty: report.currentDifficulty       || report.config.difficulty || 'Beginner',
+                  score:      String(score),
+                  correct:    String(correct),
+                  total:      String(total),
+                  ...(strong ? { strong } : {}),
+                  ...(weak   ? { weak }   : {}),
+                  auto: 'true',
+                });
+                return `/study-planner?${params.toString()}`;
+              })()}
+              target="_blank"
+              className="inline-block bg-white text-teal-700 py-3 px-8 rounded-xl font-bold hover:bg-gray-100 transition-colors shadow-lg"
+            >
+              Generate AI Study Planner
+            </Link>
+          </div>
+
           <div className="text-center mt-8">
             <Link 
               href="/ai-mock-interview"
